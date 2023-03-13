@@ -1,4 +1,4 @@
-package model;
+package Model;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class PersonalGoal {
     private Shelf playerShelf;

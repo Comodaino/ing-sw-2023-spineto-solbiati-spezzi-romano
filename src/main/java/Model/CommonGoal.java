@@ -1,3 +1,5 @@
+package Model;
+
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 package model;
 public abstract class CommonGoal {

@@ -3,7 +3,7 @@ package Model;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class Shelf{
-    private Tile[6][5] matrix;
+    private Tile matrix[6][5];
 
     public Shelf Shelf(){
 
@@ -12,10 +12,12 @@ public class Shelf{
     }
 
     public void addTile(int c, Tile t){
+
+        matrix[c] = t;
         throw new NotImplementedException;
     }
 
-    public void Tile getTile(int r, int c){
+    public Tile getTile(int r, int c){
 
         return matrix[r][c];
         throw new NotImplementedException;

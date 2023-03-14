@@ -1,5 +1,6 @@
 package Model.CommonGoals;
 
+import Model.Board;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public abstract class CommonGoal {

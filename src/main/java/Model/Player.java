@@ -1,6 +1,7 @@
 package Model;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import jdk.jshell.spi.ExecutionControl;
 
 public class Player {
     private String nickname;
@@ -11,16 +12,18 @@ public class Player {
     public Player Player(String n, boolean c){
         this.chair = c;
         this.nickname = n;
-        throw new NotImplementedException;
+        this.myShelf = new Shelf();
+        this.myGoal = new PersonalGoal();
+        throw new ExecutionControl.NotImplementedException(); //to be reviewed
     }
 
     public String getNickname(){
         return nickname;
-        throw new NotImplementedException;
+        throw new ExecutionControl.NotImplementedException(); //to be reviewed
     }
 
     public boolean getChair(){
         return chair;
-        throw new NotImplementedException;
+        throw new ExecutionControl.NotImplementedException(); //to be reviewed
     }
 }

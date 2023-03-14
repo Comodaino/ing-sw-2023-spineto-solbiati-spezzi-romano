@@ -12,6 +12,15 @@ public class Board {
 
 
     public Board Board(int np, boolean fm, List<Player> pl){
+
+        for (int i=0; i<8; i++){
+            for (int i=0; i<8; i++){
+
+
+
+
+            }
+        }
         throw new NotImplementedException;
     }
     public void endMatch(){

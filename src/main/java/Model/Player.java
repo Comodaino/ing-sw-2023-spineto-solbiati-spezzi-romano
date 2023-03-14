@@ -9,6 +9,8 @@ public class Player {
     private PersonalGoal myGoal;
 
     public Player Player(String n, boolean c){
+        this.chair = getChair();
+        this.nickname = getNickname();
         throw new NotImplementedException;
     }
 

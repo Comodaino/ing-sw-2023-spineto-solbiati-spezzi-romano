@@ -6,6 +6,8 @@ public class Shelf{
     private Tile[6][5] matrix;
 
     public Shelf Shelf(){
+
+
         throw new NotImplementedException;
     }
 
@@ -14,6 +16,8 @@ public class Shelf{
     }
 
     public void Tile getTile(int r, int c){
+
+        return matrix[r][c];
         throw new NotImplementedException;
     }
 }

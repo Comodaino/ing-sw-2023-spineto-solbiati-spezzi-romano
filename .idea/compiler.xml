@@ -6,10 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ProjectSoftEng" />
+        <module name="ing-sw-2023-spineto-solbiati-spezzi-romano" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ProjectSoftEng" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
 </project>

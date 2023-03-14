@@ -9,4 +9,5 @@ public class Tile{
     public Tile Tile(Color c){
         throw new NotImplementedException;
     }
+    public Color getColor(){ return this.color; }
 }

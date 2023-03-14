@@ -1,8 +1,15 @@
 package Model.CommonGoals;
 
+import Model.Shelf;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class GoalAngles extends CommonGoal{
+    public GoalAngles GoalAngles(Shelf s, int numberOfPlayer){
+        this.shelf = s;
+        this.numberOfPlayer = numberOfPlayer;
+        this.numberOfCompleted = 0;
+        return this;
+    }
     public int getScore(){
         if(shelf.getTile(0, 0).getColor.equals(shelf.getTile(0, 5).getColor) &&
                 shelf.getTile(5, 0).getColor.equals(shelf.getTile(5, 4).getColor) &&

@@ -12,7 +12,7 @@ import java.util.Set;
 
 
 public class Board {
-    private Cell matrix[9][9];
+    private Cell[][] matrix;
     private List<Player> listOfPlayer;
     private boolean firstMatch;
     private Set<CommonGoal> setOfCommonGoal;
@@ -22,7 +22,7 @@ public class Board {
 
     public Board Board(int np, boolean fm, List<Player> pl){
 
-
+        matrix = new Cell[9][9];
 
         try {
             File boardConf = new File("board.conf");
@@ -31,7 +31,7 @@ public class Board {
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
                 String data = reader.nextLine();
                 for (int j = 0; j<9; j++){
-                    this.matrix[j][i] = new Cell(data[j]);
+                    this.matrix[j][i] = new Cell((int)data[j]);
                 }
             }
 
@@ -48,18 +48,18 @@ public class Board {
         Random rand = new Random()
         if(fm = true){
             rand.nextInt(10);
-            switch rand.nextInt(10){
+            switch (rand.nextInt(10)){
                 case 0: setOfCommonGoal.add(new GoalAngles);
                     break;
             }
         }else{
             rand.nextInt(10);
-            switch rand.nextInt(10){
+            switch (rand.nextInt(10)){
                 case 0: setOfCommonGoal.add(new GoalAngles);
                     break;
             }
             rand.nextInt(10);
-            switch rand.nextInt(10){
+            switch (rand.nextInt(10)){
                 case 0: setOfCommonGoal.add(new GoalAngles);
                     break;
             }

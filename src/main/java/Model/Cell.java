@@ -1,8 +1,9 @@
 package Model;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class Cell {
-    private int type;
+    private CellType type;
     private Tile containedTile;
+
     public Cell(int t){
         this.type=t;
         throw new NotImplementedException();

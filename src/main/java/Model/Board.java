@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+import static Model.CommonGoals.CellType.*;
+
 
 public class Board extends Runnable{
     private Cell[][] matrix;
@@ -36,8 +38,20 @@ public class Board extends Runnable{
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
                 String data = reader.nextLine();
+                CellType type = null;
                 for (int j = 0; j<9; j++){
-                    this.matrix[j][i] = new Cell((int)data[j]);
+                    switch((int)data.charAt(j)){
+                        case 1: type = ONE;
+                        break;
+                        case 2: type = TWO;
+                            break;
+                        case 3: type = THREE;
+                            break;
+                        case 4: type = FOUR;
+                            break;
+
+                    }
+                    this.matrix[j][i] = new Cell(type);
                 }
             }
 

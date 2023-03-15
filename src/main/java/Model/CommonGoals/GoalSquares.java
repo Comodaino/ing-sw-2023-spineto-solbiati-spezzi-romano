@@ -1,14 +1,13 @@
 package Model.CommonGoals;
 
+import Model.Player;
 import Model.Shelf;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class GoalSquares extends CommonGoal{
-    public GoalSquares GoalSquares(Shelf s, int numberOfPlayer){
-        this.shelf = s;
-        this.numberOfPlayer = numberOfPlayer;
-        this.numberOfCompleted = 0;
-        return this;
+    public GoalSquares(){
+        super();
     }
-    public int getScore(){ throw new NotImplementedException(); }
+    @Override
+    public int getScore(Shelf s, Player p) { throw new NotImplementedException(); }
 }

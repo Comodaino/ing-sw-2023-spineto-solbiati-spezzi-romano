@@ -4,8 +4,8 @@ public class Cell {
     private CellType type;
     private Tile containedTile;
 
-    public Cell(int t){
-        this.type=t;
+    public Cell(CellType t){
+        this.type =t;
         throw new NotImplementedException();
     }
     public boolean isEmpty(){

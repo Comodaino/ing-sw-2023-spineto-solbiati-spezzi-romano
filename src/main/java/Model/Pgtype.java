@@ -1,5 +1,5 @@
 package Model;
-public class pgtype {
+public class Pgtype {
     int x,y;
     Color color;
     }

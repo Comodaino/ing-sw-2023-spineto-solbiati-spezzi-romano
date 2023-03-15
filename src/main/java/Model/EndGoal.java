@@ -1,13 +1,16 @@
 package Model;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class EndGoal {
     private boolean status;
-    private int value;
+    public final int value=1;
 
     public EndGoal() {
-        this.status = status;
-        this.value = value;
-        throw new NotImplementedException();
+        this.status = true;
+    }
+    public void isComplited(){
+        this.status=false;
+    }
+    public boolean getStatus(){
+        return this.status;
     }
 
 }

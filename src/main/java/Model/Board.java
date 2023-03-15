@@ -5,13 +5,10 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 
-public class Board {
+public class Board extends Runnable{
     private Cell[][] matrix;
     private List<Player> listOfPlayer;
     private boolean firstMatch;
@@ -19,10 +16,19 @@ public class Board {
     private boolean firstToEnd;
     private List<Tile> tileBuffer;
 
+    private GoalFactory goalFactory;
 
+    private Bag bag;
+
+    @Override
+    public void run() {
+        new Board();
+    }
     public Board Board(int np, boolean fm, List<Player> pl){
 
         matrix = new Cell[9][9];
+        recharge();
+        bag = new Bag;
 
         try {
             File boardConf = new File("board.conf");
@@ -41,43 +47,59 @@ public class Board {
         this.listOfPlayer = pl;
         this.firstMatch = fm;
         this.firstToEnd = true;
+        this.goalFactory = new GoalFactory();
         tileBuffer = new List<Tile>;
 
 //GOALS ARE MISSING
-        setOfCommonGoal = new Set<CommonGoal>;
-        Random rand = new Random()
-        if(fm = true){
-            rand.nextInt(10);
-            switch (rand.nextInt(10)){
-                case 0: setOfCommonGoal.add(new GoalAngles);
-                    break;
-            }
-        }else{
-            rand.nextInt(10);
-            switch (rand.nextInt(10)){
-                case 0: setOfCommonGoal.add(new GoalAngles);
-                    break;
-            }
-            rand.nextInt(10);
-            switch (rand.nextInt(10)){
-                case 0: setOfCommonGoal.add(new GoalAngles);
-                    break;
+        setOfCommonGoal = new HashSet<CommonGoal>();
+        Random rand = new Random();
+
+        for(int i=0; i<=(int)fm; i++){
+            setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11));
+        }
+
+        throw new NotImplementedException();
+    }
+
+
+
+
+
+    public void removeTile(int r, int c){
+        tileBuffer.add(matrix[r][c].getTile());
+        matrix[r][c].removeTile();
+    }
+    public void checkRecharge(){
+        boolean found=false;
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+
+                for(int k=0; k<2; k++){
+                    for(int h=0; h<2; h++){
+
+                        for(int a=0; a<2; a++){
+                            for(int b=0; b<2; b++){
+                                if(!matrix[i][j].isEmpty()  && ( !matrix[i+k][j+h].isEmpty()  && !matrix[i+k+a][j+h+b].isEmpty())) found=true;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        throw new NotImplementedException;
+        if(found) recharge();
     }
-
-
-
+    public void recharge(){
+        for(int i=0; i<9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if(matrix[i][j].isEmpty()) matrix[i][j].insertTile(bag.newTile());
+            }
+        }
+    }
 
     public void endMatch(){
-        throw new NotImplementedException();
+        return;
     }
-    public void removeTile(Tile tile){
-        throw new NotImplementedException();
-    }
-    public void checkRecharge(){
-        throw new NotImplementedException();
-    }
+
+
 }

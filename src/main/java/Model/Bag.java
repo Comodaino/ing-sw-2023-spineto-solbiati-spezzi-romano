@@ -11,7 +11,7 @@ import static Model.Color.*;
 public class Bag {
     private List<Tile> containedTiles;
 
-    public Bag Bag() {
+    public Bag() {
         containedTiles = new ArrayList<Tile>();
         for (int i = 0; i < 133; i++) {
 
@@ -33,7 +33,10 @@ public class Bag {
             }
 
         }
-
-        throw new NotImplementedException();
+    }
+    public Tile newTile(){
+        Tile tmp = containedTiles.get(0);
+        containedTiles.remove(0);
+        return tmp;
     }
 }

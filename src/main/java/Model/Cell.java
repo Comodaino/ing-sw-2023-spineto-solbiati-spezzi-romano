@@ -3,8 +3,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class Cell {
     private int type;
     private Tile containedTile;
-
-    public Cell Cell(int t){
+    public Cell(int t){
         this.type=t;
         throw new NotImplementedException();
     }

@@ -12,7 +12,7 @@ public class GoalDiffRows extends CommonGoal{
     @Override
     public int getScore(Shelf s, Player p){
         for(int r=0; r<6 && numOfRows<2; r++){
-            for(int c=0; r<4; r++){
+            for(int c=0; c<4; c++){
                 if(s.getTile(r, c).getColor().equals(s.getTile(r, c+1).getColor())){
                     break;
                 } else if(c==3){

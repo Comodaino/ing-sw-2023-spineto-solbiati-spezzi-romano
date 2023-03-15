@@ -32,7 +32,7 @@ public class Board implements Runnable{
         bag = new Bag();
 
         try {
-            File boardConf = new File("board.conf");
+            File boardConf = new File("board_conf.json");
             Scanner reader = new Scanner(boardConf);
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {

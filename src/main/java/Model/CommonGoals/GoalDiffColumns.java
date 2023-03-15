@@ -2,7 +2,6 @@ package Model.CommonGoals;
 
 import Model.Player;
 import Model.Shelf;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class GoalDiffColumns extends CommonGoal{
     private int numOfCol;
@@ -12,7 +11,7 @@ public class GoalDiffColumns extends CommonGoal{
     }
     @Override
     public int getScore(Shelf s, Player p) {
-        for(int c=0; c<4 && numOfCol<2; c++){
+        for(int c=0; c<5 && numOfCol<2; c++){
             for(int r=0; r<5; r++){
                 if(s.getTile(r, c).getColor().equals(s.getTile(r+1, c).getColor())){
                     break;

@@ -4,11 +4,10 @@ public class Cell {
     private int type;
     private Tile containedTile;
 
-    public Cell(int t){
-        throw new NotImplementedException();
+    public Cell Cell(int t){
+
     }
     public boolean isEmpty(){
         throw new NotImplementedException();
     }
-
 }

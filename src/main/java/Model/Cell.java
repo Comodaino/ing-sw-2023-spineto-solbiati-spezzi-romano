@@ -11,4 +11,13 @@ public class Cell {
     public boolean isEmpty(){
         throw new NotImplementedException();
     }
+    public Tile getTile(){
+        return containedTile;
+    }
+    public void removeTile(){
+        containedTile=null;
+    }
+    public void insertTile(Tile t){
+        this.containedTile= t;
+    }
 }

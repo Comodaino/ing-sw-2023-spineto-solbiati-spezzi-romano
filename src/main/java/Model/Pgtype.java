@@ -1,5 +1,7 @@
 package Model;
 public class Pgtype {
-    int x,y;
-    Color color;
-    }
+    public int line,col;
+    public Color color;
+
+}
+

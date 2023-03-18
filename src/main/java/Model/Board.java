@@ -7,10 +7,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static Model.CommonGoals.CellType.*;
+import static Model.CellType.*;
 
 
-public class Board extends Runnable{
+public class Board implements Runnable{
     private Cell[][] matrix;
     private List<Player> listOfPlayer;
     private boolean firstMatch;
@@ -22,7 +22,6 @@ public class Board extends Runnable{
 
     private Bag bag;
 
-    @Override
     public void run() {
         new Board();
     }
@@ -30,10 +29,10 @@ public class Board extends Runnable{
 
         matrix = new Cell[9][9];
         recharge();
-        bag = new Bag;
+        bag = new Bag();
 
         try {
-            File boardConf = new File("board.conf");
+            File boardConf = new File("board_conf.json");
             Scanner reader = new Scanner(boardConf);
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
@@ -56,21 +55,22 @@ public class Board extends Runnable{
             }
 
             reader.close();
-        } catch (FileNotFoundException e);
+        }catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        };
 
         this.listOfPlayer = pl;
         this.firstMatch = fm;
         this.firstToEnd = true;
         this.goalFactory = new GoalFactory();
-        tileBuffer = new List<Tile>;
+        tileBuffer = new ArrayList<Tile>();
 
 //GOALS ARE MISSING
         setOfCommonGoal = new HashSet<CommonGoal>();
         Random rand = new Random();
+        setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11)));
 
-        for(int i=0; i<=(int)fm; i++){
-            setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11));
-        }
+        if(fm) setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11)));
 
         throw new NotImplementedException();
     }
@@ -109,6 +109,14 @@ public class Board extends Runnable{
                 if(matrix[i][j].isEmpty()) matrix[i][j].insertTile(bag.newTile());
             }
         }
+    }
+
+    public Tile getTile(int r, int c){
+        return matrix[r][c].getTile();
+    }
+
+    public Cell getCell(int r, int c){
+        return matrix[r][c];
     }
 
     public void endMatch(){

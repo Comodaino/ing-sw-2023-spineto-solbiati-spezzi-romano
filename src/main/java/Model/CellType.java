@@ -1,4 +1,4 @@
-package Model.CommonGoals;
+package Model;
 
 public enum CellType {
     ONE,

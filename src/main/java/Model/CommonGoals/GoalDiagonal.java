@@ -4,12 +4,13 @@ import Model.Player;
 import Model.Shelf;
 
 public class GoalDiagonal extends CommonGoal{
-    private boolean found;
     public GoalDiagonal(){
         super();
     }
     @Override
     public int getScore(Shelf s, Player p){
+        boolean found = false;
+
         if(s.getTile(0, 0).getColor().equals(s.getTile(1, 1).getColor()) &&
                 s.getTile(1, 1).getColor().equals(s.getTile(2, 2).getColor()) &&
                 s.getTile(2, 2).getColor().equals(s.getTile(3, 3).getColor()) &&

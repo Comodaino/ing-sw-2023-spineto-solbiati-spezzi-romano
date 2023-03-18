@@ -21,7 +21,7 @@ public class GoalEight extends CommonGoal{
                 }
             }
 
-            if(count==8){
+            if(count==8 && !this.completed.contains(p)){
                 return assignScore(p);
             } else {
                 count = 0;

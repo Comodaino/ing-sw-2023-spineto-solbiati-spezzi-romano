@@ -111,6 +111,14 @@ public class Board implements Runnable{
         }
     }
 
+    public Tile getTile(int r, int c){
+        return matrix[r][c].getTile();
+    }
+
+    public Cell getCell(int r, int c){
+        return matrix[r][c];
+    }
+
     public void endMatch(){
         return;
     }

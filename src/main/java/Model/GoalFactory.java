@@ -8,7 +8,7 @@ public class GoalFactory {
     }
 
     public CommonGoal getGoal(int i){
-        switch(i){
+        switch(i){modified vcs.xml
             case 0: return new GoalAngles(int n);
             case 1: return new GoalColumn(int n);
             case 2: return new GoalCouples(int n);

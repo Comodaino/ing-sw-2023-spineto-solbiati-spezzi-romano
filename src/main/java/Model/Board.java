@@ -1,7 +1,6 @@
 package Model;
 
 import Model.CommonGoals.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,7 +9,7 @@ import java.util.*;
 import static Model.CellType.*;
 
 
-public class Board implements Runnable{
+public class Board{
     private Cell[][] matrix;
     private List<Player> listOfPlayer;
     private boolean firstMatch;
@@ -22,10 +21,7 @@ public class Board implements Runnable{
 
     private Bag bag;
 
-    public void run() {
-        new Board();
-    }
-    public Board Board(int np, boolean fm, List<Player> pl){
+    public Board(boolean fm, List<Player> pl){
 
         matrix = new Cell[9][9];
         recharge();
@@ -72,7 +68,6 @@ public class Board implements Runnable{
 
         if(fm) setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11)));
 
-        throw new NotImplementedException();
     }
 
 

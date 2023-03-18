@@ -1,11 +1,15 @@
 package Model;
 
-import junit.framework.TestCase;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BoardTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
 
+class BoardTest {
+    private List<Player> playerList;
     public void testRemoveTile() {
-        Board testBoard = new Board();
+        playerList=new ArrayList<Player>();
+        Board testBoard = new Board(false, playerList);
         testBoard.removeTile(5,5);
         assertEquals(testBoard.getTile(5,5),null);
     }

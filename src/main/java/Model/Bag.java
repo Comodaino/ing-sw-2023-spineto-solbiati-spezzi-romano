@@ -1,7 +1,6 @@
 package Model;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,28 +9,32 @@ import static Model.Color.*;
 public class Bag {
     private List<Tile> containedTiles;
 
-    public Bag Bag() {
+    public Bag() {
+        containedTiles = new ArrayList<Tile>();
         for (int i = 0; i < 133; i++) {
-            Random rand = new Random()
+
+            Random rand = new Random();
             rand.nextInt(6);
             switch (rand.nextInt(6)){
-
-                case 0: containedTiles.insert(new Tile(WHITE));
+                case 0: containedTiles.add(new Tile(WHITE));
                     break;
-                case 1: containedTiles.insert(new Tile(YELLOW));
+                case 1: containedTiles.add(new Tile(YELLOW));
                     break;
-                case 2: containedTiles.insert(new Tile(PINK));
+                case 2: containedTiles.add(new Tile(PINK));
                     break;
-                case 3: containedTiles.insert(new Tile(BLUE));
+                case 3: containedTiles.add(new Tile(BLUE));
                     break;
-                case 4: containedTiles.insert(new Tile(LIGHTBLUE));
+                case 4: containedTiles.add(new Tile(LIGHTBLUE));
                     break;
-                case 5: containedTiles.insert(new Tile(GREEN));
+                case 5: containedTiles.add(new Tile(GREEN));
                     break;
             }
 
         }
-
-        throw new NotImplementedException;
+    }
+    public Tile newTile(){
+        Tile tmp = containedTiles.get(0);
+        containedTiles.remove(0);
+        return tmp;
     }
 }

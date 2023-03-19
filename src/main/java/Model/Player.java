@@ -16,10 +16,12 @@ public class Player {
     }
 
     public String getNickname(){
-        return nickname;
+        return this.nickname;
     }
 
     public boolean getChair(){
-        return chair;
+        return this.chair;
     }
+    public Shelf getShelf(){ return this.myShelf;}
+    public PersonalGoal getGoal(){ return this.myGoal;}
 }

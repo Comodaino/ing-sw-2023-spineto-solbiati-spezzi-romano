@@ -1,6 +1,5 @@
 package Model;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class Shelf{
     private Tile[][] matrix;

@@ -1,16 +1,15 @@
 package Model;
 
 import Model.CommonGoals.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static Model.CommonGoals.CellType.*;
+import static Model.CellType.*;
 
 
-public class Board extends Runnable{
+public class Board{
     private Cell[][] matrix;
     private List<Player> listOfPlayer;
     private boolean firstMatch;
@@ -22,18 +21,14 @@ public class Board extends Runnable{
 
     private Bag bag;
 
-    @Override
-    public void run() {
-        new Board();
-    }
-    public Board Board(int np, boolean fm, List<Player> pl){
+    public Board(boolean fm, List<Player> pl){
 
         matrix = new Cell[9][9];
         recharge();
-        bag = new Bag;
+        bag = new Bag();
 
         try {
-            File boardConf = new File("board.conf");
+            File boardConf = new File("board_conf.json");
             Scanner reader = new Scanner(boardConf);
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
@@ -56,23 +51,23 @@ public class Board extends Runnable{
             }
 
             reader.close();
-        } catch (FileNotFoundException e);
+        }catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        };
 
         this.listOfPlayer = pl;
         this.firstMatch = fm;
         this.firstToEnd = true;
         this.goalFactory = new GoalFactory();
-        tileBuffer = new List<Tile>;
+        tileBuffer = new ArrayList<Tile>();
 
 //GOALS ARE MISSING
         setOfCommonGoal = new HashSet<CommonGoal>();
         Random rand = new Random();
+        setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11)));
 
-        for(int i=0; i<=(int)fm; i++){
-            setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11));
-        }
+        if(fm) setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11)));
 
-        throw new NotImplementedException();
     }
 
 
@@ -88,12 +83,15 @@ public class Board extends Runnable{
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
 
-                for(int k=0; k<2; k++){
-                    for(int h=0; h<2; h++){
+                for(int k=-1; k<1; k++){
+                    for(int h=-1; h<1; h++){
 
-                        for(int a=0; a<2; a++){
-                            for(int b=0; b<2; b++){
-                                if(!matrix[i][j].isEmpty()  && ( !matrix[i+k][j+h].isEmpty()  && !matrix[i+k+a][j+h+b].isEmpty())) found=true;
+                        for(int a=-1; a<1; a++){
+                            for(int b=-1; b<1; b++){
+                                if(matrix[i][j]!=matrix[i+k][j+h] && matrix[i+k][j+h]!=matrix[i+k+a][j+h+b]) {
+                                    if (!matrix[i][j].isEmpty() && (!matrix[i + k][j + h].isEmpty() && !matrix[i + k + a][j + h + b].isEmpty()))
+                                        found = true;
+                                }
                             }
                         }
                     }
@@ -106,9 +104,17 @@ public class Board extends Runnable{
     public void recharge(){
         for(int i=0; i<9; i++) {
             for (int j = 0; j < 9; j++) {
-                if(matrix[i][j].isEmpty()) matrix[i][j].insertTile(bag.newTile());
+                if(matrix[i][j].isEmpty() && matrix[i][j].getType()!=ONE) matrix[i][j].insertTile(bag.newTile());
             }
         }
+    }
+
+    public Tile getTile(int r, int c){
+        return matrix[r][c].getTile();
+    }
+
+    public Cell getCell(int r, int c){
+        return matrix[r][c];
     }
 
     public void endMatch(){

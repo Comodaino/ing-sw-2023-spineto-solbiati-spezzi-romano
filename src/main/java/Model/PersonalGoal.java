@@ -47,16 +47,17 @@ public class PersonalGoal {
     }
 
     public int getScore(Shelf playerShelf){
-      /*  int score=0;
-        EndGoal endGoal=null;
-        if(endGoal.getStatus()==false){
-            for (int r=0;r<6;r++){
-                for(int c=0;c<5;c++){
-                    playerShelf[r][c]=;
+        int score=0;
+            for (int i=0;i<PGoal.size();i++){
+                Pgtype pgtype = PGoal.get(i);
+                int line = pgtype.getLine();
+                int col = pgtype.getCol();
+                Color color = pgtype.getColor();
                 }
-            }
+            if(playerShelf.getTile(line,col).getColor()== color){
+                score += (6-i);
         }
-        return score;*/
+        return score;
     }
     public void getPersGoal(int j) {
         String fileName = "PersonalGoal.json";

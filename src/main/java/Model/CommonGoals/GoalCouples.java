@@ -15,6 +15,7 @@ public class GoalCouples extends CommonGoal{
         int counter = 0;
         boolean[][] foundMatrix = new boolean[6][5];
         Arrays.fill(foundMatrix, false);
+
         for(int i=0; i<6; i++) {
             for(int j = 0; j < 5; j++) {
                 if(  !((i-1<0 || j-1<0) || (i+1>=6 || j+1>=5))) {
@@ -43,7 +44,7 @@ public class GoalCouples extends CommonGoal{
                 }
             }
         }
-        if(counter>=6) return assignScore(p);
+        if(counter>=6 && !this.completed.contains(p)) return assignScore(p);
         return 0;
     }
 }

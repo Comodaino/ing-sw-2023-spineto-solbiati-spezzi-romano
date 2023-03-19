@@ -83,12 +83,15 @@ public class Board{
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
 
-                for(int k=0; k<2; k++){
-                    for(int h=0; h<2; h++){
+                for(int k=-1; k<1; k++){
+                    for(int h=-1; h<1; h++){
 
-                        for(int a=0; a<2; a++){
-                            for(int b=0; b<2; b++){
-                                if(!matrix[i][j].isEmpty()  && ( !matrix[i+k][j+h].isEmpty()  && !matrix[i+k+a][j+h+b].isEmpty())) found=true;
+                        for(int a=-1; a<1; a++){
+                            for(int b=-1; b<1; b++){
+                                if(matrix[i][j]!=matrix[i+k][j+h] && matrix[i+k][j+h]!=matrix[i+k+a][j+h+b]) {
+                                    if (!matrix[i][j].isEmpty() && (!matrix[i + k][j + h].isEmpty() && !matrix[i + k + a][j + h + b].isEmpty()))
+                                        found = true;
+                                }
                             }
                         }
                     }
@@ -101,7 +104,7 @@ public class Board{
     public void recharge(){
         for(int i=0; i<9; i++) {
             for (int j = 0; j < 9; j++) {
-                if(matrix[i][j].isEmpty()) matrix[i][j].insertTile(bag.newTile());
+                if(matrix[i][j].isEmpty() && matrix[i][j].getType()!=ONE) matrix[i][j].insertTile(bag.newTile());
             }
         }
     }

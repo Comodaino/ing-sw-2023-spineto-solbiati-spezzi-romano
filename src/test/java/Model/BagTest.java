@@ -16,7 +16,7 @@ class BagTest {
             System.out.println((String)testBag.newTile().getColor());
         }
         assertEquals(testBag.newTile(), null);
-        System.out.println("TEST SUPERATO");
+        System.out.println("TEST PASSED");
     }
 }
 }

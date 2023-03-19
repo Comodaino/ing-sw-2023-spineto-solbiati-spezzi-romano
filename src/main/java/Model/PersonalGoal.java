@@ -49,7 +49,6 @@ public class PersonalGoal {
 
     public int getScore(Shelf shelf){
         for(int i=1;i<=6;i++){
-            if()
         }
     }
     public void getPersGoal(int j) {

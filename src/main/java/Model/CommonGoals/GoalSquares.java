@@ -6,9 +6,7 @@ import Model.Shelf;
 import java.util.Arrays;
 
 public class GoalSquares extends CommonGoal{
-    public GoalSquares(){
-        super();
-    }
+    public GoalSquares(){ super(); }
     @Override
     public int getScore(Shelf s, Player p) {
         int counter = 0;

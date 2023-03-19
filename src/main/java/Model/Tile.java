@@ -8,7 +8,10 @@ public class Tile{
     public void Tile(Color c){
 
         this.color = c;
-        throw new NotImplementedException;
+    }
+
+    public Color getColor(){
+        return this.color;
     }
     public Color getColor(){ return this.color; }
 }

@@ -1,7 +1,5 @@
 package Model;
 
-
-
 public class Player {
     private String nickname;
     private boolean chair;
@@ -22,4 +20,8 @@ public class Player {
     public boolean getChair(){
         return chair;
     }
+
+    public Shelf getMyShelf() { return myShelf; }
+
+    public PersonalGoal getMyGoal() { return myGoal; }
 }

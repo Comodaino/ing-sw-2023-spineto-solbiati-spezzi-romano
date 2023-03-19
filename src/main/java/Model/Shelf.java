@@ -22,9 +22,9 @@ public class Shelf{
     }
 
 
-    public Color getTile(int r, int c){
+    public Tile getTile(int r, int c){
 
-        return matrix[r][c].getColor();
+        return matrix[r][c];
     }
 }
 

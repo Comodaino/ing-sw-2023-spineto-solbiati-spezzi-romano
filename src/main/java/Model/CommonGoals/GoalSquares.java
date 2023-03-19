@@ -14,6 +14,7 @@ public class GoalSquares extends CommonGoal{
         int counter = 0;
         boolean[][] foundMatrix = new boolean[6][5];
         Arrays.fill(foundMatrix, false);
+
         for(int i=0; i<5; i++){
             for(int j=0; j<4; j++){
                 if(((!foundMatrix[i][j] && !foundMatrix[i+1][j+1])&&(!foundMatrix[i+1][j] && !foundMatrix[i][j+1]))){
@@ -27,7 +28,7 @@ public class GoalSquares extends CommonGoal{
                 }
             }
         }
-        if(counter>=4) return assignScore(p);
+        if(counter>=4 && !this.completed.contains(p)) return assignScore(p);
         return 0;
     }
 }

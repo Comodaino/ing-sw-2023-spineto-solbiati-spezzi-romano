@@ -12,7 +12,7 @@ public class Player {
         this.chair = c;
         this.nickname = n;
         this.myShelf = new Shelf();
-        this.myGoal = new PersonalGoal();
+        this.myGoal = new PersonalGoal(this.myShelf);
     }
 
     public String getNickname(){

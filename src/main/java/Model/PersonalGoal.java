@@ -1,11 +1,10 @@
 package Model;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
-import static Model.Color.WHITE;
+import java.util.StringTokenizer;
 
 public class PersonalGoal {
     private Shelf playerShelf;
@@ -47,21 +46,39 @@ public class PersonalGoal {
         }
     }
 
-    public int getScore(Shelf shelf){
-        for(int i=1;i<=6;i++){
-            if()
+    public int getScore(Shelf playerShelf){
+      /*  int score=0;
+        EndGoal endGoal=null;
+        if(endGoal.getStatus()==false){
+            for (int r=0;r<6;r++){
+                for(int c=0;c<5;c++){
+                    playerShelf[r][c]=;
+                }
+            }
         }
+        return score;*/
     }
     public void getPersGoal(int j) {
-        try {
-            File PersonalGoal = new File("PersonalGoal.json");
-            Scanner reader = new Scanner(PersonalGoal);
-            String Pers = reader.nextLine();
-            for(int line=j; j<=j+6; j++) {
+        String fileName = "PersonalGoal.json";
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))){
+            String file = br.readLine();
 
-                PGoal.add(new Pgtype((int) Pers.charAt(0), (int) Pers.charAt(1), (Color)Pers.lines()));  //non so cosa fare per leggere il colore
+            for(int l=j; l<=j+6; l++) {
+                StringTokenizer st = new StringTokenizer(file,",");
+                while (st.hasMoreTokens()){
+                    String line = st.nextToken();
+                    String col = st.nextToken();
+                    Color color = Color.valueOf(st.nextToken());
+                    PGoal.add(new Pgtype(Integer.parseInt(line),Integer.parseInt(col),color));
+                }
+
             }
-        }catch (FileNotFoundException e);
+        }catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ;
     }
 
 }

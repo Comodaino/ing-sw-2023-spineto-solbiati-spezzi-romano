@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static Model.CommonGoals.CellType.*;
+import static Model.CellType.*;
 
 
 public class Board extends Runnable{

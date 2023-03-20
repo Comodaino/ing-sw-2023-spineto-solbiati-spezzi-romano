@@ -1,9 +1,11 @@
 package Model;
-import java.io.File;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class PersonalGoal {
@@ -79,7 +81,7 @@ public class PersonalGoal {
         return score;
     }
     public void getPersGoal(int j) {
-        String fileName = "src/main/java/Model/PersonalGoal.json";
+        String fileName = "src/main/java/Model/Conf/PersonalGoal.json";
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))){
             String file = br.readLine();
 

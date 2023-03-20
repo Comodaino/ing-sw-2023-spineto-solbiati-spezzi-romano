@@ -6,82 +6,95 @@ import Model.Shelf;
 import Model.Tile;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GoalAnglesTest {
+    public void configShelf(Shelf shelf, Scanner scanner){
+        while(scanner.hasNextLine()){
+            String confBuffer = scanner.nextLine();
+            for(int c=0; c<5; c++){
+                switch(confBuffer.charAt(c)){
+                    case 'W': shelf.addTile(c, new Tile(Color.WHITE));
+                        break;
+                    case 'B': shelf.addTile(c, new Tile(Color.BLUE));
+                        break;
+                    case 'P': shelf.addTile(c, new Tile(Color.PINK));
+                        break;
+                    case 'G': shelf.addTile(c, new Tile(Color.GREEN));
+                        break;
+                    case 'Y': shelf.addTile(c, new Tile(Color.YELLOW));
+                        break;
+                    case 'L': shelf.addTile(c, new Tile(Color.LIGHTBLUE));
+                        break;
+                    case '-': shelf.addTile(c, null);
+                }
+            }
+        }
+    }
 
     @Test
     void emptyShelf(){
         GoalAngles goal = new GoalAngles();
         Player p = new Player("Nico", true);
-        Shelf s = new Shelf();
 
-        assertEquals(0, goal.getScore(s, p));
+        assertEquals(0, goal.getScore(p));
         System.out.println("TEST PASSED");
     }
 
     @Test
-    void goalCompletedByOnePlayer(){
+    void goalCompletedByOnePlayer() throws FileNotFoundException {
         GoalAngles goal = new GoalAngles();
         Player p = new Player("Nico", true);
-        Shelf s = new Shelf();
 
-        for(int i=0; i<6; i++){
-            if(i==0 || i==5){
-                s.addTile(0, new Tile(Color.WHITE));
-                s.addTile(4, new Tile(Color.WHITE));
-            } else {
-                s.addTile(0, new Tile(Color.BLUE));
-                s.addTile(4, new Tile(Color.BLUE));
-            }
-        }
-        assertEquals(8, goal.getScore(s, p));
-        System.out.println("TEST PASSED"); //color: White
-    }
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles.json");
+        Scanner reader = new Scanner(shelfConf);
+        configShelf(p.getShelf(), reader);
 
-    @Test
-    void theSamePlayerCannotCompleteTheSameGoalTwoTimes(){
-        GoalAngles goal = new GoalAngles();
-        Player p = new Player("Nico", true);
-        Shelf s = new Shelf();
-
-        for(int i=0; i<6; i++){
-            if(i==0 || i==5){
-                s.addTile(0, new Tile(Color.BLUE));
-                s.addTile(4, new Tile(Color.BLUE));
-            } else {
-                s.addTile(0, new Tile(Color.GREEN));
-                s.addTile(4, new Tile(Color.GREEN));
-            }
-        }
-        assertEquals(8, goal.getScore(s, p)); //Nico completes the goal for the first time
-        assertEquals(0, goal.getScore(s, p)); //Nico can't take other points from this goal
+        assertEquals(8, goal.getScore(p));
         System.out.println("TEST PASSED");
     }
 
     @Test
-    void goalCompletedByFourPlayers(){
+    void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
+        GoalAngles goal = new GoalAngles();
+        Player p = new Player("Nico", true);
+
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles.json");
+        Scanner reader = new Scanner(shelfConf);
+        configShelf(p.getShelf(), reader);
+
+        assertEquals(8, goal.getScore(p)); //Nico completes the goal for the first time
+        assertEquals(0, goal.getScore(p)); //Nico can't take other points from this goal
+        System.out.println("TEST PASSED");
+    }
+
+    @Test
+    void goalCompletedByFourPlayers() throws FileNotFoundException {
         GoalAngles goal = new GoalAngles();
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);
         Player p4 = new Player("Alessandra", false);
-        Shelf s = new Shelf();
 
-        for(int i=0; i<6; i++){
-            if(i==0 || i==5){
-                s.addTile(0, new Tile(Color.BLUE));
-                s.addTile(4, new Tile(Color.BLUE));
-            } else {
-                s.addTile(0, new Tile(Color.GREEN));
-                s.addTile(4, new Tile(Color.GREEN));
-            }
-        }
-        assertEquals(8, goal.getScore(s, p1));
-        assertEquals(6, goal.getScore(s, p2));
-        assertEquals(4, goal.getScore(s, p3));
-        assertEquals(2, goal.getScore(s, p4));
-        //assertEquals(0, goal.getScore(s, p2)); the same player cannot complete the same goal two times
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles.json");
+        Scanner reader1 = new Scanner(shelfConf);
+        Scanner reader2 = new Scanner(shelfConf);
+        Scanner reader3 = new Scanner(shelfConf);
+        Scanner reader4 = new Scanner(shelfConf);
+        configShelf(p1.getShelf(), reader1);
+        configShelf(p2.getShelf(), reader2);
+        configShelf(p3.getShelf(), reader3);
+        configShelf(p4.getShelf(), reader4);
+
+        assertEquals(8, goal.getScore(p1));
+        assertEquals(6, goal.getScore(p2));
+        assertEquals(4, goal.getScore(p3));
+        assertEquals(2, goal.getScore(p4));
+        //assertEquals(0, goal.getScore(p2)); the same player cannot complete the same goal two times
         System.out.println("TEST PASSED");
     }
 }

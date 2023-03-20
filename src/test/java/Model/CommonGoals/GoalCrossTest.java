@@ -6,135 +6,92 @@ import Model.Shelf;
 import Model.Tile;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GoalCrossTest {
+    public void configShelf(Shelf shelf, Scanner scanner){
+        while(scanner.hasNextLine()){
+            String confBuffer = scanner.nextLine();
+            for(int c=0; c<5; c++){
+                switch(confBuffer.charAt(c)){
+                    case 'W': shelf.addTile(c, new Tile(Color.WHITE));
+                        break;
+                    case 'B': shelf.addTile(c, new Tile(Color.BLUE));
+                        break;
+                    case 'P': shelf.addTile(c, new Tile(Color.PINK));
+                        break;
+                    case 'G': shelf.addTile(c, new Tile(Color.GREEN));
+                        break;
+                    case 'Y': shelf.addTile(c, new Tile(Color.YELLOW));
+                        break;
+                    case 'L': shelf.addTile(c, new Tile(Color.LIGHTBLUE));
+                        break;
+                    case '-': shelf.addTile(c, null);
+                }
+            }
+        }
+    }
 
     @Test
     void emptyShelf(){
         GoalCross goal = new GoalCross();
         Player p = new Player("Nico", true);
-        Shelf s = new Shelf();
 
-        assertEquals(0, goal.getScore(s, p));
+        assertEquals(0, goal.getScore(p));
         System.out.println("TEST PASSED");
     }
 
     @Test
-    void goalCompletedByOnePlayer(){
+    void goalCompletedByOnePlayer() throws FileNotFoundException {
         GoalCross goal = new GoalCross();
         Player p = new Player("Nico", true);
-        Shelf s = new Shelf();
 
-        for(int r=0; r<5; r++){
-            switch (r){
-                case 0: s.addTile(2, new Tile(Color.BLUE));
-                case 1: s.addTile(2, new Tile(Color.WHITE));
-                case 2: s.addTile(2, new Tile(Color.WHITE));
-                case 3: s.addTile(2, new Tile(Color.BLUE));
-                case 4: s.addTile(2, new Tile(Color.WHITE));
-            }
-        }
-        for(int r=0; r<4; r++){
-            switch (r){
-                case 0: s.addTile(3, new Tile(Color.PINK));
-                case 1: s.addTile(3, new Tile(Color.WHITE));
-                case 2: s.addTile(3, new Tile(Color.GREEN));
-                case 3: s.addTile(3, new Tile(Color.WHITE));
-            }
-        }
-        for(int r=0; r<5; r++){
-            switch (r){
-                case 0: s.addTile(4, new Tile(Color.BLUE));
-                case 1: s.addTile(4, new Tile(Color.WHITE));
-                case 2: s.addTile(4, new Tile(Color.WHITE));
-                case 3: s.addTile(4, new Tile(Color.BLUE));
-                case 4: s.addTile(4, new Tile(Color.WHITE));
-            }
-        }
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/cross.json");
+        Scanner reader = new Scanner(shelfConf);
+        configShelf(p.getShelf(), reader);
 
-        assertEquals(8, goal.getScore(s, p));
+        assertEquals(8, goal.getScore(p));
         System.out.println("TEST PASSED");
     }
 
     @Test
-    void theSamePlayerCannotCompleteTheSameGoalTwoTimes(){
+    void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
         GoalCross goal = new GoalCross();
         Player p = new Player("Nico", true);
-        Shelf s = new Shelf();
 
-        for(int r=0; r<5; r++){
-            switch (r){
-                case 0: s.addTile(2, new Tile(Color.BLUE));
-                case 1: s.addTile(2, new Tile(Color.WHITE));
-                case 2: s.addTile(2, new Tile(Color.WHITE));
-                case 3: s.addTile(2, new Tile(Color.BLUE));
-                case 4: s.addTile(2, new Tile(Color.WHITE));
-            }
-        }
-        for(int r=0; r<4; r++){
-            switch (r){
-                case 0: s.addTile(3, new Tile(Color.PINK));
-                case 1: s.addTile(3, new Tile(Color.WHITE));
-                case 2: s.addTile(3, new Tile(Color.GREEN));
-                case 3: s.addTile(3, new Tile(Color.WHITE));
-            }
-        }
-        for(int r=0; r<5; r++){
-            switch (r){
-                case 0: s.addTile(4, new Tile(Color.BLUE));
-                case 1: s.addTile(4, new Tile(Color.WHITE));
-                case 2: s.addTile(4, new Tile(Color.WHITE));
-                case 3: s.addTile(4, new Tile(Color.BLUE));
-                case 4: s.addTile(4, new Tile(Color.WHITE));
-            }
-        }
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/cross.json");
+        Scanner reader = new Scanner(shelfConf);
+        configShelf(p.getShelf(), reader);
 
-        assertEquals(8, goal.getScore(s, p));
-        assertEquals(0, goal.getScore(s, p));
+        assertEquals(8, goal.getScore(p)); //Nico completes the goal for the first time
+        assertEquals(0, goal.getScore(p)); //Nico can't take other points from this goal
         System.out.println("TEST PASSED");
     }
 
     @Test
-    void goalCompletedByFourPlayers(){
+    void goalCompletedByFourPlayers() throws FileNotFoundException {
         GoalCross goal = new GoalCross();
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);
         Player p4 = new Player("Alessandra", false);
-        Shelf s = new Shelf();
 
-        for(int r=0; r<5; r++){
-            switch (r){
-                case 0: s.addTile(2, new Tile(Color.BLUE));
-                case 1: s.addTile(2, new Tile(Color.WHITE));
-                case 2: s.addTile(2, new Tile(Color.WHITE));
-                case 3: s.addTile(2, new Tile(Color.BLUE));
-                case 4: s.addTile(2, new Tile(Color.WHITE));
-            }
-        }
-        for(int r=0; r<4; r++){
-            switch (r){
-                case 0: s.addTile(3, new Tile(Color.PINK));
-                case 1: s.addTile(3, new Tile(Color.WHITE));
-                case 2: s.addTile(3, new Tile(Color.GREEN));
-                case 3: s.addTile(3, new Tile(Color.WHITE));
-            }
-        }
-        for(int r=0; r<5; r++){
-            switch (r){
-                case 0: s.addTile(4, new Tile(Color.BLUE));
-                case 1: s.addTile(4, new Tile(Color.WHITE));
-                case 2: s.addTile(4, new Tile(Color.WHITE));
-                case 3: s.addTile(4, new Tile(Color.BLUE));
-                case 4: s.addTile(4, new Tile(Color.WHITE));
-            }
-        }
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/cross.json");
+        Scanner reader = new Scanner(shelfConf);
+        configShelf(p1.getShelf(), reader);
+        configShelf(p2.getShelf(), reader);
+        configShelf(p3.getShelf(), reader);
+        configShelf(p4.getShelf(), reader);
 
-        assertEquals(8, goal.getScore(s, p1));
-        assertEquals(6, goal.getScore(s, p2));
-        assertEquals(4, goal.getScore(s, p3));
-        assertEquals(2, goal.getScore(s, p4));
+        assertEquals(8, goal.getScore(p1));
+        assertEquals(6, goal.getScore(p2));
+        assertEquals(4, goal.getScore(p3));
+        assertEquals(2, goal.getScore(p4));
+        //assertEquals(0, goal.getScore(p2)); the same player cannot complete the same goal two times
         System.out.println("TEST PASSED");
     }
 }

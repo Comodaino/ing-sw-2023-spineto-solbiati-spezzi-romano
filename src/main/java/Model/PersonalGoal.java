@@ -1,9 +1,7 @@
 package Model;
-import java.io.File;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class PersonalGoal {
@@ -101,6 +99,9 @@ public class PersonalGoal {
         ;
     }
 
+    public ArrayList<Pgtype> getPersGoal() {
+        return null;
+    }
 }
 
 

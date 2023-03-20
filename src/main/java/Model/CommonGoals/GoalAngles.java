@@ -2,7 +2,6 @@ package Model.CommonGoals;
 
 import Model.Player;
 import Model.Shelf;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class GoalAngles extends CommonGoal{
     public GoalAngles(){

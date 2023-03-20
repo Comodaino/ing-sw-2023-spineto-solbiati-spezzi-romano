@@ -12,14 +12,16 @@ public class Player {
         this.chair = c;
         this.nickname = n;
         this.myShelf = new Shelf();
-        this.myGoal = new PersonalGoal();
+        this.myGoal = new PersonalGoal(this.myShelf);
     }
 
     public String getNickname(){
-        return nickname;
+        return this.nickname;
     }
 
     public boolean getChair(){
-        return chair;
+        return this.chair;
     }
+    public Shelf getShelf(){ return this.myShelf;}
+    public PersonalGoal getGoal(){ return this.myGoal;}
 }

@@ -56,6 +56,7 @@ public class GoalStair extends CommonGoal{
                 break;
             }
         } //checks a "right stair" (i.e. a stair with the top at right)
+
         if(numOfCol==4 && !this.completed.contains(p)){
             return assignScore(p);
         }

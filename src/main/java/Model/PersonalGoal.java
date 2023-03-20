@@ -1,11 +1,10 @@
 package Model;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
-import static Model.Color.WHITE;
+import java.util.StringTokenizer;
 
 public class PersonalGoal {
     private Shelf playerShelf;
@@ -47,20 +46,59 @@ public class PersonalGoal {
         }
     }
 
-    public int getScore(Shelf shelf){
-        for(int i=1;i<=6;i++){
-        }
+    public int getScore(Shelf playerShelf){
+        int score=0,point=0;
+            for (int i=0;i<PGoal.size();i++) {
+                Pgtype pgtype = PGoal.get(i);
+                int line = pgtype.getLine();
+                int col = pgtype.getCol();
+                Color color = pgtype.getColor();
+                if (playerShelf.getTile(line, col).getColor() == color) {
+                    point+=1;
+                }
+            }
+            if (point==1){
+                score=1;
+            }
+            if(point==2){
+                score=2;
+            }
+            if(point==3){
+                score=4;
+            }
+            if(point==4){
+                score=6;
+            }
+            if(point==5){
+                score=9;
+            }
+            if(point==6){
+                score=12;
+            }
+
+        return score;
     }
     public void getPersGoal(int j) {
-        try {
-            File PersonalGoal = new File("PersonalGoal.json");
-            Scanner reader = new Scanner(PersonalGoal);
-            String Pers = reader.nextLine();
-            for(int line=j; j<=j+6; j++) {
+        String fileName = "src/main/java/Model/PersonalGoal.json";
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))){
+            String file = br.readLine();
 
-                PGoal.add(new Pgtype((int) Pers.charAt(0), (int) Pers.charAt(1), (Color)Pers.lines()));  //non so cosa fare per leggere il colore
+            for(int l=j; l<=j+6; l++) {
+                StringTokenizer st = new StringTokenizer(file,",");
+                while (st.hasMoreTokens()){
+                    String line = st.nextToken();
+                    String col = st.nextToken();
+                    Color color = Color.valueOf(st.nextToken());
+                    PGoal.add(new Pgtype(Integer.parseInt(line),Integer.parseInt(col),color));
+                }
+
             }
-        }catch (FileNotFoundException e);
+        }catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ;
     }
 
 }

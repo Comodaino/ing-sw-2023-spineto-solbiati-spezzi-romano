@@ -1,15 +1,14 @@
 package Model;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class Cell {
     private CellType type;
     private Tile containedTile;
 
     public Cell(CellType t){
         this.type =t;
-        throw new NotImplementedException();
     }
     public boolean isEmpty(){
-        throw new NotImplementedException();
+        if (containedTile==null) return false;
+            else return true;
     }
     public Tile getTile(){
         return containedTile;

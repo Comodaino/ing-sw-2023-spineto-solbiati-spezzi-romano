@@ -11,7 +11,7 @@ public abstract class CommonGoal {
     public CommonGoal() {
         this.completed = new ArrayList<Player>();
     }
-    public int getScore(Shelf s, Player p){ throw new NotImplementedException();}
+    public abstract int getScore(Shelf s, Player p);
     public int assignScore(Player p){
         switch(this.completed.size()){
             case 0:

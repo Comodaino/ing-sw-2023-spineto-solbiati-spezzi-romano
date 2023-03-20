@@ -2,8 +2,6 @@ package Model.CommonGoals;
 
 import Model.Player;
 import Model.Shelf;
-
-
 import java.util.Arrays;
 
 public class GoalCouples extends CommonGoal{

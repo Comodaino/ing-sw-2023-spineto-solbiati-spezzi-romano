@@ -13,10 +13,9 @@ class BagTest {
     @Test
     public void test1(){
         for(int i=0; i<133; i++){
-            System.out.println((String)testBag.newTile().getColor());
+            System.out.println(testBag.newTile().getColor().toString());
         }
         assertEquals(testBag.newTile(), null);
         System.out.println("TEST PASSED");
     }
-}
 }

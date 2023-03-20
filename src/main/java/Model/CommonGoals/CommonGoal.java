@@ -2,7 +2,6 @@ package Model.CommonGoals;
 
 import Model.Player;
 import Model.Shelf;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +26,7 @@ public abstract class CommonGoal {
                 this.completed.add(p);
                 return 2;
         }
-        throw new NotImplementedException(); //throw a new NotAssignableScoreException
+        return 0;
+       // throw new NotImplementedException(); //throw a new NotAssignableScoreException
     }
 }

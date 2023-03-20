@@ -6,6 +6,7 @@ import java.util.Random;
 
 import static Model.Color.*;
 
+
 public class Bag {
     private List<Tile> containedTiles;
 

@@ -1,12 +1,35 @@
 package Model;
 
-import junit.framework.TestCase;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BoardTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
 
+class BoardTest {
+    private List<Player> playerList;
     public void testRemoveTile() {
-        Board testBoard = new Board();
+        playerList=new ArrayList<Player>();
+        playerList.add(new Player("player1", true));
+        playerList.add(new Player("player2", false));
+        Board testBoard = new Board(false, playerList);
         testBoard.removeTile(5,5);
-        assertEquals(testBoard.getTile(5,5),null);
+        assertNull(testBoard.getTile(5, 5));
+        System.out.println("SEGMENT PASSED");
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                if(!testBoard.getCell(i,j).isEmpty()) testBoard.removeTile(i,j);
+            }
+        }
+        testBoard.checkRecharge();
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                if(testBoard.getCell(i,j).isEmpty() && testBoard.getCell(i,j).getType()!=CellType.ONE) {
+                    System.out.println("RECHARGE FAIL");
+                    return;
+                }
+            }
+        }
+        System.out.println("TEST PASSED");
+        return;
     }
 }

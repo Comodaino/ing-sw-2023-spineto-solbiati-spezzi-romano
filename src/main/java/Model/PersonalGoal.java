@@ -79,7 +79,7 @@ public class PersonalGoal {
         return score;
     }
     public void getPersGoal(int j) {
-        String fileName = "PersonalGoal.json";
+        String fileName = "src/main/java/Model/PersonalGoal.json";
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))){
             String file = br.readLine();
 

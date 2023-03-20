@@ -1,5 +1,7 @@
 package Model;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
     private List<Player> playerList;
+    @Test
     public void testRemoveTile() {
         playerList=new ArrayList<Player>();
         playerList.add(new Player("player1", true));

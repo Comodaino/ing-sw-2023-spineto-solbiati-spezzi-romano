@@ -7,7 +7,7 @@ public class Cell {
         this.type =t;
     }
     public boolean isEmpty(){
-        if (containedTile.equals(null)) return false;
+        if (containedTile==null) return false;
             else return true;
     }
     public Tile getTile(){

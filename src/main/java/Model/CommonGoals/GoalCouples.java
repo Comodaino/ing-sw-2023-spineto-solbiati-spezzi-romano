@@ -7,7 +7,8 @@ import java.util.Arrays;
 public class GoalCouples extends CommonGoal{
     public GoalCouples (){ super(); }
     @Override
-    public int getScore(Shelf s, Player p){
+    public int getScore(Player p){
+        Shelf s = p.getMyShelf();
         int counter = 0;
         boolean[][] foundMatrix = new boolean[6][5];
         Arrays.fill(foundMatrix, false);

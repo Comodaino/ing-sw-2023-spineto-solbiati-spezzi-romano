@@ -8,17 +8,17 @@ public class GoalCross extends CommonGoal{
         super();
     }
     @Override
-    public int getScore(Shelf s, Player p){
+    public int getScore(Player p){
         boolean found = false;
 
         for(int r=1; r<5 && !found; r++){
             for(int c=1; c<4 && !found; c++){
-                if(s.getTile(r, c)!=null && s.getTile(r-1, c-1)!=null && s.getTile(r-1, c+1)!=null &&
-                s.getTile(r+1, c-1)!=null && s.getTile(r+1, c+1)!=null){
-                    if(s.getTile(r, c).getColor().equals(s.getTile(r-1, c-1).getColor()) &&
-                    s.getTile(r, c).getColor().equals(s.getTile(r-1, c+1).getColor()) &&
-                    s.getTile(r, c).getColor().equals(s.getTile(r+1, c-1).getColor()) &&
-                    s.getTile(r, c).getColor().equals(s.getTile(r+1, c+1).getColor())){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r-1, c-1)!=null && p.getShelf().getTile(r-1, c+1)!=null &&
+                p.getShelf().getTile(r+1, c-1)!=null && p.getShelf().getTile(r+1, c+1)!=null){
+                    if(p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r-1, c-1).getColor()) &&
+                    p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r-1, c+1).getColor()) &&
+                    p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c-1).getColor()) &&
+                    p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c+1).getColor())){
                         found = true;
                     }
                 }

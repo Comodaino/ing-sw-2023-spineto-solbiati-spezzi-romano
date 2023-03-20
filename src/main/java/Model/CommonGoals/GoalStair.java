@@ -8,19 +8,19 @@ public class GoalStair extends CommonGoal{
         super();
     }
     @Override
-    public int getScore(Shelf s, Player p){
+    public int getScore(Player p){
         int n = 0;
         int m = 0;
         int numOfCol = 0;
 
         for(int r=0; r<6; r++){
-            if(s.getTile(r, 0) != null){
+            if(p.getShelf().getTile(r, 0) != null){
                 n++;
             }
         }
         for(int c=1; c<5; c++){
             for(int r=0; r<6; r++){
-                if(s.getTile(r, c) != null){
+                if(p.getShelf().getTile(r, c) != null){
                     m++;
                 }
             }
@@ -38,13 +38,13 @@ public class GoalStair extends CommonGoal{
 
         numOfCol = 0;
         for(int r=0; r<6; r++){
-            if(s.getTile(r, 0) != null){
+            if(p.getShelf().getTile(r, 0) != null){
                 n++;
             }
         }
         for(int c=1; c<5; c++){
             for(int r=0; r<6; r++){
-                if(s.getTile(r, c) != null){
+                if(p.getShelf().getTile(r, c) != null){
                     m++;
                 }
             }

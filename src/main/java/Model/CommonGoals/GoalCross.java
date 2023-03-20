@@ -13,7 +13,8 @@ public class GoalCross extends CommonGoal{
 
         for(int r=1; r<5 && !found; r++){
             for(int c=1; c<4 && !found; c++){
-                if(s.getTile(r, c) != null){
+                if(s.getTile(r, c)!=null && s.getTile(r-1, c-1)!=null && s.getTile(r-1, c+1)!=null &&
+                s.getTile(r+1, c-1)!=null && s.getTile(r+1, c+1)!=null){
                     if(s.getTile(r, c).getColor().equals(s.getTile(r-1, c-1).getColor()) &&
                     s.getTile(r, c).getColor().equals(s.getTile(r-1, c+1).getColor()) &&
                     s.getTile(r, c).getColor().equals(s.getTile(r+1, c-1).getColor()) &&

@@ -1,5 +1,7 @@
 package Model;
 
+
+
 public class Player {
     private String nickname;
     private boolean chair;
@@ -10,18 +12,16 @@ public class Player {
         this.chair = c;
         this.nickname = n;
         this.myShelf = new Shelf();
-        this.myGoal = new PersonalGoal();
+        this.myGoal = new PersonalGoal(this.myShelf);
     }
 
     public String getNickname(){
-        return nickname;
+        return this.nickname;
     }
 
     public boolean getChair(){
-        return chair;
+        return this.chair;
     }
-
-    public Shelf getMyShelf() { return myShelf; }
-
-    public PersonalGoal getMyGoal() { return myGoal; }
+    public Shelf getShelf(){ return this.myShelf;}
+    public PersonalGoal getGoal(){ return this.myGoal;}
 }

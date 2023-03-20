@@ -11,7 +11,7 @@ public class GameController implements Observer {
     //The following constructor needs to be reviewed and modified after the lesson about sockets and view
     public GameController(){
         //this.gameTui = new View()
-        this.gameBoard = new Board();
+        //this.gameBoard = new Board();
     }
 
     @Override

@@ -33,9 +33,10 @@ public class Board{
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
                 String data = reader.nextLine();
+
                 CellType type = null;
                 for (int j = 0; j<9; j++){
-                    switch((int)data.charAt(j)){
+                    switch((int)data.charAt(j)-48){
                         case 1: type = ONE;
                         break;
                         case 2: type = TWO;
@@ -46,6 +47,7 @@ public class Board{
                             break;
 
                     }
+                    //System.out.println("type: " + type.toString());
                     this.matrix[i][j] = new Cell(type);
                 }
             }
@@ -53,7 +55,7 @@ public class Board{
             reader.close();
         }catch (FileNotFoundException e) {
             throw new RuntimeException(e);
-        };
+        }
         recharge();
         this.listOfPlayer = pl;
         this.firstMatch = fm;
@@ -93,9 +95,10 @@ public class Board{
             }
         }
 
-        if(found) recharge();
+        if(!found) recharge();
     }
     public void recharge(){
+
         for(int i=0; i<9; i++) {
             for (int j = 0; j < 9; j++) {
                 if(matrix[i][j].isEmpty() && matrix[i][j].getType()!=ONE) matrix[i][j].insertTile(bag.newTile());

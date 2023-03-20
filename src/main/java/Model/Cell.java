@@ -11,6 +11,7 @@ public class Cell {
             else return true;
     }
     public Tile getTile(){
+        if(this.isEmpty()) return null;
         return containedTile;
     }
     public void removeTile(){
@@ -19,5 +20,5 @@ public class Cell {
     public void insertTile(Tile t){
         this.containedTile= t;
     }
-    public CellType getType(){ return this.type; }    //scusa ti ho aggiunto questo metodo -Alessio
+    public CellType getType(){ return this.type; }
 }

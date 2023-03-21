@@ -55,6 +55,9 @@ public class GameController implements Observer {
                 for(CommonGoal cg: gameBoard.getSetOfCommonGoal()) {
                     gameBoard.getListOfPlayer().get(i).addScore(cg.getScore(gameBoard.getListOfPlayer().get(i)));
                 }
+                if(gameBoard.getEndGoal().getStatus()){
+                    gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getEndGoal().isCompleted());
+                }
             }
         }
     }

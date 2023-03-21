@@ -14,7 +14,7 @@ public class Board{
     private List<Player> listOfPlayer;
     private boolean firstMatch;
     private Set<CommonGoal> setOfCommonGoal;
-    private boolean firstToEnd;
+    private EndGoal endGoal;
     private List<Tile> tileBuffer;
 
     private GoalFactory goalFactory;
@@ -57,7 +57,7 @@ public class Board{
         recharge();
         this.listOfPlayer = pl;
         this.firstMatch = fm;
-        this.firstToEnd = true;
+        this.endGoal = new EndGoal();
         this.goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();
 
@@ -121,5 +121,9 @@ public class Board{
 
     public Set<CommonGoal> getSetOfCommonGoal() {
         return setOfCommonGoal;
+    }
+
+    public EndGoal getEndGoal() {
+        return endGoal;
     }
 }

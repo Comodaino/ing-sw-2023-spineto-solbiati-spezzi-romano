@@ -51,7 +51,7 @@ public class PersonalGoal {
                 int line = pgtype.getLine();
                 int col = pgtype.getCol();
                 Color color = pgtype.getColor();
-                if (playerShelf.getTile(line, col).getColor() == color) {
+                if (playerShelf.getTile(line, col)!=null && playerShelf.getTile(line, col).getColor() == color) {
                     point+=1;
                 }
             }
@@ -76,19 +76,21 @@ public class PersonalGoal {
 
         return score;
     }
-    public void getPersGoal(int j) {
+    public ArrayList<Pgtype> getPersGoal(int j) {
         String fileName = "src/main/java/Model/PersonalGoal.json";
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))){
-            String file = br.readLine();
 
-            for(int l=j; l<=j+6; l++) {
-                StringTokenizer st = new StringTokenizer(file,",");
-                while (st.hasMoreTokens()){
-                    String line = st.nextToken();
-                    String col = st.nextToken();
-                    Color color = Color.valueOf(st.nextToken());
-                    PGoal.add(new Pgtype(Integer.parseInt(line),Integer.parseInt(col),color));
-                }
+            for(int k=0;k<j-1;k++)  {
+                br.readLine();
+            }
+            String file = br.readLine();
+            for(int l=0; l<6; l++) {
+                String st[] = file.split(",");
+
+                    int line = st[0].charAt(0)-48;
+                    int col = st[1].charAt(0)-48;
+                    Color color = Color.valueOf(st[2]);
+                    PGoal.add(new Pgtype(line,col,color));
 
             }
         }catch (FileNotFoundException e) {
@@ -96,11 +98,11 @@ public class PersonalGoal {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ;
+        return PGoal;
     }
 
-    public ArrayList<Pgtype> getPersGoal() {
-        return null;
+    public ArrayList<Pgtype> getPGoal() {
+        return PGoal;
     }
 }
 

@@ -9,7 +9,7 @@ public class Shelf{
         this.matrix = new Tile[6][5];
     }
 
-    public Shelf(Tile[][] m){
+    public void setShelf(Tile[][] m){
         this.matrix = m;
     }
 
@@ -28,6 +28,14 @@ public class Shelf{
     public Tile getTile(int r, int c){
 
         return matrix[r][c];
+    }
+
+    public Tile[][] getMatrix() {
+        return matrix;
+    }
+
+    public void setMatrix(Tile[][] m) {
+        this.matrix=m;
     }
 }
 

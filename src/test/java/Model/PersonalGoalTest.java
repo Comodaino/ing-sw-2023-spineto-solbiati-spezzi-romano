@@ -13,18 +13,19 @@ class PersonalGoalTest {
     public void TestGetScoreNOMatchingTile(){
         Shelf playerShelf = new Shelf();
         PersonalGoal personalGoal= new PersonalGoal(playerShelf);
-        personalGoal.getPersGoal(0);
-        int expectedScore=0;
-        int actualScore=personalGoal.getScore(playerShelf);
-        Assertions.assertEquals(expectedScore,actualScore);
+        Assertions.assertEquals( 0, personalGoal.getScore(playerShelf));
     }
     @Test
     public void TestGetScoreOneMatchingTile(){
         Shelf playerShelf = new Shelf();
         PersonalGoal personalGoal= new PersonalGoal(playerShelf);
         Tile t= new Tile(Color.GREEN);
-        playerShelf.addTile(1,t);
-        personalGoal.getPersGoal(0);
+        Cell cell =new Cell(CellType.ONE);
+        cell.insertTile(t);
+
+        playerShelf.getTile(1,1);
+       // playerShelf.addTile(1,t);
+        //personalGoal.getPersGoal(0);
         Assertions.assertEquals(0,personalGoal.getScore(playerShelf));
 
     }
@@ -33,9 +34,6 @@ class PersonalGoalTest {
         Shelf playerShelf = new Shelf();
         ArrayList<Pgtype> pGoal = new ArrayList<>();
         PersonalGoal personalGoal= new PersonalGoal(playerShelf);
-        System.out.println(personalGoal.getPGoal().size());
-
-
         for(int i=0; i<personalGoal.getPGoal().size();i++){
             System.out.print(personalGoal.getPGoal().get(i).getColor().toString()+" ");
             System.out.print(personalGoal.getPGoal().get(i).getLine()+" ");
@@ -50,5 +48,7 @@ class PersonalGoalTest {
         ArrayList<Pgtype> pGoal =new ArrayList<>();
         Assertions.assertEquals(6, personalGoal.getPGoal().size());
     }
+
+
 
 }

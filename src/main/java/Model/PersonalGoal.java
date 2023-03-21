@@ -78,8 +78,6 @@ public class PersonalGoal {
         return score;
     }
     public ArrayList<Pgtype> getPersGoal(int j) {
-        System.out.println(j);
-        //String fileName = "src/main/java/Model/PersonalGoal.json";
         try {
             File ListOfPersonalGoal = new File("src/main/java/Model/PersonalGoal.json");
             Scanner reader = new Scanner(ListOfPersonalGoal);
@@ -90,7 +88,6 @@ public class PersonalGoal {
             String pg = reader.nextLine();
             for(int l=0; l<6; l++) {
                 String st[] = pg.split(",");
-
                     int line = st[0].charAt(0)-48;
                     int col = st[1].charAt(0)-48;
                     Color color = Color.valueOf(st[2]);
@@ -109,9 +106,3 @@ public class PersonalGoal {
         return PGoal;
     }
 }
-
-
-
-
-
-

@@ -35,7 +35,7 @@ public class Board{
                 String data = reader.nextLine();
                 CellType type = null;
                 for (int j = 0; j<9; j++){
-                    switch((int)data.charAt(j)){
+                    switch((int)data.charAt(j) - 48){
                         case 1: type = ONE;
                         break;
                         case 2: type = TWO;
@@ -111,4 +111,15 @@ public class Board{
         return matrix[r][c];
     }
 
+    public List<Tile> getTileBuffer() {
+        return tileBuffer;
+    }
+
+    public List<Player> getListOfPlayer() {
+        return listOfPlayer;
+    }
+
+    public Set<CommonGoal> getSetOfCommonGoal() {
+        return setOfCommonGoal;
+    }
 }

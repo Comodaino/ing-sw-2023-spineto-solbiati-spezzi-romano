@@ -15,6 +15,11 @@ class BoardTest {
         playerList.add(new Player("player1", true));
         playerList.add(new Player("player2", false));
         Board testBoard = new Board(false, playerList);
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                System.out.println(testBoard.getCell(i,j).getType());
+            }
+        }
         testBoard.removeTile(5,5);
         assertNull(testBoard.getTile(5, 5));
         System.out.println("SEGMENT PASSED");

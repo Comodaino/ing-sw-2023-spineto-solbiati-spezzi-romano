@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Board;
+import Model.CommonGoals.CommonGoal;
 import Model.Player;
 import View.ViewInterface;
 
@@ -23,16 +24,38 @@ public class GameController implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(o==gameTui){
-            String input = arg.toString();
-            if(input.charAt(0) == '/')
-            switch(input.substring(0,input.indexOf(' ')-1)){
-                case "/remove":
+            String input[] = arg.toString().split(" ");
+            if(input[0].charAt(0) == '/'){
+            switch(input[0]) {
+                case "/remove": playRemove(input);
                     break;
+                case "/add": playAdd(input);
+                    break;
+            }
             }else{
-                System.out.("Commands must start with '/'");
+                System.out.println("Commands must start with '/'");
             }
         }else{
-            System.out.("Wrong Observable");
+            System.out.println("Wrong Observable");
+        }
+    }
+
+
+    //NOTE: INPUT LAYOUT SHOULD BE "\COMMAND PLAYERNAME PAR1 PAR2 ...
+    private void playRemove(String[] input) {
+        gameBoard.removeTile(input[2].charAt(0) - 48, input[3].charAt(0) - 48);
+        gameBoard.checkRecharge();
+    }
+
+    private void playAdd(String[] input) {
+        for(int i=0; i<gameBoard.getListOfPlayer().size(); i++){
+            if(gameBoard.getListOfPlayer().get(i).getNickname().equals(input[1])){
+                gameBoard.getListOfPlayer().get(i).getShelf().addTile(input[2].charAt(0) - 48, gameBoard.getTileBuffer().remove(0));
+                gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
+                for(CommonGoal cg: gameBoard.getSetOfCommonGoal()) {
+                    gameBoard.getListOfPlayer().get(i).addScore(cg.getScore(gameBoard.getListOfPlayer().get(i)));
+                }
+            }
         }
     }
 

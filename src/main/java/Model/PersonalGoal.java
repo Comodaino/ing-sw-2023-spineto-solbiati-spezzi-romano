@@ -11,9 +11,10 @@ import java.util.StringTokenizer;
 public class PersonalGoal {
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
+    private int limit;
 
     public PersonalGoal(Shelf ps){
-
+        this.limit=0;
         this.playerShelf= ps;
         this.PGoal= new ArrayList<Pgtype>();   //ArrayList o List??
         Random rand = new Random();
@@ -59,23 +60,30 @@ public class PersonalGoal {
                     point+=1;
                 }
             }
+            score=0;
             if (point==1){
-                score=1;
+                score+=1;
+                limit=1;
             }
             if(point==2){
-                score=2;
+                score+=1;
+                limit=2;
             }
             if(point==3){
-                score=4;
+                score+=2;
+                limit=3;
             }
             if(point==4){
-                score=6;
+                score+=2;
+                limit=4;
             }
             if(point==5){
-                score=9;
+                score+=3;
+                limit=5;
             }
             if(point==6){
-                score=12;
+                score+=3;
+                limit=6;
             }
 
         return score;

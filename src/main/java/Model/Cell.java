@@ -5,10 +5,11 @@ public class Cell {
 
     public Cell(CellType t){
         this.type =t;
+        this.containedTile = null;
     }
     public boolean isEmpty(){
-        if (containedTile==null) return false;
-            else return true;
+        if (containedTile==null) return true;
+            else return false;
     }
     public Tile getTile(){
         if(this.isEmpty()) return null;

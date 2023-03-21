@@ -1,9 +1,5 @@
 package Model;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -11,10 +7,9 @@ import java.util.StringTokenizer;
 public class PersonalGoal {
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
-    private int limit;
 
     public PersonalGoal(Shelf ps){
-        this.limit=0;
+
         this.playerShelf= ps;
         this.PGoal= new ArrayList<Pgtype>();   //ArrayList o List??
         Random rand = new Random();
@@ -56,51 +51,46 @@ public class PersonalGoal {
                 int line = pgtype.getLine();
                 int col = pgtype.getCol();
                 Color color = pgtype.getColor();
-                if (playerShelf.getTile(line, col).getColor() == color) {
+                if (playerShelf.getTile(line, col)!=null && playerShelf.getTile(line, col).getColor() == color) {
                     point+=1;
                 }
             }
-            score=0;
             if (point==1){
-                score+=1;
-                limit=1;
+                score=1;
             }
             if(point==2){
-                score+=1;
-                limit=2;
+                score=2;
             }
             if(point==3){
-                score+=2;
-                limit=3;
+                score=4;
             }
             if(point==4){
-                score+=2;
-                limit=4;
+                score=6;
             }
             if(point==5){
-                score+=3;
-                limit=5;
+                score=9;
             }
             if(point==6){
-                score+=3;
-                limit=6;
+                score=12;
             }
 
         return score;
     }
-    public void getPersGoal(int j) {
-        String fileName = "src/main/java/Model/Conf/PersonalGoal.json";
+    public ArrayList<Pgtype> getPersGoal(int j) {
+        String fileName = "src/main/java/Model/PersonalGoal.json";
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))){
-            String file = br.readLine();
 
-            for(int l=j; l<=j+6; l++) {
-                StringTokenizer st = new StringTokenizer(file,",");
-                while (st.hasMoreTokens()){
-                    String line = st.nextToken();
-                    String col = st.nextToken();
-                    Color color = Color.valueOf(st.nextToken());
-                    PGoal.add(new Pgtype(Integer.parseInt(line),Integer.parseInt(col),color));
-                }
+            for(int k=0;k<j-1;k++)  {
+                br.readLine();
+            }
+            String file = br.readLine();
+            for(int l=0; l<6; l++) {
+                String st[] = file.split(",");
+
+                    int line = st[0].charAt(0)-48;
+                    int col = st[1].charAt(0)-48;
+                    Color color = Color.valueOf(st[2]);
+                    PGoal.add(new Pgtype(line,col,color));
 
             }
         }catch (FileNotFoundException e) {
@@ -108,9 +98,12 @@ public class PersonalGoal {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ;
+        return PGoal;
     }
 
+    public ArrayList<Pgtype> getPGoal() {
+        return PGoal;
+    }
 }
 
 

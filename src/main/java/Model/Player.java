@@ -34,4 +34,8 @@ public class Player {
     public int getScore() {
         return score;
     }
+
+    public void setShelf(Tile[][] m) {
+        this.myShelf.setMatrix(m);
+    }
 }

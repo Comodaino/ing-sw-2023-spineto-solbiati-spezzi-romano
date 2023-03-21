@@ -9,9 +9,9 @@ public class ShelfTest {
     public ShelfTest(){
         this.testShelf = new Shelf();
     }
-    public ShelfTest(Tile[][] m){
+    public void setShelf(Tile[][] m){
 
-        this.testShelf = new Shelf(m);
+          this.testShelf.setMatrix(m);
     }
     @Test
     public void testAddInEmptyColumn(){
@@ -31,7 +31,8 @@ public class ShelfTest {
         tMatrix[3][0] = tile;
         tMatrix[4][0] = tile;
         tMatrix[5][0] = tile;
-        ShelfTest t = new ShelfTest(tMatrix);
+        ShelfTest t = new ShelfTest();
+        t.testShelf.setShelf(tMatrix);
         assertFalse(t.testShelf.addTile(0, tile));
         System.out.println("Test Passed");
     }

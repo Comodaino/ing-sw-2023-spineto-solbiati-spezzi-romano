@@ -17,8 +17,9 @@ class BoardTest {
         Board testBoard = new Board(false, playerList);
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
-                System.out.println(testBoard.getCell(i,j).getType());
+                System.out.print(testBoard.getCell(i,j).getType() + " ");
             }
+            System.out.println();
         }
         testBoard.removeTile(5,5);
         assertNull(testBoard.getTile(5, 5));

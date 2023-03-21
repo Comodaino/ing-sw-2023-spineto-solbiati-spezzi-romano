@@ -16,7 +16,6 @@ public class NearGoal extends Goal{
         int counter=0;
         for(int i=0; i<6; i++){
             for(int j=0; j<6; j++) {
-                counter = 0;
                 matrix[i][j]=true;
                 counter=iterator(i,j,p);
                 switch (counter){

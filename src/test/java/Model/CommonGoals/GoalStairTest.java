@@ -50,7 +50,7 @@ class GoalStairTest {
         GoalStair goal = new GoalStair();
         Player p = new Player("Nico", true);
 
-        File shelfConf = new File("");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair.json");
         Scanner reader = new Scanner(shelfConf);
         configShelf(p.getShelf(), reader);
 
@@ -63,7 +63,7 @@ class GoalStairTest {
         GoalStair goal = new GoalStair();
         Player p = new Player("Nico", true);
 
-        File shelfConf = new File("");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair.json");
         Scanner reader = new Scanner(shelfConf);
         configShelf(p.getShelf(), reader);
 
@@ -80,7 +80,7 @@ class GoalStairTest {
         Player p3 = new Player("Clara", false);
         Player p4 = new Player("Alessandra", false);
 
-        File shelfConf = new File("");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair.json");
         Scanner reader1 = new Scanner(shelfConf);
         Scanner reader2 = new Scanner(shelfConf);
         Scanner reader3 = new Scanner(shelfConf);

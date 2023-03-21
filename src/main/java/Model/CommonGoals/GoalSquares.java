@@ -1,9 +1,6 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import Model.Shelf;
-
-import java.util.Arrays;
 
 public class GoalSquares extends CommonGoal{
     public GoalSquares(){ super(); }
@@ -11,7 +8,11 @@ public class GoalSquares extends CommonGoal{
     public int getScore(Player p) {
         int counter = 0;
         boolean[][] foundMatrix = new boolean[6][5];
-        Arrays.fill(foundMatrix, false);
+        for(int i=0; i<6; i++){
+            for(int j=0; j<5; j++){
+                foundMatrix[i][j] = false;
+            }
+        }
 
         for(int i=0; i<5; i++){
             for(int j=0; j<4; j++){

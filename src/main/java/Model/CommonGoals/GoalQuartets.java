@@ -3,7 +3,6 @@ package Model.CommonGoals;
 import Model.Player;
 import Model.Shelf;
 
-import java.util.Arrays;
 
 public class GoalQuartets extends CommonGoal{
     public GoalQuartets(){
@@ -13,7 +12,11 @@ public class GoalQuartets extends CommonGoal{
     public int getScore(Player p){
         int numOfQuartets = 0, n = 0;
         boolean[][] foundMatrix = new boolean[6][5];
-        Arrays.fill(foundMatrix, false);
+        for(int i=0; i<6; i++){
+            for(int j=0; j<5; j++){
+                foundMatrix[i][j] = false;
+            }
+        }
 
         for(int r=0; r<6 && numOfQuartets<4; r++){
             n = 0;
@@ -26,7 +29,7 @@ public class GoalQuartets extends CommonGoal{
                 }
                 if(n==3){
                     numOfQuartets++;
-                    for(int i=c+1; i>c-4; i--){
+                    for(int i=c+1; i>=c-2; i--){
                         foundMatrix[r][i] = true;
                     }
                     break;
@@ -45,7 +48,7 @@ public class GoalQuartets extends CommonGoal{
                 }
                 if(n==3){
                     numOfQuartets++;
-                    for(int i=r+1; i>r-4; i--){
+                    for(int i=r+1; i>=r-2; i--){
                         foundMatrix[i][c] = true;
                     }
                     break;

@@ -1,7 +1,6 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import Model.Shelf;
 
 public class GoalStair extends CommonGoal{
     public GoalStair(){
@@ -36,6 +35,8 @@ public class GoalStair extends CommonGoal{
             return assignScore(p);
         }
 
+        n = 0;
+        m = 0;
         numOfCol = 0;
         for(int r=0; r<6; r++){
             if(p.getShelf().getTile(r, 0) != null){
@@ -56,7 +57,6 @@ public class GoalStair extends CommonGoal{
                 break;
             }
         } //checks a "right stair" (i.e. a stair with the top at right)
-
         if(numOfCol==4 && !this.completed.contains(p)){
             return assignScore(p);
         }

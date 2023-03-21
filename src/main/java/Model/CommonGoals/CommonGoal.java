@@ -1,7 +1,6 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import Model.Shelf;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,7 +2,6 @@ package Model.CommonGoals;
 
 import Model.Color;
 import Model.Player;
-import Model.Shelf;
 
 import java.util.ArrayList;
 import java.util.List;

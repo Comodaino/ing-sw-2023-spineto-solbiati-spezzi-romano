@@ -1,7 +1,6 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import Model.Shelf;
 
 public class GoalAngles extends CommonGoal{
     public GoalAngles(){

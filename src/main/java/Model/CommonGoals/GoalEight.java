@@ -2,7 +2,6 @@ package Model.CommonGoals;
 
 import Model.Color;
 import Model.Player;
-import Model.Shelf;
 
 public class GoalEight extends CommonGoal{
     private int count;

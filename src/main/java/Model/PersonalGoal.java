@@ -2,6 +2,7 @@ package Model;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class PersonalGoal {
@@ -11,7 +12,7 @@ public class PersonalGoal {
     public PersonalGoal(Shelf ps){
 
         this.playerShelf= ps;
-        this.PGoal= new ArrayList<Pgtype>();   //ArrayList o List??
+        this.PGoal= new ArrayList<>();   //ArrayList o List??
         Random rand = new Random();
         rand.nextInt(12);
 
@@ -19,27 +20,27 @@ public class PersonalGoal {
 
             case 0:  getPersGoal(0);
                 break;
-            case 1:  getPersGoal(6);
+            case 1:  getPersGoal(7);
                 break;
-            case 2:  getPersGoal(12);
+            case 2:  getPersGoal(13);
                 break;
-            case 3:  getPersGoal(18);
+            case 3:  getPersGoal(19);
                 break;
-            case 4:  getPersGoal(24);
+            case 4:  getPersGoal(25);
                 break;
-            case 5:  getPersGoal(30);
+            case 5:  getPersGoal(31);
                 break;
-            case 6:  getPersGoal(36);
+            case 6:  getPersGoal(37);
                 break;
-            case 7:  getPersGoal(42);
+            case 7:  getPersGoal(43);
                 break;
-            case 8:  getPersGoal(48);
+            case 8:  getPersGoal(49);
                 break;
-            case 9:  getPersGoal(54);
+            case 9:  getPersGoal(55);
                 break;
-            case 10:  getPersGoal(60);
+            case 10:  getPersGoal(61);
                 break;
-            case 11:  getPersGoal(66);
+            case 11:  getPersGoal(67);
                 break;
         }
     }
@@ -77,21 +78,24 @@ public class PersonalGoal {
         return score;
     }
     public ArrayList<Pgtype> getPersGoal(int j) {
-        String fileName = "src/main/java/Model/PersonalGoal.json";
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))){
+        System.out.println(j);
+        //String fileName = "src/main/java/Model/PersonalGoal.json";
+        try {
+            File ListOfPersonalGoal = new File("src/main/java/Model/PersonalGoal.json");
+            Scanner reader = new Scanner(ListOfPersonalGoal);
 
             for(int k=0;k<j-1;k++)  {
-                br.readLine();
+                String pg= reader.nextLine();
             }
-            String file = br.readLine();
+            String pg = reader.nextLine();
             for(int l=0; l<6; l++) {
-                String st[] = file.split(",");
+                String st[] = pg.split(",");
 
                     int line = st[0].charAt(0)-48;
                     int col = st[1].charAt(0)-48;
                     Color color = Color.valueOf(st[2]);
                     PGoal.add(new Pgtype(line,col,color));
-
+                    pg= reader.nextLine();
             }
         }catch (FileNotFoundException e) {
             throw new RuntimeException(e);

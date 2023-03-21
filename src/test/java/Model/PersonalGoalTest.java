@@ -33,7 +33,9 @@ class PersonalGoalTest {
         Shelf playerShelf = new Shelf();
         ArrayList<Pgtype> pGoal = new ArrayList<>();
         PersonalGoal personalGoal= new PersonalGoal(playerShelf);
-        personalGoal.getPersGoal(0);
+        System.out.println(personalGoal.getPGoal().size());
+
+
         for(int i=0; i<personalGoal.getPGoal().size();i++){
             System.out.print(personalGoal.getPGoal().get(i).getColor().toString()+" ");
             System.out.print(personalGoal.getPGoal().get(i).getLine()+" ");
@@ -41,4 +43,12 @@ class PersonalGoalTest {
 
         }
     }
+    @Test
+    public void testGetPersGoal() {
+        Shelf shelf = new Shelf();
+        PersonalGoal personalGoal = new PersonalGoal(shelf);
+        ArrayList<Pgtype> pGoal =new ArrayList<>();
+        Assertions.assertEquals(6, personalGoal.getPGoal().size());
+    }
+
 }

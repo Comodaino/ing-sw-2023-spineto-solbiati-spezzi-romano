@@ -14,7 +14,7 @@ public class Board{
     private List<Player> listOfPlayer;
     private boolean firstMatch;
     private Set<CommonGoal> setOfCommonGoal;
-    private boolean firstToEnd;
+    private EndGoal endGoal;
     private List<Tile> tileBuffer;
 
     private GoalFactory goalFactory;
@@ -28,15 +28,14 @@ public class Board{
         bag = new Bag();
 
         try {
-            File boardConf = new File("src/main/java/Model/board_conf.json");
+            File boardConf = new File("src/main/java/Model/Conf/board_conf.json");
             Scanner reader = new Scanner(boardConf);
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
                 String data = reader.nextLine();
-
                 CellType type = null;
                 for (int j = 0; j<9; j++){
-                    switch((int)data.charAt(j)-48){
+                    switch((int)data.charAt(j) - 48){
                         case 1: type = ONE;
                         break;
                         case 2: type = TWO;
@@ -47,7 +46,6 @@ public class Board{
                             break;
 
                     }
-                    //System.out.println("type: " + type.toString());
                     this.matrix[i][j] = new Cell(type);
                 }
             }
@@ -55,11 +53,11 @@ public class Board{
             reader.close();
         }catch (FileNotFoundException e) {
             throw new RuntimeException(e);
-        }
+        };
         recharge();
         this.listOfPlayer = pl;
         this.firstMatch = fm;
-        this.firstToEnd = true;
+        this.endGoal = new EndGoal();
         this.goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();
 
@@ -95,10 +93,9 @@ public class Board{
             }
         }
 
-        if(!found) recharge();
+        if(found) recharge();
     }
     public void recharge(){
-
         for(int i=0; i<9; i++) {
             for (int j = 0; j < 9; j++) {
                 if(matrix[i][j].isEmpty() && matrix[i][j].getType()!=ONE) matrix[i][j].insertTile(bag.newTile());
@@ -114,4 +111,19 @@ public class Board{
         return matrix[r][c];
     }
 
+    public List<Tile> getTileBuffer() {
+        return tileBuffer;
+    }
+
+    public List<Player> getListOfPlayer() {
+        return listOfPlayer;
+    }
+
+    public Set<CommonGoal> getSetOfCommonGoal() {
+        return setOfCommonGoal;
+    }
+
+    public EndGoal getEndGoal() {
+        return endGoal;
+    }
 }

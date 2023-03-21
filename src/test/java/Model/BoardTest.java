@@ -16,13 +16,10 @@ class BoardTest {
         playerList.add(new Player("player2", false));
         Board testBoard = new Board(false, playerList);
         for(int i=0; i<9; i++){
-            for(int j=0; j<9; j++) {
-                if(testBoard.getCell(i,j).getTile()!=null) System.out.println(testBoard.getCell(i,j).getType().toString() + " " + testBoard.getCell(i,j).getTile().getColor().toString() + " ");
-                else System.out.println(testBoard.getCell(i,j).getType() + "   ");
+            for(int j=0; j<9; j++){
+                System.out.println(testBoard.getCell(i,j).getType());
             }
-            System.out.println("\n");
         }
-
         testBoard.removeTile(5,5);
         assertNull(testBoard.getTile(5, 5));
         System.out.println("SEGMENT PASSED");

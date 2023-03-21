@@ -1,39 +1,34 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import Model.Shelf;
 
 public class GoalDiagonal extends CommonGoal{
     public GoalDiagonal(){
         super();
     }
     @Override
-    public int getScore(Shelf s, Player p){
+    public int getScore(Player p){
         boolean found = false;
 
-        if(s.getTile(0, 0).getColor().equals(s.getTile(1, 1).getColor()) &&
-                s.getTile(1, 1).getColor().equals(s.getTile(2, 2).getColor()) &&
-                s.getTile(2, 2).getColor().equals(s.getTile(3, 3).getColor()) &&
-                s.getTile(3, 3).getColor().equals(s.getTile(4, 4).getColor()) &&
-                s.getTile(0,0) != null){
+        if(p.getShelf().getTile(0,0) != null && p.getShelf().getTile(0, 0).getColor().equals(p.getShelf().getTile(1, 1).getColor()) &&
+                p.getShelf().getTile(1, 1).getColor().equals(p.getShelf().getTile(2, 2).getColor()) &&
+                p.getShelf().getTile(2, 2).getColor().equals(p.getShelf().getTile(3, 3).getColor()) &&
+                p.getShelf().getTile(3, 3).getColor().equals(p.getShelf().getTile(4, 4).getColor())){
             found = true;
-        } else if(s.getTile(1, 0).getColor().equals(s.getTile(2, 1).getColor()) &&
-                s.getTile(2, 1).getColor().equals(s.getTile(3, 2).getColor()) &&
-                s.getTile(3, 2).getColor().equals(s.getTile(4, 3).getColor()) &&
-                s.getTile(4, 3).getColor().equals(s.getTile(5, 4).getColor()) &&
-                s.getTile(1,0) != null){
+        } else if(p.getShelf().getTile(1,0) != null && p.getShelf().getTile(1, 0).getColor().equals(p.getShelf().getTile(2, 1).getColor()) &&
+                p.getShelf().getTile(2, 1).getColor().equals(p.getShelf().getTile(3, 2).getColor()) &&
+                p.getShelf().getTile(3, 2).getColor().equals(p.getShelf().getTile(4, 3).getColor()) &&
+                p.getShelf().getTile(4, 3).getColor().equals(p.getShelf().getTile(5, 4).getColor())){
             found = true;
-        } else if(s.getTile(0, 4).getColor().equals(s.getTile(1, 3).getColor()) &&
-                s.getTile(1, 3).getColor().equals(s.getTile(2, 2).getColor()) &&
-                s.getTile(2, 2).getColor().equals(s.getTile(3, 1).getColor()) &&
-                s.getTile(3, 1).getColor().equals(s.getTile(4, 0).getColor()) &&
-                s.getTile(0,4) != null){
+        } else if(p.getShelf().getTile(0,4) != null && p.getShelf().getTile(0, 4).getColor().equals(p.getShelf().getTile(1, 3).getColor()) &&
+                p.getShelf().getTile(1, 3).getColor().equals(p.getShelf().getTile(2, 2).getColor()) &&
+                p.getShelf().getTile(2, 2).getColor().equals(p.getShelf().getTile(3, 1).getColor()) &&
+                p.getShelf().getTile(3, 1).getColor().equals(p.getShelf().getTile(4, 0).getColor())){
             found = true;
-        } else if(s.getTile(1, 4).getColor().equals(s.getTile(2, 3).getColor()) &&
-                s.getTile(2, 3).getColor().equals(s.getTile(3, 2).getColor()) &&
-                s.getTile(3, 2).getColor().equals(s.getTile(4, 1).getColor()) &&
-                s.getTile(4, 1).getColor().equals(s.getTile(5, 0).getColor()) &&
-                s.getTile(1,4) != null){
+        } else if(p.getShelf().getTile(1,4) != null && p.getShelf().getTile(1, 4).getColor().equals(p.getShelf().getTile(2, 3).getColor()) &&
+                p.getShelf().getTile(2, 3).getColor().equals(p.getShelf().getTile(3, 2).getColor()) &&
+                p.getShelf().getTile(3, 2).getColor().equals(p.getShelf().getTile(4, 1).getColor()) &&
+                p.getShelf().getTile(4, 1).getColor().equals(p.getShelf().getTile(5, 0).getColor())){
             found = true;
         }
 

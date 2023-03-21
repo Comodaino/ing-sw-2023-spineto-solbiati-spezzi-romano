@@ -2,7 +2,6 @@ package Model.CommonGoals;
 
 import Model.Color;
 import Model.Player;
-import Model.Shelf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +11,17 @@ public class GoalRow extends CommonGoal{
         super();
     }
     @Override
-    public int getScore(Shelf s, Player p){
+    public int getScore(Player p){
         List<Color> buffer = new ArrayList<Color>();
         int n = 0;
         int numOfRows = 0;
 
         for(int r=0; r<6 && numOfRows<4; r++){
             for(int c=0; c<5; c++){
-                if(s.getTile(r, c) != null){
+                if(p.getShelf().getTile(r, c) != null){
                     n++;
-                    if(!buffer.contains(s.getTile(r, c).getColor())){
-                        buffer.add(s.getTile(r, c).getColor());
+                    if(!buffer.contains(p.getShelf().getTile(r, c).getColor())){
+                        buffer.add(p.getShelf().getTile(r, c).getColor());
                     }
                 }
             }

@@ -41,16 +41,20 @@ public class NearGoal extends Goal{
     }
     public int iterator(int i, int j, Player p){
         int counter=0;
-            if(p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i+1,j).getColor())){
-                counter+=1;
-                matrix[i][j]=true;
-                counter += iterator(i+1, j, p);
+        if( i < 6 && p.getShelf().getTile(i+1,j)!=null) {
+            if (p.getShelf().getTile(i, j).getColor().equals(p.getShelf().getTile(i + 1, j).getColor())) {
+                counter += 1;
+                matrix[i][j] = true;
+                counter += iterator(i + 1, j, p);
             }
-            if(p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i,j+1).getColor())){
-                counter+=1;
-                matrix[i][j]=true;
-                counter += iterator(i, j+1, p);
+        }
+        if( j < 5  && p.getShelf().getTile(i+1,j)!=null) {
+            if (p.getShelf().getTile(i, j).getColor().equals(p.getShelf().getTile(i, j + 1).getColor())) {
+                counter += 1;
+                matrix[i][j] = true;
+                counter += iterator(i, j + 1, p);
             }
+        }
             return counter;
     }
     @Override

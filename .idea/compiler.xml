@@ -11,4 +11,9 @@
       </profile>
     </annotationProcessing>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ing-sw-2023-spineto-solbiati-spezzi-romano" options="" />
+    </option>
+  </component>
 </project>

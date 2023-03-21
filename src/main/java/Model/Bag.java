@@ -6,6 +6,7 @@ import java.util.Random;
 
 import static Model.Color.*;
 
+
 public class Bag {
     private List<Tile> containedTiles;
 
@@ -33,8 +34,9 @@ public class Bag {
         }
     }
     public Tile newTile(){
-        Tile tmp = containedTiles.get(0);
-        containedTiles.remove(0);
-        return tmp;
+        if(containedTiles.size()>0) {
+            System.out.println("Bag");
+            return containedTiles.remove(0);
+        }else return null;
     }
 }

@@ -1,5 +1,5 @@
 package Model;
-
+import Model.Color.*;
 
 public class Tile{
     private Color color;

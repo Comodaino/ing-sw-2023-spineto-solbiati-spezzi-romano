@@ -2,14 +2,10 @@ package Model.CommonGoals;
 
 import Model.Player;
 import Model.Shelf;
-
-
 import java.util.Arrays;
 
 public class GoalCouples extends CommonGoal{
-    public GoalCouples (){
-        super();
-    }
+    public GoalCouples (){ super(); }
     @Override
     public int getScore(Shelf s, Player p){
         int counter = 0;

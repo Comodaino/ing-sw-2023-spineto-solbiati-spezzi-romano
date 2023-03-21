@@ -6,9 +6,13 @@ public class EndGoal {
     public EndGoal() {
         this.status = true;
     }
-    public int isCompleted(){ //NEEDS TO BE REVIEWED
-        this.status=false;
-        return 1;
+    public boolean isCompleted(Player p){
+        for(int r=0; r<6; r++){
+            for(int c=0; c<5; c++){
+                if(p.getShelf().getTile(r, c)==null) return false;
+            }
+        }
+        return true;
     }
     public boolean getStatus(){
         return this.status;

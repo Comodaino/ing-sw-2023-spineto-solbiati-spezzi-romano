@@ -8,6 +8,10 @@ public class Shelf{
         this.matrix = new Tile[6][5];
     }
 
+    public Shelf(Tile[][] m){
+        this.matrix = m;
+    }
+
     public boolean addTile(int c, Tile t) {
         for (int r = 0; r < 6; r++) {
             if (matrix[r][c] == null) {

@@ -4,6 +4,7 @@ import Model.Board;
 import Model.CommonGoals.CommonGoal;
 import Model.Player;
 import View.ViewInterface;
+import jdk.jshell.spi.ExecutionControl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,12 @@ public class GameController implements Observer {
                     break;
                 case "/add": playAdd(input);
                     break;
+                case "/endGame":
+                    try {
+                        playEndGame(input);
+                    } catch (ExecutionControl.NotImplementedException e) {
+                        throw new RuntimeException(e);
+                    }
             }
             }else{
                 System.out.println("Commands must start with '/'");
@@ -38,6 +45,10 @@ public class GameController implements Observer {
         }else{
             System.out.println("Wrong Observable");
         }
+    }
+
+    private void playEndGame(String[] input) throws ExecutionControl.NotImplementedException {
+
     }
 
 

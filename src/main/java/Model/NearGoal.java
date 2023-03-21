@@ -20,7 +20,21 @@ public class NearGoal extends Goal{
                 matrix[i][j]=true;
                 counter=iterator(i,j,p);
                 switch (counter){
-                    case: ;
+                    case 0: score+=2;
+                        break;
+                    case 1: score+=2;
+                        break;
+                    case 2: score+=2;
+                        break;
+                    case 3: score+=2;
+                    break;
+                    case 4: score+=3;
+                        break;
+                    case 5: score+=5;
+                        break;
+                    default: score+=8;
+                        break;
+
                 }
             }
         }

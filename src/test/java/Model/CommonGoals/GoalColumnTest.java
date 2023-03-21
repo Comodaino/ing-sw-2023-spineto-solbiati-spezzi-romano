@@ -81,11 +81,14 @@ class GoalColumnTest {
         Player p4 = new Player("Alessandra", false);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/column.json");
-        Scanner reader = new Scanner(shelfConf);
-        configShelf(p1.getShelf(), reader);
-        configShelf(p2.getShelf(), reader);
-        configShelf(p3.getShelf(), reader);
-        configShelf(p4.getShelf(), reader);
+        Scanner reader1 = new Scanner(shelfConf);
+        Scanner reader2 = new Scanner(shelfConf);
+        Scanner reader3 = new Scanner(shelfConf);
+        Scanner reader4 = new Scanner(shelfConf);
+        configShelf(p1.getShelf(), reader1);
+        configShelf(p2.getShelf(), reader2);
+        configShelf(p3.getShelf(), reader3);
+        configShelf(p4.getShelf(), reader4);
 
         assertEquals(8, goal.getScore(p1));
         assertEquals(6, goal.getScore(p2));

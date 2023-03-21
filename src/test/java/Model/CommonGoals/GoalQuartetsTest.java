@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GoalDiagonalTest {
+class GoalQuartetsTest {
     public void configShelf(Shelf shelf, Scanner scanner){
         while(scanner.hasNextLine()){
             String confBuffer = scanner.nextLine();
@@ -38,7 +38,7 @@ class GoalDiagonalTest {
 
     @Test
     void emptyShelf(){
-        GoalDiagonal goal = new GoalDiagonal();
+        GoalQuartets goal = new GoalQuartets();
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,10 +47,10 @@ class GoalDiagonalTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalDiagonal goal = new GoalDiagonal();
+        GoalQuartets goal = new GoalQuartets();
         Player p = new Player("Nico", true);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/diagonal.json");
+        File shelfConf = new File("");
         Scanner reader = new Scanner(shelfConf);
         configShelf(p.getShelf(), reader);
 
@@ -60,10 +60,10 @@ class GoalDiagonalTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalDiagonal goal = new GoalDiagonal();
+        GoalQuartets goal = new GoalQuartets();
         Player p = new Player("Nico", true);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/diagonal.json");
+        File shelfConf = new File("");
         Scanner reader = new Scanner(shelfConf);
         configShelf(p.getShelf(), reader);
 
@@ -74,13 +74,13 @@ class GoalDiagonalTest {
 
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalDiagonal goal = new GoalDiagonal();
+        GoalQuartets goal = new GoalQuartets();
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);
         Player p4 = new Player("Alessandra", false);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/diagonal.json");
+        File shelfConf = new File("");
         Scanner reader1 = new Scanner(shelfConf);
         Scanner reader2 = new Scanner(shelfConf);
         Scanner reader3 = new Scanner(shelfConf);

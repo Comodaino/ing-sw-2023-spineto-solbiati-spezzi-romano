@@ -1,8 +1,11 @@
 package Model;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.StringTokenizer;
 
 public class PersonalGoal {
     private Shelf playerShelf;
@@ -77,7 +80,7 @@ public class PersonalGoal {
         return score;
     }
     public ArrayList<Pgtype> getPersGoal(int j) {
-        String fileName = "src/main/java/Model/PersonalGoal.json";
+        String fileName = "src/main/java/Model/Conf/PersonalGoal.json";
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))){
 
             for(int k=0;k<j-1;k++)  {

@@ -4,7 +4,7 @@ package Model;
 public class Tile{
     private Color color;
 
-    public void Tile(Color c){
+    public Tile(Color c){
 
         this.color = c;
     }

@@ -6,8 +6,9 @@ public class EndGoal {
     public EndGoal() {
         this.status = true;
     }
-    public void isComplited(){
+    public int isCompleted(){ //NEEDS TO BE REVIEWED
         this.status=false;
+        return 1;
     }
     public boolean getStatus(){
         return this.status;

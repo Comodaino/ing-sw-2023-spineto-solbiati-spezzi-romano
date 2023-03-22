@@ -61,7 +61,7 @@ public class Board{
         this.goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();
 
-//GOALS ARE MISSING
+
         setOfCommonGoal = new HashSet<CommonGoal>();
         Random rand = new Random();
         setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11)));

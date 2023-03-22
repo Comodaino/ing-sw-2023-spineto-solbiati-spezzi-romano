@@ -63,6 +63,10 @@ public class GameController implements Observer {
         gameBoard.checkRecharge();
     }
 
+    /**
+     *
+     * @param input
+     */
     private void playAdd(String[] input) {
         for(int i=0; i<gameBoard.getListOfPlayer().size(); i++){
             if(gameBoard.getListOfPlayer().get(i).getNickname().equals(input[1])){

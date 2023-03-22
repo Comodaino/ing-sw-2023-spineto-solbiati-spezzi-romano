@@ -14,7 +14,7 @@ public class Board{
     private List<Player> listOfPlayer;
     private boolean firstMatch;
     private Set<CommonGoal> setOfCommonGoal;
-    private boolean firstToEnd;
+    private EndGoal endGoal;
     private List<Tile> tileBuffer;
 
     private GoalFactory goalFactory;
@@ -24,18 +24,18 @@ public class Board{
     public Board(boolean fm, List<Player> pl){
 
         matrix = new Cell[9][9];
-        recharge();
+
         bag = new Bag();
 
         try {
-            File boardConf = new File("board_conf.json");
+            File boardConf = new File("src/main/java/Model/Conf/board_conf.json");
             Scanner reader = new Scanner(boardConf);
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
                 String data = reader.nextLine();
                 CellType type = null;
                 for (int j = 0; j<9; j++){
-                    switch((int)data.charAt(j)){
+                    switch((int)data.charAt(j) - 48){
                         case 1: type = ONE;
                         break;
                         case 2: type = TWO;
@@ -46,7 +46,7 @@ public class Board{
                             break;
 
                     }
-                    this.matrix[j][i] = new Cell(type);
+                    this.matrix[i][j] = new Cell(type);
                 }
             }
 
@@ -54,10 +54,10 @@ public class Board{
         }catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         };
-
+        recharge();
         this.listOfPlayer = pl;
         this.firstMatch = fm;
-        this.firstToEnd = true;
+        this.endGoal = new EndGoal();
         this.goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();
 
@@ -80,20 +80,14 @@ public class Board{
     }
     public void checkRecharge(){
         boolean found=false;
-        for(int i=0; i<9; i++){
-            for(int j=0; j<9; j++){
-
-                for(int k=-1; k<1; k++){
-                    for(int h=-1; h<1; h++){
-
-                        for(int a=-1; a<1; a++){
-                            for(int b=-1; b<1; b++){
-                                if(matrix[i][j]!=matrix[i+k][j+h] && matrix[i+k][j+h]!=matrix[i+k+a][j+h+b]) {
-                                    if (!matrix[i][j].isEmpty() && (!matrix[i + k][j + h].isEmpty() && !matrix[i + k + a][j + h + b].isEmpty()))
-                                        found = true;
-                                }
-                            }
-                        }
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++){
+                if(!matrix[i][j].isEmpty()){
+                    if(!matrix[i+1][j].isEmpty()){
+                        found=true;
+                    }
+                    if(!matrix[i][j+1].isEmpty()){
+                        found=true;
                     }
                 }
             }
@@ -117,9 +111,19 @@ public class Board{
         return matrix[r][c];
     }
 
-    public void endMatch(){
-        return;
+    public List<Tile> getTileBuffer() {
+        return tileBuffer;
     }
 
+    public List<Player> getListOfPlayer() {
+        return listOfPlayer;
+    }
 
+    public Set<CommonGoal> getSetOfCommonGoal() {
+        return setOfCommonGoal;
+    }
+
+    public EndGoal getEndGoal() {
+        return endGoal;
+    }
 }

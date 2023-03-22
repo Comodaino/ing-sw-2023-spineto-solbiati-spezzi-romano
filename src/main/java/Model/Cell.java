@@ -5,12 +5,14 @@ public class Cell {
 
     public Cell(CellType t){
         this.type =t;
+        this.containedTile = null;
     }
     public boolean isEmpty(){
-        if (containedTile.equals(null)) return false;
-            else return true;
+        if (containedTile==null) return true;
+            else return false;
     }
     public Tile getTile(){
+        if(this.isEmpty()) return null;
         return containedTile;
     }
     public void removeTile(){
@@ -19,5 +21,5 @@ public class Cell {
     public void insertTile(Tile t){
         this.containedTile= t;
     }
-    public CellType getType(){ return this.type; }    //scusa ti ho aggiunto questo metodo -Alessio
+    public CellType getType(){ return this.type; }
 }

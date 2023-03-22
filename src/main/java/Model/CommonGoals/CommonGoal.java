@@ -1,7 +1,6 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import Model.Shelf;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,7 @@ public abstract class CommonGoal {
     public CommonGoal() {
         this.completed = new ArrayList<Player>();
     }
-    public abstract int getScore(Shelf s, Player p);
+    public abstract int getScore(Player p);
     public int assignScore(Player p){
         switch(this.completed.size()){
             case 0:
@@ -27,6 +26,5 @@ public abstract class CommonGoal {
                 return 2;
         }
         return 0;
-       // throw new NotImplementedException(); //throw a new NotAssignableScoreException
     }
 }

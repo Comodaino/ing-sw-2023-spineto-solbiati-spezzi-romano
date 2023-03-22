@@ -35,9 +35,8 @@ public class Bag {
     }
     public Tile newTile(){
         if(containedTiles.size()>0) {
-            Tile tmp = containedTiles.get(0);
-            containedTiles.remove(0);
-            return tmp;
+            System.out.println("Bag");
+            return containedTiles.remove(0);
         }else return null;
     }
 }

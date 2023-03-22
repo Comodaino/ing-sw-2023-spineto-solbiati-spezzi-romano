@@ -1,9 +1,20 @@
 package Model.CommonGoals;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import Model.Player;
 
 public class GoalAngles extends CommonGoal{
-    public int getScore(){
-        throw new NotImplementedException();
+    public GoalAngles(){
+        super();
+    }
+    @Override
+    public int getScore(Player p){
+        if(!this.completed.contains(p) && p.getShelf().getTile(0, 0) != null &&
+                p.getShelf().getTile(0, 0).getColor().equals(p.getShelf().getTile(0, 4).getColor()) &&
+                p.getShelf().getTile(5, 0).getColor().equals(p.getShelf().getTile(5, 4).getColor()) &&
+                p.getShelf().getTile(0, 0).getColor().equals(p.getShelf().getTile(5, 0).getColor())) {
+
+            return assignScore(p);
+        }
+        return 0;
     }
 }

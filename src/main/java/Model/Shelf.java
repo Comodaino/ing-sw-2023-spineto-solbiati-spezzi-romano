@@ -1,20 +1,38 @@
 package Model;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class Shelf{
-    private Tile matrix[6][5];
+    private Tile[][] matrix;
 
-    public Shelf Shelf() {
-        throw new NotImplementedException;
+    public Shelf() {
+        this.matrix = new Tile[6][5];
     }
 
-    public void addTile(int c, Tile t){
-        throw new NotImplementedException;
+    public void setShelf(Tile[][] m){
+        this.matrix = m;
     }
+
+    public boolean addTile(int c, Tile t) {
+        for (int r = 0; r < 6; r++) {
+            if (matrix[r][c] == null) {
+                matrix[r][c] = t;
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public Tile getTile(int r, int c){
-        throw new NotImplementedException;
+        return matrix[r][c];
+    }
+
+    public Tile[][] getMatrix() {
+        return matrix;
+    }
+
+    public void setMatrix(Tile[][] m) {
+        this.matrix=m;
     }
 }
 

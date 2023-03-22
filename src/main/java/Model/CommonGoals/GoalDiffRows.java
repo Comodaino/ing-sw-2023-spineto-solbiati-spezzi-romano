@@ -1,22 +1,21 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import Model.Shelf;
 
 public class GoalDiffRows extends CommonGoal{
     public GoalDiffRows(){
         super();
     }
     @Override
-    public int getScore(Shelf s, Player p){
+    public int getScore(Player p){
         int numOfRows = 0;
 
         for(int r=0; r<6 && numOfRows<2; r++){
             for(int c=0; c<4; c++){
-                if(s.getTile(r, c) != null && s.getTile(r, c+1) != null &&
-                        s.getTile(r, c).getColor().equals(s.getTile(r, c+1).getColor())){
+                if(p.getShelf().getTile(r, c) != null && p.getShelf().getTile(r, c+1) != null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor())){
                     break;
-                } else if(c==3 && s.getTile(r, c) != null && s.getTile(r, c+1) != null){
+                } else if(c==3 && p.getShelf().getTile(r, c) != null && p.getShelf().getTile(r, c+1) != null){
                     numOfRows++;
                 }
             }

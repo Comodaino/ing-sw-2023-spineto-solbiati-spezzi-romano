@@ -2,5 +2,5 @@ package Model;
 
 
 public abstract class Goal {
-    public abstract boolean isCompleted();
+    public abstract int getScore(Player p);
 }

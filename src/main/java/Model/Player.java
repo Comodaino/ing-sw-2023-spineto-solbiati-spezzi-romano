@@ -7,8 +7,11 @@ public class Player {
     private boolean chair;
     private Shelf myShelf;
     private PersonalGoal myGoal;
+    private int score;
+    private NearGoal nearGoal;
 
     public Player(String n, boolean c){
+        this.score=0;
         this.chair = c;
         this.nickname = n;
         this.myShelf = new Shelf();
@@ -24,4 +27,20 @@ public class Player {
     }
     public Shelf getShelf(){ return this.myShelf;}
     public PersonalGoal getGoal(){ return this.myGoal;}
+
+    public void addScore(int n) {
+        this.score+=n;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setShelf(Tile[][] m) {
+        this.myShelf.setMatrix(m);
+    }
+
+    public NearGoal getNearGoal() {
+        return nearGoal;
+    }
 }

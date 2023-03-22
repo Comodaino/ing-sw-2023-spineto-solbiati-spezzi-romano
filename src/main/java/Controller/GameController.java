@@ -56,17 +56,12 @@ public class GameController implements Observer {
         }
     }
 
-
     //NOTE: INPUT LAYOUT SHOULD BE "\COMMAND PLAYERNAME PAR1 PAR2 ...
     private void playRemove(String[] input) {
         gameBoard.removeTile(input[2].charAt(0) - 48, input[3].charAt(0) - 48);
         gameBoard.checkRecharge();
     }
 
-    /**
-     *
-     * @param input
-     */
     private void playAdd(String[] input) {
         for(int i=0; i<gameBoard.getListOfPlayer().size(); i++){
             if(gameBoard.getListOfPlayer().get(i).getNickname().equals(input[1])){

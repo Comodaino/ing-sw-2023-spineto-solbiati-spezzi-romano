@@ -16,7 +16,6 @@ class NearGoalTest {
 
     public void testNearGoal(){
         Tile m[][] = new Tile[6][5];
-
         Scanner scanner = null;
         String inputFile = null;
         try {
@@ -47,9 +46,9 @@ class NearGoalTest {
         }
         for(int i=0; i<6; i++){
             for(int j=0; j<5; j++){
-                System.out.print(j + m[i][j].getColor().toString());
+                System.out.print(m[i][j].getColor().toString().charAt(0) + "   ");
             }
-            System.out.println(i);
+            System.out.println();
         }
 
         this.player = new Player("player1", true);

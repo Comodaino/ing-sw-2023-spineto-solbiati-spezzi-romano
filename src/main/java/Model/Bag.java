@@ -15,7 +15,6 @@ public class Bag {
         for (int i = 0; i < 133; i++) {
 
             Random rand = new Random();
-            rand.nextInt(6);
             switch (rand.nextInt(6)){
                 case 0: containedTiles.add(new Tile(WHITE));
                     break;
@@ -35,7 +34,6 @@ public class Bag {
     }
     public Tile newTile(){
         if(containedTiles.size()>0) {
-            System.out.println("Bag");
             return containedTiles.remove(0);
         }else return null;
     }

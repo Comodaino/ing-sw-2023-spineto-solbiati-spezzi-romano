@@ -13,7 +13,8 @@ class BagTest {
     @Test
     public void test1(){
         for(int i=0; i<133; i++){
-            System.out.println(testBag.newTile().getColor().toString() + i);
+            Tile newTile = testBag.newTile();
+            System.out.println(newTile.getColor().toString() + " " + newTile.getType().toString() + " " + i);
         }
         assertNull(testBag.newTile());
         System.out.println("TEST PASSED");

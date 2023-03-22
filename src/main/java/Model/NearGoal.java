@@ -26,7 +26,7 @@ public class NearGoal extends Goal{
                     case 2: score+=2;
                         break;
                     case 3: score+=2;
-                    break;
+                        break;
                     case 4: score+=3;
                         break;
                     case 5: score+=5;
@@ -57,8 +57,5 @@ public class NearGoal extends Goal{
         }
             return counter;
     }
-    @Override
-    public boolean isCompleted() {
-        return false;
-    }
+
 }

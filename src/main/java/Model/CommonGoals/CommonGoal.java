@@ -1,10 +1,11 @@
 package Model.CommonGoals;
 
+import Model.Goal;
 import Model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CommonGoal {
+public abstract class CommonGoal extends Goal {
     protected List<Player> completed;
     public CommonGoal() {
         this.completed = new ArrayList<Player>();

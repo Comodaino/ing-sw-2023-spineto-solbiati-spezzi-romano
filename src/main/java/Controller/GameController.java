@@ -48,7 +48,12 @@ public class GameController implements Observer {
     }
 
     private void playEndGame(String[] input) throws ExecutionControl.NotImplementedException {
-
+        for(int i=0; i<gameBoard.getListOfPlayer().size(); i++) {
+            if (gameBoard.getListOfPlayer().get(i).getNickname().equals(input[1])) {
+                gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
+                gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
+            }
+        }
     }
 
 
@@ -62,7 +67,7 @@ public class GameController implements Observer {
         for(int i=0; i<gameBoard.getListOfPlayer().size(); i++){
             if(gameBoard.getListOfPlayer().get(i).getNickname().equals(input[1])){
                 gameBoard.getListOfPlayer().get(i).getShelf().addTile(input[2].charAt(0) - 48, gameBoard.getTileBuffer().remove(0));
-                gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
+
                 for(CommonGoal cg: gameBoard.getSetOfCommonGoal()) {
                     gameBoard.getListOfPlayer().get(i).addScore(cg.getScore(gameBoard.getListOfPlayer().get(i)));
                 }

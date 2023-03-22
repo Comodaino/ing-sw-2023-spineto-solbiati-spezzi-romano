@@ -1,5 +1,5 @@
 package Model;
-public class EndGoal {
+public class EndGoal extends Goal{
     private boolean status;
     public final int value=1;
 

@@ -8,6 +8,7 @@ public class Player {
     private Shelf myShelf;
     private PersonalGoal myGoal;
     private int score;
+    private NearGoal nearGoal;
 
     public Player(String n, boolean c){
         this.score=0;
@@ -37,5 +38,9 @@ public class Player {
 
     public void setShelf(Tile[][] m) {
         this.myShelf.setMatrix(m);
+    }
+
+    public NearGoal getNearGoal() {
+        return nearGoal;
     }
 }

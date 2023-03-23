@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class PersonalGoal {
+public class PersonalGoal extends Goal{
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
 
@@ -18,7 +18,7 @@ public class PersonalGoal {
 
         switch (rand.nextInt(12)) {
 
-            case 0:  getPersGoal(0);
+            case 0:  getPersGoal(1);
                 break;
             case 1:  getPersGoal(7);
                 break;
@@ -46,7 +46,7 @@ public class PersonalGoal {
     }
 
     public int getScore(Shelf playerShelf){
-        int score=0,point=0;
+        int score=0, point=0;
             for (int i=0;i<PGoal.size();i++) {
                 Pgtype pgtype = PGoal.get(i);
                 int line = pgtype.getLine();
@@ -77,11 +77,46 @@ public class PersonalGoal {
 
         return score;
     }
+    @Override
+    public int getScore(Player p) {
+        playerShelf =p.getShelf();
+        int score=0,point=0;
+        for (int i=0;i<PGoal.size();i++) {
+            Pgtype pgtype = PGoal.get(i);
+            int line = pgtype.getLine();
+            int col = pgtype.getCol();
+            Color color = pgtype.getColor();
+            if (playerShelf.getTile(line, col)!=null && playerShelf.getTile(line, col).getColor() == color) {
+                point+=1;
+            }
+        }
+        if (point==1){
+            score=1;
+        }
+        if(point==2){
+            score=2;
+        }
+        if(point==3){
+            score=4;
+        }
+        if(point==4){
+            score=6;
+        }
+        if(point==5){
+            score=9;
+        }
+        if(point==6){
+            score=12;
+        }
+
+        return score;
+
+    }
     public ArrayList<Pgtype> getPersGoal(int j) {
         try {
-            File ListOfPersonalGoal = new File("src/main/java/Model/PersonalGoal.json");
+            File ListOfPersonalGoal = new File("src/main/java/Model/Conf/PersonalGoal.json");
             Scanner reader = new Scanner(ListOfPersonalGoal);
-
+            if(reader.hasNextLine()){
             for(int k=0;k<j-1;k++)  {
                 String pg= reader.nextLine();
             }
@@ -92,8 +127,10 @@ public class PersonalGoal {
                     int col = st[1].charAt(0)-48;
                     Color color = Color.valueOf(st[2]);
                     PGoal.add(new Pgtype(line,col,color));
-                    pg= reader.nextLine();
-            }
+                    if(l!=5) {
+                        pg = reader.nextLine();
+                    }
+            }}
         }catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -105,4 +142,6 @@ public class PersonalGoal {
     public ArrayList<Pgtype> getPGoal() {
         return PGoal;
     }
+
+
 }

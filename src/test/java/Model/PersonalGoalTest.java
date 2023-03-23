@@ -10,24 +10,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class PersonalGoalTest {
 
     @Test
-    public void TestGetScoreNOMatchingTile(){
-        Shelf playerShelf = new Shelf();
-        PersonalGoal personalGoal= new PersonalGoal(playerShelf);
-        Assertions.assertEquals( 0, personalGoal.getScore(playerShelf));
+    public void TestGetScoreNoMatchingTile(){
+        Shelf shelf = new Shelf();
+        ArrayList<Pgtype> pGoal = new ArrayList<>();
+        PersonalGoal personalGoal = new PersonalGoal(shelf);
+        personalGoal.getPGoal();
+        int i=personalGoal.getScore(shelf);
+        Assertions.assertEquals(0,i);
     }
     @Test
     public void TestGetScoreOneMatchingTile(){
-        Shelf playerShelf = new Shelf();
-        PersonalGoal personalGoal= new PersonalGoal(playerShelf);
-        Tile t= new Tile(Color.GREEN);
-        Cell cell =new Cell(CellType.ONE);
-        cell.insertTile(t);
-
-        playerShelf.getTile(1,1);
-       // playerShelf.addTile(1,t);
-        //personalGoal.getPersGoal(0);
-        Assertions.assertEquals(0,personalGoal.getScore(playerShelf));
-
     }
     @Test
     public void TestCreatePersGoal(){

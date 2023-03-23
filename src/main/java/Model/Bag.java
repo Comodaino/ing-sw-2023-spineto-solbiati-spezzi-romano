@@ -9,7 +9,7 @@ import static Model.Color.*;
 
 public class Bag {
     private List<Tile> containedTiles;
-
+    
     public Bag() {
         containedTiles = new ArrayList<Tile>();
         for (int i = 0; i < 133; i++) {

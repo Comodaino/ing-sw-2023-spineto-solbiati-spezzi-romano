@@ -54,13 +54,13 @@ public class Board{
         }catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         };
-        recharge();
+
         this.listOfPlayer = pl;
         this.firstMatch = fm;
         this.endGoal = new EndGoal();
         this.goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();
-
+        recharge();
 
         setOfCommonGoal = new HashSet<CommonGoal>();
         Random rand = new Random();
@@ -93,12 +93,19 @@ public class Board{
             }
         }
 
-        if(found) recharge();
+        if(!found) recharge();
     }
     public void recharge(){
         for(int i=0; i<9; i++) {
             for (int j = 0; j < 9; j++) {
-                if(matrix[i][j].isEmpty() && matrix[i][j].getType()!=ONE) matrix[i][j].insertTile(bag.newTile());
+                switch(this.getListOfPlayer().size()){
+                    case 2: if((matrix[i][j].isEmpty() && matrix[i][j].getType()!=ONE) && (matrix[i][j].getType()!=FOUR && matrix[i][j].getType()!=THREE)) matrix[i][j].insertTile(bag.newTile());
+                        break;
+                    case 3: if((matrix[i][j].isEmpty() && matrix[i][j].getType()!=ONE) && (matrix[i][j].getType()!=FOUR)) matrix[i][j].insertTile(bag.newTile());
+                        break;
+                    case 4: if(matrix[i][j].isEmpty() && matrix[i][j].getType()!=ONE) matrix[i][j].insertTile(bag.newTile());
+                        break;
+                }
             }
         }
     }

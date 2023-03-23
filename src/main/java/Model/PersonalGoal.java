@@ -1,26 +1,26 @@
 package Model;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+
 
 public class PersonalGoal extends Goal{
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
 
-    public PersonalGoal(Shelf ps){
+    public PersonalGoal(Shelf ps) {
 
-        this.playerShelf= ps;
-        this.PGoal= new ArrayList<>();   //ArrayList o List??
+        this.playerShelf = ps;
+        this.PGoal = new ArrayList<>();
+    }
+    public void CreatePersonalGoal(){
         Random rand = new Random();
         rand.nextInt(12);
 
         switch (rand.nextInt(12)) {
 
-            case 0:  getPersGoal(0);
+            case 0:  getPersGoal(1);
                 break;
             case 1:  getPersGoal(7);
                 break;
@@ -48,7 +48,7 @@ public class PersonalGoal extends Goal{
     }
 
     public int getScore(Shelf playerShelf){
-        int score=0,point=0;
+        int score=0, point=0;
             for (int i=0;i<PGoal.size();i++) {
                 Pgtype pgtype = PGoal.get(i);
                 int line = pgtype.getLine();
@@ -78,37 +78,6 @@ public class PersonalGoal extends Goal{
             }
 
         return score;
-    }
-    public ArrayList<Pgtype> getPersGoal(int j) {
-        try {
-            File ListOfPersonalGoal = new File("src/main/java/Model/Conf/PersonalGoal.json");
-            Scanner reader = new Scanner(ListOfPersonalGoal);
-            if(reader.hasNextLine()){
-                for(int k=0;k<j-1;k++)  {
-                    String pg= reader.nextLine();
-                }
-                String pg = reader.nextLine();
-                for(int l=0; l<6; l++) {
-                    String st[] = pg.split(",");
-                        int line = st[0].charAt(0)-48;
-                        int col = st[1].charAt(0)-48;
-                        Color color = Color.valueOf(st[2]);
-                        PGoal.add(new Pgtype(line,col,color));
-                            if(l!=5) {
-                                pg = reader.nextLine();
-                            }
-                }
-            }
-        }catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return PGoal;
-    }
-
-    public ArrayList<Pgtype> getPGoal() {
-        return PGoal;
     }
     @Override
     public int getScore(Player p) {
@@ -145,4 +114,36 @@ public class PersonalGoal extends Goal{
         return score;
 
     }
+    public ArrayList<Pgtype> getPersGoal(int j) {
+        try {
+            File ListOfPersonalGoal = new File("src/main/java/Model/Conf/PersonalGoal.json");
+            Scanner reader = new Scanner(ListOfPersonalGoal);
+            if(reader.hasNextLine()){
+            for(int k=0;k<j-1;k++)  {
+                String pg= reader.nextLine();
+            }
+            String pg = reader.nextLine();
+            for(int l=0; l<6; l++) {
+                String st[] = pg.split(",");
+                    int line = st[0].charAt(0)-48;
+                    int col = st[1].charAt(0)-48;
+                    Color color = Color.valueOf(st[2]);
+                    PGoal.add(new Pgtype(line,col,color));
+                    if(l!=5) {
+                        pg = reader.nextLine();
+                    }
+            }}
+        }catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return PGoal;
+    }
+
+    public ArrayList<Pgtype> getPGoal() {
+        return PGoal;
+    }
+
+
 }

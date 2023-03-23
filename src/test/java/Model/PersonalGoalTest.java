@@ -40,4 +40,7 @@ class PersonalGoalTest {
         ArrayList<Pgtype> pGoal =new ArrayList<>();
         Assertions.assertEquals(6, personalGoal.getPGoal().size());
     }
+
+
+
 }

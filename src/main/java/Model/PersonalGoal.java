@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class PersonalGoal {
+public class PersonalGoal extends Goal{
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
 
@@ -83,18 +83,21 @@ public class PersonalGoal {
         try {
             File ListOfPersonalGoal = new File("src/main/java/Model/Conf/PersonalGoal.json");
             Scanner reader = new Scanner(ListOfPersonalGoal);
-
-            for(int k=0;k<j-1;k++)  {
-                String pg= reader.nextLine();
-            }
-            String pg = reader.nextLine();
-            for(int l=0; l<6; l++) {
-                String st[] = pg.split(",");
-                    int line = st[0].charAt(0)-48;
-                    int col = st[1].charAt(0)-48;
-                    Color color = Color.valueOf(st[2]);
-                    PGoal.add(new Pgtype(line,col,color));
-                    pg= reader.nextLine();
+            if(reader.hasNextLine()){
+                for(int k=0;k<j-1;k++)  {
+                    String pg= reader.nextLine();
+                }
+                String pg = reader.nextLine();
+                for(int l=0; l<6; l++) {
+                    String st[] = pg.split(",");
+                        int line = st[0].charAt(0)-48;
+                        int col = st[1].charAt(0)-48;
+                        Color color = Color.valueOf(st[2]);
+                        PGoal.add(new Pgtype(line,col,color));
+                            if(l!=5) {
+                                pg = reader.nextLine();
+                            }
+                }
             }
         }catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -106,5 +109,40 @@ public class PersonalGoal {
 
     public ArrayList<Pgtype> getPGoal() {
         return PGoal;
+    }
+    @Override
+    public int getScore(Player p) {
+        playerShelf =p.getShelf();
+        int score=0,point=0;
+        for (int i=0;i<PGoal.size();i++) {
+            Pgtype pgtype = PGoal.get(i);
+            int line = pgtype.getLine();
+            int col = pgtype.getCol();
+            Color color = pgtype.getColor();
+            if (playerShelf.getTile(line, col)!=null && playerShelf.getTile(line, col).getColor() == color) {
+                point+=1;
+            }
+        }
+        if (point==1){
+            score=1;
+        }
+        if(point==2){
+            score=2;
+        }
+        if(point==3){
+            score=4;
+        }
+        if(point==4){
+            score=6;
+        }
+        if(point==5){
+            score=9;
+        }
+        if(point==6){
+            score=12;
+        }
+
+        return score;
+
     }
 }

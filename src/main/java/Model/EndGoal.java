@@ -14,7 +14,7 @@ public class EndGoal extends Goal{
             }
         }
         this.status = false;
-        return 1;
+        return value;
     }
     public boolean getStatus(){
         return this.status;

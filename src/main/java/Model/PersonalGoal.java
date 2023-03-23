@@ -48,7 +48,8 @@ public class PersonalGoal extends Goal{
     }
 
     public int getScore(Shelf playerShelf){
-        int score=0, point=0;
+        int score=0;
+        int point=0;
             for (int i=0;i<PGoal.size();i++) {
                 Pgtype pgtype = PGoal.get(i);
                 int line = pgtype.getLine();

@@ -28,7 +28,7 @@ public class Board{
         bag = new Bag();
 
         try {
-            File boardConf = new File("src/main/java/Model/Conf/board_conf.json");
+            File boardConf = new File("src/main/java/Model/Conf/board_conf");
             Scanner reader = new Scanner(boardConf);
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {

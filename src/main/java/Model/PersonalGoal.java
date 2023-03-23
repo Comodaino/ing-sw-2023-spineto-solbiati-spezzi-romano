@@ -11,16 +11,18 @@ public class PersonalGoal extends Goal{
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
 
-    public PersonalGoal(Shelf ps){
+    public PersonalGoal(Shelf ps) {
 
-        this.playerShelf= ps;
-        this.PGoal= new ArrayList<>();   //ArrayList o List??
+        this.playerShelf = ps;
+        this.PGoal = new ArrayList<>();
+    }
+    public void CreatePersonalGoal(){
         Random rand = new Random();
         rand.nextInt(12);
 
         switch (rand.nextInt(12)) {
 
-            case 0:  getPersGoal(0);
+            case 0:  getPersGoal(1);
                 break;
             case 1:  getPersGoal(7);
                 break;
@@ -48,7 +50,8 @@ public class PersonalGoal extends Goal{
     }
 
     public int getScore(Shelf playerShelf){
-        int score=0,point=0;
+        int score=0;
+        int point=0;
             for (int i=0;i<PGoal.size();i++) {
                 Pgtype pgtype = PGoal.get(i);
                 int line = pgtype.getLine();

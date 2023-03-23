@@ -81,7 +81,7 @@ public class PersonalGoal extends Goal{
     }
     public ArrayList<Pgtype> getPersGoal(int j) {
         try {
-            File ListOfPersonalGoal = new File("src/main/java/Model/Conf/PersonalGoal.json");
+            File ListOfPersonalGoal = new File("src/main/java/Model/Conf/PersonalGoal_conf");
             Scanner reader = new Scanner(ListOfPersonalGoal);
             if(reader.hasNextLine()){
                 for(int k=0;k<j-1;k++)  {

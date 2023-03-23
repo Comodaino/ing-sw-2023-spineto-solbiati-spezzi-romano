@@ -9,10 +9,12 @@ public class PersonalGoal extends Goal{
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
 
-    public PersonalGoal(Shelf ps){
+    public PersonalGoal(Shelf ps) {
 
-        this.playerShelf= ps;
-        this.PGoal= new ArrayList<>();   //ArrayList o List??
+        this.playerShelf = ps;
+        this.PGoal = new ArrayList<>();
+    }
+    public void CreatePersonalGoal(){
         Random rand = new Random();
         rand.nextInt(12);
 

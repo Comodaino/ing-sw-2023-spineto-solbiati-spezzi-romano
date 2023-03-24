@@ -29,7 +29,6 @@ class PersonalGoalTest {
         int actualScore = personalGoal.getScore(playerShelf);
         Assertions.assertEquals(expectedScore, actualScore);
     }
-
     @Test
     public void TestCreatePersGoal(){
         Shelf playerShelf = new Shelf();
@@ -61,7 +60,6 @@ class PersonalGoalTest {
 
             }
         }
-
     }
     @Test
     public void testGetPersGoal() {

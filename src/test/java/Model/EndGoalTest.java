@@ -3,11 +3,15 @@ package Model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class EndGoalTest {
     @Test
-    void GetSCore(){
+    void TestGetSCore(){
         Player player = new Player("Ale",false);
         EndGoal endGoal = new EndGoal();
         endGoal.getStatus();
@@ -20,6 +24,12 @@ class EndGoalTest {
         player.getShelf().addTile(0,tile3);
         Assertions.assertEquals(0,endGoal.getScore(player));
     }
+    @Test
+    void TestGetScoreIs1() throws FileNotFoundException {
+        Player player = new Player("Ale",false);
+        EndGoal endGoal = new EndGoal();
+        Shelf shelf = new Shelf();
 
 
+    }
 }

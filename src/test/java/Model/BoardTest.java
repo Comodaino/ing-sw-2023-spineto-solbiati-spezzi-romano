@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class BoardTest {
@@ -39,7 +40,7 @@ class BoardTest {
             for(int j=0; j<9; j++){
                 if(testBoard.getCell(i,j).isEmpty() && testBoard.getCell(i,j).getType()==CellType.TWO) {
                     System.out.println("RECHARGE FAIL");
-                    return;
+                    assertFalse(true);
                 }
             }
         }
@@ -76,9 +77,9 @@ class BoardTest {
         testBoard.checkRecharge();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
-                if(testBoard.getCell(i,j).isEmpty() && testBoard.getCell(i,j).getType()!=CellType.THREE) {
+                if(testBoard.getCell(i,j).isEmpty() && (testBoard.getCell(i,j).getType()!=CellType.ONE  && testBoard.getCell(i,j).getType()!=CellType.FOUR)) {
                     System.out.println("RECHARGE FAIL");
-                    return;
+                    assertFalse(true);
                 }
             }
         }
@@ -116,9 +117,9 @@ class BoardTest {
         testBoard.checkRecharge();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
-                if(testBoard.getCell(i,j).isEmpty() && (testBoard.getCell(i,j).getType()==CellType.TWO || testBoard.getCell(i,j).getType()==CellType.THREE)) {
+                if(testBoard.getCell(i,j).isEmpty() && testBoard.getCell(i,j).getType()!=CellType.ONE) {
                     System.out.println("RECHARGE FAIL");
-                    return;
+                    assertFalse(true);
                 }
             }
         }

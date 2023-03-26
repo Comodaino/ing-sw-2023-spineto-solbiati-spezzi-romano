@@ -15,15 +15,16 @@ public class GoalSquares extends CommonGoal{
             }
         }
 
-        for(Color color : Color.values()) {
+        for(Color color : Color.values()){
             numOfSquares = 0;
             for (int r=1; r<6 && numOfSquares<2; r++) {
                 for (int c=1; c<5 && numOfSquares<2; c++) {
                     if (p.getShelf().getTile(r, c) != null && p.getShelf().getTile(r - 1, c) != null &&
                             p.getShelf().getTile(r, c - 1) != null && p.getShelf().getTile(r - 1, c - 1) != null) {
-                        if (p.getShelf().getTile(r, c).getColor().equals(color) && p.getShelf().getTile(r - 1, c).getColor().equals(color) &&
-                                p.getShelf().getTile(r, c - 1).getColor().equals(color) && p.getShelf().getTile(r-1, c-1).equals(color) &&
-                                !foundMatrix[r][c] && !foundMatrix[r - 1][c] && !foundMatrix[r][c - 1] && !foundMatrix[r - 1][c - 1]) {
+                        if(p.getShelf().getTile(r, c).getColor().equals(color) &&
+                                p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r-1, c).getColor()) &&
+                                p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c-1).getColor()) &&
+                                p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r-1, c-1).getColor())) {
 
                             numOfSquares++;
                             foundMatrix[r][c] = true;

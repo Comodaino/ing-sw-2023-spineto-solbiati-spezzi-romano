@@ -16,8 +16,10 @@ public class GoalCouples extends CommonGoal{
         }
 
         for(int r=0; r<6 && numOfCouples<6; r++){
-            for(int c=0; c<4; c++){
-                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c+1)!=null && p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor()) && !foundMatrix[r][c] && !foundMatrix[r][c+1]){
+            for(int c=0; c<4 && numOfCouples<6; c++){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c+1)!=null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor()) &&
+                        !foundMatrix[r][c] && !foundMatrix[r][c+1]){
                     numOfCouples++;
                     foundMatrix[r][c] = true;
                     foundMatrix[r][c+1] = true;
@@ -26,8 +28,10 @@ public class GoalCouples extends CommonGoal{
         } //search "horizontal couples"
 
         for(int c=0; c<5 && numOfCouples<6; c++){
-            for(int r=0; r<5; r++){
-                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r+1, c)!=null && p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c).getColor()) && !foundMatrix[r][c] && !foundMatrix[r+1][c]){
+            for(int r=0; r<5 && numOfCouples<6; r++){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r+1, c)!=null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c).getColor()) &&
+                        !foundMatrix[r][c] && !foundMatrix[r+1][c]){
                     numOfCouples++;
                     foundMatrix[r][c] = true;
                     foundMatrix[r+1][c] = true;

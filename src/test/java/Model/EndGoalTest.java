@@ -37,6 +37,7 @@ class EndGoalTest {
                 Tile t = new Tile(Color.valueOf(st[c]));
                 player.getShelf().addTile(c,t);
             }
+            if (r!=5) sh = reader.nextLine();
         }
         Assertions.assertEquals(1,endGoal.getScore(player));
         Assertions.assertEquals(false,endGoal.getStatus());

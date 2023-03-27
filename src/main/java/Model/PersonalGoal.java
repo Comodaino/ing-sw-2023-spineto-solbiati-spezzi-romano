@@ -16,7 +16,7 @@ public class PersonalGoal extends Goal{
         this.playerShelf = ps;
         this.PGoal = new ArrayList<>();
     }
-    public void CreatePersonalGoal(){
+    public Random CreatePersonalGoal(){
         Random rand = new Random();
         rand.nextInt(12);
 
@@ -47,6 +47,7 @@ public class PersonalGoal extends Goal{
             case 11:  getPersGoal(67);
                 break;
         }
+        return rand;
     }
 
     public int getScore(Shelf playerShelf){

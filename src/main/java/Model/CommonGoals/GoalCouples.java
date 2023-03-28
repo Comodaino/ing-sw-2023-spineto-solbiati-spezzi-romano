@@ -7,7 +7,7 @@ public class GoalCouples extends CommonGoal{
     public GoalCouples (){ super(); }
     @Override
     public int getScore(Player p){
-        int counter = 0;
+        int numOfCouples = 0;
         boolean[][] foundMatrix = new boolean[6][5];
         for(int i=0; i<6; i++){
             for(int j=0; j<5; j++){
@@ -15,35 +15,34 @@ public class GoalCouples extends CommonGoal{
             }
         }
 
-        for(int i=0; i<6; i++) {
-            for(int j = 0; j < 5; j++) {
-                if(  !((i-1<=0 || j-1<=0) || (i+1>=6 || j+1>=5))) {
-                    if (!foundMatrix[i][j]) {
-                        if (!foundMatrix[i + 1][j] && p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i+1,j).getColor())) {
-                            counter++;
-                            foundMatrix[i][j] = true;
-                            foundMatrix[i + 1][j] = true;
-                        }
-                        if (!foundMatrix[i - 1][j] && p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i-1,j).getColor())) {
-                            counter++;
-                            foundMatrix[i][j] = true;
-                            foundMatrix[i - 1][j] = true;
-                        }
-                        if (!foundMatrix[i][j + 1] && p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i,j+1).getColor())) {
-                            counter++;
-                            foundMatrix[i][j] = true;
-                            foundMatrix[i][j + 1] = true;
-                        }
-                        if (!foundMatrix[i][j - 1] && p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i,j-1).getColor())) {
-                            counter++;
-                            foundMatrix[i][j] = true;
-                            foundMatrix[i][j - 1] = true;
-                        }
-                    }
+        for(int r=0; r<6 && numOfCouples<6; r++){
+            for(int c=0; c<4 && numOfCouples<6; c++){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c+1)!=null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor()) &&
+                        !foundMatrix[r][c] && !foundMatrix[r][c+1]){
+                    numOfCouples++;
+                    foundMatrix[r][c] = true;
+                    foundMatrix[r][c+1] = true;
                 }
             }
+        } //search "horizontal couples"
+
+        for(int c=0; c<5 && numOfCouples<6; c++){
+            for(int r=0; r<5 && numOfCouples<6; r++){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r+1, c)!=null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c).getColor()) &&
+                        !foundMatrix[r][c] && !foundMatrix[r+1][c]){
+                    numOfCouples++;
+                    foundMatrix[r][c] = true;
+                    foundMatrix[r+1][c] = true;
+                }
+            }
+        } //search "vertical couples"
+
+        if(numOfCouples==6 && !this.completed.contains(p)){
+            return assignScore(p);
         }
-        if(counter>=6 && !this.completed.contains(p)) return assignScore(p);
+
         return 0;
     }
 }

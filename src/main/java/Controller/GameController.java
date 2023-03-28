@@ -13,18 +13,18 @@ import java.util.Observer;
 public class GameController implements Observer {
     private Board gameBoard;
     private ViewInterface gameTui;
-    //The following constructor needs to be reviewed and modified after the lesson about sockets and view
-    public GameController(){
+    //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view
+    public GameController(List<Player> pl){
         //this.gameTui = new View()
-        List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        this.gameBoard = new Board(false, playerList);
+        this.gameBoard = new Board(false, pl);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if(o==gameTui){
+        System.out.println(arg);
+        //TODO CHANGE CONDITION FOR TESTING
+        if(true){
+            System.out.println(arg);
             String input[] = arg.toString().split(" ");
             if(input[0].charAt(0) == '/'){
             switch(input[0]) {
@@ -32,7 +32,7 @@ public class GameController implements Observer {
                     break;
                 case "/add": playAdd(input);
                     break;
-                case "/endGame":
+                case "/endgame":
                     try {
                         playEndGame(input);
                     } catch (ExecutionControl.NotImplementedException e) {
@@ -48,6 +48,7 @@ public class GameController implements Observer {
     }
 
     private void playEndGame(String[] input) throws ExecutionControl.NotImplementedException {
+        //TODO NEEDS TO DECIDE IF TO END FOR EVERYONE OR PLAYER PER PLAYER
         for(int i=0; i<gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).getNickname().equals(input[1])) {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
@@ -58,11 +59,13 @@ public class GameController implements Observer {
 
     //NOTE: INPUT LAYOUT SHOULD BE "\COMMAND PLAYERNAME PAR1 PAR2 ...
     private void playRemove(String[] input) {
+        System.out.println("remove");
         gameBoard.removeTile(input[2].charAt(0) - 48, input[3].charAt(0) - 48);
         gameBoard.checkRecharge();
     }
 
     private void playAdd(String[] input) {
+        System.out.println("add");
         for(int i=0; i<gameBoard.getListOfPlayer().size(); i++){
             if(gameBoard.getListOfPlayer().get(i).getNickname().equals(input[1])){
                 gameBoard.getListOfPlayer().get(i).getShelf().addTile(input[2].charAt(0) - 48, gameBoard.getTileBuffer().remove(0));
@@ -77,4 +80,7 @@ public class GameController implements Observer {
         }
     }
 
+    public Board getBoard() {
+        return gameBoard;
+    }
 }

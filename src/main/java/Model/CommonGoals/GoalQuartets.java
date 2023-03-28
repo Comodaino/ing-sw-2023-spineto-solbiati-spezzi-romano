@@ -1,8 +1,6 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import Model.Shelf;
-
 
 public class GoalQuartets extends CommonGoal{
     public GoalQuartets(){
@@ -21,8 +19,9 @@ public class GoalQuartets extends CommonGoal{
         for(int r=0; r<6 && numOfQuartets<4; r++){
             n = 0;
             for(int c=0; c<4; c++){
-                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor()) &&
-                !foundMatrix[r][c] && !foundMatrix[r][c+1]){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c+1)!=null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor()) &&
+                        !foundMatrix[r][c] && !foundMatrix[r][c+1]){
                     n++;
                 } else {
                     n = 0;
@@ -40,8 +39,9 @@ public class GoalQuartets extends CommonGoal{
         for(int c=0; c<5 && numOfQuartets<4; c++){
             n = 0;
             for(int r=0; r<5; r++){
-                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c).getColor()) &&
-                !foundMatrix[r][c] && !foundMatrix[r+1][c]){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r+1, c)!=null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c).getColor()) &&
+                        !foundMatrix[r][c] && !foundMatrix[r+1][c]){
                     n++;
                 } else {
                     n = 0;

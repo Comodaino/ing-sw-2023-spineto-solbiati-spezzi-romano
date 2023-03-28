@@ -31,12 +31,8 @@ public class GameController implements Observer {
                     break;
                 case "/add": playAdd(input);
                     break;
-                case "/endgame":
-                    try {
-                        playEndGame(input);
-                    } catch (ExecutionControl.NotImplementedException e) {
-                        throw new RuntimeException(e);
-                    }
+                case "/endgame": playEndGame(input);
+                        break;
             }
             }else{
                 System.out.println("Commands must start with '/'");
@@ -46,7 +42,7 @@ public class GameController implements Observer {
         }
     }
 
-    private void playEndGame(String[] input) throws ExecutionControl.NotImplementedException {
+    private void playEndGame(String[] input) {
         //TODO NEEDS TO DECIDE IF TO END FOR EVERYONE OR PLAYER PER PLAYER
         for(int i=0; i<gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).getNickname().equals(input[1])) {

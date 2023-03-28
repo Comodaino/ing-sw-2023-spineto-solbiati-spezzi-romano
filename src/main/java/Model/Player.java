@@ -16,6 +16,7 @@ public class Player {
         this.nickname = n;
         this.myShelf = new Shelf();
         this.myGoal = new PersonalGoal(this.myShelf);
+        this.nearGoal = new NearGoal();
     }
 
     public String getNickname(){

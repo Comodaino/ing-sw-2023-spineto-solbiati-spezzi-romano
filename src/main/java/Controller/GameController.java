@@ -21,7 +21,6 @@ public class GameController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println(arg);
         //TODO CHANGE CONDITION FOR TESTING
         if(true){
             System.out.println(arg);

@@ -12,7 +12,7 @@ public class GoalEight extends CommonGoal{
     @Override
     public int getScore(Player p){
         for(Color color : Color.values()){
-            for(int r=0; r<6 && count<8; r++){
+            for(int r=0; r<6; r++){
                 for(int c=0; c<5; c++){
                     if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c).getColor().equals(color)){
                         count++;

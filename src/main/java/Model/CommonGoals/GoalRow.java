@@ -16,7 +16,7 @@ public class GoalRow extends CommonGoal{
         int n = 0;
         int numOfRows = 0;
 
-        for(int r=0; r<6 && numOfRows<4; r++){
+        for(int r=0; r<6; r++){
             for(int c=0; c<5; c++){
                 if(p.getShelf().getTile(r, c) != null){
                     n++;

@@ -10,7 +10,7 @@ public class GoalDiffRows extends CommonGoal{
     public int getScore(Player p){
         int numOfRows = 0;
 
-        for(int r=0; r<6 && numOfRows<2; r++){
+        for(int r=0; r<6; r++){
             for(int c=0; c<4; c++){
                 if(p.getShelf().getTile(r, c) != null && p.getShelf().getTile(r, c+1) != null &&
                         p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor())){

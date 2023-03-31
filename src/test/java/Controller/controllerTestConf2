@@ -1,0 +1,11 @@
+/remove 5 5
+add 4
+/add 4
+/remove 5 6
+/remove 4 6
+/add 3
+/remove 4 0
+/remove 4 1
+/remove 4 2
+/add 3
+/endgame

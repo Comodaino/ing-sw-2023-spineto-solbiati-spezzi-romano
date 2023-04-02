@@ -38,7 +38,7 @@ class GoalCrossTest {
 
     @Test
     void emptyShelf(){
-        GoalCross goal = new GoalCross();
+        GoalCross goal = new GoalCross(2);
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,7 +47,7 @@ class GoalCrossTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalCross goal = new GoalCross();
+        GoalCross goal = new GoalCross(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/cross.json");
@@ -60,7 +60,7 @@ class GoalCrossTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalCross goal = new GoalCross();
+        GoalCross goal = new GoalCross(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/cross.json");
@@ -74,7 +74,7 @@ class GoalCrossTest {
 
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalCross goal = new GoalCross();
+        GoalCross goal = new GoalCross(4);
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);

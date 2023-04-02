@@ -38,7 +38,7 @@ class GoalDiffColumnsTest {
 
     @Test
     void emptyShelf(){
-        GoalDiffColumns goal = new GoalDiffColumns();
+        GoalDiffColumns goal = new GoalDiffColumns(2);
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,7 +47,7 @@ class GoalDiffColumnsTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalDiffColumns goal = new GoalDiffColumns();
+        GoalDiffColumns goal = new GoalDiffColumns(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/diffcolumns.json");
@@ -60,7 +60,7 @@ class GoalDiffColumnsTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalDiffColumns goal = new GoalDiffColumns();
+        GoalDiffColumns goal = new GoalDiffColumns(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/diffcolumns.json");
@@ -74,7 +74,7 @@ class GoalDiffColumnsTest {
 
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalDiffColumns goal = new GoalDiffColumns();
+        GoalDiffColumns goal = new GoalDiffColumns(4);
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);

@@ -38,7 +38,7 @@ class GoalEightTest {
 
     @Test
     void emptyShelf(){
-        GoalEight goal = new GoalEight();
+        GoalEight goal = new GoalEight(2);
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,7 +47,7 @@ class GoalEightTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalEight goal = new GoalEight();
+        GoalEight goal = new GoalEight(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/eight.json");
@@ -60,7 +60,7 @@ class GoalEightTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalEight goal = new GoalEight();
+        GoalEight goal = new GoalEight(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/eight.json");
@@ -74,7 +74,7 @@ class GoalEightTest {
 
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalEight goal = new GoalEight();
+        GoalEight goal = new GoalEight(4);
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);

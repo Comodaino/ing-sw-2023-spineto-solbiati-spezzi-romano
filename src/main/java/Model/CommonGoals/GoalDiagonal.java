@@ -3,8 +3,8 @@ package Model.CommonGoals;
 import Model.Player;
 
 public class GoalDiagonal extends CommonGoal{
-    public GoalDiagonal(){
-        super();
+    public GoalDiagonal(int numOfPlayer){
+        super(numOfPlayer);
     }
     @Override
     public int getScore(Player p){

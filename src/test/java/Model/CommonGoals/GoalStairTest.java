@@ -38,7 +38,7 @@ class GoalStairTest {
 
     @Test
     void emptyShelf(){
-        GoalStair goal = new GoalStair();
+        GoalStair goal = new GoalStair(2);
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,7 +47,7 @@ class GoalStairTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalStair goal = new GoalStair();
+        GoalStair goal = new GoalStair(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair.json");
@@ -60,7 +60,7 @@ class GoalStairTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalStair goal = new GoalStair();
+        GoalStair goal = new GoalStair(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair.json");
@@ -74,7 +74,7 @@ class GoalStairTest {
 
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalStair goal = new GoalStair();
+        GoalStair goal = new GoalStair(4);
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);

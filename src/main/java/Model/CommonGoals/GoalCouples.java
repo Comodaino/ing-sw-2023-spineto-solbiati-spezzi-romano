@@ -1,10 +1,11 @@
 package Model.CommonGoals;
 
 import Model.Player;
+import java.util.Arrays;
 
 public class GoalCouples extends CommonGoal{
     private boolean[][] foundMatrix = new boolean[6][5];
-    public GoalCouples(int numOfPlayer){
+    public GoalCouples (int numOfPlayer){
         super(numOfPlayer);
         for(int i=0; i<6; i++){
             for(int j=0; j<5; j++){
@@ -16,8 +17,8 @@ public class GoalCouples extends CommonGoal{
     public int getScore(Player p){
         int numOfCouples = 0;
 
-        for(int r=0; r<6; r++){
-            for(int c=0; c<4; c++){
+        for(int r=0; r<6 && numOfCouples<6; r++){
+            for(int c=0; c<4 && numOfCouples<6; c++){
                 if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c+1)!=null &&
                         p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor()) &&
                         !foundMatrix[r][c] && !foundMatrix[r][c+1]){
@@ -27,8 +28,8 @@ public class GoalCouples extends CommonGoal{
             }
         } //search "horizontal couples"
 
-        for(int c=0; c<5; c++){
-            for(int r=0; r<5; r++){
+        for(int c=0; c<5 && numOfCouples<6; c++){
+            for(int r=0; r<5 && numOfCouples<6; r++){
                 if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r+1, c)!=null &&
                         p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c).getColor()) &&
                         !foundMatrix[r][c] && !foundMatrix[r+1][c]){

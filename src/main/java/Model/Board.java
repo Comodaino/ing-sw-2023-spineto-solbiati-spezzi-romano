@@ -64,9 +64,8 @@ public class Board{
 
         setOfCommonGoal = new HashSet<CommonGoal>();
         Random rand = new Random();
-        setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11)));
-
-        if(fm) setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11)));
+        setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
+        if(fm) setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
 
     }
 

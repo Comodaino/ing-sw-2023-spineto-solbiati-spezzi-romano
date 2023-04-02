@@ -52,7 +52,7 @@ public class GoalQuartets extends CommonGoal{
             }
         } //search "vertical quartets"
 
-        System.out.println(numOfQuartets);
+        //System.out.println(numOfQuartets);
         if(numOfQuartets==4 && !this.completed.contains(p)){
             return assignScore(p);
         }

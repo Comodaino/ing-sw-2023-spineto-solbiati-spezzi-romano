@@ -4,13 +4,13 @@ import Model.Color;
 import Model.Player;
 
 public class GoalEight extends CommonGoal{
-    private int count;
-    public GoalEight(){
-        super();
-        this.count = 0;
+    public GoalEight(int numOfPlayer){
+        super(numOfPlayer);
     }
     @Override
     public int getScore(Player p){
+        int count = 0;
+
         for(Color color : Color.values()){
             for(int r=0; r<6; r++){
                 for(int c=0; c<5; c++){

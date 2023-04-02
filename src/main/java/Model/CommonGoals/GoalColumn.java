@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GoalColumn extends CommonGoal{
-    public GoalColumn(){
-        super();
+    public GoalColumn(int numOfPlayer){
+        super(numOfPlayer);
     }
     @Override
     public int getScore(Player p){

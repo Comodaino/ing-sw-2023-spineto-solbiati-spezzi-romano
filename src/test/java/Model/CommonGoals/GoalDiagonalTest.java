@@ -38,7 +38,7 @@ class GoalDiagonalTest {
 
     @Test
     void emptyShelf(){
-        GoalDiagonal goal = new GoalDiagonal();
+        GoalDiagonal goal = new GoalDiagonal(2);
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,7 +47,7 @@ class GoalDiagonalTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalDiagonal goal = new GoalDiagonal();
+        GoalDiagonal goal = new GoalDiagonal(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/diagonal.json");
@@ -60,7 +60,7 @@ class GoalDiagonalTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalDiagonal goal = new GoalDiagonal();
+        GoalDiagonal goal = new GoalDiagonal(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/diagonal.json");
@@ -74,7 +74,7 @@ class GoalDiagonalTest {
 
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalDiagonal goal = new GoalDiagonal();
+        GoalDiagonal goal = new GoalDiagonal(4);
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);

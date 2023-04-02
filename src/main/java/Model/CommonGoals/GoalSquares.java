@@ -4,7 +4,7 @@ import Model.Color;
 import Model.Player;
 
 public class GoalSquares extends CommonGoal{
-    public GoalSquares(){ super(); }
+    public GoalSquares(int numOfPlayer){ super(numOfPlayer); }
     @Override
     public int getScore(Player p) {
         int numOfSquares = 0;

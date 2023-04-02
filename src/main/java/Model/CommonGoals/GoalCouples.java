@@ -4,7 +4,7 @@ import Model.Player;
 import java.util.Arrays;
 
 public class GoalCouples extends CommonGoal{
-    public GoalCouples (){ super(); }
+    public GoalCouples (int numOfPlayer){ super(numOfPlayer); }
     @Override
     public int getScore(Player p){
         int numOfCouples = 0;

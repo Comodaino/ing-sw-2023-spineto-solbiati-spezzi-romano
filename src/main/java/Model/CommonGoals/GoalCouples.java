@@ -4,7 +4,7 @@ import Model.Player;
 
 public class GoalCouples extends CommonGoal{
     private boolean[][] foundMatrix = new boolean[6][5];
-    public GoalCouples (int numOfPlayer){
+    public GoalCouples(int numOfPlayer){
         super(numOfPlayer);
         for(int i=0; i<6; i++){
             for(int j=0; j<5; j++){

@@ -16,7 +16,7 @@ public class GoalQuartets extends CommonGoal{
             }
         }
 
-        for(int r=0; r<6 && numOfQuartets<4; r++){
+        for(int r=0; r<6; r++){
             n = 0;
             for(int c=0; c<4; c++){
                 if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c+1)!=null &&
@@ -28,15 +28,13 @@ public class GoalQuartets extends CommonGoal{
                 }
                 if(n==3){
                     numOfQuartets++;
-                    for(int i=c+1; i>=c-2; i--){
-                        foundMatrix[r][i] = true;
-                    }
+                    search(r, c-2, p, foundMatrix);
                     break;
                 }
             }
         } //search "horizontal quartets"
 
-        for(int c=0; c<5 && numOfQuartets<4; c++){
+        for(int c=0; c<5; c++){
             n = 0;
             for(int r=0; r<5; r++){
                 if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r+1, c)!=null &&
@@ -48,17 +46,35 @@ public class GoalQuartets extends CommonGoal{
                 }
                 if(n==3){
                     numOfQuartets++;
-                    for(int i=r+1; i>=r-2; i--){
-                        foundMatrix[i][c] = true;
-                    }
+                    search(r-2, c, p, foundMatrix);
                     break;
                 }
             }
         } //search "vertical quartets"
 
+        //System.out.println(numOfQuartets);
         if(numOfQuartets==4 && !this.completed.contains(p)){
             return assignScore(p);
         }
         return 0;
+    }
+
+    public void search(int r, int c, Player p, boolean[][] foundMatrix) {
+        foundMatrix[r][c]=true;
+        if(r+1<6){
+            if(p.getShelf().getTile(r + 1, c) != null && !foundMatrix[r+1][c]){
+                if(p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r + 1, c).getColor())){
+                    search(r + 1, c, p, foundMatrix);
+                }
+            }
+        }
+
+        if(c+1<5){
+            if(p.getShelf().getTile(r, c + 1) != null && !foundMatrix[r][c+1]) {
+                if(p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c + 1).getColor())){
+                    search(r, c + 1, p, foundMatrix);
+                }
+            }
+        }
     }
 }

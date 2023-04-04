@@ -3,8 +3,8 @@ package Model.CommonGoals;
 import Model.Player;
 
 public class GoalStair extends CommonGoal{
-    public GoalStair(){
-        super();
+    public GoalStair(int numOfPlayer){
+        super(numOfPlayer);
     }
     @Override
     public int getScore(Player p){

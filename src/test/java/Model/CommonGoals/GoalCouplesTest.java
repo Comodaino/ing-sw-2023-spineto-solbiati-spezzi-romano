@@ -38,7 +38,7 @@ class GoalCouplesTest {
 
     @Test
     void emptyShelf(){
-        GoalCouples goal = new GoalCouples();
+        GoalCouples goal = new GoalCouples(2);
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,10 +47,10 @@ class GoalCouplesTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalCouples goal = new GoalCouples();
+        GoalCouples goal = new GoalCouples(2);
         Player p = new Player("Nico", true);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/cross.json");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/couples.json");
         Scanner reader = new Scanner(shelfConf);
         configShelf(p.getShelf(), reader);
 
@@ -60,10 +60,10 @@ class GoalCouplesTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalCouples goal = new GoalCouples();
+        GoalCouples goal = new GoalCouples(2);
         Player p = new Player("Nico", true);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/cross.json");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/couples.json");
         Scanner reader = new Scanner(shelfConf);
         configShelf(p.getShelf(), reader);
 
@@ -74,13 +74,13 @@ class GoalCouplesTest {
 
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalCouples goal = new GoalCouples();
+        GoalCouples goal = new GoalCouples(4);
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);
         Player p4 = new Player("Alessandra", false);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/cross.json");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/couples.json");
         Scanner reader1 = new Scanner(shelfConf);
         Scanner reader2 = new Scanner(shelfConf);
         Scanner reader3 = new Scanner(shelfConf);

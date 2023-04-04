@@ -38,7 +38,7 @@ class GoalSquaresTest {
 
     @Test
     void emptyShelf(){
-        GoalSquares goal = new GoalSquares();
+        GoalSquares goal = new GoalSquares(2);
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,7 +47,7 @@ class GoalSquaresTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalSquares goal = new GoalSquares();
+        GoalSquares goal = new GoalSquares(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/squares.json");
@@ -60,7 +60,7 @@ class GoalSquaresTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalSquares goal = new GoalSquares();
+        GoalSquares goal = new GoalSquares(2);
         Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/squares.json");
@@ -74,7 +74,7 @@ class GoalSquaresTest {
 
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalSquares goal = new GoalSquares();
+        GoalSquares goal = new GoalSquares(4);
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);

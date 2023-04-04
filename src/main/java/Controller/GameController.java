@@ -7,6 +7,11 @@ import View.ViewInterface;
 
 import java.util.*;
 
+/**
+ * Game controller controls the flow of the match, taking command using the update() method of the observable-observer pattern,
+ * it represents the entirety of the controller in the MVC patter
+ * @author Alessio
+ */
 public class GameController implements Observer {
     private final Board gameBoard;
     private ViewInterface gameTui;
@@ -14,7 +19,14 @@ public class GameController implements Observer {
     private List<Player> donePlayers;
 
     //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view
+
+    /**
+     * GameController constructor
+     * @param pl list of players
+     * @author Alessio
+     */
     public GameController(List<Player> pl) {
+        //TODO insert view once implemented
         //this.gameTui = new View()
         this.gameBoard = new Board(false, pl);
         this.donePlayers = new ArrayList<Player>();
@@ -26,6 +38,13 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     *
+     * @param o     the observable object.
+     * @param arg   an argument passed to the {@code notifyObservers}
+     *                 method. It is format is /command [par 0] [par 1] ...
+     * @author Alessio
+     */
     @Override
     public void update(Observable o, Object arg) {
         //TODO CHANGE CONDITION FOR TESTING
@@ -48,25 +67,34 @@ public class GameController implements Observer {
         }
     }
 
-    private void playEndGame(String[] input) {
-        //TODO NEEDS TO DECIDE IF TO END FOR EVERYONE OR PLAYER PER PLAYER
+    /**
+     * Ends the game for a single player and makes him wait for the other players to finish
+     */
+    private void playEndGame() {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                 donePlayers.add(currentPlayer);
             }
-
         }
     }
 
-    //NOTE: INPUT LAYOUT SHOULD BE "\COMMAND PLAYERNAME PAR1 PAR2 ...
+    /**
+     * Removes a tile from the board and checks for recharge
+     * @param input input[0] is the command, preceded by /, input[1] is the row coordinate, input[2] is the column coordinate
+     * @author Alessio
+     */
     private void playRemove(String[] input) {
         System.out.println("remove " + Arrays.toString(input));
         gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
         gameBoard.checkRecharge();
     }
-
+    /**
+     * Adds a tile to the current player shelf tanking it from the board buffer
+     * @param input input[0] is the command, preceded by /, input[1] is the column coordinate
+     * @author Alessio
+     */
     private void playAdd(String[] input) {
         System.out.println("add");
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
@@ -80,18 +108,19 @@ public class GameController implements Observer {
                     if (gameBoard.getEndGoal().getStatus()) {
                         gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getEndGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                     }
-                    /* TODO add when isFull is implemented
                     if (currentPlayer.getShelf().isFull()){
                         while(gameBoard.getTileBuffer().size()!=0) gameBoard.getTileBuffer().remove(0);
                     }
-                    */
-
                 }
             }
         }
         spinHandler();
     }
 
+    /**
+     * Controls who the current player is by making the player next to the old current player the new current player
+     * @author Alessio
+     */
     private void spinHandler() {
         int i = gameBoard.getListOfPlayer().indexOf(currentPlayer);
         do {

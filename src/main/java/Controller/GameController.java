@@ -42,7 +42,7 @@ public class GameController implements Observer {
      *
      * @param o     the observable object.
      * @param arg   an argument passed to the {@code notifyObservers}
-     *                 method. It's format is /command [par 0] [par 1] ...
+     *                 method. It is format is /command [par 0] [par 1] ...
      * @author Alessio
      */
     @Override

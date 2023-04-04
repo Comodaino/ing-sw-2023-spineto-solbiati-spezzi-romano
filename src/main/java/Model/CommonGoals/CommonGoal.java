@@ -14,7 +14,7 @@ public abstract class CommonGoal extends Goal {
     }
     public abstract int getScore(Player p);
     public int assignScore(Player p){
-        if(numOfPlayer == 2) {
+        if(this.numOfPlayer == 2){
             switch (this.completed.size()) {
                 case 0:
                     this.completed.add(p);

@@ -15,11 +15,11 @@ class NearGoalTest {
     @Test
 
     public void testNearGoal(){
-        Tile m[][] = new Tile[6][5];
-        Scanner scanner = null;
-        String inputFile = null;
+        Tile[][] m = new Tile[6][5];
+        Scanner scanner;
+        String inputFile;
         try {
-            File shelfFile = new File("src/test/java/Model/Test_confs/shelfTest1.json");
+            File shelfFile = new File("src/test/java/Model/Test_confs/shelfTest1_conf_conf");
             scanner = new Scanner(shelfFile);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

@@ -6,7 +6,9 @@ import java.util.Random;
 
 import static Model.Color.*;
 
-
+/**
+ * The bag generates and distributes a finite arraylist of tiles
+ */
 public class Bag {
     private List<Tile> containedTiles;
     

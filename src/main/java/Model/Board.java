@@ -16,10 +16,9 @@ public class Board{
     private Set<CommonGoal> setOfCommonGoal;
     private EndGoal endGoal;
     private List<Tile> tileBuffer;
-
     private GoalFactory goalFactory;
-
     private Bag bag;
+    private Player currentPlayer;
 
     public Board(boolean fm, List<Player> pl){
 
@@ -132,4 +131,6 @@ public class Board{
     public EndGoal getEndGoal() {
         return endGoal;
     }
+    public Player getCurrentPlayer() { return currentPlayer; }
+    public void setCurrentPlayer(Player cp){ this.currentPlayer= cp;}
 }

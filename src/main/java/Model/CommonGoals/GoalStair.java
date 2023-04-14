@@ -2,6 +2,13 @@ package Model.CommonGoals;
 
 import Model.Player;
 
+/**
+ * GoalStair is a class which extends the class CommonGoal.
+ * It represents the "stair" common goal card: five columns of increasing or decreasing height:
+ * starting from the first column on the left or on the right, each next column must be made of exactly one more tile.
+ * Tiles can be of any type.
+ * @author Nicolò
+ */
 public class GoalStair extends CommonGoal{
     public GoalStair(int numOfPlayer){
         super(numOfPlayer);

@@ -2,6 +2,11 @@ package Model.CommonGoals;
 
 import Model.Player;
 
+/**
+ * GoalDiagonal is a class which extends the class CommonGoal.
+ * It represents the "diagonal" common goal card: five tiles of the same type forming a diagonal.
+ * @author Nicolò
+ */
 public class GoalDiagonal extends CommonGoal{
     public GoalDiagonal(int numOfPlayer){
         super(numOfPlayer);

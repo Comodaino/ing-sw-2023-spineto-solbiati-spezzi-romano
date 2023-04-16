@@ -4,10 +4,12 @@ import Model.Player;
 import java.util.Arrays;
 
 public class GoalCouples extends CommonGoal{
-    public GoalCouples (){ super(); }
+    public GoalCouples (int numOfPlayer){
+        super(numOfPlayer);
+    }
     @Override
     public int getScore(Player p){
-        int counter = 0;
+        int numOfCouples = 0;
         boolean[][] foundMatrix = new boolean[6][5];
         for(int i=0; i<6; i++){
             for(int j=0; j<5; j++){
@@ -15,35 +17,52 @@ public class GoalCouples extends CommonGoal{
             }
         }
 
-        for(int i=0; i<6; i++) {
-            for(int j = 0; j < 5; j++) {
-                if(  !((i-1<=0 || j-1<=0) || (i+1>=6 || j+1>=5))) {
-                    if (!foundMatrix[i][j]) {
-                        if (!foundMatrix[i + 1][j] && p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i+1,j).getColor())) {
-                            counter++;
-                            foundMatrix[i][j] = true;
-                            foundMatrix[i + 1][j] = true;
-                        }
-                        if (!foundMatrix[i - 1][j] && p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i-1,j).getColor())) {
-                            counter++;
-                            foundMatrix[i][j] = true;
-                            foundMatrix[i - 1][j] = true;
-                        }
-                        if (!foundMatrix[i][j + 1] && p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i,j+1).getColor())) {
-                            counter++;
-                            foundMatrix[i][j] = true;
-                            foundMatrix[i][j + 1] = true;
-                        }
-                        if (!foundMatrix[i][j - 1] && p.getShelf().getTile(i,j).getColor().equals(p.getShelf().getTile(i,j-1).getColor())) {
-                            counter++;
-                            foundMatrix[i][j] = true;
-                            foundMatrix[i][j - 1] = true;
-                        }
-                    }
+        for(int r=0; r<6; r++){
+            for(int c=0; c<4; c++){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r, c+1)!=null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c+1).getColor()) &&
+                        !foundMatrix[r][c] && !foundMatrix[r][c+1]){
+                    numOfCouples++;
+                    search(r, c, p, foundMatrix);
+                }
+            }
+        } //search "horizontal couples"
+
+        for(int c=0; c<5; c++){
+            for(int r=0; r<5; r++){
+                if(p.getShelf().getTile(r, c)!=null && p.getShelf().getTile(r+1, c)!=null &&
+                        p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c).getColor()) &&
+                        !foundMatrix[r][c] && !foundMatrix[r+1][c]){
+                    numOfCouples++;
+                    search(r, c, p, foundMatrix);
+                }
+            }
+        } //search "vertical couples"
+
+        //System.out.println(numOfCouples);
+        if(numOfCouples==6 && !this.completed.contains(p)){
+            return assignScore(p);
+        }
+
+        return 0;
+    }
+
+    public void search(int r, int c, Player p, boolean[][] foundMatrix) {
+        foundMatrix[r][c]=true;
+        if(r+1<6){
+            if(p.getShelf().getTile(r + 1, c) != null && !foundMatrix[r+1][c]){
+                if(p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r + 1, c).getColor())){
+                    search(r + 1, c, p, foundMatrix);
                 }
             }
         }
-        if(counter>=6 && !this.completed.contains(p)) return assignScore(p);
-        return 0;
+
+        if(c+1<5){
+            if(p.getShelf().getTile(r, c + 1) != null && !foundMatrix[r][c+1]) {
+                if(p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r, c + 1).getColor())){
+                    search(r, c + 1, p, foundMatrix);
+                }
+            }
+        }
     }
 }

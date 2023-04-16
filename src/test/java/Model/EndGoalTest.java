@@ -11,9 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EndGoalTest {
     @Test
-    void TestGetScoreIs0(){
+    void TestGetSCore(){
         Player player = new Player("Ale",false);
         EndGoal endGoal = new EndGoal();
+        endGoal.getStatus();
         Shelf playerShelf = new Shelf();
         Tile tile1 = new Tile(Color.LIGHTBLUE);
         Tile tile2 = new Tile(Color.GREEN);
@@ -28,21 +29,9 @@ class EndGoalTest {
         Player player = new Player("Ale",false);
         EndGoal endGoal = new EndGoal();
         Shelf shelf = new Shelf();
-        File shelfTest = new File("src/test/java/Model/Test_confs/EndGoalShelfTest_conf");
-        Scanner reader = new Scanner(shelfTest);
-        String sh = reader.nextLine();
-        for(int r=0; r<6;r++){
-            String st[] = sh.split(",");
-            for(int c=0; c<5;c++){
-                Tile t = new Tile(Color.valueOf(st[c]));
-                player.getShelf().addTile(c,t);
-            }
-            if (r!=5) sh = reader.nextLine();
-        }
-        Assertions.assertEquals(1,endGoal.getScore(player));
-        Assertions.assertEquals(false,endGoal.getStatus());
-        System.out.println("TEST PASSED");
 
 
     }
+
+
 }

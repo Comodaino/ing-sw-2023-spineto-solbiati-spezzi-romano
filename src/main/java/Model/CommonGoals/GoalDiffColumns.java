@@ -3,14 +3,14 @@ package Model.CommonGoals;
 import Model.Player;
 
 public class GoalDiffColumns extends CommonGoal{
-    public GoalDiffColumns(){
-        super();
+    public GoalDiffColumns(int numOfPlayer){
+        super(numOfPlayer);
     }
     @Override
     public int getScore(Player p) {
         int numOfCol = 0;
 
-        for(int c=0; c<5 && numOfCol<2; c++){
+        for(int c=0; c<5; c++){
             for(int r=0; r<5; r++){
                 if(p.getShelf().getTile(r, c) != null && p.getShelf().getTile(r+1, c) != null &&
                 p.getShelf().getTile(r, c).getColor().equals(p.getShelf().getTile(r+1, c).getColor())){

@@ -38,7 +38,7 @@ class GoalAnglesTest {
 
     @Test
     void emptyShelf(){
-        GoalAngles goal = new GoalAngles();
+        GoalAngles goal = new GoalAngles(2);
         Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
@@ -47,10 +47,10 @@ class GoalAnglesTest {
 
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
-        GoalAngles goal = new GoalAngles();
+        GoalAngles goal = new GoalAngles(2);
         Player p = new Player("Nico", true);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles.json");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles_conf");
         Scanner reader = new Scanner(shelfConf);
         configShelf(p.getShelf(), reader);
 
@@ -60,10 +60,10 @@ class GoalAnglesTest {
 
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
-        GoalAngles goal = new GoalAngles();
+        GoalAngles goal = new GoalAngles(2);
         Player p = new Player("Nico", true);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles.json");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles_conf");
         Scanner reader = new Scanner(shelfConf);
         configShelf(p.getShelf(), reader);
 
@@ -73,14 +73,32 @@ class GoalAnglesTest {
     }
 
     @Test
+    void goalCompletedByTwoPlayers() throws FileNotFoundException {
+        GoalAngles goal = new GoalAngles(2);
+        Player p1 = new Player("Nico", true);
+        Player p2 = new Player("Alessio", false);
+
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles_conf");
+        Scanner reader1 = new Scanner(shelfConf);
+        Scanner reader2 = new Scanner(shelfConf);
+        configShelf(p1.getShelf(), reader1);
+        configShelf(p2.getShelf(), reader2);
+
+        assertEquals(8, goal.getScore(p1));
+        assertEquals(4, goal.getScore(p2));
+        //assertEquals(0, goal.getScore(p2)); the same player cannot complete the same goal two times
+        System.out.println("TEST PASSED");
+    }
+
+    @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
-        GoalAngles goal = new GoalAngles();
+        GoalAngles goal = new GoalAngles(4);
         Player p1 = new Player("Nico", true);
         Player p2 = new Player("Alessio", false);
         Player p3 = new Player("Clara", false);
         Player p4 = new Player("Alessandra", false);
 
-        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles.json");
+        File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles_conf");
         Scanner reader1 = new Scanner(shelfConf);
         Scanner reader2 = new Scanner(shelfConf);
         Scanner reader3 = new Scanner(shelfConf);

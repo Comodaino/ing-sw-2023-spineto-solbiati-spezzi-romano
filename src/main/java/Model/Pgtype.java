@@ -1,7 +1,20 @@
 package Model;
+
+/**
+ * Pgtype is the type defining Personal Goals.
+ * Parameters line and col that represent coordinate, and color of Tile
+ * @author alessandra
+ */
 public class Pgtype {
     private int line,col;
     private Color color;
+
+    /**
+     * Constructor of Pgtype
+     * @param line
+     * @param col
+     * @param color
+     */
     public Pgtype(int line, int col, Color color) {
         this.line = line;
         this.col = col;

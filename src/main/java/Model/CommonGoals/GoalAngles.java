@@ -2,6 +2,11 @@ package Model.CommonGoals;
 
 import Model.Player;
 
+/**
+ * GoalAngles is a class which extends the class CommonGoal.
+ * It represents the "angles" common goal card: four tiles of the same type in the four corners of the bookshelf.
+ * @author Nicolò
+ */
 public class GoalAngles extends CommonGoal{
     public GoalAngles(int numOfPlayer){
         super(numOfPlayer);

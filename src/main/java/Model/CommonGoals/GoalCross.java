@@ -2,6 +2,11 @@ package Model.CommonGoals;
 
 import Model.Player;
 
+/**
+ * GoalCross is a class which extends the class CommonGoal.
+ * It represents the "cross" common goal card: five tiles of the same type forming an X.
+ * @author Nicolò
+ */
 public class GoalCross extends CommonGoal{
     public GoalCross(int numOfPlayer){
         super(numOfPlayer);

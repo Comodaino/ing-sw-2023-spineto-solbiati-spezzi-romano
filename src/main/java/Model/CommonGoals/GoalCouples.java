@@ -1,8 +1,13 @@
 package Model.CommonGoals;
 
 import Model.Player;
-import java.util.Arrays;
 
+/**
+ * GoalCouples is a class which extends the class CommonGoal.
+ * It represents the "couples" common goal card: six groups each containing at least 2 tiles of the same type;
+ * the tiles of one group can be different from those of another group.
+ * @author Nicolò
+ */
 public class GoalCouples extends CommonGoal{
     public GoalCouples (int numOfPlayer){
         super(numOfPlayer);

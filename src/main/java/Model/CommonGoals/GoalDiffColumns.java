@@ -2,6 +2,11 @@ package Model.CommonGoals;
 
 import Model.Player;
 
+/**
+ * GoalDiffColumns is a class which extends the class CommonGoal.
+ * It represents the "different columns" common goal card: two columns each formed by 6 different types of tiles.
+ * @author Nicolò
+ */
 public class GoalDiffColumns extends CommonGoal{
     public GoalDiffColumns(int numOfPlayer){
         super(numOfPlayer);

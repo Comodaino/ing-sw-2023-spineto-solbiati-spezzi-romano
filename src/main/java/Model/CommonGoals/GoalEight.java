@@ -3,6 +3,12 @@ package Model.CommonGoals;
 import Model.Color;
 import Model.Player;
 
+/**
+ * GoalEight is a class which extends the class CommonGoal.
+ * It represents the eight tiles common goal card: eight tiles of the same type;
+ * there’s no restriction about the position of these tiles.
+ * @author Nicolò
+ */
 public class GoalEight extends CommonGoal{
     public GoalEight(int numOfPlayer){
         super(numOfPlayer);

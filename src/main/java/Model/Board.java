@@ -45,7 +45,7 @@ public class Board{
                 for (int j = 0; j<9; j++){
                     switch((int)data.charAt(j) - 48){
                         case 1: type = ONE;
-                        break;
+                            break;
                         case 2: type = TWO;
                             break;
                         case 3: type = THREE;

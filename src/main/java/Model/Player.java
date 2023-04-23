@@ -1,5 +1,7 @@
 package Model;
 
+import Distributed.RemotePlayer;
+
 /**
  * represent one Player with attribute nickname, chair, myShelf (Shelf type),
  * myGoal (PersonalGoal type), score and nearGoal.
@@ -13,8 +15,10 @@ public class Player {
     private PersonalGoal myGoal;
     private int score;
     private NearGoal nearGoal;
+    private RemotePlayer remotePlayer;
 
-    public Player(String n, boolean c){
+    public Player(String n, boolean c, RemotePlayer remotePlayer){
+        this.remotePlayer = remotePlayer;
         this.score=0;
         this.chair = c;
         this.nickname = n;

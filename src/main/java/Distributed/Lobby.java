@@ -1,15 +1,20 @@
 package Distributed;
 
+import Controller.GameControllerSocket;
 import Distributed.ServerSocket.SocketPlayer;
+import Distributed.ServerSocket.States;
+import Model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Lobby {
-    private List<RemotePlayer> lp;
+    private final List<RemotePlayer> lp;
     private boolean open;
+    private boolean firstMatch;
     public Lobby(){
-        lp = new ArrayList<RemotePlayer>();
+        this.lp = new ArrayList<RemotePlayer>();
+        this.firstMatch = false;
     }
 
     /**
@@ -29,5 +34,15 @@ public class Lobby {
 
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
+    }
+    public GameControllerSocket startGame(){
+        List<Player> modelPlayerList = new ArrayList<Player>();
+        for(RemotePlayer p: lp){
+            Player tmpPlayer = new Player(p.getNickname(),p.isChair(), p);
+            modelPlayerList.add(tmpPlayer);
+            p.setModelPlayer(tmpPlayer);
+            p.getHandler().setState(States.PLAY);
+        }
+        return new GameControllerSocket(modelPlayerList, firstMatch);
     }
 }

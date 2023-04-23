@@ -1,6 +1,7 @@
 package Distributed.ServerSocket;
 
 import Distributed.Lobby;
+import Distributed.RemoteHandler;
 import Distributed.RemotePlayer;
 
 import java.io.IOException;
@@ -8,11 +9,9 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.Socket;
 import java.util.Scanner;
-
-public class ClientHandlerSocket implements Runnable {
-    private final Lobby lobby;
+//TODO CREATE A CUSTOM HANDLER FOR CHAIR
+public class ClientHandlerSocket extends RemoteHandler implements Runnable{
     private Socket socket;
-    private States state;
     private Scanner in;
     private Writer out;
     private String input;
@@ -54,17 +53,7 @@ public class ClientHandlerSocket implements Runnable {
         state=States.WAIT;
     }
 
-    /**
-     *
-     * @param input
-     * @return return true if the input nickname is avaible
-     */
-    private boolean nicknameChecker(String input) {
-        for(RemotePlayer p: lobby.getListOfPlayers()){
-            if(p.getNickname().equals(input)) return false;
-        }
-        return true;
-    }
+
 
     public void initPlayer(){
         String line = in.nextLine();

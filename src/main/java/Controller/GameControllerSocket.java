@@ -1,5 +1,6 @@
 package Controller;
 
+import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Board;
 import Model.CommonGoals.CommonGoal;
 import Model.Player;
@@ -12,7 +13,7 @@ import java.util.*;
  * it represents the entirety of the controller in the MVC patter
  * @author Alessio
  */
-public class GameController implements Observer {
+public class GameControllerSocket implements Observer {
     private final Board gameBoard;
     private ViewInterface gameTui;
     private Player currentPlayer;
@@ -25,10 +26,9 @@ public class GameController implements Observer {
      * @param pl list of players
      * @author Alessio
      */
-    public GameController(List<Player> pl) {
+    public GameControllerSocket(List<Player> pl, boolean firstMatch) {
         //TODO insert view once implemented
-        //this.gameTui = new View()
-        this.gameBoard = new Board(false, pl);
+        this.gameBoard = new Board(firstMatch, pl);
         this.donePlayers = new ArrayList<Player>();
         for(int i=0; i< pl.size(); i++){
             if(pl.get(i).getChair()){

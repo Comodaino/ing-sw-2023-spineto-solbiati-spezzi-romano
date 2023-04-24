@@ -1,8 +1,13 @@
 package Model.CommonGoals;
 
-import Model.Color;
 import Model.Player;
 
+/**
+ * GoalSquares is a class which extends the class CommonGoal.
+ * It represents the "squares" common goal card: two groups each containing 4 tiles of the same type in a 2x2 square;
+ * the tiles of one square can be different from those of the other square.
+ * @author Nicolò
+ */
 public class GoalSquares extends CommonGoal{
     public GoalSquares(int numOfPlayer){ super(numOfPlayer); }
     @Override

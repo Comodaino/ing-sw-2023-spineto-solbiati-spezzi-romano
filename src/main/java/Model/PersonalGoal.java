@@ -1,5 +1,4 @@
 package Model;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,15 +6,27 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * represent PersonalGoal with an ArrayList of type Pgtype
+ * @author alessandra
+ */
 public class PersonalGoal extends Goal{
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
 
+    /**
+     * Constructor of the PersonalGoal
+     * @param ps, Shelf of player
+     */
     public PersonalGoal(Shelf ps) {
 
         this.playerShelf = ps;
         this.PGoal = new ArrayList<>();
     }
+
+    /**
+     * this method create a random Personal goal through the getPersGoal method
+     */
     public Random CreatePersonalGoal(){
         Random rand = new Random();
         rand.nextInt(12);
@@ -50,6 +61,11 @@ public class PersonalGoal extends Goal{
         return rand;
     }
 
+    /**
+     * this method calculate the score at the end of the game
+     * @param playerShelf
+     * @return score
+     */
     public int getScore(Shelf playerShelf){
         int score=0;
         int point=0;
@@ -83,6 +99,12 @@ public class PersonalGoal extends Goal{
 
         return score;
     }
+
+    /**
+     * get a Personal Goal from the document PersonalGoal_conf
+     * @param j that represents a random number
+     * @return PGoal, the Personal Goal
+     */
     public ArrayList<Pgtype> getPersGoal(int j) {
         try {
             File ListOfPersonalGoal = new File("src/main/java/Model/Conf/PersonalGoal_conf");

@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GoalColumnTest {
+class  GoalColumnTest {
     public void configShelf(Shelf shelf, Scanner scanner){
         while(scanner.hasNextLine()){
             String confBuffer = scanner.nextLine();

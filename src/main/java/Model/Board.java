@@ -8,7 +8,11 @@ import java.util.*;
 
 import static Model.CellType.*;
 
-
+/**
+ * The board represents the entirety of the game model, it contains everything and grants access to everything using getter methods,
+ * it contains a set of common goals, a list of player the board itself made of a matrix of cells, a bag and a goal factory
+ * @author Alessio
+ */
 public class Board{
     private Cell[][] matrix;
     private List<Player> listOfPlayer;
@@ -20,6 +24,11 @@ public class Board{
     private Bag bag;
     private Player currentPlayer;
 
+    /**
+     * Constructor of the board
+     * @param fm represents if it's the first match for the players
+     * @param pl list of the players
+     */
     public Board(boolean fm, List<Player> pl){
 
         matrix = new Cell[9][9];
@@ -68,14 +77,23 @@ public class Board{
 
     }
 
-
-
-
-
+    /**
+     * removes a single tile from the specified coordinates of the board, it does nothing is the cell is empty
+     * @param r row coordinate to remove
+     * @param c column coordinate to remove
+     * @author Alessio
+     */
     public void removeTile(int r, int c){
-        tileBuffer.add(matrix[r][c].getTile());
-        matrix[r][c].removeTile();
+        if(!matrix[r][c].isEmpty()) {
+            tileBuffer.add(matrix[r][c].getTile());
+            matrix[r][c].removeTile();
+        }
     }
+
+    /**
+     * checks if it's not possible for a player to take more than one tile, it also recharges is automatically
+     * @author Alessio
+     */
     public void checkRecharge(){
         boolean found=false;
         for(int i=0; i<8; i++){
@@ -93,6 +111,11 @@ public class Board{
 
         if(!found) recharge();
     }
+
+    /**
+     * recharges the board taking tile from the bag
+     * @author Alessio
+     */
     public void recharge(){
         for(int i=0; i<9; i++) {
             for (int j = 0; j < 9; j++) {

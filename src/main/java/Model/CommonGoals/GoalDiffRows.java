@@ -2,6 +2,12 @@ package Model.CommonGoals;
 
 import Model.Player;
 
+/**
+ * GoalDiffRows is a class which extends the class CommonGoal.
+ * It represents the "different rows" common goal card: two lines each formed by 5 different types of tiles;
+ * one line can show the same or a different combination of the other line.
+ * @author Nicolò
+ */
 public class GoalDiffRows extends CommonGoal{
     public GoalDiffRows(int numOfPlayer){
         super(numOfPlayer);

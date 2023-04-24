@@ -2,6 +2,12 @@ package Model.CommonGoals;
 
 import Model.Player;
 
+/**
+ * GoalQuartets is a class which extends the class CommonGoal.
+ * It represents the "quartets" common goal card: four groups each containing at least 4 tiles of the same type;
+ * the tiles of one group can be different from those of another group.
+ * @author Nicolò
+ */
 public class GoalQuartets extends CommonGoal{
     public GoalQuartets(int numOfPlayer){
         super(numOfPlayer);

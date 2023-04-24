@@ -4,7 +4,6 @@ import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Board;
 import Model.CommonGoals.CommonGoal;
 import Model.Player;
-import View.ViewInterface;
 
 import java.util.*;
 
@@ -14,11 +13,6 @@ import java.util.*;
  * @author Alessio
  */
 public class GameControllerSocket extends GameController implements Observer {
-    private final Board gameBoard;
-    private ViewInterface gameTui;
-    private Player currentPlayer;
-    private List<Player> pl;
-    private List<Player> donePlayers;
 
     //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view
 
@@ -70,7 +64,7 @@ public class GameControllerSocket extends GameController implements Observer {
 
     public void update(ClientHandlerSocket o, Object arg) {
         //TODO CHANGE CONDITION FOR TESTING
-        if (true) {
+        if (o.getPlayer().getNickname().equals(currentPlayer.getNickname())) {
             String input[] = arg.toString().split(" ");
             if (input[0].charAt(0) == '/') {
                 switch (input[0]) {
@@ -85,7 +79,7 @@ public class GameControllerSocket extends GameController implements Observer {
                 System.out.println("Commands must start with '/'");
             }
         } else {
-            System.out.println("Wrong Observable");
+            System.out.println("Player " + o.getPlayer().getNickname() + " tried to play during another player's turn");
         }
     }
 
@@ -139,32 +133,10 @@ public class GameControllerSocket extends GameController implements Observer {
         spinHandler();
     }
 
-    /**
-     * Controls who the current player is by making the player next to the old current player the new current player
-     * @author Alessio
-     */
-    private void spinHandler() {
-        int i = gameBoard.getListOfPlayer().indexOf(currentPlayer);
-        do {
-            if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
-            else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
-        } while (donePlayers.contains(currentPlayer));
-        gameBoard.setCurrentPlayer(currentPlayer);
-    }
     private void serverUpdater(){
         for(Player p: gameBoard.getListOfPlayer()){
             //TODO p.getRemotePlayer().getHandler().update();
 
         }
-    }
-    public Board getBoard() {
-        return gameBoard;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-    public void setCurrentPlayer(Player p){
-        this.currentPlayer= p;
     }
 }

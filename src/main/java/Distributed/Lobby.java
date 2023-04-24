@@ -1,7 +1,6 @@
 package Distributed;
 
 import Controller.GameControllerSocket;
-import Distributed.ServerSocket.ClientHandlerSocket;
 import Distributed.ServerSocket.SocketPlayer;
 import Distributed.ServerSocket.States;
 import Model.Player;
@@ -23,10 +22,15 @@ public class Lobby {
      * @param p
      * @return returns true if there are 4 player in the lobby
      */
-    private void addPlayer(SocketPlayer p){
+    public void addPlayer(SocketPlayer p){
         if(lp.isEmpty()) p.setAsChair();
         lp.add(p);
         open = lp.size()==4;
+
+    }
+
+    public void setFirstMatch(boolean firstMatch) {
+        this.firstMatch = firstMatch;
     }
 
     public boolean isOpen() {

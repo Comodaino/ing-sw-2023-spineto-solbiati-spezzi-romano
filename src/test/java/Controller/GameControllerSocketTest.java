@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Scanner;
 
-class GameControllerTest extends Observable{
+class GameControllerSocketTest extends Observable{
     @Test
     public void inputTestTwo() throws FileNotFoundException {
         List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        GameController testController = new GameController(playerList);
+        playerList.add(new Player("player1", true, null));
+        playerList.add(new Player("player2", false, null));
+        GameControllerSocket testController = new GameControllerSocket(playerList, false);
         Board gameBoard = testController.getBoard();
         this.addObserver(testController);
         File commands = new File("src/test/java/Controller/controllerTestConf2");
@@ -32,10 +32,10 @@ class GameControllerTest extends Observable{
     @Test
     public void inputTestThree() throws FileNotFoundException {
         List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", false));
-        playerList.add(new Player("player2", true));
-        playerList.add(new Player("player3", false));
-        GameController testController = new GameController(playerList);
+        playerList.add(new Player("player1", false, null));
+        playerList.add(new Player("player2", true, null));
+        playerList.add(new Player("player3", false, null));
+        GameControllerSocket testController = new GameControllerSocket(playerList, false);
         Board gameBoard = testController.getBoard();
         this.addObserver(testController);
         File commands = new File("src/test/java/Controller/controllerTestConf2");

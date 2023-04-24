@@ -1,6 +1,7 @@
 package Distributed;
 
 import Controller.GameControllerSocket;
+import Distributed.ServerSocket.ClientHandlerSocket;
 import Distributed.ServerSocket.SocketPlayer;
 import Distributed.ServerSocket.States;
 import Model.Player;
@@ -35,14 +36,17 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
-    public GameControllerSocket startGame(){
+    public void startGame(){
         List<Player> modelPlayerList = new ArrayList<Player>();
+        GameControllerSocket tmpControllerSocket = new GameControllerSocket(modelPlayerList, firstMatch);
+        //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp){
             Player tmpPlayer = new Player(p.getNickname(),p.isChair(), p);
             modelPlayerList.add(tmpPlayer);
             p.setModelPlayer(tmpPlayer);
             p.getHandler().setState(States.PLAY);
+            if(p.getHandler().getType().equals(HandlersType.Socket)) p.getHandler().setGameController(tmpControllerSocket);
+               //TODO else p.getHandler().setGameController(tmpControllerRMI);
         }
-        return new GameControllerSocket(modelPlayerList, firstMatch);
     }
 }

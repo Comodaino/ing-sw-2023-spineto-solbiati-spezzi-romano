@@ -1,8 +1,9 @@
 package Distributed.ServerSocket;
 
+import Controller.GameControllerSocket;
+import Distributed.HandlersType;
 import Distributed.Lobby;
 import Distributed.RemoteHandler;
-import Distributed.RemotePlayer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,11 +16,20 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable{
     private Scanner in;
     private Writer out;
     private String input;
+    private GameControllerSocket gameController;
 
     public ClientHandlerSocket(Socket socket, Lobby lobby) {
         this.socket = socket;
         this.state = States.INIT;
         this.lobby = lobby;
+        this.type = HandlersType.Socket;
+    }
+    private void initCommand(Scanner in, Writer out) throws IOException {
+        do{
+            out.write("Please insert a unique nickname");
+            input = in.nextLine();
+        }while(!nicknameChecker(input));
+        state=States.WAIT;
     }
     public void run() {
         try {
@@ -34,7 +44,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable{
                         break;
                     case WAIT:
                         break;
-                    case PLAY:
+                    case PLAY: playCommand(in, out);
                         break;
                 }
             }
@@ -44,17 +54,12 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable{
             System.err.println(e.getMessage());
         }
     }
+    //TODO SERVER MUST CALL CLIENTS UPDATE
 
-    private void initCommand(Scanner in, Writer out) throws IOException {
-        do{
-            out.write("Please insert a unique nickname");
-            input = in.nextLine();
-        }while(!nicknameChecker(input));
-        state=States.WAIT;
+    public void playCommand(Scanner in, Writer out) throws IOException {
+        out.write("Play a command, all commands should start with /");
+        gameController.update(this, in.nextLine());
     }
-
-
-
     public void initPlayer(){
         String line = in.nextLine();
     }

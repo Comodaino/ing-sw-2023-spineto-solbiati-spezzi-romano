@@ -1,19 +1,12 @@
 package Distributed.ClientSocket;
 
 import Distributed.Lobby;
-import Distributed.ServerSocket.ClientHandlerSocket;
-import Distributed.ServerSocket.ServerAppSocket;
-
-import javax.management.remote.rmi.RMIServerImpl_Stub;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.rmi.RemoteException;
-import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +16,6 @@ public class ClientAppSocket {
     private BufferedReader in;
     private PrintWriter out;
     private int port;
-    private ServerSocket server;
 
     public ClientAppSocket(int port){
         this.port = port;

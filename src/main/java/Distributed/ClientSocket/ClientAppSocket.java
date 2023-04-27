@@ -9,11 +9,12 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ClientAppSocket {
     private List<Lobby> lobbyList;
     private Socket socket;
-    private BufferedReader in;
+    private Scanner in;
     private PrintWriter out;
     private int port;
 
@@ -24,12 +25,15 @@ public class ClientAppSocket {
         try {
             lobbyList = new ArrayList<Lobby>();
             lobbyList.add(new Lobby());
+
             socket = new Socket(lobbyList.toString(),port);
 
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            in = new Scanner(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-
+            String messageFromServer = in.nextLine();
+            System.out.println("Message from server "+messageFromServer);
+            socket.close();
         } catch (UnknownHostException e){
             System.err.println("Error connecting to server");
         } catch (Exception e) {

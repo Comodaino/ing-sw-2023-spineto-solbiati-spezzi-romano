@@ -1,7 +1,7 @@
-package Distributed.server;
+package Distributed.RMI.server;
 
-import Distributed.client.Client;
-import Distributed.common.Message;
+import Distributed.RMI.client.Client;
+import Distributed.RMI.common.Message;
 
 import java.rmi.*;
 

@@ -1,7 +1,7 @@
-package Distributed.server;
+package Distributed.RMI.server;
 
-import Distributed.client.Client;
-import Distributed.common.Message;
+import Distributed.RMI.client.Client;
+import Distributed.RMI.common.Message;
 
 import java.util.*;
 import java.rmi.*;
@@ -16,10 +16,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     public synchronized void join(Client client) throws RemoteException {
+        System.out.println(client.getNickname() + " has connected to the server");
         clients.add(client);
     }
 
     public synchronized void leave(Client client) throws RemoteException {
+        System.out.println(client.getNickname() + " has left the server");
         clients.remove(client);
     }
 
@@ -29,7 +31,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             clientsCopy = new ArrayList<Client>(clients);
         }
         for(Client c: clientsCopy) {
-            c.printMsg(msg);
+            if(!c.getNickname().equals(msg.getAuthor())){
+                c.printMsg(msg);
+            }
         }
     }
 

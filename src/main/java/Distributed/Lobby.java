@@ -8,6 +8,9 @@ import Model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Distributed.ServerSocket.States.CLOSE;
+import static Distributed.ServerSocket.States.END;
+
 public class Lobby {
     private final List<RemotePlayer> lp;
     private boolean open;
@@ -51,6 +54,16 @@ public class Lobby {
             p.getHandler().setState(States.PLAY);
             if(p.getHandler().getType().equals(HandlersType.Socket)) p.getHandler().setGameController(tmpControllerSocket);
                //TODO else p.getHandler().setGameController(tmpControllerRMI);
+        }
+    }
+    public void endMatch() {
+        for(RemotePlayer p: lp){
+            p.getHandler().setState(END);
+        }
+    }
+    public void close() {
+        for(RemotePlayer p: lp){
+            p.getHandler().setState(CLOSE);
         }
     }
 }

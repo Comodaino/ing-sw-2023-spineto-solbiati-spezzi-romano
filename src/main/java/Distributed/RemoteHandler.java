@@ -29,4 +29,8 @@ public abstract class RemoteHandler {
     public HandlersType getType() {
         return type;
     }
+    public void endCommand(){
+        state=States.WAIT;
+
+    }
 }

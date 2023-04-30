@@ -17,6 +17,7 @@ public abstract class GameController {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
     public void setCurrentPlayer(Player p){
         this.currentPlayer= p;
     }

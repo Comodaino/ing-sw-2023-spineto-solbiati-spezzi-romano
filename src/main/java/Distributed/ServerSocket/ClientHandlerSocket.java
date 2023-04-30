@@ -28,15 +28,15 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         this.lobby = lobby;
         this.type = HandlersType.Socket;
         this.player = new SocketPlayer(socket, this);
-        this.objOut = new ObjectOutputStream();
+        this.objOut = new ObjectOutputStream(socket.getOutputStream());
+        this.in = new Scanner(socket.getInputStream());
+        this.out = new PrintWriter(socket.getOutputStream());
         lobby.addPlayer(player);
     }
 
     public void run() {
         try {
             //TODO OUTPUT TO CLIENT IS ONLY FOR DEBUG
-            in = new Scanner(socket.getInputStream());
-            out = new PrintWriter(socket.getOutputStream());
             while (!state.equals(States.CLOSE)) {
                 switch (state) {
                     case INIT:
@@ -104,6 +104,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
 
         //TODO THIS SHOULD SEND THE SERIALIZED MODELVIEW
         out.write("/update");
+        objOut.writeObject(lobby.getBoardView());
 
     }
     public void initPlayer() {

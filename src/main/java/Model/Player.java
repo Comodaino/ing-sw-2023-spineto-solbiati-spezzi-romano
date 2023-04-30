@@ -1,6 +1,12 @@
 package Model;
 
+import Distributed.RemotePlayer;
 
+/**
+ * represent one Player with attribute nickname, chair, myShelf (Shelf type),
+ * myGoal (PersonalGoal type), score and nearGoal.
+ * @author Clara
+ */
 
 public class Player {
     private String nickname;
@@ -9,8 +15,10 @@ public class Player {
     private PersonalGoal myGoal;
     private int score;
     private NearGoal nearGoal;
+    private RemotePlayer remotePlayer;
 
-    public Player(String n, boolean c){
+    public Player(String n, boolean c, RemotePlayer remotePlayer){
+        this.remotePlayer = remotePlayer;
         this.score=0;
         this.chair = c;
         this.nickname = n;
@@ -26,15 +34,23 @@ public class Player {
     public boolean getChair(){
         return this.chair;
     }
-    public Shelf getShelf(){ return this.myShelf;}
-    public PersonalGoal getGoal(){ return this.myGoal;}
+    public Shelf getShelf(){
+        return this.myShelf;
+    }
+    public PersonalGoal getGoal(){
+        return this.myGoal;
+    }
 
+    /**
+     * addScore takes an integer n and add it to the previous score
+     * @param n how much the score is incremented
+     */
     public void addScore(int n) {
         this.score+=n;
     }
 
     public int getScore() {
-        return score;
+        return this.score;
     }
 
     public void setShelf(Tile[][] m) {
@@ -42,6 +58,6 @@ public class Player {
     }
 
     public NearGoal getNearGoal() {
-        return nearGoal;
+        return this.nearGoal;
     }
 }

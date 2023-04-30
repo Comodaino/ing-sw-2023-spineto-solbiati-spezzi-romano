@@ -6,10 +6,12 @@ import java.util.Random;
 
 import static Model.Color.*;
 
-
+/**
+ * The bag generates and distributes a finite arraylist of tiles, for each board a single bag is associated
+ * @author Alessio
+ */
 public class Bag {
     private List<Tile> containedTiles;
-    
     public Bag() {
         containedTiles = new ArrayList<Tile>();
         for (int i = 0; i < 133; i++) {
@@ -32,6 +34,12 @@ public class Bag {
 
         }
     }
+
+    /**
+     * Removes a tile from the bag and returns it
+     * @return returns a tile removing it from the initial arraylist
+     * @author Alessio
+     */
     public Tile newTile(){
         if(containedTiles.size()>0) {
             return containedTiles.remove(0);

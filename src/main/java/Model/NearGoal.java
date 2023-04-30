@@ -1,5 +1,9 @@
 package Model;
 
+/**
+ * This goal is checked at the end of a player's game and checks for clusters of tiles of the same color
+ * @author Alessio
+ */
 public class NearGoal extends Goal {
     private int score;
     private boolean matrix[][];
@@ -14,6 +18,12 @@ public class NearGoal extends Goal {
         }
     }
 
+    /**
+     * calculates and return the score of the player passed as parameter counting the number of clusters and their dimension
+     * @param p player for which the score is calculated
+     * @return score of the player
+     * @author Alessio
+     */
     public int getScore(Player p) {
 
         for (int i = 0; i < 6; i++) {
@@ -49,6 +59,13 @@ public class NearGoal extends Goal {
         return score;
     }
 
+    /**
+     * a recursive function that checks a cluster of tile's dimension on a player's shelf
+     * @param i current row
+     * @param j current column
+     * @param p current player checked
+     * @return cardinality of a cluster
+     */
     public int iterator(int i, int j, Player p) {
         int counter = 0;
         matrix[i][j]=true;

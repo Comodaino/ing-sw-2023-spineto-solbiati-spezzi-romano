@@ -6,6 +6,12 @@ import Model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GoalRow is a class which extends the class CommonGoal.
+ * It represents the "row" common goal card: four lines each formed by 5 tiles of maximum three different types;
+ * one line can show the same or a different combination of another line.
+ * @author Nicolò
+ */
 public class GoalRow extends CommonGoal{
     public GoalRow(int numOfPlayer){
         super(numOfPlayer);

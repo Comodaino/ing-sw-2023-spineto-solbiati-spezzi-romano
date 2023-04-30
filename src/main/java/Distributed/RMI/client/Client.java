@@ -1,9 +1,10 @@
-package Distributed.client;
+package Distributed.RMI.client;
 
-import Distributed.common.Message;
+import Distributed.RMI.common.Message;
 
 import java.rmi.*;
 
 public interface Client extends Remote {
     public void printMsg(Message msg) throws RemoteException;
+    public String getNickname() throws RemoteException;
 }

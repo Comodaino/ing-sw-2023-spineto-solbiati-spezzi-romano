@@ -2,15 +2,14 @@ package Distributed;
 
 import Controller.GameControllerSocket;
 import Distributed.ServerSocket.SocketPlayer;
-import Distributed.ServerSocket.States;
 import Model.BoardView;
 import Model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static Distributed.ServerSocket.States.CLOSE;
-import static Distributed.ServerSocket.States.END;
+import static Distributed.States.CLOSE;
+import static Distributed.States.END;
 
 public class Lobby {
     private final List<RemotePlayer> lp;

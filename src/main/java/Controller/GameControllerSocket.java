@@ -134,9 +134,6 @@ public class GameControllerSocket extends GameController implements Observer {
     }
 
     private void serverUpdater(){
-        for(Player p: gameBoard.getListOfPlayer()){
-            //TODO p.getRemotePlayer().getHandler().update();
 
-        }
     }
 }

@@ -3,6 +3,8 @@ package Distributed;
 import Controller.GameController;
 import Distributed.ServerSocket.States;
 
+import java.io.IOException;
+
 public abstract class RemoteHandler {
     protected Lobby lobby;
     protected States state;
@@ -32,5 +34,8 @@ public abstract class RemoteHandler {
     public void endCommand(){
         state=States.WAIT;
 
+    }
+
+    public void update() throws IOException {
     }
 }

@@ -30,7 +30,7 @@ public class Board{
      * @param fm represents if it's the first match for the players
      * @param pl list of the players
      */
-    public Board(boolean fm, List<Player> pl){
+    public Board(boolean fm, List<Player> pl) {
 
         matrix = new Cell[9][9];
         bag = new Bag();

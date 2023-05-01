@@ -2,7 +2,7 @@ package Distributed;
 
 import Model.Player;
 //TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
-public class RemotePlayer {
+public abstract class RemotePlayer {
     protected RemoteHandler remoteHandler;
     private Player modelPlayer;
     private String nickname;
@@ -35,4 +35,5 @@ public class RemotePlayer {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
+
 }

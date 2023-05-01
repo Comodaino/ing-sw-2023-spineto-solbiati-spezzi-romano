@@ -13,7 +13,6 @@ import java.io.Writer;
 import java.net.Socket;
 import java.util.Scanner;
 
-//TODO CREATE A CUSTOM HANDLER FOR CHAIR
 public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private final Socket socket;
     private final SocketPlayer player;
@@ -64,6 +63,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private void initCommand() throws IOException {
         String input;
         do {
+            //TODO CHECK SYNCHRONIZED
             out.write("Please insert a unique nickname");
             input = in.nextLine();
         } while (!nicknameChecker(input));
@@ -100,12 +100,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     public void playCommand() throws IOException {
         out.write("Play a command, all commands should start with /");
         gameController.update(this, in.nextLine());
-
-
-        //TODO THIS SHOULD SEND THE SERIALIZED MODELVIEW
-        out.write("/update");
-        objOut.writeObject(lobby.getBoardView());
-
     }
     public void initPlayer() {
         String line = in.nextLine();
@@ -113,5 +107,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     public RemotePlayer getPlayer() {
         return player;
     }
-
+    public void update() throws IOException {
+        objOut.writeObject(lobby.getBoardView());
+    }
 }

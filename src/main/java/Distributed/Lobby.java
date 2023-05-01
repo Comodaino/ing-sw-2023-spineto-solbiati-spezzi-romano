@@ -30,8 +30,7 @@ public class Lobby {
     public void addPlayer(SocketPlayer p){
         if(lp.isEmpty()) p.setAsChair();
         lp.add(p);
-        open = lp.size()==4;
-
+        open = !(lp.size()==4);
     }
 
     public void setFirstMatch(boolean firstMatch) {
@@ -73,7 +72,6 @@ public class Lobby {
             p.getHandler().setState(CLOSE);
         }
     }
-
     public Object getBoardView() {
         return boardView;
     }

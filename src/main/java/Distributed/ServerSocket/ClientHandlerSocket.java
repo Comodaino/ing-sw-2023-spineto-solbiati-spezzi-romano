@@ -1,10 +1,7 @@
 package Distributed.ServerSocket;
 
-import Controller.GameControllerSocket;
-import Distributed.HandlersType;
-import Distributed.Lobby;
-import Distributed.RemoteHandler;
-import Distributed.RemotePlayer;
+import Controller.GameController;
+import Distributed.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -16,10 +13,11 @@ import java.util.Scanner;
 public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private final Socket socket;
     private final SocketPlayer player;
+    private final ObjectOutputStream objOut;
     private Scanner in;
     private Writer out;
-    private GameControllerSocket gameController;
-    private final ObjectOutputStream objOut;
+    private final Lobby lobby;
+    private GameController gameController;
 
     public ClientHandlerSocket(Socket socket, Lobby lobby) throws IOException {
         this.socket = socket;
@@ -58,7 +56,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             System.err.println(e.getMessage());
         }
     }
-    //TODO SERVER MUST CALL CLIENTS UPDATE
 
     private void initCommand() throws IOException {
         String input;
@@ -72,27 +69,31 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     }
 
     private void waitCommand() throws IOException {
-        if(in.hasNextLine()) {
+
+        if (in.hasNextLine()) {
             for (RemotePlayer p : lobby.getListOfPlayers()) {
                 if (p.isChair() && p.getNickname().equals(player.getNickname())) {
-                    switch (in.nextLine()) {
-                        case "/start":
-                            lobby.startGame();
-                            state = States.PLAY;
-                            break;
-                        case "/firstMatch":
-                            lobby.setFirstMatch(true);
-                            break;
-                        case "/notfirstMatch":
-                            lobby.setFirstMatch(false);
-                            break;
-                        case "/closelobby":
-                            lobby.close();
-                            break;
+                    synchronized (lobby) {
+                        switch (in.nextLine()) {
+                            case "/start":
+                                lobby.startGame();
+                                state = States.PLAY;
+                                break;
+                            case "/firstMatch":
+                                lobby.setFirstMatch(true);
+                                break;
+                            case "/notfirstMatch":
+                                lobby.setFirstMatch(false);
+                                break;
+                            case "/closelobby":
+                                lobby.close();
+                                break;
+                        }
                     }
                 } else {
                     out.write("Wait for chair player to start the match");
                 }
+
             }
         }
     }
@@ -101,13 +102,17 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         out.write("Play a command, all commands should start with /");
         gameController.update(this, in.nextLine());
     }
+
     public void initPlayer() {
         String line = in.nextLine();
     }
+
     public RemotePlayer getPlayer() {
         return player;
     }
+
     public void update() throws IOException {
+        out.write("/update");
         objOut.writeObject(lobby.getBoardView());
     }
 }

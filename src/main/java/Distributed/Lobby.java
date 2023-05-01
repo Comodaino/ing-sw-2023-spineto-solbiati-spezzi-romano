@@ -1,6 +1,6 @@
 package Distributed;
 
-import Controller.GameControllerSocket;
+import Controller.GameController;
 import Distributed.ServerSocket.SocketPlayer;
 import Model.BoardView;
 import Model.Player;
@@ -52,7 +52,7 @@ public class Lobby {
             p.setModelPlayer(tmpPlayer);
             p.getHandler().setState(States.PLAY);
         }
-        GameControllerSocket tmpControllerSocket = new GameControllerSocket(modelPlayerList, firstMatch);
+        GameController tmpControllerSocket = new GameController(modelPlayerList, firstMatch);
         //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp) {
             if (p.getHandler().getType().equals(HandlersType.Socket))

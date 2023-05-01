@@ -1,7 +1,7 @@
-package Distributed.ServerSocket;
+package Distributed;
 
 
-import Distributed.Lobby;
+import Distributed.ServerSocket.ClientHandlerSocket;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,7 +1,6 @@
 package Distributed;
 
 import Model.Player;
-//TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
 public abstract class RemotePlayer {
     protected RemoteHandler remoteHandler;
     private Player modelPlayer;

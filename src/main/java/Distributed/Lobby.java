@@ -26,7 +26,7 @@ public class Lobby {
      * @param p
      * @return returns true if there are 4 player in the lobby
      */
-    public void addPlayer(SocketPlayer p){
+    public void addPlayer(RemotePlayer p){
         if(lp.isEmpty()) p.setAsChair();
         lp.add(p);
         open = !(lp.size()==4);

@@ -23,16 +23,16 @@ public class Board{
     private GoalFactory goalFactory;
     private Bag bag;
     private Player currentPlayer;
+    public final BoardView boardView;
 
     /**
      * Constructor of the board
      * @param fm represents if it's the first match for the players
      * @param pl list of the players
      */
-    public Board(boolean fm, List<Player> pl){
+    public Board(boolean fm, List<Player> pl) {
 
         matrix = new Cell[9][9];
-
         bag = new Bag();
 
         try {
@@ -75,6 +75,7 @@ public class Board{
         setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
         if(fm) setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
 
+        this.boardView = new BoardView(this);
     }
 
     /**

@@ -1,20 +1,13 @@
 package Distributed;
 
-import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Player;
-
-import java.net.Socket;
-import java.util.logging.Handler;
-
+//TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
 public abstract class RemotePlayer {
+    protected RemoteHandler remoteHandler;
     private Player modelPlayer;
     private String nickname;
     private boolean chair;
-    private RemoteHandler personalHandler;
 
-    public RemotePlayer(){
-        this.modelPlayer=null;
-    }
     public Player getModelPlayer() {
         return modelPlayer;
     }
@@ -28,14 +21,19 @@ public abstract class RemotePlayer {
     }
 
     public RemoteHandler getHandler() {
-        return personalHandler;
+        return remoteHandler;
     }
 
     public boolean isChair() {
         return chair;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
+
 }

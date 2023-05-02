@@ -9,7 +9,7 @@ import java.rmi.server.*;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
     private RemotePlayer player = new RMIPlayer(/*TODO NEEDS ID */ 0);
-    public static void main(String args[]) throws Exception {
+    public static void main(String args[]) throws Exception {p
         ClientImpl client = new ClientImpl();
         client.doJob("localhost");
     }

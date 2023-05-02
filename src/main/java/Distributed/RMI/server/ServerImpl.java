@@ -9,6 +9,8 @@ import Distributed.RemotePlayer;
 import Model.Board;
 import Model.Player;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.*;
 import java.rmi.*;
 import java.rmi.server.*;
@@ -40,44 +42,61 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         }
 
         lobbies.add(new Lobby());
-        lobbies.get(0).setSerialNumber(0);
+        lobbies.get(0).setSerialNumber(1);
         System.out.println("Server bound and ready");
     }
     public synchronized void register(Client client) throws RemoteException {
         if (!lobbies.get(lobbies.size() - 1).isOpen()) { //if the lobby is closed, creates a new lobby
             lobbies.add(new Lobby());
-            lobbies.get(lobbies.size() - 1).setSerialNumber(lobbies.size() - 1);
+            lobbies.get(lobbies.size() - 1).setSerialNumber(lobbies.size());
         }
 
         if(lobbies.get(lobbies.size() - 1).getListOfPlayers().size() == 0){ //if the lobby is empty, creates a new model and controller for the game
             List<Player> players = new ArrayList<Player>();
             Boolean firstMatch = lobbies.get(lobbies.size() - 1).isFirstMatch();
-            Integer lobbyNumber = lobbies.size() - 1;
+            Integer lobbyNumber = lobbies.size();
 
-            players.add(client.getRemotePlayer().getModelPlayer());
             models.put(lobbyNumber, new Board(firstMatch, players));
             controllers.put(lobbyNumber, new GameControllerSocket(players, firstMatch)); //TODO: IMPLEMENTS CONTROLLER RMI
         }
 
-        lobbies.get(lobbies.size() - 1).addPlayer(client.getRemotePlayer()); //add the player (client) in the last lobby available
-        models.get(lobbies.size() - 1).addPlayer(client.getRemotePlayer().getModelPlayer()); //add the player (client) in the list of players in the model
-        System.out.println(client.getNickname() + " has joined the " + (lobbies.size() - 1) + " lobby");
+        client.getRemotePlayer();
+        RemotePlayer p = deserializeRemotePlayer();
+
+        lobbies.get(lobbies.size() - 1).addPlayer(p); //add the player (client) in the last lobby available
+        models.get(lobbies.size()).addPlayer(p.getModelPlayer()); //add the player (client) in the list of players in the model
+        System.out.println(client.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
     }
 
     public synchronized void leave(Client client) throws RemoteException {
         for(Lobby l: lobbies){
             for(RemotePlayer rp: l.getListOfPlayers()){
-                if(client.getRemotePlayer().equals(rp)){
+                if(client.getNickname().equals(rp.getNickname())){
                     l.getListOfPlayers().remove(rp);
+                    System.out.println(client.getNickname() + " has left the server");
+                    break;
                 }
             }
         }
-        System.out.println(client.getNickname() + " has left the server");
     }
 
     public void update(RemoteHandler o, Object arg) throws RemoteException { //TODO ClientHandlerRMI instead of RemoteHandler
         Integer lobbyNumber = o.getLobby().getSerialNumber();
         controllers.get(lobbyNumber).update(o, arg);
+    }
+
+    public RemotePlayer deserializeRemotePlayer() {
+        RemotePlayer p = null;
+        try {
+            //Creating stream to read the object
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/main/java/Distributed/RMI/serialized/remotePlayer.json"));
+            p = (RemotePlayer) in.readObject();
+            //closing the stream
+            in.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return p;
     }
     public static void main(String args[]) throws Exception {
         ServerImpl server = new ServerImpl();

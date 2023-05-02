@@ -1,8 +1,11 @@
 package Distributed;
 
 import Model.Player;
+
+import java.io.Serializable;
+
 //TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
-public class RemotePlayer {
+public class RemotePlayer implements Serializable {
     protected RemoteHandler remoteHandler;
     private Player modelPlayer;
     private String nickname;
@@ -10,7 +13,7 @@ public class RemotePlayer {
 
     public RemotePlayer(){
         modelPlayer = new Player("Nico", true, null);
-        this.nickname = "Nick ;)";
+        this.nickname = "Ale";
     }
 
     public Player getModelPlayer() {

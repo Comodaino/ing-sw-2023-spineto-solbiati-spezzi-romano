@@ -2,11 +2,11 @@ package Distributed.RMI.client;
 
 import Distributed.RMI.server.Server;
 import Distributed.RemotePlayer;
-import Model.Player;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.rmi.*;
 import java.rmi.server.*;
-import java.util.Scanner;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
     private RemotePlayer player = new RemotePlayer();
@@ -38,5 +38,15 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public RemotePlayer getRemotePlayer() throws RemoteException { return player; }
+    public void getRemotePlayer() throws RemoteException { //serializes the RemotePlayer
+        try{
+            FileOutputStream fileOut = new FileOutputStream("src/main/java/Distributed/RMI/serialized/remotePlayer.json");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(this.player);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

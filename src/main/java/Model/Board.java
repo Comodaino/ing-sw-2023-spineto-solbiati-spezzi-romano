@@ -132,6 +132,8 @@ public class Board{
         }
     }
 
+    public void addPlayer(Player player){ listOfPlayer.add(player); }
+
     public Tile getTile(int r, int c){
         return matrix[r][c].getTile();
     }

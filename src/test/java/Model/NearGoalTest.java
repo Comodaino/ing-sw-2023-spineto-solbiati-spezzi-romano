@@ -51,7 +51,7 @@ class NearGoalTest {
             System.out.println();
         }
 
-        this.player = new Player("player1", true);
+        this.player = new Player("player1", true, null);
         player.setShelf(m);
         this.neargoal = new NearGoal();
         int tmp = neargoal.getScore(player);

@@ -2,13 +2,15 @@ package Model;
 
 import Distributed.RemotePlayer;
 
+import java.io.Serializable;
+
 /**
  * represent one Player with attribute nickname, chair, myShelf (Shelf type),
  * myGoal (PersonalGoal type), score and nearGoal.
  * @author Clara
  */
 
-public class Player {
+public class Player implements Serializable {
     private String nickname;
     private boolean chair;
     private Shelf myShelf;

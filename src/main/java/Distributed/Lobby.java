@@ -5,6 +5,7 @@ import Distributed.ServerSocket.SocketPlayer;
 import Model.BoardView;
 import Model.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +14,14 @@ import static Distributed.States.END;
 
 public class Lobby {
     private final List<RemotePlayer> lp;
+    private Integer serialNumber;
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
     public Lobby(){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
+        this.serialNumber = null;
     }
 
     /**
@@ -34,6 +37,10 @@ public class Lobby {
 
     public void setFirstMatch(boolean firstMatch) {
         this.firstMatch = firstMatch;
+    }
+
+    public boolean isFirstMatch() {
+        return firstMatch;
     }
 
     public boolean isOpen() {
@@ -74,4 +81,6 @@ public class Lobby {
     public Object getBoardView() {
         return boardView;
     }
+    public void setSerialNumber(Integer i) { this.serialNumber = i; }
+    public Integer getSerialNumber() { return this.serialNumber; }
 }

@@ -80,6 +80,7 @@ public class GameController implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         //TODO CHECK WITH LAB ASSISTANT
+        //TODO ERRORS
         if (true) {
             String input[] = arg.toString().split(" ");
             if (input[0].charAt(0) == '/') {

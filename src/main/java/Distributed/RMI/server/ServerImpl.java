@@ -40,28 +40,28 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         }
 
         lobbies.add(new Lobby());
-        lobbies.get(1).setSerialNumber(1);
+        lobbies.get(0).setSerialNumber(0);
         System.out.println("Server bound and ready");
     }
     public synchronized void register(Client client) throws RemoteException {
-        if (!lobbies.get(lobbies.size()).isOpen()) { //if the lobby is closed, creates a new lobby
+        if (!lobbies.get(lobbies.size() - 1).isOpen()) { //if the lobby is closed, creates a new lobby
             lobbies.add(new Lobby());
-            lobbies.get(lobbies.size()).setSerialNumber(lobbies.size());
+            lobbies.get(lobbies.size() - 1).setSerialNumber(lobbies.size() - 1);
         }
 
-        if(lobbies.get(lobbies.size()).getListOfPlayers().size() == 0){ //if the lobby is empty, creates a new model and controller for the game
+        if(lobbies.get(lobbies.size() - 1).getListOfPlayers().size() == 0){ //if the lobby is empty, creates a new model and controller for the game
             List<Player> players = new ArrayList<Player>();
-            Boolean firstMatch = lobbies.get(lobbies.size()).isFirstMatch();
-            Integer lobbyNumber = lobbies.size();
+            Boolean firstMatch = lobbies.get(lobbies.size() - 1).isFirstMatch();
+            Integer lobbyNumber = lobbies.size() - 1;
 
             players.add(client.getRemotePlayer().getModelPlayer());
             models.put(lobbyNumber, new Board(firstMatch, players));
             controllers.put(lobbyNumber, new GameControllerSocket(players, firstMatch)); //TODO: IMPLEMENTS CONTROLLER RMI
         }
 
-        lobbies.get(lobbies.size()).addPlayer(client.getRemotePlayer()); //add the player (client) in the last lobby available
-        models.get(lobbies.size()).addPlayer(client.getRemotePlayer().getModelPlayer()); //add the player (client) in the list of players in the model
-        System.out.println(client.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
+        lobbies.get(lobbies.size() - 1).addPlayer(client.getRemotePlayer()); //add the player (client) in the last lobby available
+        models.get(lobbies.size() - 1).addPlayer(client.getRemotePlayer().getModelPlayer()); //add the player (client) in the list of players in the model
+        System.out.println(client.getNickname() + " has joined the " + (lobbies.size() - 1) + " lobby");
     }
 
     public synchronized void leave(Client client) throws RemoteException {

@@ -23,6 +23,7 @@ public class Lobby {
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.serialNumber = null;
+        this.open = true;
     }
 
     /**

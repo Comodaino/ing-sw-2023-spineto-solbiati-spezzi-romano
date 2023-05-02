@@ -26,7 +26,7 @@ public abstract class RemoteHandler {
     public void setState(States state) {
         this.state = state;
     }
-
+    public Lobby getLobby() { return this.lobby; }
     public HandlersType getType() {
         return type;
     }

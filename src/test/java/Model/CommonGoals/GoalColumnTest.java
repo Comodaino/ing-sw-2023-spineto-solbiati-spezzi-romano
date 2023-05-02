@@ -39,7 +39,7 @@ class  GoalColumnTest {
     @Test
     void emptyShelf(){
         GoalColumn goal = new GoalColumn(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico", true, null);
 
         assertEquals(0, goal.getScore(p));
         System.out.println("TEST PASSED");
@@ -48,7 +48,7 @@ class  GoalColumnTest {
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
         GoalColumn goal = new GoalColumn(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico", true, null);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/column_conf");
         Scanner reader = new Scanner(shelfConf);
@@ -61,7 +61,7 @@ class  GoalColumnTest {
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
         GoalColumn goal = new GoalColumn(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico", true, null);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/column_conf");
         Scanner reader = new Scanner(shelfConf);
@@ -75,8 +75,8 @@ class  GoalColumnTest {
     @Test
     void goalCompletedByTwoPlayers() throws FileNotFoundException {
         GoalColumn goal = new GoalColumn(2);
-        Player p1 = new Player("Nico", true);
-        Player p2 = new Player("Alessio", false);
+        Player p1 = new Player("Nico", true, null);
+        Player p2 = new Player("Alessio", false, null);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/column_conf");
         Scanner reader1 = new Scanner(shelfConf);
@@ -93,10 +93,10 @@ class  GoalColumnTest {
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
         GoalColumn goal = new GoalColumn(4);
-        Player p1 = new Player("Nico", true);
-        Player p2 = new Player("Alessio", false);
-        Player p3 = new Player("Clara", false);
-        Player p4 = new Player("Alessandra", false);
+        Player p1 = new Player("Nico", true, null);
+        Player p2 = new Player("Alessio", false, null);
+        Player p3 = new Player("Clara", false, null);
+        Player p4 = new Player("Alessandra", false, null);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/column_conf");
         Scanner reader1 = new Scanner(shelfConf);

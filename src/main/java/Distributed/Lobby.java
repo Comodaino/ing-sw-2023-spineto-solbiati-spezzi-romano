@@ -1,7 +1,6 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ServerSocket.SocketPlayer;
 import Model.BoardView;
 import Model.Player;
 
@@ -13,12 +12,15 @@ import static Distributed.States.END;
 
 public class Lobby {
     private final List<RemotePlayer> lp;
+    private Integer serialNumber;
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
     public Lobby(){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
+        this.serialNumber = null;
+        this.open = true;
     }
 
     /**
@@ -26,7 +28,7 @@ public class Lobby {
      * @param p
      * @return returns true if there are 4 player in the lobby
      */
-    public void addPlayer(SocketPlayer p){
+    public void addPlayer(RemotePlayer p){
         if(lp.isEmpty()) p.setAsChair();
         lp.add(p);
         open = !(lp.size()==4);
@@ -34,6 +36,10 @@ public class Lobby {
 
     public void setFirstMatch(boolean firstMatch) {
         this.firstMatch = firstMatch;
+    }
+
+    public boolean isFirstMatch() {
+        return firstMatch;
     }
 
     public boolean isOpen() {
@@ -74,4 +80,6 @@ public class Lobby {
     public Object getBoardView() {
         return boardView;
     }
+    public void setSerialNumber(Integer i) { this.serialNumber = i; }
+    public Integer getSerialNumber() { return this.serialNumber; }
 }

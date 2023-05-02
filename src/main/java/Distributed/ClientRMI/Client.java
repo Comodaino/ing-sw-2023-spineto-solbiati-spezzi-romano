@@ -1,4 +1,4 @@
-package Distributed.RMI.client;
+package Distributed.ClientRMI;
 
 import Distributed.RMI.server.Server;
 

@@ -1,4 +1,4 @@
-package Distributed.RMI.server;
+package Distributed.ServerRMI;
 
 import Controller.GameController;
 import Distributed.HandlersType;

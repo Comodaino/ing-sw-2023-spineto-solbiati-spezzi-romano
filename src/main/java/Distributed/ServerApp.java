@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ServerAppSocket {
+public class ServerApp {
     private int port;
     private List<Lobby> lobbyList;
-    public ServerAppSocket(int port) {
+    public ServerApp(int port) {
         this.port = port;
     }
     public void startServer() {
@@ -49,7 +49,7 @@ public class ServerAppSocket {
         executor.shutdown();
     }
     public static void main(String[] args) {
-        ServerAppSocket server = new ServerAppSocket(25565);
+        ServerApp server = new ServerApp(25565);
         server.startServer();
     }
 }

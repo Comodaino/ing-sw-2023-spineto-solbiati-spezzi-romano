@@ -13,8 +13,6 @@ import java.util.*;
 import java.rmi.*;
 import java.rmi.server.*;
 import java.rmi.registry.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ServerImpl extends UnicastRemoteObject implements Server {
     private HashMap<Integer, Board> models; //each lobby has its own model

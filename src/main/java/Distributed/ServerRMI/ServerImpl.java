@@ -77,7 +77,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     public void update(RemoteHandler o, Object arg) throws RemoteException { //TODO ClientHandlerRMI instead of RemoteHandler
         Integer lobbyNumber = o.getLobby().getSerialNumber();
-        controllers.get(lobbyNumber).update(o, arg);
+        //controllers.get(lobbyNumber).update(o, arg);
     }
     public static void main(String args[]) throws Exception {
         ServerImpl server = new ServerImpl();

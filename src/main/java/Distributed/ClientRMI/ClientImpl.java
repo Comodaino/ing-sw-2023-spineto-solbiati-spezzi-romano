@@ -1,5 +1,6 @@
 package Distributed.ClientRMI;
 
+import Distributed.ServerRMI.RMIPlayer;
 import Distributed.ServerRMI.Server;
 import Distributed.RemotePlayer;
 
@@ -7,7 +8,7 @@ import java.rmi.*;
 import java.rmi.server.*;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
-    private RemotePlayer player = new RemotePlayer();
+    private RemotePlayer player = new RMIPlayer(/*TODO NEEDS ID */ 0);
     public static void main(String args[]) throws Exception {
         ClientImpl client = new ClientImpl();
         client.doJob("localhost");

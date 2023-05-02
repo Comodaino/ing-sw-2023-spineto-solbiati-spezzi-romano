@@ -37,19 +37,24 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             while (!state.equals(States.CLOSE)) {
                 switch (state) {
                     case INIT:
+                        out.write("/init");
                         initCommand();
                         break;
                     case WAIT:
+                        out.write("/wait");
                         waitCommand();
                         break;
                     case PLAY:
+                        out.write("/play");
                         playCommand();
                         break;
                     case END:
+                        out.write("/end");
                         endCommand();
                         break;
                 }
             }
+            out.write("/close");
             in.close();
             socket.close();
         } catch (IOException e) {
@@ -61,7 +66,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         String input;
         do {
             //TODO CHECK SYNCHRONIZED
-            out.write("Please insert a unique nickname");
+            out.write(" .Please insert a unique nickname");
             input = in.nextLine();
         } while (!nicknameChecker(input));
         player.setNickname(input);
@@ -82,10 +87,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                             case "/firstMatch":
                                 lobby.setFirstMatch(true);
                                 break;
-                            case "/notfirstMatch":
+                            case "/notFirstMatch":
                                 lobby.setFirstMatch(false);
                                 break;
-                            case "/closelobby":
+                            case "/closeLobby":
                                 lobby.close();
                                 break;
                         }

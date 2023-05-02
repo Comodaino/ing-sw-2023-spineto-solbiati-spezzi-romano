@@ -11,7 +11,6 @@ public abstract class RemotePlayer {
         modelPlayer = new Player("Nico", true, null);
         this.nickname = "Nick ;)";
     }
-
     public Player getModelPlayer() {
         return modelPlayer;
     }

@@ -16,7 +16,6 @@ public class Lobby {
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
-    private int id;
     public Lobby(){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
@@ -83,7 +82,4 @@ public class Lobby {
     }
     public void setSerialNumber(Integer i) { this.serialNumber = i; }
     public Integer getSerialNumber() { return this.serialNumber; }
-    public int getId(){
-        return this.id;
-    }
 }

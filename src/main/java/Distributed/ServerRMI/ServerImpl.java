@@ -14,6 +14,7 @@ import java.rmi.server.*;
 import java.rmi.registry.*;
 
 public class ServerImpl extends UnicastRemoteObject implements Server {
+    //TODO CHIEDERE SE SERVE O MENO MISCHIARE DISTR E CONTROLLER
     private HashMap<Integer, Board> models; //each lobby has its own model
     private HashMap<Integer, GameController> controllers; //each lobby has its own controller
     private List<Lobby> lobbies;

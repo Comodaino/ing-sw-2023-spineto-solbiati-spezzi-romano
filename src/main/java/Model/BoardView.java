@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public class BoardView implements Serializable {
+    static final long serialVersionUID = 1L;
     private final Board board;
     public BoardView(Board b){ this.board=b; }
     public Tile getTile(int r, int c){

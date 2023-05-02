@@ -1,5 +1,8 @@
 package Controller;
 
+import Distributed.RMI.client.Client;
+import Distributed.RMI.server.ClientHandlerRMI;
+import Distributed.RemoteHandler;
 import Model.Board;
 import Model.BoardView;
 import Model.Player;
@@ -37,5 +40,9 @@ public abstract class GameController {
             else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
         } while (donePlayers.contains(currentPlayer));
         gameBoard.setCurrentPlayer(currentPlayer);
+    }
+
+    //TODO with ClientHandlerRMI instead of RemoteHandler
+    public void update(RemoteHandler client, Object arg) {
     }
 }

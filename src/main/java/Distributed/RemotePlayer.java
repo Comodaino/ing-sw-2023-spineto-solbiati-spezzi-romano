@@ -8,6 +8,11 @@ public class RemotePlayer {
     private String nickname;
     private boolean chair;
 
+    public RemotePlayer(){
+        modelPlayer = new Player("Nico", true, null);
+        this.nickname = "Nick ;)";
+    }
+
     public Player getModelPlayer() {
         return modelPlayer;
     }

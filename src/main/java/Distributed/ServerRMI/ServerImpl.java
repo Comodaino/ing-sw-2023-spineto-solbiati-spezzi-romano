@@ -1,9 +1,8 @@
-package Distributed.RMI.server;
+package Distributed.ServerRMI;
 
 import Controller.GameController;
-import Controller.GameControllerSocket;
 import Distributed.Lobby;
-import Distributed.RMI.client.Client;
+import Distributed.ClientRMI.Client;
 import Distributed.RemoteHandler;
 import Distributed.RemotePlayer;
 import Model.Board;
@@ -56,7 +55,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
             players.add(client.getRemotePlayer().getModelPlayer());
             models.put(lobbyNumber, new Board(firstMatch, players));
-            controllers.put(lobbyNumber, new GameControllerSocket(players, firstMatch)); //TODO: IMPLEMENTS CONTROLLER RMI
+            controllers.put(lobbyNumber, new GameController(players, firstMatch)); //TODO: IMPLEMENTS CONTROLLER RMI
         }
 
         lobbies.get(lobbies.size() - 1).addPlayer(client.getRemotePlayer()); //add the player (client) in the last lobby available

@@ -1,12 +1,10 @@
-package Distributed.RMI.client;
+package Distributed.ClientRMI;
 
-import Distributed.RMI.server.Server;
+import Distributed.ServerRMI.Server;
 import Distributed.RemotePlayer;
-import Model.Player;
 
 import java.rmi.*;
 import java.rmi.server.*;
-import java.util.Scanner;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
     private RemotePlayer player = new RemotePlayer();

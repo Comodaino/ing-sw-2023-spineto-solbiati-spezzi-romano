@@ -1,6 +1,6 @@
-package Distributed.RMI.server;
+package Distributed.ServerRMI;
 
-import Distributed.RMI.client.Client;
+import Distributed.ClientRMI.Client;
 import Distributed.RemoteHandler;
 
 import java.rmi.*;

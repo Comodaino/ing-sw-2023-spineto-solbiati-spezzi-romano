@@ -34,7 +34,7 @@ public class ServerApp {
         while (true) {
             try {
                 //Accepts new players and creates another lobby if it's full
-                //TODO ASK THE LAB ATTENDANT IF THE SYNCHRONIZE IS CORRECT
+                //TODO ASK THE LAB ATTENDANT IF THE SYNCHRONIZE IS CORRECT AND IF DELETING THE ELEMENT FROM THE LIST IS NEEDED OR THE JVM DOES IT FORM ME
                 Socket socket = serverSocket.accept();
                 synchronized(lobbyList.get(lobbyList.size() - 1)) {
                     executor.submit(new ClientHandlerSocket(socket, lobbyList.get(lobbyList.size() - 1)));

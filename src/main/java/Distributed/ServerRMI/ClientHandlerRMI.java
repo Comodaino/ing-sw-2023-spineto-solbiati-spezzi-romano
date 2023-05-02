@@ -1,4 +1,4 @@
-package Distributed.RMI.server;
+package Distributed.ServerRMI;
 
 import Distributed.RemoteHandler;
 

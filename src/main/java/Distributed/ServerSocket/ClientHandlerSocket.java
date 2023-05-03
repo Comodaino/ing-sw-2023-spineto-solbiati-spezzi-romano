@@ -31,6 +31,9 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         lobby.addPlayer(player);
     }
 
+    /**
+     * FSM which executes another method depending on the current state
+     */
     public void run() {
         try {
             //TODO OUTPUT TO CLIENT IS ONLY FOR DEBUG
@@ -62,6 +65,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         }
     }
 
+    /**
+     * Asks the socket to write a nickname, repeats the operation if the nickname is already used
+     * @throws IOException
+     */
     private void initCommand() throws IOException {
         String input;
         do {
@@ -73,6 +80,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         state = States.WAIT;
     }
 
+    /**
+     * filters all input coming from non-chair members of the lobby, the lobby-chair can start the match, close the lobby or set the match as "FIrst Match"
+     * @throws IOException
+     */
     private void waitCommand() throws IOException {
 
         if (in.hasNextLine()) {
@@ -103,19 +114,23 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         }
     }
 
+    /**
+     * fetches the input from the socket and redirects it to the controller using update()
+     * @throws IOException
+     */
+
     public void playCommand() throws IOException {
         out.write("Play a command, all commands should start with /");
         gameController.update(this, in.nextLine());
     }
-
-    public void initPlayer() {
-        String line = in.nextLine();
-    }
-
     public RemotePlayer getPlayer() {
         return player;
     }
 
+    /**
+     * writes the serializble ModelView to the client's socket
+     * @throws IOException
+     */
     public void update() throws IOException {
         out.write("/update");
         objOut.writeObject(lobby.getBoardView());

@@ -28,7 +28,7 @@ public class Lobby {
     }
 
     /**
-     *
+     * adds a RemotePlayer to the lobby
      * @param p
      * @return returns true if there are 4 player in the lobby
      */
@@ -53,9 +53,12 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
+
+    /**
+     * Creates a controller and starts the game
+     */
     public void startGame(){
         List<Player> modelPlayerList = new ArrayList<Player>();
-        //TODO NEED TO DECIDE BETWEEN TWO CONTROLLERS OR ONE
         for(RemotePlayer p: lp){
             Player tmpPlayer = new Player(p.getNickname(),p.isChair(), p);
             modelPlayerList.add(tmpPlayer);
@@ -63,11 +66,9 @@ public class Lobby {
             p.getHandler().setState(States.PLAY);
         }
         GameController tmpControllerSocket = new GameController(modelPlayerList, firstMatch);
-        //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp) {
             if (p.getHandler().getType().equals(HandlersType.Socket))
                 p.getHandler().setGameController(tmpControllerSocket);
-            //TODO else p.getHandler().setGameController(tmpControllerRMI);
         }
         boardView = tmpControllerSocket.getBoardView();
     }

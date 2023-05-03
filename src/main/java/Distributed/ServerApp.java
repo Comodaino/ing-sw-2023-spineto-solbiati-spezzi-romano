@@ -76,6 +76,6 @@ public class ServerApp {
     public void removeLobby(Lobby lobby){
         this.lobbySet.remove(lobby);
     }
-    public void RMIDistributor() {//TODO
+    public void RMIDistributor() {//TODO IMPLEMENT
     }
 }

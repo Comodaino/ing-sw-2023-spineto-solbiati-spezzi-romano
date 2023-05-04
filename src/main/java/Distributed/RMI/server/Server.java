@@ -26,4 +26,10 @@ public interface Server extends Remote {
      */
     //TODO: IMPLEMENTS THE SAME METHOD IN CONTROLLER with ClientHandlerRMI instead of RemoteHandler
     public void update(RemoteHandler o, Object arg) throws RemoteException;
+
+    /**
+     * Checks if there are no other players with the same nickname connected to the server
+     * @param nickname the nickname which will be checked
+     */
+    public String checkNickname(String nickname) throws RemoteException;
 }

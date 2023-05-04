@@ -1,11 +1,12 @@
 package Distributed;
 
+import Distributed.RMI.server.ClientHandlerRMI;
 import Model.Player;
 
 import java.io.Serializable;
 
 //TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
-public class RemotePlayer implements Serializable {
+public class RemotePlayer {
     protected RemoteHandler remoteHandler;
     private Player modelPlayer;
     private String nickname;

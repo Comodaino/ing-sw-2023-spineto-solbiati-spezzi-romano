@@ -15,14 +15,14 @@ import static Distributed.ServerSocket.States.END;
 
 public class Lobby {
     private final List<RemotePlayer> lp;
-    private Integer serialNumber;
+    private Integer ID;
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
     public Lobby(){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
-        this.serialNumber = null;
+        this.ID = null;
         this.open = true;
     }
 
@@ -84,6 +84,6 @@ public class Lobby {
     public Object getBoardView() {
         return boardView;
     }
-    public void setSerialNumber(Integer i) { this.serialNumber = i; }
-    public Integer getSerialNumber() { return this.serialNumber; }
+    public void setID(Integer i) { this.ID = i; }
+    public Integer getID() { return this.ID; }
 }

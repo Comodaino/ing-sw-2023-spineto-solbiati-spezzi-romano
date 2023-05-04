@@ -1,12 +1,10 @@
 package Model;
 
-import java.io.Serializable;
-
 /**
  * represent Shelf
  * @author  Clara Spezzi
  */
-public class Shelf implements Serializable {
+public class Shelf {
     private Tile[][] matrix;
 
     public Shelf() {

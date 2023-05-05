@@ -9,7 +9,6 @@ public class RMIPlayer extends RemotePlayer {
     private Player modelPlayer;
     public RMIPlayer(int id){
         this.id = id;
-        this.remoteHandler = remoteHandler;
         this.modelPlayer=null;
         this.nickname= null;
     }

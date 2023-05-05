@@ -25,7 +25,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         this.lobby = lobby;
         this.type = ConnectionType.Socket;
         this.player = new SocketPlayer(socket, this);
-        this.objOut = new Object.getHandler()OutputStream(socket.getOutputStream());
+        this.objOut = new ObjectOutputStream(socket.getOutputStream());
         this.in = new Scanner(socket.getInputStream());
         this.out = new PrintWriter(socket.getOutputStream());
         lobby.addPlayer(player);
@@ -131,8 +131,12 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      * writes the serializble ModelView to the client's socket
      * @throws IOException
      */
-    public void update() throws IOException {
-        out.write("/update");
-        objOut.writeObject(lobby.getBoardView());
+    public void update() {
+        try {
+            out.write("/update");
+            objOut.writeObject(lobby.getBoardView());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

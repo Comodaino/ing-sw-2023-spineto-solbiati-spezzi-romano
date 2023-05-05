@@ -38,4 +38,9 @@ public class RemotePlayer {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
+    public void update(){}
+
+    public ConnectionType getType() {
+        return type;
+    }
 }

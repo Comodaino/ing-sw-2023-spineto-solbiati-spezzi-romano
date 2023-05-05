@@ -27,7 +27,7 @@ public class ServerApp {
     }
 
     public void startServer() {
-        openLobby = new Lobby(this);
+        openLobby = new Lobby();
         lobbySet.add(openLobby);
 
         System.out.println("Server ready");
@@ -66,7 +66,7 @@ public class ServerApp {
         Socket socket = serverSocket.accept();
         synchronized (lobbySet) {
             if(!openLobby.isOpen()){
-                openLobby = new Lobby(this);
+                openLobby = new Lobby();
                 lobbySet.add(openLobby);
             }
             executor.submit(new ClientHandlerSocket(socket,openLobby));

@@ -1,45 +1,45 @@
 package Distributed.ClientSocket;
 
+<<<<<<< HEAD
 import Distributed.Lobby;
 import Distributed.States;
 
 import java.io.BufferedReader;
+=======
+>>>>>>> experimental
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.SecureRandom;
 import java.util.Scanner;
 
 public class ClientAppSocket {
-    private List<Lobby> lobbyList;
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
     private int port;
+    private final static String ip = "127.0.0.1";
 
     public ClientAppSocket(int port){
         this.port = port;
     }
     public void Connect() throws IOException {
         try {
-            lobbyList = new ArrayList<Lobby>();
-            lobbyList.add(new Lobby());
-
-            socket = new Socket(lobbyList.toString(),port);
+            socket = new Socket(ip, port);
 
             in = new Scanner(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             Scanner stdin = new Scanner(System.in);
 
             String messageFromServer = in.nextLine();
+<<<<<<< HEAD
             System.out.println("Message from server "+messageFromServer);
 
-            try{
+            try {
                 boolean spin = true;
-                while(spin){
+                while (spin) {
                     switch (messageFromServer) {
                         case "/init":
                             System.out.println(in.nextLine());
@@ -62,14 +62,15 @@ public class ClientAppSocket {
                             out.close();
                             socket.close();
                     }
-
-
-
-
-                    }
                 }
             }
+            catch(IOException e){
+                System.err.println(e.getMessage());
+            }
 
+=======
+            System.out.println("Message from server " + messageFromServer);
+>>>>>>> experimental
             socket.close();
         } catch (UnknownHostException e){
             System.err.println("Error connecting to server");

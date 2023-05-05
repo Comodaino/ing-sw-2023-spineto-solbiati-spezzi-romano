@@ -1,6 +1,6 @@
 package Distributed;
 
-public enum HandlersType {
+public enum ConnectionType {
     Socket,
     RMI
 }

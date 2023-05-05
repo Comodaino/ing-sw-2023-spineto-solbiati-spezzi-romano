@@ -23,9 +23,9 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         this.socket = socket;
         this.state = States.INIT;
         this.lobby = lobby;
-        this.type = HandlersType.Socket;
+        this.type = ConnectionType.Socket;
         this.player = new SocketPlayer(socket, this);
-        this.objOut = new ObjectOutputStream(socket.getOutputStream());
+        this.objOut = new Object.getHandler()OutputStream(socket.getOutputStream());
         this.in = new Scanner(socket.getInputStream());
         this.out = new PrintWriter(socket.getOutputStream());
         lobby.addPlayer(player);

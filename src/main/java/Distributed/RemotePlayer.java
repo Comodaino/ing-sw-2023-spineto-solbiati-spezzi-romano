@@ -1,18 +1,16 @@
 package Distributed;
 
-import Distributed.RMI.server.ClientHandlerRMI;
 import Model.Player;
-
-import java.io.Serializable;
 
 //TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
 public class RemotePlayer {
-    protected RemoteHandler remoteHandler;
     private Player modelPlayer;
+    private ConnectionType type;
     private String nickname;
     private boolean chair;
 
-    public RemotePlayer(){
+    public RemotePlayer(ConnectionType type){
+        this.type = type
         modelPlayer = new Player("Nico", true, null);
         this.nickname = "Ale";
     }
@@ -27,10 +25,6 @@ public class RemotePlayer {
 
     public void setAsChair() {
         chair = true;
-    }
-
-    public RemoteHandler getHandler() {
-        return remoteHandler;
     }
 
     public boolean isChair() {

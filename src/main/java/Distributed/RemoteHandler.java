@@ -1,13 +1,12 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ServerSocket.States;
 
 public abstract class RemoteHandler {
     protected Lobby lobby;
     protected States state;
     protected GameController gameController;
-    protected HandlersType type;
+    protected ConnectionType type;
     /**
      *
      * @param input
@@ -27,8 +26,11 @@ public abstract class RemoteHandler {
         this.state = state;
     }
     public Lobby getLobby() { return this.lobby; }
-    public HandlersType getType() {
+    public ConnectionType getType() {
         return type;
     }
     public void endCommand(){ state=States.WAIT; }
+    public void update(){
+        //TODO ADVERTISE THERE AS BEEN A CHANGE IN THE BOARDVIEW
+    }
 }

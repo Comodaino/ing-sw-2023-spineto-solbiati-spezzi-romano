@@ -49,7 +49,8 @@ public class GameController implements Observer {
     }
     private void serverUpdater() throws IOException {
         for(Player p: pl){
-            p.getRemotePlayer().getHandler().update();
+            if(p.)
+            p.getRemotePlayer().update();
         }
     }
     //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view

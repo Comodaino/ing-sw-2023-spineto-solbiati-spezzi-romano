@@ -1,12 +1,10 @@
 package Distributed;
 
 import Controller.GameControllerSocket;
-import Distributed.ServerSocket.SocketPlayer;
 import Distributed.ServerSocket.States;
 import Model.BoardView;
 import Model.Player;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +68,7 @@ public class Lobby {
         GameControllerSocket tmpControllerSocket = new GameControllerSocket(modelPlayerList, firstMatch);
         //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp) {
-            if (p.getHandler().getType().equals(HandlersType.Socket))
+            if (p.getHandler().getType().equals(ConnectionType.Socket))
                 p.getHandler().setGameController(tmpControllerSocket);
             //TODO else p.getHandler().setGameController(tmpControllerRMI);
         }

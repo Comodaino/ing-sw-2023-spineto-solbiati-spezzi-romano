@@ -34,7 +34,13 @@ public class Lobby {
     public void addPlayer(RemotePlayer p){
         if(lp.isEmpty()) p.setAsChair();
         lp.add(p);
-        if(lp.size()==2) this.open = false; //TODO MODIFY: you can close a lobby before it's full
+        if(lp.size()==4) this.open = false;
+    }
+
+    public void closeLobby() {
+        if(lp.size()>=2){
+            this.open = false;
+        }
     }
 
     public void setFirstMatch(boolean firstMatch) {

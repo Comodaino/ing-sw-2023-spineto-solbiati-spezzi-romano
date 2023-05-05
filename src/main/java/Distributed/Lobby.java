@@ -1,11 +1,9 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ServerSocket.SocketPlayer;
 import Model.BoardView;
 import Model.Player;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,7 @@ import static Distributed.States.END;
 
 public class Lobby {
     private final List<RemotePlayer> lp;
-    private Integer ID;
+    private Integer serialNumber;
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
@@ -22,7 +20,7 @@ public class Lobby {
     public Lobby(ServerApp server){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
-        this.ID = null;
+        this.serialNumber = null;
         this.open = true;
         this.server = server;
     }
@@ -86,6 +84,6 @@ public class Lobby {
     public Object getBoardView() {
         return boardView;
     }
-    public void setID(Integer i) { this.ID = i; }
-    public Integer getID() { return this.ID; }
+    public void setSerialNumber(Integer i) { this.serialNumber = i; }
+    public Integer getSerialNumber() { return this.serialNumber; }
 }

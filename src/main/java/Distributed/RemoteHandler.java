@@ -1,8 +1,7 @@
 package Distributed;
 
 import Controller.GameController;
-
-import java.io.IOException;
+import Distributed.ServerSocket.States;
 
 public abstract class RemoteHandler {
     protected Lobby lobby;
@@ -12,7 +11,7 @@ public abstract class RemoteHandler {
     /**
      *
      * @param input
-     * @return return true if the input nickname is avaible
+     * @return return true if the input nickname is available
      */
     protected boolean nicknameChecker(String input) {
         for(RemotePlayer p: lobby.getListOfPlayers()){
@@ -23,6 +22,7 @@ public abstract class RemoteHandler {
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
+    public GameController getGameController() { return this.gameController; }
     public void setState(States state) {
         this.state = state;
     }
@@ -30,11 +30,5 @@ public abstract class RemoteHandler {
     public HandlersType getType() {
         return type;
     }
-    public void endCommand(){
-        state=States.WAIT;
-
-    }
-
-    public void update() throws IOException {
-    }
+    public void endCommand(){ state=States.WAIT; }
 }

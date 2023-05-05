@@ -1,7 +1,12 @@
 package Distributed;
 
+import Distributed.RMI.server.ClientHandlerRMI;
 import Model.Player;
-public abstract class RemotePlayer {
+
+import java.io.Serializable;
+
+//TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
+public class RemotePlayer {
     protected RemoteHandler remoteHandler;
     private Player modelPlayer;
     private String nickname;
@@ -9,8 +14,9 @@ public abstract class RemotePlayer {
 
     public RemotePlayer(){
         modelPlayer = new Player("Nico", true, null);
-        this.nickname = "Nick ;)";
+        this.nickname = "Ale";
     }
+
     public Player getModelPlayer() {
         return modelPlayer;
     }
@@ -38,5 +44,4 @@ public abstract class RemotePlayer {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
-
 }

@@ -1,6 +1,8 @@
 package Distributed.ClientSocket;
 
 import Distributed.Lobby;
+import Distributed.States;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,9 +32,44 @@ public class ClientAppSocket {
 
             in = new Scanner(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+            Scanner stdin = new Scanner(System.in);
 
             String messageFromServer = in.nextLine();
             System.out.println("Message from server "+messageFromServer);
+
+            try{
+                boolean spin = true;
+                while(spin){
+                    switch (messageFromServer) {
+                        case "/init":
+                            System.out.println(in.nextLine());
+                            String nickname = stdin.nextLine();
+                            out.println(nickname);
+                            out.flush();
+                            break;
+                        case "/wait":
+                            if (in.hasNextLine())
+                                System.out.println(in.nextLine());
+                            break;
+                        case "/play":
+                            System.out.println(in.nextLine());
+                            out.println(stdin.nextLine());
+                            out.flush();
+                        case "/end":
+                            System.out.println("Game over");
+                        case "/close":
+                            in.close();
+                            out.close();
+                            socket.close();
+                    }
+
+
+
+
+                    }
+                }
+            }
+
             socket.close();
         } catch (UnknownHostException e){
             System.err.println("Error connecting to server");

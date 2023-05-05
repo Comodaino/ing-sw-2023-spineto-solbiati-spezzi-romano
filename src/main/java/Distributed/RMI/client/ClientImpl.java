@@ -33,14 +33,14 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         String nickname = null;
         boolean found = false;
 
+        System.out.println("Please choose a unique nickname");
         do {
-            System.out.println("Please choose a unique nickname");
             Scanner scanIn = new Scanner(System.in);
             nickname = scanIn.nextLine();
 
             nickname = server.checkNickname(nickname);
             if(nickname==null){
-                System.out.println("Please be more original, nickname already chosen!");
+                System.out.println("Nickname already chosen! Please be more original and retry");
             }
         } while(nickname==null);
 

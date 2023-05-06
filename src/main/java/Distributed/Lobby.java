@@ -66,7 +66,7 @@ public class Lobby {
         controller = new GameController(modelPlayerList, firstMatch);
         //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp) {
-            if (p.getType().equals(ConnectionType.Socket))
+            if (p.getType().equals(ConnectionType.SOCKET))
                 p.setController(controller);
             //TODO else p.getHandler().setGameController(tmpControllerRMI);
         }

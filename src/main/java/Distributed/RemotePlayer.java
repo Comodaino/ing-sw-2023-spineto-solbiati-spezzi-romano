@@ -1,7 +1,10 @@
 package Distributed;
 
 import Controller.GameController;
+import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Player;
+
+import java.net.Socket;
 
 import static Distributed.States.INIT;
 
@@ -19,6 +22,8 @@ public class RemotePlayer {
         modelPlayer = new Player("Nico", true, null);
         this.nickname = "Ale";
         this.state = INIT;
+    }
+    public RemotePlayer(Socket socket, ClientHandlerSocket remoteHandler, ConnectionType type){
     }
 
     public Player getModelPlayer() {
@@ -59,5 +64,9 @@ public class RemotePlayer {
 
     public ConnectionType getType() {
         return type;
+    }
+
+    public States getState() {
+        return state;
     }
 }

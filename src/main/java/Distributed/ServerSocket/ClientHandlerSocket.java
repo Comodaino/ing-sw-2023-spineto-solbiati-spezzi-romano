@@ -1,6 +1,5 @@
 package Distributed.ServerSocket;
 
-import Controller.GameController;
 import Distributed.*;
 
 import java.io.IOException;
@@ -10,6 +9,8 @@ import java.io.Writer;
 import java.net.Socket;
 import java.util.Scanner;
 
+import static Distributed.States.*;
+
 public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private final Socket socket;
     private final SocketPlayer player;
@@ -17,14 +18,12 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private Scanner in;
     private Writer out;
     private final Lobby lobby;
-    private GameController gameController;
 
     public ClientHandlerSocket(Socket socket, Lobby lobby) throws IOException {
         this.socket = socket;
-        this.state = States.INIT;
         this.lobby = lobby;
-        this.type = ConnectionType.Socket;
-        this.player = new SocketPlayer(socket, this);
+        this.type = ConnectionType.SOCKET;
+        this.player = new SocketPlayer(socket, this, ConnectionType.SOCKET);
         this.objOut = new ObjectOutputStream(socket.getOutputStream());
         this.in = new Scanner(socket.getInputStream());
         this.out = new PrintWriter(socket.getOutputStream());
@@ -37,8 +36,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     public void run() {
         try {
             //TODO OUTPUT TO CLIENT IS ONLY FOR DEBUG
-            while (!state.equals(States.CLOSE)) {
-                switch (state) {
+            while (player.getState().equals(CLOSE)) {
+                switch (player.getState()) {
                     case INIT:
                         out.write("/init");
                         initCommand();
@@ -77,7 +76,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             input = in.nextLine();
         } while (!nicknameChecker(input));
         player.setNickname(input);
-        state = States.WAIT;
+        player.setState(WAIT);
     }
 
     /**
@@ -93,7 +92,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                         switch (in.nextLine()) {
                             case "/start":
                                 lobby.startGame();
-                                state = States.PLAY;
+                                player.setState(PLAY);
                                 break;
                             case "/firstMatch":
                                 lobby.setFirstMatch(true);

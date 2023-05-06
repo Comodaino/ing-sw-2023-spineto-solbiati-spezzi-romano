@@ -1,11 +1,13 @@
 package Distributed;
 
 
+import Distributed.RMI.server.ServerImpl;
 import Distributed.ServerSocket.ClientHandlerSocket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -23,13 +25,19 @@ public class ServerApp {
 
     public static void main(String[] args) {
         ServerApp server = new ServerApp(25565);
-        server.startServer();
+
+        try {
+            server.startServer();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void startServer() {
+    public void startServer() throws RemoteException {
         openLobby = new Lobby();
         lobbySet.add(openLobby);
-
+        ServerImpl serverRMI = new ServerImpl(this);
+        serverRMI.start();
         System.out.println("Server ready");
         while (true) {
             new Runnable() {
@@ -69,5 +77,23 @@ public class ServerApp {
     }
     public void removeLobby(Lobby lobby){
         this.lobbySet.remove(lobby);
+    }
+    public String checkNickname(String input){
+        boolean found = true;
+        for(Lobby l: lobbySet){
+            for(RemotePlayer p:  l.getListOfPlayers()){
+                if(p.getNickname().equals(input)){
+                    found = false;
+                    break;
+                }
+            }
+            if(!found) break;
+        }
+        if(found) return input;
+        return null;
+    }
+
+    public void register(Distributed.RMI.client.ClientImpl client) {
+        //TODO IMPL
     }
 }

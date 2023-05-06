@@ -1,6 +1,6 @@
 package Distributed;
 
 public enum ConnectionType {
-    Socket,
+    SOCKET,
     RMI
 }

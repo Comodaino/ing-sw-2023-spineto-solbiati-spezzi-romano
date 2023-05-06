@@ -16,7 +16,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private final SocketPlayer player;
     private final ObjectOutputStream objOut;
     private Scanner in;
-    private Writer out;
+    private PrintWriter out;
     private final Lobby lobby;
 
     public ClientHandlerSocket(Socket socket, Lobby lobby) throws IOException {
@@ -28,16 +28,16 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         this.in = new Scanner(socket.getInputStream());
         this.out = new PrintWriter(socket.getOutputStream());
         lobby.addPlayer(player);
-        run();
     }
 
     /**
      * FSM which executes another method depending on the current state
      */
     public void run() {
+
         try {
-            in.nextLine();
-            out.write("Ready");
+            System.out.println("Handler Ready");
+            out.write("Handler Ready");
             //TODO OUTPUT TO CLIENT IS ONLY FOR DEBUG
             while (!player.getState().equals(CLOSE)) {
                 switch (player.getState()) {
@@ -73,10 +73,14 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      */
     private void initCommand() throws IOException {
         String input;
+        System.out.println("INIT");
         do {
+            System.out.println("Asking for nickname");
             //TODO CHECK SYNCHRONIZED
-            out.write(" .Please insert a unique nickname");
+            out.println("Please insert a unique nickname");
+            out.flush();
             input = in.nextLine();
+            System.out.println("Received " + input);
         } while (!nicknameChecker(input));
         player.setNickname(input);
         player.setState(WAIT);
@@ -87,7 +91,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      * @throws IOException
      */
     private void waitCommand() throws IOException {
-
+        System.out.println("WAIT");
         if (in.hasNextLine()) {
             for (RemotePlayer p : lobby.getListOfPlayers()) {
                 if (p.isOwner() && p.getNickname().equals(player.getNickname())) {

@@ -60,14 +60,13 @@ public class ServerApp {
         while(true) {
             Socket socket = serverSocket.accept();
             socket.getOutputStream().flush();
-            synchronized (lobbySet) {
                 if (!openLobby.isOpen()) {
                     openLobby = new Lobby();
                     lobbySet.add(openLobby);
+                    System.out.println("Created new lobby");
                 }
-                executor.submit(new ClientHandlerSocket(socket, openLobby));
-            }
-            executor.shutdown();
+            executor.submit(new ClientHandlerSocket(socket, openLobby));
+            System.out.println("Passed socket to handler");
         }
 
     }

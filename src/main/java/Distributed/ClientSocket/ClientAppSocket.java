@@ -25,19 +25,16 @@ public class ClientAppSocket {
     public void Connect(){
         try {
             socket = new Socket(ip, port);
-
+            String messageFromServer = null;
             in = new Scanner(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             Scanner stdin = new Scanner(System.in);
-            System.out.println("test");
-            out.write("ok");
-            String messageFromServer = in.nextLine();
-            System.out.println("test");
-            System.out.println("Message from server " + messageFromServer);
 
             try {
                 boolean spin = true;
                 while (spin) {
+                    messageFromServer = in.nextLine();
+                    System.out.println("Received " + messageFromServer);
                     switch (messageFromServer) {
                         case "/init":
                             System.out.println(in.nextLine());

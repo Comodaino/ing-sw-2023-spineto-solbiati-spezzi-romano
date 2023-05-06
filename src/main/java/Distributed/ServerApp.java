@@ -42,12 +42,6 @@ public class ServerApp {
                 }
 
             };
-            new Runnable() {
-                public void run() {
-                    RMIDistributor();
-                }
-
-            };
         }
 
     }
@@ -75,7 +69,5 @@ public class ServerApp {
     }
     public void removeLobby(Lobby lobby){
         this.lobbySet.remove(lobby);
-    }
-    public void RMIDistributor() {//TODO IMPLEMENT
     }
 }

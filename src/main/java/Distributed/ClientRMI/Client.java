@@ -1,6 +1,5 @@
 package Distributed.ClientRMI;
-
-import Distributed.RMI.server.Server;
+import Distributed.ServerApp;
 
 import java.rmi.*;
 
@@ -10,7 +9,7 @@ public interface Client extends Remote {
      * connected to the server
      * @param server the server the client connects to
      */
-    public String setNickname(Server server) throws RemoteException;
+    public String setNickname(ServerApp server) throws RemoteException;
     public String getNickname() throws RemoteException;
     public void setIDs(Integer clientID, Integer lobbyID) throws RemoteException;
 }

@@ -88,7 +88,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
 
         if (in.hasNextLine()) {
             for (RemotePlayer p : lobby.getListOfPlayers()) {
-                if (p.isChair() && p.getNickname().equals(player.getNickname())) {
+                if (p.isOwner() && p.getNickname().equals(player.getNickname())) {
                     synchronized (lobby) {
                         switch (in.nextLine()) {
                             case "/start":

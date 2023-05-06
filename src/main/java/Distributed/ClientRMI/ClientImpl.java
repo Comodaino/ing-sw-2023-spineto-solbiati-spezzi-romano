@@ -1,6 +1,6 @@
 package Distributed.RMI.client;
-
-import Distributed.RMI.server.Server;
+import Distributed.ClientRMI.Client;
+import Distributed.ServerApp;
 
 import java.rmi.*;
 import java.rmi.server.*;
@@ -29,7 +29,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public String setNickname(Server server) throws RemoteException{
+    public String setNickname(ServerApp server) throws RemoteException{
         String nickname = null;
         boolean found = false;
 
@@ -50,9 +50,9 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     public void doJob(String serverHost) throws Exception {
-        Server server;
+        ServerApp server;
         // take a reference of the server from the registry
-        server = (Server) Naming.lookup("rmi://" + serverHost + "/Server");
+        server = (ServerApp) Naming.lookup("rmi://" + serverHost + "/Server");
         // join
         server.register(this);
         // main loop [...]

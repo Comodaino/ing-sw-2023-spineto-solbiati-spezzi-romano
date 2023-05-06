@@ -51,7 +51,7 @@ public class GameController implements Observer {
     private void serverUpdater() throws IOException {
         for(Player p: pl){
             if(p.getRemotePlayer().getType().equals(ConnectionType.Socket)) p.getRemotePlayer().update();
-            if(p.getRemotePlayer().getType().equals(ConnectionType.Socket)) //TODO IMPLEMENT ONCE RMI IS DONE
+            //if(p.getRemotePlayer().getType().equals(ConnectionType.Socket)) //TODO IMPLEMENT ONCE RMI IS DONE
         }
     }
     //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view

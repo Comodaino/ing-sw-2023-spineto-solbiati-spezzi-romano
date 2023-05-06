@@ -1,16 +1,10 @@
 package Distributed.RMI.server;
-
-import Controller.GameController;
-import Controller.GameControllerSocket;
+import Distributed.ClientRMI.Client;
 import Distributed.Lobby;
-import Distributed.RMI.client.Client;
 import Distributed.RemoteHandler;
 import Distributed.RemotePlayer;
-import Model.Board;
-import Model.Player;
+import Distributed.ServerRMI.Server;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.*;
 import java.rmi.*;
 import java.rmi.server.*;
@@ -76,7 +70,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     @Override
     public void update(RemoteHandler o, Object arg) throws RemoteException { //TODO ClientHandlerRMI instead of RemoteHandler
-        o.getGameController().update(o, arg);
+        //TODO o.getGameController().update(o, arg);
     }
 
     @Override

@@ -30,28 +30,18 @@ public class ServerApp {
             server.startServer();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void startServer() throws RemoteException {
+    public void startServer() throws IOException {
         openLobby = new Lobby();
         lobbySet.add(openLobby);
         ServerImpl serverRMI = new ServerImpl(this);
         serverRMI.start();
         System.out.println("Server ready");
-        while (true) {
-            new Runnable() {
-                public void run() {
-                    try {
-                        socketAccepter();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-            };
-        }
-
+        socketAccepter();
     }
 
     public void socketAccepter() throws IOException {
@@ -65,15 +55,21 @@ public class ServerApp {
         }
         System.out.println("Server socket ready");
         //Accepts new players and creates another lobby if it's full
-        Socket socket = serverSocket.accept();
-        synchronized (lobbySet) {
-            if(!openLobby.isOpen()){
-                openLobby = new Lobby();
-                lobbySet.add(openLobby);
+
+
+        while(true) {
+            Socket socket = serverSocket.accept();
+            socket.getOutputStream().flush();
+            synchronized (lobbySet) {
+                if (!openLobby.isOpen()) {
+                    openLobby = new Lobby();
+                    lobbySet.add(openLobby);
+                }
+                executor.submit(new ClientHandlerSocket(socket, openLobby));
             }
-            executor.submit(new ClientHandlerSocket(socket,openLobby));
+            executor.shutdown();
         }
-        executor.shutdown();
+
     }
     public void removeLobby(Lobby lobby){
         this.lobbySet.remove(lobby);

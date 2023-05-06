@@ -22,16 +22,18 @@ public class ClientAppSocket {
     public ClientAppSocket(int port){
         this.port = port;
     }
-    public void Connect() throws IOException {
+    public void Connect(){
         try {
             socket = new Socket(ip, port);
 
             in = new Scanner(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             Scanner stdin = new Scanner(System.in);
-
+            System.out.println("test");
+            out.write("ok");
             String messageFromServer = in.nextLine();
-            System.out.println("Message from server "+messageFromServer);
+            System.out.println("test");
+            System.out.println("Message from server " + messageFromServer);
 
             try {
                 boolean spin = true;
@@ -57,6 +59,7 @@ public class ClientAppSocket {
                             in.close();
                             out.close();
                             socket.close();
+                        default: break;
                     }
                 }
             }

@@ -28,6 +28,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         this.in = new Scanner(socket.getInputStream());
         this.out = new PrintWriter(socket.getOutputStream());
         lobby.addPlayer(player);
+        run();
     }
 
     /**
@@ -35,8 +36,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      */
     public void run() {
         try {
+            in.nextLine();
+            out.write("Ready");
             //TODO OUTPUT TO CLIENT IS ONLY FOR DEBUG
-            while (player.getState().equals(CLOSE)) {
+            while (!player.getState().equals(CLOSE)) {
                 switch (player.getState()) {
                     case INIT:
                         out.write("/init");

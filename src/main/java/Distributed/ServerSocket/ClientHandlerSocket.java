@@ -1,11 +1,13 @@
 package Distributed.ServerSocket;
 
-import Distributed.*;
+import Distributed.ConnectionType;
+import Distributed.Lobby;
+import Distributed.RemoteHandler;
+import Distributed.RemotePlayer;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -37,24 +39,26 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
 
         try {
             System.out.println("Handler Ready");
-            out.write("Handler Ready");
+            out.println("Handler Ready");
             //TODO OUTPUT TO CLIENT IS ONLY FOR DEBUG
             while (!player.getState().equals(CLOSE)) {
                 switch (player.getState()) {
                     case INIT:
-                        out.write("/init");
+                        out.println("Please insert a unique nickname");
+                        out.println("/init");
+                        out.flush();
                         initCommand();
                         break;
                     case WAIT:
-                        out.write("/wait");
+                        out.println("/wait");
                         waitCommand();
                         break;
                     case PLAY:
-                        out.write("/play");
+                        out.println("/play");
                         playCommand();
                         break;
                     case END:
-                        out.write("/end");
+                        out.println("/end");
                         endCommand();
                         break;
                 }
@@ -74,14 +78,18 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private void initCommand() throws IOException {
         String input;
         System.out.println("INIT");
-        do {
+
+        input = in.nextLine();
+        System.out.println("Received " + input);
+        while(!nicknameChecker(input)){
             System.out.println("Asking for nickname");
-            //TODO CHECK SYNCHRONIZED
-            out.println("Please insert a unique nickname");
+            out.println("Please retry to insert a unique nickname");
+            out.println("/init");
             out.flush();
             input = in.nextLine();
             System.out.println("Received " + input);
-        } while (!nicknameChecker(input));
+        }
+        System.out.println("All good, the player has been created ");
         player.setNickname(input);
         player.setState(WAIT);
     }
@@ -126,7 +134,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      */
 
     public void playCommand() throws IOException {
-        out.write("Play a command, all commands should start with /");
+        out.println("Play a command, all commands should start with /");
         gameController.update(this, in.nextLine());
     }
     public RemotePlayer getPlayer() {

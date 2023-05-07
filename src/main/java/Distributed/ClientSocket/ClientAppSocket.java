@@ -3,10 +3,12 @@ package Distributed.ClientSocket;
 import Distributed.Lobby;
 import Model.BoardView;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,6 +19,7 @@ public class ClientAppSocket {
     private Scanner in;
     private PrintWriter out;
     private BoardView boardView;
+    private final String address = "127.0.0.1";
     ObjectInputStream objIn;
 
     public ClientAppSocket(int port) {
@@ -30,17 +33,11 @@ public class ClientAppSocket {
 
     public void Connect() throws IOException {
         try {
+            socket = new Socket(address, port);
             objIn = new ObjectInputStream(socket.getInputStream());
-            lobbyList = new ArrayList<Lobby>();
-            lobbyList.add(new Lobby());
-
-            socket = new Socket(lobbyList.toString(), port);
-
             in = new Scanner(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             Scanner stdin = new Scanner(System.in);
-
-
 
             try {
                 boolean spin = true;
@@ -49,15 +46,13 @@ public class ClientAppSocket {
                     System.out.println("Message from server " + messageFromServer);
                     switch (messageFromServer) {
                         case "/init":
-                            System.out.println(in.nextLine());
-                            String nickname = stdin.nextLine();
-                            out.println(nickname);
+                            out.println(stdin.nextLine());
                             out.flush();
                             break;
                         case "/wait":
                             break;
                         case "/play":
-                            System.out.println(in.nextLine());
+                            System.out.println("play the next move");
                             out.println(stdin.nextLine());
                             out.flush();
                             break;

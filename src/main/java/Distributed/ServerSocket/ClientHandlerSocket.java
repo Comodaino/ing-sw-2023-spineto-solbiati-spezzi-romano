@@ -50,10 +50,12 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                         initCommand();
                         break;
                     case WAIT:
+                        System.out.println("WAIT");
                         out.println("/wait");
                         waitCommand();
                         break;
                     case PLAY:
+                        System.out.println("PLAY");
                         out.println("/play");
                         playCommand();
                         break;

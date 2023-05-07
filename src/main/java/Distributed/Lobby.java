@@ -16,11 +16,13 @@ public class Lobby {
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
-    public Lobby(){
+    private ServerApp server;
+    public Lobby(ServerApp server){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.serialNumber = null;
         this.open = true;
+        this.server = server;
     }
 
     /**
@@ -76,6 +78,7 @@ public class Lobby {
         for(RemotePlayer p: lp){
             p.getHandler().setState(CLOSE);
         }
+        server.removeLobby(this);
     }
     public Object getBoardView() {
         return boardView;

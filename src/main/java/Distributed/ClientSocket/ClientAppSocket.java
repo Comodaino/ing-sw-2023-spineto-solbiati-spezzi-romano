@@ -47,6 +47,7 @@ public class ClientAppSocket {
             try {
                 boolean spin = true;
                 while (spin) {
+                    System.out.println("Waiting for response from server");
                     String messageFromServer = in.nextLine();
                     System.out.println("Message from server " + messageFromServer);
                     switch (messageFromServer) {
@@ -96,20 +97,9 @@ public class ClientAppSocket {
     }
 
     private void waitCommand() {
-        if(firstWait){
-            firstWait = false;
-            new Runnable(){
-                @Override
-                public void run() {
-                    while(state == States.WAIT){
-                        out.println(stdIn.nextLine());
-                        out.flush();
-                    }
-                }
-            };
+        if(in.nextLine().equals("/true")){
+            out.println(stdIn.nextLine());
+            out.flush();
         }
-
     }
-
-
 }

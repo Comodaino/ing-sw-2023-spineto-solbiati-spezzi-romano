@@ -68,6 +68,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -102,37 +104,29 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      *
      * @throws IOException
      */
-    private void waitCommand() throws IOException {
+    private void waitCommand() throws IOException, InterruptedException {
         System.out.println("WAIT");
         out.println("/wait");
-        if(firstWait) {
-            firstWait = false;
-            new Runnable() {
-                public void run() {
-                    if (in.hasNextLine()) {
-                        if (player.isOwner()) {
-                            switch (in.nextLine()) {
-                                case "/start":
-                                    lobby.startGame();
-                                    player.setState(PLAY);
-                                    break;
-                                case "/firstMatch":
-                                    lobby.setFirstMatch(true);
-                                    break;
-                                case "/notFirstMatch":
-                                    lobby.setFirstMatch(false);
-                                    break;
-                                case "/closeLobby":
-                                    lobby.close();
-                                    break;
-                            }
-                        } else {
-                            out.write("Wait for owner player to start the match");
-                        }
-                    }
-                }
-
-            };
+        out.flush();
+        if (player.isOwner()) out.println("/true");
+        else out.println("/false");
+        out.flush();
+        if (player.isOwner()) {
+            switch (in.nextLine()) {
+                case "/start":
+                    lobby.startGame();
+                    player.setState(PLAY);
+                    break;
+                case "/firstMatch":
+                    lobby.setFirstMatch(true);
+                    break;
+                case "/notFirstMatch":
+                    lobby.setFirstMatch(false);
+                    break;
+                case "/closeLobby":
+                    lobby.close();
+                    break;
+            }
         }
     }
 
@@ -158,7 +152,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      */
     public void update() {
         try {
-            out.write("/update");
+            out.println("/update");
             objOut.writeObject(lobby.getBoardView());
         } catch (IOException e) {
             throw new RuntimeException(e);

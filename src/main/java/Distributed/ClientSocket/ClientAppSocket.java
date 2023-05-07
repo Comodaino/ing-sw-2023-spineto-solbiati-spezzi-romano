@@ -1,6 +1,7 @@
 package Distributed.ClientSocket;
 
 import Distributed.Lobby;
+import Distributed.States;
 import Model.BoardView;
 
 import java.io.IOException;
@@ -20,10 +21,14 @@ public class ClientAppSocket {
     private PrintWriter out;
     private BoardView boardView;
     private final String address = "127.0.0.1";
+    private final Scanner stdIn = new Scanner(System.in);
+    private boolean firstWait;
+    private States state;
     ObjectInputStream objIn;
 
     public ClientAppSocket(int port) {
         this.port = port;
+        firstWait = true;
     }
 
     public static void main(String[] args) throws IOException {
@@ -37,7 +42,7 @@ public class ClientAppSocket {
             objIn = new ObjectInputStream(socket.getInputStream());
             in = new Scanner(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-            Scanner stdin = new Scanner(System.in);
+
 
             try {
                 boolean spin = true;
@@ -46,23 +51,27 @@ public class ClientAppSocket {
                     System.out.println("Message from server " + messageFromServer);
                     switch (messageFromServer) {
                         case "/init":
-                            out.println(stdin.nextLine());
+                            state = States.INIT;
+                            out.println(stdIn.nextLine());
                             out.flush();
                             break;
                         case "/wait":
+                            state = States.WAIT;
                             System.out.println("we are in wait");
-                                out.println(stdin.nextLine());
-                                out.flush();
+                            waitCommand();
                             break;
                         case "/play":
+                            state = States.PLAY;
                             System.out.println("play the next move");
-                            out.println(stdin.nextLine());
+                            out.println(stdIn.nextLine());
                             out.flush();
                             break;
                         case "/end":
+                            state = States.END;
                             System.out.println("Game over");
                             break;
                         case "/close":
+                            state = States.CLOSE;
                             spin = false;
                             in.close();
                             out.close();
@@ -84,6 +93,22 @@ public class ClientAppSocket {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void waitCommand() {
+        if(firstWait){
+            firstWait = false;
+            new Runnable(){
+                @Override
+                public void run() {
+                    while(state == States.WAIT){
+                        out.println(stdIn.nextLine());
+                        out.flush();
+                    }
+                }
+            };
+        }
+
     }
 
 

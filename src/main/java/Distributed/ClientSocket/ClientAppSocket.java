@@ -50,6 +50,9 @@ public class ClientAppSocket {
                             out.flush();
                             break;
                         case "/wait":
+                            System.out.println("we are in wait");
+                                out.println(stdin.nextLine());
+                                out.flush();
                             break;
                         case "/play":
                             System.out.println("play the next move");
@@ -71,8 +74,7 @@ public class ClientAppSocket {
                             //TODO IMPLEMENT update();
                             break;
                     }
-
-
+                    System.out.println("end of current cycle");
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

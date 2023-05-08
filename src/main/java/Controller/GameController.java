@@ -2,6 +2,7 @@ package Controller;
 
 import Distributed.ConnectionType;
 import Distributed.ServerSocket.ClientHandlerSocket;
+import Distributed.States;
 import Model.Board;
 import Model.BoardView;
 import Model.CommonGoals.CommonGoal;
@@ -132,6 +133,7 @@ public class GameController implements Observer {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                 donePlayers.add(currentPlayer);
+                currentPlayer.getRemotePlayer().setState(States.END);
             }
         }
     }

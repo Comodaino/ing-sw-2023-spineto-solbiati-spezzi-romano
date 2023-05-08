@@ -17,6 +17,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private final Lobby lobby;
     private Scanner in;
     private PrintWriter out;
+    private Object lock;
 
     public ClientHandlerSocket(Socket socket, Lobby lobby, ServerApp serverApp) throws IOException {
         this.socket = socket;
@@ -101,6 +102,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             System.out.println("Nickname is available");
             player.setNickname(input);
             player.setState(WAIT);
+            out.println("/wait");
+            out.flush();
         } else System.out.println("Nickname not available");
     }
 
@@ -116,6 +119,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                 case "/start":
                     lobby.startGame();
                     player.setState(PLAY);
+                    out.println("/play");
+                    out.flush();
                     break;
                 case "/firstMatch":
                     lobby.setFirstMatch(true);
@@ -136,9 +141,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      * @throws IOException
      */
 
-    public void playCommand(String input) throws IOException {
-        out.println("Play a command, all commands should start with /");
-        out.flush();
+    public void playCommand(String input){
+        System.out.println("Received command: " + input);
         gameController.update(this, input);
     }
 
@@ -152,9 +156,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             System.out.println("RECEIVED " + input);
             if(input.charAt(0)=='/') {
                 switch (player.getState()) {
-                    case INIT:
-                        initCommand(input);
-                        break;
                     case WAIT:
                         waitCommand(input);
                         break;
@@ -164,7 +165,9 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                         endCommand();
                 }
             }else{
-                lobby.sendMessage(player, input);
+                if(player.getState().equals(INIT)){
+                    initCommand(input);
+                }else lobby.sendMessage(player, input);
             }
             System.out.println(player.getState());
             notifyAll();
@@ -172,7 +175,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     }
 
     public synchronized void outputHandler() throws InterruptedException {
+        out.println("/init");
+        out.flush();
         while (!player.getState().equals(CLOSE)) {
+            this.wait();
             switch (player.getState()) {
                 case INIT:
                     out.println("/init");
@@ -192,7 +198,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                     out.flush();
                     break;
             }
-            this.wait();
         }
     }
 }

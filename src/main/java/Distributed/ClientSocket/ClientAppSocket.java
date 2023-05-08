@@ -23,7 +23,7 @@ public class ClientAppSocket {
     private final String address = "127.0.0.1";
     private final Scanner stdIn = new Scanner(System.in);
     private States state;
-    ObjectInputStream objIn;
+    private ObjectInputStream objIn;
 
     public ClientAppSocket(int port) {
         this.port = port;
@@ -78,11 +78,10 @@ public class ClientAppSocket {
             if (state == States.INIT) System.out.println("Insert a unique nickname");
             out.println(stdIn.nextLine());
             out.flush();
-            this.wait();
         }
     }
 
-    public synchronized void inputHandler() throws InterruptedException {
+    public void inputHandler() throws InterruptedException {
         while (state!=States.CLOSE) {
             System.out.println("input");
             String input = in.nextLine();
@@ -110,7 +109,6 @@ public class ClientAppSocket {
                 String[] message = input.split(" ", 2);
                 System.out.print("[" + message[0] + "]: " + message[1]);
             }
-            this.notifyAll();
         }
     }
 }

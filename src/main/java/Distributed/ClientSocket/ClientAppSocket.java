@@ -41,7 +41,7 @@ public class ClientAppSocket {
         in = new Scanner(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         if (in.nextLine().equals("ready")) System.out.println("Client starting");
-        new Runnable() {
+        Thread th1 = new Thread() {
             @Override
             public void run() {
                 try {
@@ -51,7 +51,7 @@ public class ClientAppSocket {
                 }
             }
         };
-        new Runnable() {
+        Thread th2 = new Thread() {
             @Override
             public void run() {
                 try {
@@ -62,6 +62,8 @@ public class ClientAppSocket {
             }
         };
         System.out.println("Handlers created");
+        th1.start();
+        th2.start();
         while (state != States.CLOSE) {
             TimeUnit.SECONDS.sleep(1);
         }
@@ -70,18 +72,21 @@ public class ClientAppSocket {
 
     }
 
-    public void outputHandler() throws InterruptedException {
-        while (true) {
+    public synchronized void outputHandler() throws InterruptedException {
+        while (state!=States.CLOSE) {
+            System.out.println("output");
             if (state == States.INIT) System.out.println("Insert a unique nickname");
             out.println(stdIn.nextLine());
             out.flush();
-            TimeUnit.SECONDS.sleep(1);
+            this.wait();
         }
     }
 
-    public void inputHandler() throws InterruptedException {
-        while (true) {
+    public synchronized void inputHandler() throws InterruptedException {
+        while (state!=States.CLOSE) {
+            System.out.println("input");
             String input = in.nextLine();
+            System.out.println("RECEIVED: " + input);
             if (input.charAt(0) == '/') {
                 switch (input) {
                     case "/init":
@@ -105,7 +110,7 @@ public class ClientAppSocket {
                 String[] message = input.split(" ", 2);
                 System.out.print("[" + message[0] + "]: " + message[1]);
             }
-            TimeUnit.SECONDS.sleep(1);
+            this.notifyAll();
         }
     }
 }

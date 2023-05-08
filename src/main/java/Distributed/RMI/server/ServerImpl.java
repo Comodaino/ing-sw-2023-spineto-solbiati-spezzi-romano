@@ -6,10 +6,12 @@ import Distributed.Lobby;
 import Distributed.RMI.client.Client;
 import Distributed.RemoteHandler;
 import Distributed.RemotePlayer;
+import Distributed.ServerSocket.States;
 import Model.Board;
 import Model.Player;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.*;
 import java.rmi.*;
@@ -110,6 +112,18 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         }
         client.printMsg("You cannot close the lobby because you're not the owner");
         return false;
+    }
+
+    @Override
+    public void waitCommand(Client client) throws RemoteException {
+    }
+
+    @Override
+    public void playCommand(Client client) throws RemoteException {
+    }
+
+    @Override
+    public void endCommand(Client client) throws RemoteException {
     }
 
     public static void main(String args[]) throws Exception {

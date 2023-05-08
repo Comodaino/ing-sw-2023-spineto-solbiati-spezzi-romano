@@ -83,15 +83,15 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                         case "/firstMatch":
                             lobby.setFirstMatch(true);
                             break;
-                        case "/notfirstMatch":
+                        case "/notFirstMatch":
                             lobby.setFirstMatch(false);
                             break;
-                        case "/closelobby":
+                        case "/closeLobby":
                             lobby.close();
                             break;
                     }
                 } else {
-                    out.write("Wait for chair player to start the match");
+                    out.write("Wait for lobby owner to start the match");
                 }
             }
         }

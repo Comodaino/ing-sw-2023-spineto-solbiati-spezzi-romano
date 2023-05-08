@@ -38,4 +38,8 @@ public interface Server extends Remote {
      * @param client the client who is trying to close the lobby
      */
     public boolean closeLobby(Client client) throws RemoteException;
+
+    public void waitCommand(Client client) throws RemoteException;
+    public void playCommand(Client client) throws RemoteException;
+    public void endCommand(Client client) throws RemoteException;
 }

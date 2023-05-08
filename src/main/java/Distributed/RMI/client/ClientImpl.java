@@ -1,7 +1,9 @@
 package Distributed.RMI.client;
 
 import Distributed.RMI.server.Server;
+import Distributed.ServerSocket.States;
 
+import java.io.IOException;
 import java.rmi.*;
 import java.rmi.server.*;
 import java.util.Scanner;
@@ -10,6 +12,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     private String nickname;
     private Integer clientID; //maybe it is not necessary because the nickname is already unique
     private Integer lobbyID;
+    private States state;
 
     public ClientImpl() throws RemoteException {
         nickname = null;
@@ -64,25 +67,59 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         System.out.println(message);
     }
 
-    public void doJob(String serverHost) throws Exception {
-        Server server;
+    public void run(String serverHost) throws Exception {
+        Server server = null;
         // take a reference of the server from the registry
         server = (Server) Naming.lookup("rmi://" + serverHost + "/Server");
+
         // join
         server.register(this);
+
         // main loop
         while(true){
-            Scanner scanIn = new Scanner(System.in);
-            if(scanIn.nextLine().equals("/closeLobby")){
-                server.closeLobby(this);
-            }
 
+            /* try {
+                while (!state.equals(States.CLOSE)){
+                    switch (state) {
+                        case WAIT:
+                            server.waitCommand(this);
+                            break;
+                        case PLAY:
+                            server.playCommand(this);
+                            break;
+                        case END:
+                            server.endCommand(this);
+                            break;
+                    }
+                }
+            } catch (IOException e){
+                System.err.println(e.getMessage());
+            } */
+
+            Scanner scanIn = new Scanner(System.in);
+            switch (scanIn.nextLine()) {
+                case "/closeLobby":
+                    server.closeLobby(this);
+                    break;
+                case "/leave":
+                    server.leave(this);
+                    return;
+            }
         }
-        //server.leave(this);
     }
 
-    public static void main(String args[]) throws Exception {
-        ClientImpl client = new ClientImpl();
-        client.doJob("localhost");
+    public static void main(String args[]) {
+        ClientImpl client = null;
+        try {
+            client = new ClientImpl();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            client.run("localhost");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,117 +1,161 @@
 package Distributed.ServerSocket;
 
-import Controller.GameControllerSocket;
-import Distributed.HandlersType;
-import Distributed.Lobby;
-import Distributed.RemoteHandler;
-import Distributed.RemotePlayer;
+import Distributed.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.Socket;
 import java.util.Scanner;
 
-//TODO CREATE A CUSTOM HANDLER FOR CHAIR
+import static Distributed.States.*;
+
 public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private final Socket socket;
     private final SocketPlayer player;
-    private Scanner in;
-    private Writer out;
-    private GameControllerSocket gameController;
     private final ObjectOutputStream objOut;
+    private final Lobby lobby;
+    private Scanner in;
+    private PrintWriter out;
+    private boolean firstWait;
 
-    public ClientHandlerSocket(Socket socket, Lobby lobby) throws IOException {
+    public ClientHandlerSocket(Socket socket, Lobby lobby, ServerApp serverApp) throws IOException {
         this.socket = socket;
-        this.state = States.INIT;
         this.lobby = lobby;
-        this.type = HandlersType.Socket;
-        this.player = new SocketPlayer(socket, this);
+        this.serverApp = serverApp;
+        this.type = ConnectionType.SOCKET;
+        this.player = new SocketPlayer(socket, this, ConnectionType.SOCKET);
         this.objOut = new ObjectOutputStream(socket.getOutputStream());
         this.in = new Scanner(socket.getInputStream());
         this.out = new PrintWriter(socket.getOutputStream());
+        this.firstWait = true;
         lobby.addPlayer(player);
     }
 
+    /**
+     * FSM which executes another method depending on the current state
+     */
     public void run() {
+
         try {
+            System.out.println("Handler Ready");
+            out.println("Handler Ready");
             //TODO OUTPUT TO CLIENT IS ONLY FOR DEBUG
-            while (!state.equals(States.CLOSE)) {
-                switch (state) {
+            while (!player.getState().equals(CLOSE)) {
+                switch (player.getState()) {
                     case INIT:
+                        out.println("Please insert a unique nickname");
+                        out.println("/init");
+                        out.flush();
                         initCommand();
                         break;
                     case WAIT:
                         waitCommand();
                         break;
                     case PLAY:
+                        System.out.println("PLAY");
+                        out.println("/play");
                         playCommand();
                         break;
                     case END:
+                        out.println("/end");
                         endCommand();
                         break;
                 }
             }
+            out.write("/close");
             in.close();
             socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
-    //TODO SERVER MUST CALL CLIENTS UPDATE
 
+    /**
+     * Asks the socket to write a nickname, repeats the operation if the nickname is already used
+     *
+     * @throws IOException
+     */
     private void initCommand() throws IOException {
         String input;
-        do {
-            out.write("Please insert a unique nickname");
-            input = in.nextLine();
-        } while (!nicknameChecker(input));
+        System.out.println("INIT");
+
+        input = in.nextLine();
+        System.out.println("Received " + input);
+        if (!nicknameChecker(input)) {
+            while (!nicknameChecker(input)) {
+                System.out.println("Asking for nickname");
+                out.println("Please retry to insert a unique nickname");
+                out.println("/init");
+                out.flush();
+                input = in.nextLine();
+                System.out.println("Received " + input);
+            }
+        }
+        System.out.println("All good, the player has been created ");
         player.setNickname(input);
-        state = States.WAIT;
+        player.setState(WAIT);
     }
 
-    private void waitCommand() throws IOException {
-        if(in.hasNextLine()) {
-            for (RemotePlayer p : lobby.getListOfPlayers()) {
-                if (p.isChair() && p.getNickname().equals(player.getNickname())) {
-                    switch (in.nextLine()) {
-                        case "/start":
-                            lobby.startGame();
-                            state = States.PLAY;
-                            break;
-                        case "/firstMatch":
-                            lobby.setFirstMatch(true);
-                            break;
-                        case "/notfirstMatch":
-                            lobby.setFirstMatch(false);
-                            break;
-                        case "/closelobby":
-                            lobby.close();
-                            break;
-                    }
-                } else {
-                    out.write("Wait for chair player to start the match");
-                }
+    /**
+     * filters all input coming from non-chair members of the lobby, the lobby-chair can start the match, close the lobby or set the match as "FIrst Match"
+     *
+     * @throws IOException
+     */
+    private void waitCommand() throws IOException, InterruptedException {
+        System.out.println("WAIT");
+        out.println("/wait");
+        out.flush();
+        if (player.isOwner()) out.println("/true");
+        else out.println("/false");
+        out.flush();
+        if (player.isOwner()) {
+            switch (in.nextLine()) {
+                case "/start":
+                    lobby.startGame();
+                    player.setState(PLAY);
+                    break;
+                case "/firstMatch":
+                    lobby.setFirstMatch(true);
+                    break;
+                case "/notFirstMatch":
+                    lobby.setFirstMatch(false);
+                    break;
+                case "/closeLobby":
+                    lobby.close();
+                    break;
             }
         }
     }
 
+    /**
+     * fetches the input from the socket and redirects it to the controller using update()
+     *
+     * @throws IOException
+     */
+
     public void playCommand() throws IOException {
-        out.write("Play a command, all commands should start with /");
+        out.println("Play a command, all commands should start with /");
         gameController.update(this, in.nextLine());
-
-
-        //TODO THIS SHOULD SEND THE SERIALIZED MODELVIEW
-        out.write("/update");
-        objOut.writeObject(lobby.getBoardView());
-
     }
-    public void initPlayer() {
-        String line = in.nextLine();
-    }
+
     public RemotePlayer getPlayer() {
         return player;
     }
 
+    /**
+     * writes the serializble ModelView to the client's socket
+     *
+     * @throws IOException
+     */
+    public void update() {
+        try {
+            out.println("/update");
+            objOut.writeObject(lobby.getBoardView());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

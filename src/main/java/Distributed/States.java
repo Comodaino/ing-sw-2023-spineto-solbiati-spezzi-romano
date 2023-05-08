@@ -1,4 +1,4 @@
-package Distributed.ServerSocket;
+package Distributed;
 
 public enum States {
     INIT,

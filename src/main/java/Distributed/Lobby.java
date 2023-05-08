@@ -1,17 +1,12 @@
 package Distributed;
 
-import Controller.GameControllerSocket;
-import Distributed.ServerSocket.SocketPlayer;
-import Distributed.ServerSocket.States;
+import Controller.GameController;
 import Model.BoardView;
 import Model.Player;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Distributed.ServerSocket.States.CLOSE;
-import static Distributed.ServerSocket.States.END;
 
 public class Lobby {
     private final List<RemotePlayer> lp;
@@ -19,6 +14,7 @@ public class Lobby {
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
+    private GameController controller;
     public Lobby(){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
@@ -62,28 +58,28 @@ public class Lobby {
         List<Player> modelPlayerList = new ArrayList<Player>();
         //TODO NEED TO DECIDE BETWEEN TWO CONTROLLERS OR ONE
         for(RemotePlayer p: lp){
-            Player tmpPlayer = new Player(p.getNickname(),p.isChair(), p);
+            Player tmpPlayer = new Player(p.getNickname(),p.isOwner(), p);
             modelPlayerList.add(tmpPlayer);
             p.setModelPlayer(tmpPlayer);
-            p.getHandler().setState(States.PLAY);
+            p.setState(States.PLAY);
         }
-        GameControllerSocket tmpControllerSocket = new GameControllerSocket(modelPlayerList, firstMatch);
+        controller = new GameController(modelPlayerList, firstMatch);
         //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp) {
-            if (p.getHandler().getType().equals(HandlersType.Socket))
-                p.getHandler().setGameController(tmpControllerSocket);
+            if (p.getType().equals(ConnectionType.SOCKET))
+                p.setController(controller);
             //TODO else p.getHandler().setGameController(tmpControllerRMI);
         }
-        boardView = tmpControllerSocket.getBoardView();
+        boardView = controller.getBoardView();
     }
     public void endMatch() {
         for(RemotePlayer p: lp){
-            p.getHandler().setState(END);
+            p.setState(States.END);
         }
     }
     public void close() {
         for(RemotePlayer p: lp){
-            p.getHandler().setState(CLOSE);
+            p.setState(States.CLOSE);
         }
     }
 

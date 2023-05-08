@@ -1,16 +1,8 @@
 package Distributed.RMI.server;
+import Distributed.*;
+import Distributed.ClientRMI.Client;
+import Distributed.ServerRMI.Server;
 
-import Controller.GameController;
-import Controller.GameControllerSocket;
-import Distributed.Lobby;
-import Distributed.RMI.client.Client;
-import Distributed.RemoteHandler;
-import Distributed.RemotePlayer;
-import Model.Board;
-import Model.Player;
-
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.*;
 import java.rmi.*;
 import java.rmi.server.*;
@@ -19,9 +11,12 @@ import java.rmi.registry.*;
 //TODO check synchronization
 public class ServerImpl extends UnicastRemoteObject implements Server {
     private List<Lobby> lobbies;
+    private ServerApp serverApp;
 
-    public ServerImpl() throws RemoteException {
+    public ServerImpl(ServerApp serverApp) throws RemoteException {
         this.lobbies = new ArrayList<>();
+        this.serverApp = serverApp;
+
     }
 
     public void start() {
@@ -41,8 +36,8 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public void register(Client client) throws RemoteException {
         //Creates a new RemotePlayer and sets its nickname, asking it to the client
-        RemotePlayer rp = new RemotePlayer(); //TODO: check the constructor
-        String nickname = client.setNickname(this);
+        RemotePlayer rp = new RemotePlayer(ConnectionType.RMI); //TODO: check the constructor
+        String nickname = client.setNickname(serverApp);
         rp.setNickname(nickname);
 
         synchronized (lobbies){
@@ -76,7 +71,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     @Override
     public void update(RemoteHandler o, Object arg) throws RemoteException { //TODO ClientHandlerRMI instead of RemoteHandler
-        o.getGameController().update(o, arg);
+        //TODO o.getGameController().update(o, arg);
     }
 
     @Override
@@ -93,10 +88,5 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         }
         System.out.println("OK");
         return nickname;
-    }
-
-    public static void main(String args[]) throws Exception {
-        ServerImpl server = new ServerImpl();
-        server.start();
     }
 }

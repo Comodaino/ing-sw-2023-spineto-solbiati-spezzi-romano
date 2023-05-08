@@ -74,7 +74,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private void waitCommand() throws IOException {
         if(in.hasNextLine()) {
             for (RemotePlayer p : lobby.getListOfPlayers()) {
-                if (p.isChair() && p.getNickname().equals(player.getNickname())) {
+                if (p.isOwner() && p.getNickname().equals(player.getNickname())) {
                     switch (in.nextLine()) {
                         case "/start":
                             lobby.startGame();

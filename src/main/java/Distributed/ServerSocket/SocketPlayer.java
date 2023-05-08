@@ -19,4 +19,10 @@ public class SocketPlayer extends RemotePlayer {
     public Socket getSocket() {
         return socket;
     }
+
+    @Override
+    public void setClientID(Integer ID) {}
+
+    @Override
+    public Integer getClientID() { return null; }
 }

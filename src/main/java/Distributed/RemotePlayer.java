@@ -1,16 +1,12 @@
 package Distributed;
 
-import Distributed.RMI.server.ClientHandlerRMI;
 import Model.Player;
 
-import java.io.Serializable;
-
-//TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
-public class RemotePlayer {
+public abstract class RemotePlayer {
     protected RemoteHandler remoteHandler;
     private Player modelPlayer;
     private String nickname;
-    private boolean chair;
+    private boolean owner;
 
     public RemotePlayer(){
         modelPlayer = new Player("Nico", true, null);
@@ -25,16 +21,12 @@ public class RemotePlayer {
         return nickname;
     }
 
-    public void setAsChair() {
-        chair = true;
-    }
-
     public RemoteHandler getHandler() {
         return remoteHandler;
     }
 
-    public boolean isChair() {
-        return chair;
+    public boolean isOwner() {
+        return owner;
     }
 
     public void setNickname(String nickname) {
@@ -44,4 +36,8 @@ public class RemotePlayer {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
+
+    public void setOwner(boolean owner) { this.owner = owner; }
+    public abstract void setClientID(Integer ID);
+    public abstract Integer getClientID();
 }

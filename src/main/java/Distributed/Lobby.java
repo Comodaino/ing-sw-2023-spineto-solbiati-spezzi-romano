@@ -88,4 +88,9 @@ public class Lobby {
     }
     public void setID(Integer i) { this.ID = i; }
     public Integer getID() { return this.ID; }
+    public void sendMessage(RemotePlayer player, String message){
+        for(RemotePlayer p: lp){
+            //TODO IMPLEMENT
+        }
+    }
 }

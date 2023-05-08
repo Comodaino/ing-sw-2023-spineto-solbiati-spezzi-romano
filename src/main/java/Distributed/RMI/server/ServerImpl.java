@@ -41,7 +41,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public void register(Client client) throws RemoteException {
         //Creates a new RemotePlayer and sets its nickname, asking it to the client
-        RemotePlayer rp = new RemotePlayer(); //TODO: check the constructor
+        PlayerRMI rp = new PlayerRMI(); //TODO: check the constructor
         String nickname = client.setNickname(this);
         rp.setNickname(nickname);
 
@@ -54,8 +54,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             //Adds the player in the list of RemotePlayer of the Lobby the client joined
             lobbies.get(lobbies.size() - 1).addPlayer(rp);
             //Sets lobbyID and clientID in Client
-            client.setIDs(1, lobbies.get(lobbies.size() - 1).getID()); //TODO: generate clientID
+            client.setIDs(2, lobbies.get(lobbies.size() - 1).getID()); //TODO: generate clientID
+            rp.setClientID(2); //TODO: generate clientID
             System.out.println(rp.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
+            System.out.println("owner: " + rp.isOwner());
         }
     }
 
@@ -93,6 +95,21 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         }
         System.out.println("OK");
         return nickname;
+    }
+
+    @Override
+    public boolean closeLobby(Client client) throws RemoteException {
+        synchronized (lobbies){
+            List<RemotePlayer> rps = lobbies.get(client.getLobbyID()-1).getListOfPlayers();
+            for(RemotePlayer rp: rps){
+                if(rp.isOwner() && rp.getNickname().equals(client.getNickname())){
+                    //searches the client who is trying to close the lobby: if it is the owner of the lobby, then it closes the lobby
+                        return lobbies.get(client.getLobbyID()-1).closeLobby();
+                }
+            }
+        }
+        client.printMsg("You cannot close the lobby because you're not the owner");
+        return false;
     }
 
     public static void main(String args[]) throws Exception {

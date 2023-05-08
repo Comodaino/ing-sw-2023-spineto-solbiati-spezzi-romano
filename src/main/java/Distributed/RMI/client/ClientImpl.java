@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
     private String nickname;
-    private Integer clientID;
+    private Integer clientID; //maybe it is not necessary because the nickname is already unique
     private Integer lobbyID;
 
     public ClientImpl() throws RemoteException {
@@ -49,13 +49,35 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         return this.nickname;
     }
 
+    @Override
+    public Integer getClientID() throws RemoteException {
+        return this.clientID;
+    }
+
+    @Override
+    public Integer getLobbyID() throws RemoteException {
+        return this.lobbyID;
+    }
+
+    @Override
+    public void printMsg(String message){
+        System.out.println(message);
+    }
+
     public void doJob(String serverHost) throws Exception {
         Server server;
         // take a reference of the server from the registry
         server = (Server) Naming.lookup("rmi://" + serverHost + "/Server");
         // join
         server.register(this);
-        // main loop [...]
+        // main loop
+        while(true){
+            Scanner scanIn = new Scanner(System.in);
+            if(scanIn.nextLine().equals("/closeLobby")){
+                server.closeLobby(this);
+            }
+
+        }
         //server.leave(this);
     }
 

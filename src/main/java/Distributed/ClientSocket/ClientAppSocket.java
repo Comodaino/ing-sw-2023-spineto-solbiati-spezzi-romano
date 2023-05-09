@@ -1,12 +1,9 @@
 package Distributed.ClientSocket;
 
-<<<<<<< HEAD
 import Distributed.Lobby;
 import Distributed.States;
 
 import java.io.BufferedReader;
-=======
->>>>>>> experimental
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -34,7 +31,6 @@ public class ClientAppSocket {
             Scanner stdin = new Scanner(System.in);
 
             String messageFromServer = in.nextLine();
-<<<<<<< HEAD
             System.out.println("Message from server "+messageFromServer);
 
             try {
@@ -67,10 +63,6 @@ public class ClientAppSocket {
             catch(IOException e){
                 System.err.println(e.getMessage());
             }
-
-=======
-            System.out.println("Message from server " + messageFromServer);
->>>>>>> experimental
             socket.close();
         } catch (UnknownHostException e){
             System.err.println("Error connecting to server");

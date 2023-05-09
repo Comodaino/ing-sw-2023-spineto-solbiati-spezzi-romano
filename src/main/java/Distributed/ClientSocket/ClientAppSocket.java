@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+
 public class ClientAppSocket {
     private final int port;
     private List<Lobby> lobbyList;
@@ -56,7 +57,7 @@ public class ClientAppSocket {
             public void run() {
                 try {
                     inputHandler();
-                } catch (InterruptedException e) {
+                } catch (InterruptedException | IOException | ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -81,7 +82,7 @@ public class ClientAppSocket {
         }
     }
 
-    public void inputHandler() throws InterruptedException {
+    public void inputHandler() throws InterruptedException, IOException, ClassNotFoundException {
         while (state!=States.CLOSE) {
             System.out.println("input");
             String input = in.nextLine();
@@ -103,6 +104,9 @@ public class ClientAppSocket {
                     case "/close":
                         state = States.CLOSE;
                         break;
+                    case "/update":
+                        boardView = (BoardView) objIn.readObject();
+                        update();
                 }
             }
             if (input.charAt(0) == '+') {
@@ -111,4 +115,6 @@ public class ClientAppSocket {
             }
         }
     }
+
+    public void update(){}
 }

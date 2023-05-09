@@ -1,6 +1,7 @@
 package Controller;
 
 import Distributed.ConnectionType;
+import Distributed.RemotePlayer;
 import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Board;
 import Model.BoardView;
@@ -102,9 +103,9 @@ public class GameController implements Observer {
         }
     }
 
-    public void update(ClientHandlerSocket o, Object arg) {
+    public void update(RemotePlayer p, Object arg) {
         //TODO CHANGE CONDITION FOR TESTING
-        if (o.getPlayer().getNickname().equals(currentPlayer.getNickname())) {
+        if (p.getNickname().equals(currentPlayer.getNickname())) {
             String input[] = arg.toString().split(" ");
             if (input[0].charAt(0) == '/') {
                 switch (input[0]) {
@@ -119,7 +120,7 @@ public class GameController implements Observer {
                 System.out.println("Commands must start with '/'");
             }
         } else {
-            System.out.println("Player " + o.getPlayer().getNickname() + " tried to play during another player's turn");
+            System.out.println("Player " + p.getNickname() + " tried to play during another player's turn");
         }
     }
 

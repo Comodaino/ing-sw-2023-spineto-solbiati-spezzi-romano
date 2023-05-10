@@ -5,10 +5,7 @@ import Distributed.Lobby;
 import Distributed.States;
 import Model.BoardView;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.List;
 import java.util.Scanner;
@@ -23,11 +20,13 @@ public class ClientAppSocket implements AbstractClient {
     private PrintWriter out;
     private BoardView boardView;
     private final String address = "127.0.0.1";
-    private final Scanner stdIn = new Scanner(System.in);
+    private final File viewFile = new File("viewInput");
+    private final Scanner stdIn = new Scanner(viewFile);
+    private final FileWriter stdOut = new FileWriter(viewFile);
     private States state;
     private ObjectInputStream objIn;
 
-    public ClientAppSocket(int port) {
+    public ClientAppSocket(int port) throws IOException {
         this.port = port;
         state = States.INIT;
     }
@@ -120,7 +119,8 @@ public class ClientAppSocket implements AbstractClient {
     public void update(){}
 
     @Override
-    public void println(String arg) {
-
+    public void println(String arg) throws IOException {
+        stdOut.write(arg);
+        stdOut.flush();
     }
 }

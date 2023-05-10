@@ -18,8 +18,8 @@ class BoardTest {
     @Test
     public void testTwoPlayers() {
         playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
+        playerList.add(new Player("player1", true, null));
+        playerList.add(new Player("player2", false, null));
         Board testBoard = new Board(false, playerList);
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
@@ -56,9 +56,9 @@ class BoardTest {
     @Test
     public void testThreePlayers() {
         playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        playerList.add(new Player("player3", false));
+        playerList.add(new Player("player1", true, null));
+        playerList.add(new Player("player2", false, null));
+        playerList.add(new Player("player3", false, null));
         Board testBoard = new Board(false, playerList);
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
@@ -95,10 +95,10 @@ class BoardTest {
     @Test
     public void testFourPlayers() {
         playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        playerList.add(new Player("player3", false));
-        playerList.add(new Player("player4", false));
+        playerList.add(new Player("player1", true, null));
+        playerList.add(new Player("player2", false, null));
+        playerList.add(new Player("player3", false, null));
+        playerList.add(new Player("player4", false, null));
         Board testBoard = new Board(false, playerList);
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){

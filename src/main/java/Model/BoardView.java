@@ -2,10 +2,12 @@ package Model;
 
 import Model.CommonGoals.CommonGoal;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public class BoardView {
+public class BoardView implements Serializable {
+    static final long serialVersionUID = 1L;
     private final Board board;
     public BoardView(Board b){ this.board=b; }
     public Tile getTile(int r, int c){

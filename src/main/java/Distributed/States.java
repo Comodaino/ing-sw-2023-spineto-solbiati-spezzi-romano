@@ -1,8 +1,9 @@
-package Distributed.ServerSocket;
+package Distributed;
 
 public enum States {
     INIT,
     PLAY,
     WAIT,
-    END
+    END,
+    CLOSE
 }

@@ -60,4 +60,8 @@ public class Player {
     public NearGoal getNearGoal() {
         return this.nearGoal;
     }
+
+    public RemotePlayer getRemotePlayer() {
+        return remotePlayer;
+    }
 }

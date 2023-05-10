@@ -1,5 +1,6 @@
 package Controller;
 
+import Distributed.ConnectionType;
 import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Board;
 import Model.BoardView;
@@ -49,7 +50,8 @@ public class GameController implements Observer {
     }
     private void serverUpdater() throws IOException {
         for(Player p: pl){
-            p.getRemotePlayer().getHandler().update();
+            if(p.getRemotePlayer().getType().equals(ConnectionType.SOCKET)) p.getRemotePlayer().update();
+            //if(p.getRemotePlayer().getType().equals(ConnectionType.Socket)) //TODO IMPLEMENT ONCE RMI IS DONE
         }
     }
     //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view

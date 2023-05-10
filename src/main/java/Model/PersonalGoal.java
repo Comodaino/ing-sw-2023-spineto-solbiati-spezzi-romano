@@ -10,7 +10,7 @@ import java.util.Scanner;
  * represent PersonalGoal with an ArrayList of type Pgtype
  * @author alessandra
  */
-public class PersonalGoal extends Goal{
+public class PersonalGoal extends Goal {
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
 

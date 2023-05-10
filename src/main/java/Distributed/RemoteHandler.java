@@ -2,17 +2,15 @@ package Distributed;
 
 import Controller.GameController;
 
-import java.io.IOException;
-
 public abstract class RemoteHandler {
     protected Lobby lobby;
     protected States state;
     protected GameController gameController;
-    protected HandlersType type;
+    protected ConnectionType type;
     /**
      *
      * @param input
-     * @return return true if the input nickname is avaible
+     * @return return true if the input nickname is available
      */
     protected boolean nicknameChecker(String input) {
         for(RemotePlayer p: lobby.getListOfPlayers()){
@@ -23,19 +21,16 @@ public abstract class RemoteHandler {
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
+    public GameController getGameController() { return this.gameController; }
     public void setState(States state) {
         this.state = state;
     }
     public Lobby getLobby() { return this.lobby; }
-    public HandlersType getType() {
+    public ConnectionType getType() {
         return type;
     }
-    public void endCommand(){
-        state=States.WAIT;
-
-    }
-
-    public void update() throws IOException {
+    public void endCommand(){ state=States.WAIT; }
+    public void update(){
+        //TODO ADVERTISE THERE AS BEEN A CHANGE IN THE BOARDVIEW
     }
 }
-,

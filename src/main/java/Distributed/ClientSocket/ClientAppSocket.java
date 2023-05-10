@@ -76,7 +76,7 @@ public class ClientAppSocket {
     public synchronized void outputHandler() throws InterruptedException {
         while (state!=States.CLOSE) {
             System.out.println("output");
-            if (state == States.INIT) System.out.println("Insert a unique nickname");
+            if (state == States.INIT) System.out.println("/nickname");
             out.println(stdIn.nextLine());
             out.flush();
         }

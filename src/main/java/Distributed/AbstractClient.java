@@ -1,5 +1,5 @@
 package Distributed;
 
-public interface ClientInterface {
+public interface AbstractClient {
     public void println(String arg);
 }

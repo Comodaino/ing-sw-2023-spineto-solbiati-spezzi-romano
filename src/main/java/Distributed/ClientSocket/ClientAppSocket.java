@@ -1,5 +1,6 @@
 package Distributed.ClientSocket;
 
+import Distributed.AbstractClient;
 import Distributed.Lobby;
 import Distributed.States;
 import Model.BoardView;
@@ -14,7 +15,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 
-public class ClientAppSocket {
+public class ClientAppSocket implements AbstractClient {
     private final int port;
     private List<Lobby> lobbyList;
     private Socket socket;
@@ -117,4 +118,9 @@ public class ClientAppSocket {
     }
 
     public void update(){}
+
+    @Override
+    public void println(String arg) {
+
+    }
 }

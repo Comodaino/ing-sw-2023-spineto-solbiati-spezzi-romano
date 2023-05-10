@@ -1,12 +1,15 @@
 package Distributed.RMI.client;
+
+import Distributed.AbstractClient;
 import Distributed.ClientRMI.Client;
 import Distributed.ServerApp;
 
-import java.rmi.*;
-import java.rmi.server.*;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class ClientImpl extends UnicastRemoteObject implements Client {
+public class ClientImpl extends UnicastRemoteObject implements Client, AbstractClient {
     private String nickname;
     private Integer clientID;
     private Integer lobbyID;
@@ -62,5 +65,10 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     public static void main(String args[]) throws Exception {
         ClientImpl client = new ClientImpl();
         client.doJob("localhost");
+    }
+
+    @Override
+    public void println(String arg) {
+
     }
 }

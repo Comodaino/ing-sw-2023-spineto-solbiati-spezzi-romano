@@ -10,11 +10,13 @@ public class TextualUI extends ViewInterface {
     private State state;
     private final Scanner input;
     private RemotePlayer player;
+    private final AbstractClient client;
 
     public TextualUI(AbstractClient client) {
         this.player = client.getPlayer();
         this.state = State.HOME;
         this.input = new Scanner(System.in);
+        this.client= client;
         Thread th = new Thread() {
             @Override
             public void run() {

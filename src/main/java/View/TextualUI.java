@@ -1,5 +1,7 @@
 package View;
 
+import Distributed.AbstractClient;
+import Distributed.ClientSocket.ClientAppSocket;
 import Distributed.RemotePlayer;
 
 import java.util.Scanner;
@@ -9,6 +11,7 @@ public class TextualUI extends ViewInterface {
     private State state;
     private final Scanner input;
     private RemotePlayer player;
+    private AbstractClient client;
 
     public TextualUI(AbstractClient client) {
         this.player = client.getPlayer();
@@ -58,13 +61,12 @@ public class TextualUI extends ViewInterface {
     }
 
     public void homePrint(String arg) {
-        if (arg.equals(null)) {
-            System.out.println("Please insert your nickname here: ");
+        if (arg.equals("/nickname")) {
+            System.out.println("nickname already used /splease insert another nickname:  ");
             client.println(input.nextLine());
-            //TODO inserire controllo nickname
         }
         else{
-            System.out.println("this nickname is already used :( /s/splease insert another nickname ");
+            System.out.println("insert here your nickname:  ");
             client.println(input.nextLine());
         }
 

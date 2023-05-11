@@ -1,6 +1,8 @@
 package Model;
 
 
-public abstract class Goal {
+import java.io.Serializable;
+
+public abstract class Goal implements Serializable {
     public abstract int getScore(Player p);
 }

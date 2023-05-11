@@ -1,8 +1,18 @@
 package Distributed.RMI.server;
-import Distributed.*;
-import Distributed.ClientRMI.Client;
-import Distributed.ServerRMI.Server;
 
+import Controller.GameController;
+import Controller.GameControllerSocket;
+import Distributed.Lobby;
+import Distributed.RMI.client.Client;
+import Distributed.RemoteHandler;
+import Distributed.RemotePlayer;
+import Distributed.ServerSocket.States;
+import Model.Board;
+import Model.Player;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.*;
 import java.rmi.*;
 import java.rmi.server.*;
@@ -11,12 +21,9 @@ import java.rmi.registry.*;
 //TODO check synchronization
 public class ServerImpl extends UnicastRemoteObject implements Server {
     private List<Lobby> lobbies;
-    private ServerApp serverApp;
 
-    public ServerImpl(ServerApp serverApp) throws RemoteException {
+    public ServerImpl() throws RemoteException {
         this.lobbies = new ArrayList<>();
-        this.serverApp = serverApp;
-
     }
 
     public void start() {
@@ -36,8 +43,8 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public void register(Client client) throws RemoteException {
         //Creates a new RemotePlayer and sets its nickname, asking it to the client
-        RemotePlayer rp = new RemotePlayer(ConnectionType.RMI); //TODO: check the constructor
-        String nickname = client.setNickname(serverApp);
+        PlayerRMI rp = new PlayerRMI(); //TODO: check the constructor
+        String nickname = client.setNickname(this);
         rp.setNickname(nickname);
 
         synchronized (lobbies){
@@ -49,8 +56,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             //Adds the player in the list of RemotePlayer of the Lobby the client joined
             lobbies.get(lobbies.size() - 1).addPlayer(rp);
             //Sets lobbyID and clientID in Client
-            client.setIDs(1, lobbies.get(lobbies.size() - 1).getID()); //TODO: generate clientID
+            client.setIDs(2, lobbies.get(lobbies.size() - 1).getID()); //TODO: generate clientID
+            rp.setClientID(2); //TODO: generate clientID
             System.out.println(rp.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
+            System.out.println("owner: " + rp.isOwner());
         }
     }
 
@@ -71,7 +80,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     @Override
     public void update(RemoteHandler o, Object arg) throws RemoteException { //TODO ClientHandlerRMI instead of RemoteHandler
-        //TODO o.getGameController().update(o, arg);
+        o.getGameController().update(o, arg);
     }
 
     @Override
@@ -88,5 +97,37 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         }
         System.out.println("OK");
         return nickname;
+    }
+
+    @Override
+    public boolean closeLobby(Client client) throws RemoteException {
+        synchronized (lobbies){
+            List<RemotePlayer> rps = lobbies.get(client.getLobbyID()-1).getListOfPlayers();
+            for(RemotePlayer rp: rps){
+                if(rp.isOwner() && rp.getNickname().equals(client.getNickname())){
+                    //searches the client who is trying to close the lobby: if it is the owner of the lobby, then it closes the lobby
+                        return lobbies.get(client.getLobbyID()-1).closeLobby();
+                }
+            }
+        }
+        client.printMsg("You cannot close the lobby because you're not the owner");
+        return false;
+    }
+
+    @Override
+    public void waitCommand(Client client) throws RemoteException {
+    }
+
+    @Override
+    public void playCommand(Client client) throws RemoteException {
+    }
+
+    @Override
+    public void endCommand(Client client) throws RemoteException {
+    }
+
+    public static void main(String args[]) throws Exception {
+        ServerImpl server = new ServerImpl();
+        server.start();
     }
 }

@@ -1,18 +1,18 @@
 package Distributed.RMI.client;
 
-import Distributed.AbstractClient;
-import Distributed.ClientRMI.Client;
-import Distributed.ServerApp;
+import Distributed.RMI.server.Server;
+import Distributed.ServerSocket.States;
 
-import java.rmi.Naming;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import java.io.IOException;
+import java.rmi.*;
+import java.rmi.server.*;
 import java.util.Scanner;
 
-public class ClientImpl extends UnicastRemoteObject implements Client, AbstractClient {
+public class ClientImpl extends UnicastRemoteObject implements Client {
     private String nickname;
-    private Integer clientID;
+    private Integer clientID; //maybe it is not necessary because the nickname is already unique
     private Integer lobbyID;
+    private States state;
 
     public ClientImpl() throws RemoteException {
         nickname = null;
@@ -32,7 +32,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client, AbstractC
     }
 
     @Override
-    public String setNickname(ServerApp server) throws RemoteException{
+    public String setNickname(Server server) throws RemoteException{
         String nickname = null;
         boolean found = false;
 
@@ -52,23 +52,74 @@ public class ClientImpl extends UnicastRemoteObject implements Client, AbstractC
         return this.nickname;
     }
 
-    public void doJob(String serverHost) throws Exception {
-        ServerApp server;
-        // take a reference of the server from the registry
-        server = (ServerApp) Naming.lookup("rmi://" + serverHost + "/Server");
-        // join
-        server.register(this);
-        // main loop [...]
-        //server.leave(this);
-    }
-
-    public static void main(String args[]) throws Exception {
-        ClientImpl client = new ClientImpl();
-        client.doJob("localhost");
+    @Override
+    public Integer getClientID() throws RemoteException {
+        return this.clientID;
     }
 
     @Override
-    public void println(String arg) {
+    public Integer getLobbyID() throws RemoteException {
+        return this.lobbyID;
+    }
 
+    @Override
+    public void printMsg(String message){
+        System.out.println(message);
+    }
+
+    public void run(String serverHost) throws Exception {
+        Server server = null;
+        // take a reference of the server from the registry
+        server = (Server) Naming.lookup("rmi://" + serverHost + "/Server");
+
+        // join
+        server.register(this);
+
+        // main loop
+        while(true){
+
+            /* try {
+                while (!state.equals(States.CLOSE)){
+                    switch (state) {
+                        case WAIT:
+                            server.waitCommand(this);
+                            break;
+                        case PLAY:
+                            server.playCommand(this);
+                            break;
+                        case END:
+                            server.endCommand(this);
+                            break;
+                    }
+                }
+            } catch (IOException e){
+                System.err.println(e.getMessage());
+            } */
+
+            Scanner scanIn = new Scanner(System.in);
+            switch (scanIn.nextLine()) {
+                case "/closeLobby":
+                    server.closeLobby(this);
+                    break;
+                case "/leave":
+                    server.leave(this);
+                    return;
+            }
+        }
+    }
+
+    public static void main(String args[]) {
+        ClientImpl client = null;
+        try {
+            client = new ClientImpl();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            client.run("localhost");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

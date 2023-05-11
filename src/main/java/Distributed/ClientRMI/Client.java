@@ -12,4 +12,8 @@ public interface Client extends Remote {
         public String setNickname(ServerApp server) throws RemoteException;
     public String getNickname() throws RemoteException;
     public void setIDs(Integer clientID, Integer lobbyID) throws RemoteException;
+    public Integer getClientID() throws RemoteException;
+    public Integer getLobbyID() throws RemoteException;
+    //public void waiting() throws RemoteException;
+    public void printMsg(String message) throws RemoteException;
 }

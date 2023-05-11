@@ -7,33 +7,39 @@ import Model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Distributed.States.CLOSE;
-import static Distributed.States.END;
 
 public class Lobby {
     private final List<RemotePlayer> lp;
-    private Integer serialNumber;
+    private Integer ID;
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
-    private ServerApp server;
-    public Lobby(ServerApp server){
+    private GameController controller;
+    public Lobby(){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
-        this.serialNumber = null;
+        this.ID = null;
         this.open = true;
-        this.server = server;
     }
 
-    /**
-     * adds a RemotePlayer to the lobby
-     * @param p
-     * @return returns true if there are 4 player in the lobby
-     */
     public void addPlayer(RemotePlayer p){
-        if(lp.isEmpty()) p.setAsChair();
-        lp.add(p);
-        open = !(lp.size()==4);
+        if(open){
+            if(lp.isEmpty()){
+                p.setOwner(true); //the first player to join the lobby become the owner
+            } else {
+                p.setOwner(false);
+            }
+            lp.add(p);
+            if(lp.size()==4) this.open = false;
+        }
+    }
+
+    public boolean closeLobby() {
+        if(lp.size()>=2){
+            this.open = false;
+            return true; //lobby closed
+        }
+        return false; //lobby not closed
     }
 
     public void setFirstMatch(boolean firstMatch) {
@@ -51,39 +57,43 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
-
-    /**
-     * Creates a controller and starts the game
-     */
     public void startGame(){
         List<Player> modelPlayerList = new ArrayList<Player>();
+        //TODO NEED TO DECIDE BETWEEN TWO CONTROLLERS OR ONE
         for(RemotePlayer p: lp){
-            Player tmpPlayer = new Player(p.getNickname(),p.isChair(), p);
+            Player tmpPlayer = new Player(p.getNickname(),p.isOwner(), p);
             modelPlayerList.add(tmpPlayer);
             p.setModelPlayer(tmpPlayer);
-            p.getHandler().setState(States.PLAY);
+            p.setState(States.PLAY);
         }
-        GameController tmpControllerSocket = new GameController(modelPlayerList, firstMatch);
+        controller = new GameController(modelPlayerList, firstMatch);
+        //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp) {
-            if (p.getHandler().getType().equals(HandlersType.Socket))
-                p.getHandler().setGameController(tmpControllerSocket);
+            if (p.getType().equals(ConnectionType.SOCKET))
+                p.setController(controller);
+            //TODO else p.getHandler().setGameController(tmpControllerRMI);
         }
-        boardView = tmpControllerSocket.getBoardView();
+        boardView = controller.getBoardView();
     }
     public void endMatch() {
         for(RemotePlayer p: lp){
-            p.getHandler().setState(END);
+            p.setState(States.END);
         }
     }
     public void close() {
         for(RemotePlayer p: lp){
-            p.getHandler().setState(CLOSE);
+            p.setState(States.CLOSE);
         }
-        server.removeLobby(this);
     }
+
     public Object getBoardView() {
         return boardView;
     }
-    public void setSerialNumber(Integer i) { this.serialNumber = i; }
-    public Integer getSerialNumber() { return this.serialNumber; }
+    public void setID(Integer i) { this.ID = i; }
+    public Integer getID() { return this.ID; }
+    public void sendMessage(RemotePlayer player, String message){
+        for(RemotePlayer p: lp){
+            //TODO IMPLEMENT
+        }
+    }
 }

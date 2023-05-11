@@ -1,12 +1,13 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * represent Tile with attribute Color and TileType
  * @author Clara
  */
-public class Tile{
+public class Tile implements Serializable {
     private Color color;
     private TileType type;
 

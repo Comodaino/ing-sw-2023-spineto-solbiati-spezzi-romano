@@ -24,6 +24,7 @@ public class Board{
     private Bag bag;
     private Player currentPlayer;
     public final BoardView boardView;
+    private final int[] coordBuffer;
 
     /**
      * Constructor of the board
@@ -63,6 +64,7 @@ public class Board{
             throw new RuntimeException(e);
         };
 
+        this.coordBuffer = new int[]{-1, -1, -1, -1, -1, -1};
         this.listOfPlayer = pl;
         this.firstMatch = fm;
         this.endGoal = new EndGoal();
@@ -88,6 +90,9 @@ public class Board{
         if(!matrix[r][c].isEmpty()) {
             tileBuffer.add(matrix[r][c].getTile());
             matrix[r][c].removeTile();
+            int i = tileBuffer.size() - 1;
+            coordBuffer[i] = r;
+            coordBuffer[i + 1] = c;
         }
     }
 
@@ -159,4 +164,6 @@ public class Board{
     }
     public Player getCurrentPlayer() { return currentPlayer; }
     public void setCurrentPlayer(Player cp){ this.currentPlayer= cp;}
+
+    public int[] getCoordBuffer() { return coordBuffer;}
 }

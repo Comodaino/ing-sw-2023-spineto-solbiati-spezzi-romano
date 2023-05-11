@@ -65,7 +65,7 @@ public class ServerApp {
                     lobbySet.add(openLobby);
                     System.out.println("Created new lobby");
                 }
-            executor.submit(new ClientHandlerSocket(socket, openLobby));
+            executor.submit(new ClientHandlerSocket(socket, openLobby, this));
             System.out.println("Passed socket to handler");
         }
 
@@ -90,5 +90,9 @@ public class ServerApp {
 
     public void register(Distributed.RMI.client.ClientImpl client) {
         //TODO IMPL
+    }
+
+    public Set<Lobby> getLobbySet() {
+        return lobbySet;
     }
 }

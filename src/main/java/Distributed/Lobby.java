@@ -19,6 +19,7 @@ public class Lobby {
     private boolean open;
     private boolean firstMatch;
     private BoardView boardView;
+    //TODO: add GameController
     public Lobby(){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;

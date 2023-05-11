@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
     private String nickname;
-    private Integer clientID; //maybe it is not necessary because the nickname is already unique
+    private Integer clientID; //TODO: delete clientID, it is not necessary because the nickname is already unique
     private Integer lobbyID;
     private States state;
 
@@ -67,6 +67,11 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         System.out.println(message);
     }
 
+    @Override
+    public void setState(States state) throws RemoteException {
+        this.state = state;
+    }
+
     public void run(String serverHost) throws Exception {
         Server server = null;
         // take a reference of the server from the registry
@@ -78,7 +83,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         // main loop
         while(true){
 
-            /* try {
+            try {
                 while (!state.equals(States.CLOSE)){
                     switch (state) {
                         case WAIT:
@@ -94,7 +99,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
                 }
             } catch (IOException e){
                 System.err.println(e.getMessage());
-            } */
+            }
 
             Scanner scanIn = new Scanner(System.in);
             switch (scanIn.nextLine()) {

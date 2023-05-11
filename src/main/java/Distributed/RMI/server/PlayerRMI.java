@@ -1,7 +1,6 @@
 package Distributed.RMI.server;
 
 import Distributed.RemotePlayer;
-import Model.Player;
 
 public class PlayerRMI extends RemotePlayer {
     private Integer clientID;

@@ -1,6 +1,7 @@
 package Distributed.RMI.client;
 
 import Distributed.RMI.server.Server;
+import Distributed.ServerSocket.States;
 
 import java.rmi.*;
 
@@ -17,4 +18,5 @@ public interface Client extends Remote {
     public Integer getLobbyID() throws RemoteException;
     //public void waiting() throws RemoteException;
     public void printMsg(String message) throws RemoteException;
+    public void setState(States state) throws RemoteException;
 }

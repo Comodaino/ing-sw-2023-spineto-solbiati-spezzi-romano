@@ -1,5 +1,7 @@
 package Distributed.ClientSocket;
 
+import Distributed.RemotePlayer;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -7,7 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class ClientAppSocket {
+public class ClientAppSocket extends RemotePlayer {
     private Socket socket;
     private Scanner in;
     private PrintWriter out;

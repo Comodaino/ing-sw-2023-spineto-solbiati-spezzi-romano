@@ -4,6 +4,8 @@ import Distributed.AbstractClient;
 import Distributed.Lobby;
 import Distributed.States;
 import Model.BoardView;
+import View.TextualUI;
+import View.ViewInterface;
 
 import java.io.*;
 import java.net.Socket;
@@ -25,14 +27,16 @@ public class ClientAppSocket implements AbstractClient {
     private final FileWriter stdOut = new FileWriter(viewFile);
     private States state;
     private ObjectInputStream objIn;
+    private ViewInterface view;
 
-    public ClientAppSocket(int port) throws IOException {
+    public ClientAppSocket(int port, String typeOfView) throws IOException {
         this.port = port;
+        if(typeOfView.equals("TUI")) view = new TextualUI(this);
         state = States.INIT;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        ClientAppSocket client = new ClientAppSocket(25565);
+        ClientAppSocket client = new ClientAppSocket(25565, args[0]);
         client.Connect();
     }
 

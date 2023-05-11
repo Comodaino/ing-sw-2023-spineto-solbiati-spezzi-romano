@@ -1,10 +1,12 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * Cell represents a single cell that contained a Tile
  * @author alessandra
  */
-public class Cell {
+public class Cell implements Serializable {
     private CellType type;
     private Tile containedTile;
 

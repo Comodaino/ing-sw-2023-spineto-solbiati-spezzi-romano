@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,7 +11,7 @@ import static Model.Color.*;
  * The bag generates and distributes a finite arraylist of tiles, for each board a single bag is associated
  * @author Alessio
  */
-public class Bag {
+public class Bag implements Serializable {
     private List<Tile> containedTiles;
     public Bag() {
         containedTiles = new ArrayList<Tile>();

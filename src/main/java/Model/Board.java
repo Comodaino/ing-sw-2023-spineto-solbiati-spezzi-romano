@@ -4,6 +4,7 @@ import Model.CommonGoals.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.*;
 
 import static Model.CellType.*;
@@ -13,7 +14,7 @@ import static Model.CellType.*;
  * it contains a set of common goals, a list of player the board itself made of a matrix of cells, a bag and a goal factory
  * @author Alessio
  */
-public class Board{
+public class Board implements Serializable {
     private Cell[][] matrix;
     private List<Player> listOfPlayer;
     private boolean firstMatch;

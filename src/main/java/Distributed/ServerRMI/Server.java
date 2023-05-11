@@ -32,4 +32,14 @@ public interface Server extends Remote {
      * @param nickname the nickname which will be checked
      */
     public String checkNickname(String nickname) throws RemoteException;
+
+    /**
+     * If the client is the owner of the lobby and there >= 2 players in the lobby, it closes the lobby
+     * @param client the client who is trying to close the lobby
+     */
+    public boolean closeLobby(Client client) throws RemoteException;
+
+    public void waitCommand(Client client) throws RemoteException;
+    public void playCommand(Client client) throws RemoteException;
+    public void endCommand(Client client) throws RemoteException;
 }

@@ -62,5 +62,8 @@ public class Shelf implements Serializable {
         }
         return true;
     }
+    public boolean isEmpty(int r, int c){
+        return getTile(r, c) == null;
+    }
 }
 

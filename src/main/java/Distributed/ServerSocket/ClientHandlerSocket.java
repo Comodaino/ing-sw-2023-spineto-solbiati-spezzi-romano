@@ -17,7 +17,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     private final Lobby lobby;
     private Scanner in;
     private PrintWriter out;
-    private boolean firstWait;
+    private Object lock;
 
     public ClientHandlerSocket(Socket socket, Lobby lobby, ServerApp serverApp) throws IOException {
         this.socket = socket;
@@ -28,7 +28,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         this.objOut = new ObjectOutputStream(socket.getOutputStream());
         this.in = new Scanner(socket.getInputStream());
         this.out = new PrintWriter(socket.getOutputStream());
-        this.firstWait = true;
         lobby.addPlayer(player);
     }
 
@@ -37,38 +36,56 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      */
     public void run() {
 
-        try {
-            System.out.println("Handler Ready");
-            out.println("Handler Ready");
-            //TODO OUTPUT TO CLIENT IS ONLY FOR DEBUG
-            while (!player.getState().equals(CLOSE)) {
-                switch (player.getState()) {
-                    case INIT:
-                        out.println("Please insert a unique nickname");
-                        out.println("/init");
-                        out.flush();
-                        initCommand();
-                        break;
-                    case WAIT:
-                        waitCommand();
-                        break;
-                    case PLAY:
-                        System.out.println("PLAY");
-                        out.println("/play");
-                        playCommand();
-                        break;
-                    case END:
-                        out.println("/end");
-                        endCommand();
-                        break;
+        Thread th1 = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    inputHandler();
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
-            out.write("/close");
+        };
+        Thread th2 = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    outputHandler();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        th1.start();
+        th2.start();
+        out.println("ready");
+        out.flush();
+        System.out.println("Message sent");
+        if(player.getState() == CLOSE) {
+            out.println("/close");
+            out.flush();
             in.close();
-            socket.close();
+            try {
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * writes the serializble ModelView to the client's socket
+     *
+     * @throws IOException
+     */
+    public void update() {
+        try {
+            out.println("/update");
+            out.flush();
+            objOut.writeObject(lobby.getBoardView());
+            objOut.flush();
+
         } catch (IOException e) {
-            System.err.println(e.getMessage());
-        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -78,25 +95,16 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      *
      * @throws IOException
      */
-    private void initCommand() throws IOException {
-        String input;
+    private void initCommand(String input) throws IOException {
         System.out.println("INIT");
-
-        input = in.nextLine();
         System.out.println("Received " + input);
-        if (!nicknameChecker(input)) {
-            while (!nicknameChecker(input)) {
-                System.out.println("Asking for nickname");
-                out.println("Please retry to insert a unique nickname");
-                out.println("/init");
-                out.flush();
-                input = in.nextLine();
-                System.out.println("Received " + input);
-            }
-        }
-        System.out.println("All good, the player has been created ");
-        player.setNickname(input);
-        player.setState(WAIT);
+        if (nicknameChecker(input)) {
+            System.out.println("Nickname is available");
+            player.setNickname(input);
+            player.setState(WAIT);
+            out.println("/wait");
+            out.flush();
+        } else System.out.println("Nickname not available");
     }
 
     /**
@@ -104,18 +112,15 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      *
      * @throws IOException
      */
-    private void waitCommand() throws IOException, InterruptedException {
+    private void waitCommand(String input) throws IOException, InterruptedException {
         System.out.println("WAIT");
-        out.println("/wait");
-        out.flush();
-        if (player.isOwner()) out.println("/true");
-        else out.println("/false");
-        out.flush();
         if (player.isOwner()) {
-            switch (in.nextLine()) {
+            switch (input) {
                 case "/start":
                     lobby.startGame();
                     player.setState(PLAY);
+                    out.println("/play");
+                    out.flush();
                     break;
                 case "/firstMatch":
                     lobby.setFirstMatch(true);
@@ -136,26 +141,64 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      * @throws IOException
      */
 
-    public void playCommand() throws IOException {
-        out.println("Play a command, all commands should start with /");
-        gameController.update(this, in.nextLine());
+    public void playCommand(String input){
+        System.out.println("Received command: " + input);
+        gameController.update(this, input);
     }
 
     public RemotePlayer getPlayer() {
         return player;
     }
 
-    /**
-     * writes the serializble ModelView to the client's socket
-     *
-     * @throws IOException
-     */
-    public void update() {
-        try {
-            out.println("/update");
-            objOut.writeObject(lobby.getBoardView());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public synchronized void inputHandler() throws IOException, InterruptedException {
+        while (!player.getState().equals(CLOSE)) {
+            String input = in.nextLine();
+            System.out.println("RECEIVED " + input);
+            if(input.charAt(0)=='/') {
+                switch (player.getState()) {
+                    case WAIT:
+                        waitCommand(input);
+                        break;
+                    case PLAY:
+                        playCommand(input);
+                    case END:
+                        endCommand();
+                }
+            }else{
+                if(player.getState().equals(INIT)){
+                    initCommand(input);
+                }else lobby.sendMessage(player, input);
+            }
+            System.out.println(player.getState());
+            notifyAll();
+        }
+    }
+
+    public synchronized void outputHandler() throws InterruptedException {
+        out.println("/init");
+        out.flush();
+        while (!player.getState().equals(CLOSE)) {
+            this.wait();
+            switch (player.getState()) {
+                case INIT:
+                    out.println("/init");
+                    out.flush();
+                    break;
+                case WAIT:
+                    out.println("/wait");
+                    out.flush();
+                    break;
+                case PLAY:
+                    System.out.println("PLAY");
+                    out.println("/play");
+                    out.flush();
+                    break;
+                case END:
+                    out.println("/end");
+                    out.flush();
+                    break;
+            }
         }
     }
 }
+

@@ -1,11 +1,12 @@
 package Distributed.RMI.client;
 
-import Distributed.RMI.server.Server;
+import Distributed.ServerRMI.Server;
+import Distributed.ServerApp;
 import Distributed.ServerSocket.States;
 
-import java.io.IOException;
-import java.rmi.*;
-import java.rmi.server.*;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
@@ -26,8 +27,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public void setIDs(Integer clientID, Integer lobbyID){
-        this.clientID = clientID;
+    public void setLobbyID(Integer lobbyID){
         this.lobbyID = lobbyID;
     }
 

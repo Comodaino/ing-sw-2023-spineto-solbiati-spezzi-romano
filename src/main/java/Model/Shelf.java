@@ -1,10 +1,12 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * represent Shelf
  * @author  Clara Spezzi
  */
-public class Shelf {
+public class Shelf implements Serializable {
     private Tile[][] matrix;
 
     public Shelf() {
@@ -59,6 +61,9 @@ public class Shelf {
             }
         }
         return true;
+    }
+    public boolean isEmpty(int r, int c){
+        return getTile(r, c) == null;
     }
 }
 

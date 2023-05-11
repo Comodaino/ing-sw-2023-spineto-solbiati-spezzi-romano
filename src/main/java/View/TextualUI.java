@@ -1,5 +1,6 @@
 package View;
 
+import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 
 import java.util.Scanner;

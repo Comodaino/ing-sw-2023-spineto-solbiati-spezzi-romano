@@ -17,7 +17,7 @@ import java.util.List;
  * it represents the entirety of the controller in the MVC patter
  * @author Alessio
  */
-public class GameController{
+public class GameController {
 
     private Board gameBoard;
     private BoardView boardView;
@@ -37,6 +37,7 @@ public class GameController{
 
     public void setCurrentPlayer(Player p){
         this.currentPlayer= p;
+        boardView.setCurrentPlayer(p);
     }
     /**
      * Controls who the current player is by making the player next to the old current player the new current player
@@ -81,17 +82,17 @@ public class GameController{
      * @author Alessio
      */
     public void update(String arg) {
-            String[] input = arg.split(" ");
-            if (input[0].charAt(0) == '/') {
-                switch (input[0]) {
-                    case "/remove":
-                        playRemove(input);
-                        break;
-                    case "/add":
-                        playAdd(input);
-                        break;
-                }
+        String[] input = arg.split(" ");
+        if (input[0].charAt(0) == '/') {
+            switch (input[0]) {
+                case "/remove":
+                    playRemove(input);
+                    break;
+                case "/add":
+                    playAdd(input);
+                    break;
             }
+        }
     }
 
     /**
@@ -115,7 +116,7 @@ public class GameController{
      */
     private void playRemove(String[] input) {
         System.out.println("remove " + Arrays.toString(input));
-        if(inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adiacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
+        if(inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
             gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
             gameBoard.checkRecharge();
         }
@@ -127,7 +128,7 @@ public class GameController{
      */
     private void playAdd(String[] input) {
         System.out.println("add");
-        if(columnAvaiable(gameBoard.getTileBuffer().size(),input[1].charAt(0) - 48))  {
+        if(columnAvailable(gameBoard.getTileBuffer().size(),input[1].charAt(0) - 48))  {
             for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
                 if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                     while (gameBoard.getTileBuffer().size() > 0) {
@@ -150,7 +151,7 @@ public class GameController{
     }
 
 
-    public boolean adiacentFree(int r, int c){
+    public boolean adjacentFree(int r, int c){
         if(gameBoard.getCell(r, c).isEmpty()) return false;
         if(r == 0 || c == 0 ) return true;
         if(r == 8 || c == 8) return true;
@@ -173,7 +174,7 @@ public class GameController{
         return true;
     }
 
-    public boolean columnAvaiable(int c, int size){
+    public boolean columnAvailable(int c, int size){
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)){
                 return !gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(6-size ,c);

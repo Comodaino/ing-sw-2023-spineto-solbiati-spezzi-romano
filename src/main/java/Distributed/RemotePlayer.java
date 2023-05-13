@@ -1,6 +1,7 @@
 package Distributed;
 
 import Controller.GameController;
+import Distributed.ClientRMI.Client;
 import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Player;
 
@@ -19,10 +20,9 @@ public class RemotePlayer {
 
     public RemotePlayer(ConnectionType type){
         this.type = type;
-        modelPlayer = new Player("Nico", true, null);
-        this.nickname = "Ale";
         this.state = INIT;
     }
+
     public RemotePlayer(Socket socket, ClientHandlerSocket remoteHandler, ConnectionType type){
     }
 
@@ -42,6 +42,8 @@ public class RemotePlayer {
         return owner;
     }
 
+    public void setOwner(boolean owner) { this.owner = owner; }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -49,7 +51,9 @@ public class RemotePlayer {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
+
     public void update(){}
+
     public void setState(States state) {
         this.state = state;
     }

@@ -74,7 +74,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
     }
 
     /**
-     * writes the serializble ModelView to the client's socket
+     * Writes the serializable ModelView to the client's socket
      *
      * @throws IOException
      */
@@ -101,14 +101,14 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
         if (nicknameChecker(input)) {
             System.out.println("Nickname is available");
             player.setNickname(input);
-            player.setState(WAIT);
+            player.setState(WAIT_SETTINGS);
             out.println("/wait");
             out.flush();
         } else System.out.println("Nickname not available");
     }
 
     /**
-     * filters all input coming from non-chair members of the lobby, the lobby-chair can start the match, close the lobby or set the match as "FIrst Match"
+     * Filters all input coming from non-chair members of the lobby, the lobby-chair can start the match, close the lobby or set the match as "First Match"
      *
      * @throws IOException
      */
@@ -143,7 +143,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
 
     public void playCommand(String input){
         System.out.println("Received command: " + input);
-        gameController.update(this, input);
+        gameController.update(input); //TODO: check by Alessio (before the method update has a ClientHandler parameter)
     }
 
     public RemotePlayer getPlayer() {
@@ -156,7 +156,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             System.out.println("RECEIVED " + input);
             if(input.charAt(0)=='/') {
                 switch (player.getState()) {
-                    case WAIT:
+                    case WAIT_SETTINGS:
                         waitCommand(input);
                         break;
                     case PLAY:
@@ -184,7 +184,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                     out.println("/init");
                     out.flush();
                     break;
-                case WAIT:
+                case WAIT_SETTINGS:
                     out.println("/wait");
                     out.flush();
                     break;

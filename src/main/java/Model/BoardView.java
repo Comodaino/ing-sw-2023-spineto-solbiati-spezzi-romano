@@ -26,4 +26,6 @@ public class BoardView implements Serializable {
         return board.getSetOfCommonGoal();
     }
     public EndGoal getEndGoal() { return board.getEndGoal(); }
+    public Player getCurrentPlayer() { return board.getCurrentPlayer(); }
+    public void setCurrentPlayer(Player p) { board.setCurrentPlayer(p); }
 }

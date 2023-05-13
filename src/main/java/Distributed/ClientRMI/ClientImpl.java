@@ -1,9 +1,11 @@
-package Distributed.RMI.client;
+package Distributed.ClientRMI;
 
 import Distributed.ServerRMI.Server;
 import Distributed.ServerApp;
-import Distributed.ServerSocket.States;
+import Distributed.States;
+import Model.BoardView;
 
+import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,14 +13,17 @@ import java.util.Scanner;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
     private String nickname;
-    private Integer clientID; //maybe it is not necessary because the nickname is already unique
     private Integer lobbyID;
     private States state;
+    private BoardView view;
+    private boolean owner;
 
     public ClientImpl() throws RemoteException {
         nickname = null;
-        clientID = null;
         lobbyID = null;
+        view = null;
+        owner = false;
+        state = States.INIT;
     }
 
     @Override
@@ -32,7 +37,24 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public String setNickname(Server server) throws RemoteException{
+    public Integer getLobbyID() throws RemoteException { return this.lobbyID; }
+
+    @Override
+    public void setState(States state) throws RemoteException { this.state = state; }
+
+    @Override
+    public void setOwner(boolean owner) throws RemoteException { this.owner = owner; }
+
+    @Override
+    public boolean isOwner() throws RemoteException { return this.owner; }
+
+    @Override
+    public void printMsg(String message){
+        System.out.println(message);
+    }
+
+    @Override
+    public String setNickname(ServerApp server) throws RemoteException{
         String nickname = null;
         boolean found = false;
 
@@ -52,21 +74,6 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         return this.nickname;
     }
 
-    @Override
-    public Integer getClientID() throws RemoteException {
-        return this.clientID;
-    }
-
-    @Override
-    public Integer getLobbyID() throws RemoteException {
-        return this.lobbyID;
-    }
-
-    @Override
-    public void printMsg(String message){
-        System.out.println(message);
-    }
-
     public void run(String serverHost) throws Exception {
         Server server = null;
         // take a reference of the server from the registry
@@ -78,15 +85,34 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         // main loop
         while(true){
 
-            /* try {
+            try {
                 while (!state.equals(States.CLOSE)){
                     switch (state) {
-                        case WAIT:
-                            server.waitCommand(this);
+
+                        case WAIT_SETTINGS:
+                            if (owner) { //TODO: modifica in modo che si possa fare anche /leave
+                                System.out.println("Choose a command:");
+                                System.out.println("/start, /firstMatch, /notFirstMatch, /closeLobby");
+                                Scanner input = new Scanner(System.in);
+                                server.waitCommand(this, input.nextLine());
+                            } else { System.out.println("Wait for the owner..."); } //TODO: write this just one time
                             break;
+
+                        case WAIT_TURN:
+                            System.out.println("Wait for your turn..."); //TODO: write this just one time
+                            view = server.getBoardView(lobbyID);
+                            if(view.getCurrentPlayer().getNickname().equals(this.nickname)){
+                                this.state = States.PLAY;
+                            }
+                            break;
+
                         case PLAY:
-                            server.playCommand(this);
+                            System.out.println("Choose a command:");
+                            System.out.println("/add, /remove");
+                            Scanner input = new Scanner(System.in);
+                            server.playCommand(this, input.nextLine());
                             break;
+
                         case END:
                             server.endCommand(this);
                             break;
@@ -94,9 +120,9 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
                 }
             } catch (IOException e){
                 System.err.println(e.getMessage());
-            } */
+            }
 
-            Scanner scanIn = new Scanner(System.in);
+            /* Scanner scanIn = new Scanner(System.in);
             switch (scanIn.nextLine()) {
                 case "/closeLobby":
                     server.closeLobby(this);
@@ -104,7 +130,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
                 case "/leave":
                     server.leave(this);
                     return;
-            }
+            } */
         }
     }
 

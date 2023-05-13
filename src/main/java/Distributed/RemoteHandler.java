@@ -14,7 +14,7 @@ public abstract class RemoteHandler {
      * @return return true if the input nickname is available
      */
     protected boolean nicknameChecker(String input) {
-        for(Lobby l: serverApp.getLobbySet()){
+        for(Lobby l: serverApp.getLobbies()){
             for(RemotePlayer p: l.getListOfPlayers()){
                 if(p.getNickname().equals(input)) return false;
             }
@@ -32,7 +32,7 @@ public abstract class RemoteHandler {
     public ConnectionType getType() {
         return type;
     }
-    public void endCommand(){ state=States.WAIT; }
+    public void endCommand(){ state=States.WAIT_SETTINGS; }
     public void update(){
         //TODO ADVERTISE THERE AS BEEN A CHANGE IN THE BOARDVIEW
     }

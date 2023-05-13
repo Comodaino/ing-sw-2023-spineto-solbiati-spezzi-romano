@@ -29,7 +29,7 @@ public class ServerApp {
 
         try {
             server.startServer();
-        } catch (RemoteException e) {
+        } catch (RemoteException e ) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -41,7 +41,7 @@ public class ServerApp {
         lobbies.add(openLobby);
         ServerImpl serverRMI = new ServerImpl(this);
         serverRMI.start();
-        System.out.println("Server ready");
+        System.out.println("Server RMI ready");
         socketAccepter();
     }
 
@@ -98,13 +98,15 @@ public class ServerApp {
 
     public void addPlayer(Client client, RemotePlayer rp) throws RemoteException {
         synchronized (lobbies) {
+            //If the lobby is closed, creates a new lobby and sets its ID
             if (!lobbies.get(lobbies.size() - 1).isOpen()) {
                 lobbies.add(new Lobby());
                 lobbies.get(lobbies.size() - 1).setID(lobbies.size());
             }
             //Adds the player in the list of RemotePlayer of the Lobby the client joined
             lobbies.get(lobbies.size() - 1).addPlayer(rp);
-            //Sets lobbyID and clientID in Client
+            //Sets lobbyID in Client and if it is owner of the lobby or not
+            client.setOwner(rp.isOwner());
             client.setLobbyID(lobbies.get(lobbies.size() - 1).getID());
             System.out.println(rp.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
             System.out.println("owner: " + rp.isOwner());

@@ -1,17 +1,16 @@
 package Distributed.ServerRMI;
 
+import Distributed.ClientRMI.Client;
 import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
 import Model.Player;
 
 public class RMIPlayer extends RemotePlayer {
-    private int id;
     private String nickname;
     private Player modelPlayer;
-    public RMIPlayer(int id){
+    public RMIPlayer(Client client){
         super(ConnectionType.RMI);
-        this.id = id;
-        this.modelPlayer=null;
-        this.nickname= null;
+        this.modelPlayer = null;
+        this.nickname = null;
     }
 }

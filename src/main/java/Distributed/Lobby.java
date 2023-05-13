@@ -59,7 +59,7 @@ public class Lobby {
     }
     public void startGame(){
         List<Player> modelPlayerList = new ArrayList<Player>();
-        //TODO NEED TO DECIDE BETWEEN TWO CONTROLLERS OR ONE
+        //TODO: NEED TO DECIDE BETWEEN TWO CONTROLLERS OR ONE
         for(RemotePlayer p: lp){
             Player tmpPlayer = new Player(p.getNickname(),p.isOwner(), p);
             modelPlayerList.add(tmpPlayer);
@@ -67,11 +67,11 @@ public class Lobby {
             p.setState(States.PLAY);
         }
         controller = new GameController(modelPlayerList, firstMatch);
-        //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
+        //TODO: GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp) {
             if (p.getType().equals(ConnectionType.SOCKET))
                 p.setController(controller);
-            //TODO else p.getHandler().setGameController(tmpControllerRMI);
+            //TODO: else p.getHandler().setGameController(tmpControllerRMI);
         }
         boardView = controller.getBoardView();
     }
@@ -85,6 +85,8 @@ public class Lobby {
             p.setState(States.CLOSE);
         }
     }
+
+    public GameController getController() { return this.controller; }
 
     public Object getBoardView() {
         return boardView;

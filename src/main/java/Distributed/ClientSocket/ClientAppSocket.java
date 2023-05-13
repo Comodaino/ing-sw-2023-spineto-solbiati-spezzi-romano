@@ -2,10 +2,11 @@ package Distributed.ClientSocket;
 
 import Distributed.AbstractClient;
 import Distributed.Lobby;
+import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.TextualUI;
-import View.ViewInterface;
+//import View.TextualUI;
+//import View.ViewInterface;
 
 import java.io.*;
 import java.net.Socket;
@@ -27,11 +28,11 @@ public class ClientAppSocket implements AbstractClient {
     private final FileWriter stdOut = new FileWriter(viewFile);
     private States state;
     private ObjectInputStream objIn;
-    private ViewInterface view;
+    //private ViewInterface view;
 
     public ClientAppSocket(int port, String typeOfView) throws IOException {
         this.port = port;
-        if(typeOfView.equals("TUI")) view = new TextualUI(this);
+        //if(typeOfView.equals("TUI")) view = new TextualUI(this);
         state = States.INIT;
     }
 
@@ -97,7 +98,7 @@ public class ClientAppSocket implements AbstractClient {
                         state = States.INIT;
                         break;
                     case "/wait":
-                        state = States.WAIT;
+                        state = States.WAIT_SETTINGS;
                         break;
                     case "/play":
                         state = States.PLAY;
@@ -126,5 +127,10 @@ public class ClientAppSocket implements AbstractClient {
     public void println(String arg) throws IOException {
         stdOut.write(arg);
         stdOut.flush();
+    }
+
+    @Override
+    public RemotePlayer getPlayer() {
+        return null;
     }
 }

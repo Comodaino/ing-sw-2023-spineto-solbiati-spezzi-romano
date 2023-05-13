@@ -87,6 +87,8 @@ public class GUIclass extends JFrame{
         }
         ImageIcon imageIcon = new ImageIcon(createPersonalGoal(client).getImage());
         JLabel personalGoal = new JLabel(imageIcon);
+        imageIcon.setImage(imageIcon.getImage().getScaledInstance(150,200,100));
+
 
         shelf.add(personalGoal,BorderLayout.EAST);
 
@@ -100,40 +102,28 @@ public class GUIclass extends JFrame{
 
             case 0: ImageIcon imagePersGoal1 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals12.png");
                     return imagePersGoal1;
-                break;
             case 1: ImageIcon imagePersGoal2 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals9.png");
                     return imagePersGoal2;
-                break;
             case 2: ImageIcon imagePersGoal3 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals2.png");
                     return imagePersGoal3;
-                break;
             case 3: ImageIcon imagePersGoal4 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals3.png");
                     return imagePersGoal4;
-                break;
             case 4: ImageIcon imagePersGoal5 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals4.png");
                     return imagePersGoal5;
-                break;
             case 5: ImageIcon imagePersGoal6 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals11.png");
                     return imagePersGoal6;
-                break;
             case 6: ImageIcon imagePersGoal7 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals5.png");
                     return imagePersGoal7;
-                break;
             case 7: ImageIcon imagePersGoal8 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals10.png");
                     return imagePersGoal8;
-                break;
             case 8: ImageIcon imagePersGoal9 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals.png");
                     return imagePersGoal9;
-                break;
             case 9: ImageIcon imagePersGoal10 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals6.png");
                     return imagePersGoal10;
-                break;
             case 10:ImageIcon imagePersGoal11 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals8.png");
                     return imagePersGoal11;
-                break;
             case 11:ImageIcon imagePersGoal12 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals7.png");
                     return imagePersGoal12;
-                break;
         }
         return null;
         //imagePersGoal.setImage(imagePersoGoal.getImage().getScaledInstance(100,100,100));

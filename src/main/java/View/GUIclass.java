@@ -3,14 +3,10 @@ package View;
 import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Model.Board;
-import Model.Player;
-import Model.Tile;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.Random;
 
 public class GUIclass extends JFrame{
     private RemotePlayer player;
@@ -35,37 +31,34 @@ public class GUIclass extends JFrame{
 
     }
     public static JPanel createBoard(){
-        JPanel board = new JPanel();
+        JPanel board = new BoardPanel();
         // board.setLayout(new OverlayLayout(board));
         Border border1 = BorderFactory.createLineBorder(Color.BLACK);
         TitledBorder titledBorder1 = BorderFactory.createTitledBorder(border1, "The Board");
         board.setBorder(titledBorder1);
+        board.setPreferredSize(new Dimension(750,750));
 
-        ImageIcon imageBoard = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/livingroom.png");
-        imageBoard.setImage(imageBoard.getImage().getScaledInstance(750, 750,50));
-        JLabel imageOfBoard = new JLabel(imageBoard);
-        board.add(imageOfBoard);
-
-       //    DA CONTROLLARE (NON MOSTRA LA TILE CAT1)
-        JPanel tilePanel = new JPanel();
-
+        JPanel tilePanel = new JPanel(new FlowLayout());
+        tilePanel.setLayout(null);
         tilePanel.setOpaque(false);
-  //      tilePanel.setLayout(null);
+        tilePanel.setPreferredSize(new Dimension(750,750));
 
         ImageIcon  imageCat1 = new ImageIcon("/Users/alessandraromano/Desktop/git_tutorial/ProvaMarket/foto/Tile/Gatti1.1.png");
-      //  imageCat1.setImage(imageCat1.getImage().getScaledInstance(50,50,50));
+        imageCat1.setImage(imageCat1.getImage().getScaledInstance(70,70,50));
         JLabel tileCat1 = new JLabel(imageCat1);
         tileCat1.setBounds(10,10,imageCat1.getIconWidth(),imageCat1.getIconHeight());
         tilePanel.add(tileCat1);
 
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new OverlayLayout(mainPanel));
+        mainPanel.add(board);
+        mainPanel.add(tilePanel);
 
-    //    tilePanel.setBounds(0, 0, imageBoard.getIconWidth(), imageBoard.getIconHeight());
         board.add(tilePanel);
-
         return board;
     }
     public static JPanel createShelf(AbstractClient client){
-        JPanel shelf = new JPanel();
+        JPanel shelf = new SheldPanel();
         shelf.setLayout(new BorderLayout());
 
         Border border2 = BorderFactory.createLineBorder(Color.BLACK);
@@ -89,15 +82,12 @@ public class GUIclass extends JFrame{
         JLabel personalGoal = new JLabel(imageIcon);
         imageIcon.setImage(imageIcon.getImage().getScaledInstance(150,200,100));
 
-
         shelf.add(personalGoal,BorderLayout.EAST);
-
         return shelf;
     }
     public static ImageIcon createPersonalGoal(AbstractClient client){
         RemotePlayer player1 = client.getPlayer();
         int persGoal = player1.getModelPlayer().getGoal().CreatePersonalGoal();
-    //    ImageIcon imagePersGoal = new ImageIcon();
         switch (persGoal){
 
             case 0: ImageIcon imagePersGoal1 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals12.png");
@@ -126,8 +116,6 @@ public class GUIclass extends JFrame{
                     return imagePersGoal12;
         }
         return null;
-        //imagePersGoal.setImage(imagePersoGoal.getImage().getScaledInstance(100,100,100));
-       // JLabel imageOfPersGoal = new JLabel();
     }
     public static void Home(){
         JFrame home = new JFrame();
@@ -143,7 +131,6 @@ public class GUIclass extends JFrame{
     }
 
     public void GUIclass(AbstractClient client){;
-
         this.player= client.getPlayer();
         switch (this.state){
             case HOME:{

@@ -20,7 +20,7 @@ public class TextualUI implements ViewInterface {
         this.player = client.getPlayer();
         this.state = State.HOME;
         this.input = new Scanner(System.in);
-        this.client= client;
+        this.client = client;
         Thread th = new Thread() {
             @Override
             public void run() {
@@ -41,7 +41,6 @@ public class TextualUI implements ViewInterface {
 
     }
 
-    @Override
     public void update(String arg) throws IOException {
         String command;
         switch (this.state) {
@@ -60,8 +59,8 @@ public class TextualUI implements ViewInterface {
                         command = input.nextLine();
                         client.println(command);
                     } while (!command.equals("/start"));
-                } else{
-                        System.out.println("wait for the owner to start the game");
+                } else {
+                    System.out.println("wait for the owner to start the game");
                     try {
                         wait();   //not sure yet
                     } catch (InterruptedException e) {
@@ -84,14 +83,14 @@ public class TextualUI implements ViewInterface {
 
     private void showShelf() {
         System.out.println("YOUR SHELF:");
-        for(int i=0; i<6; i++){
-            for(int j=0; j<5; j++){
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
                 Tile tile = player.getModelPlayer().getShelf().getTile(i, j);
-                if (tile.equals(null)){
+                if (tile.equals(null)) {
                     System.out.print("    ");
-                }else{
+                } else {
                     System.out.print(" " + tile.getColor().name().charAt(0));
-                    switch (tile.getType()){
+                    switch (tile.getType()) {
                         case ONE:
                             System.out.print("1 ");
                             break;
@@ -110,14 +109,14 @@ public class TextualUI implements ViewInterface {
 
     private void showBoard() {
         System.out.println("showing the BOARD...");
-        for(int i=0; i<9; i++){
-            for(int j=0; j<9; j++){
-                Tile tile = client.getBoardView().getCell(i,j).getTile();
-                if(tile.equals(null)){
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                Tile tile = client.getBoardView().getCell(i, j).getTile();
+                if (tile.equals(null)) {
                     System.out.print("|    |");
-                }else{
+                } else {
                     System.out.print("| " + tile.getColor().name().charAt(0));
-                    switch (tile.getType()){
+                    switch (tile.getType()) {
                         case ONE:
                             System.out.print("1 |");
                             break;
@@ -140,16 +139,18 @@ public class TextualUI implements ViewInterface {
         if (arg.equals("/nickname")) {
             System.out.println("nickname already used, please insert another nickname:  ");
             inputHandler();
-        }
-        else{
+        } else {
             System.out.println("insert your nickname:  ");
             inputHandler();
         }
 
     }
-    public void setState(State state){
+
+    public void setState(State state) {
         this.state = state;
     }
+
     public void setBoardView(BoardView boardView) {
-        this.boardView =
+        this.boardView = boardView;
     }
+}

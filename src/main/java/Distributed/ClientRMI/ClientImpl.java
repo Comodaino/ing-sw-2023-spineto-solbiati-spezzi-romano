@@ -1,8 +1,6 @@
-package Distributed.RMI.client;
+package Distributed.ClientRMI;
 
 import Distributed.ServerRMI.Server;
-import Distributed.ServerApp;
-import Distributed.ServerSocket.States;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;

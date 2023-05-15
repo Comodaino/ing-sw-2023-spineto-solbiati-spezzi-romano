@@ -1,9 +1,11 @@
 package View;
 
 import Distributed.AbstractClient;
+import Distributed.ClientRMI.Client;
 import Distributed.RemotePlayer;
 import Model.BoardView;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class TextualUI implements ViewInterface {
@@ -11,9 +13,11 @@ public class TextualUI implements ViewInterface {
     private BoardView boardView;
     private final Scanner input;
     private RemotePlayer player;
+    private AbstractClient client;
 
     public TextualUI(AbstractClient client) {
         this.player = client.getPlayer();
+        this.client = client;
         this.state = State.HOME;
         this.input = new Scanner(System.in);
         Thread th = new Thread() {
@@ -53,7 +57,7 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    public void homePrint(String arg) {
+    public void homePrint(String arg) throws IOException {
         System.out.println("WELCOME TO MY SHELFIE !/s");
         if (arg.equals(null)) {
             System.out.println("Please insert your nickname here: ");

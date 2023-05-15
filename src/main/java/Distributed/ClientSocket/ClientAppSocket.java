@@ -5,6 +5,7 @@ import Distributed.Lobby;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
+import View.GUIclass;
 import View.TextualUI;
 import View.ViewInterface;
 
@@ -34,7 +35,8 @@ public class ClientAppSocket implements AbstractClient {
     public ClientAppSocket(int port, String typeOfView) throws IOException {
         this.port = port;
         this.player = null;
-        if(typeOfView.equals("TUI")) view = new TextualUI(this);
+        if(typeOfView.equals("TUI")) this.view = new TextualUI(this);
+        else this.view  = new GUIclass();
         state = States.INIT;
     }
 

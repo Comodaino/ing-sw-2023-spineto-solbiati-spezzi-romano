@@ -2,16 +2,18 @@ package View;
 
 import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
+import Model.BoardView;
 import Model.Tile;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class TextualUI extends ViewInterface {
+public class TextualUI implements ViewInterface {
 
     private State state;
     private final Scanner input;
     private RemotePlayer player;
+    private BoardView boardView;
     private AbstractClient client;
 
     public TextualUI(AbstractClient client) {
@@ -145,4 +147,9 @@ public class TextualUI extends ViewInterface {
         }
 
     }
-}
+    public void setState(State state){
+        this.state = state;
+    }
+    public void setBoardView(BoardView boardView) {
+        this.boardView =
+    }

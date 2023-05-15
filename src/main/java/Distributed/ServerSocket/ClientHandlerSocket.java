@@ -143,7 +143,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
 
     public void playCommand(String input){
         System.out.println("Received command: " + input);
-        gameController.update(input); //TODO: check by Alessio (before the method update has a ClientHandler parameter)
+        gameController.update(input);
     }
 
     public RemotePlayer getPlayer() {

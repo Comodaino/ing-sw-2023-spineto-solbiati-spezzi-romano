@@ -57,6 +57,9 @@ public class RemotePlayer {
     public void setState(States state) {
         this.state = state;
     }
+    public States getState() {
+        return state;
+    }
 
     public void setController(GameController controller) {
         this.controller = controller;
@@ -68,9 +71,5 @@ public class RemotePlayer {
 
     public ConnectionType getType() {
         return type;
-    }
-
-    public States getState() {
-        return state;
     }
 }

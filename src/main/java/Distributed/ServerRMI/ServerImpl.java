@@ -1,3 +1,4 @@
+/*
 package Distributed.ServerRMI;
 
 import Distributed.ClientRMI.Client;
@@ -46,6 +47,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         this.serverApp.addPlayer(client, rp);
         //Sets the client state in WAIT
         client.setState(WAIT_SETTINGS);
+        rp.setState(WAIT_SETTINGS);
     }
 
     @Override
@@ -55,7 +57,8 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
                 for (RemotePlayer rp : l.getListOfPlayers()) {
                     if (client.getNickname().equals(rp.getNickname())) {
                         l.getListOfPlayers().remove(rp);
-                        client.setState(States.CLOSE);
+                        client.setState(CLOSE);
+                        rp.setState(CLOSE);
                         System.out.println(client.getNickname() + " has left the server");
                         return;
                     }
@@ -72,7 +75,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public String checkNickname(String nickname) throws RemoteException {
+    public String checkNicknameRMI(String nickname) throws RemoteException {
         synchronized (serverApp.getLobbies()) {
             //Iterates on each RemotePlayer in each Lobby and return null if the nickname is already taken
             for (Lobby l : serverApp.getLobbies()) {
@@ -110,6 +113,22 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
+    public States myState(Client client) throws RemoteException {
+        Lobby lobby = null;
+        synchronized (serverApp.getLobbies()){
+            lobby = serverApp.getLobbies().get(client.getLobbyID()-1);
+        }
+
+        for(RemotePlayer rp: lobby.getListOfPlayers()) {
+            if (rp.getNickname().equals(client.getNickname())) {
+                return rp.getState();
+            }
+        }
+
+        return ERROR;
+    }
+
+    @Override
     public void waitCommand(Client client, String input) throws RemoteException {
         Lobby lobby = null;
         synchronized (serverApp.getLobbies()){
@@ -126,6 +145,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
                         for(RemotePlayer rp: lobby.getListOfPlayers()){
                             if(rp.getNickname().equals(client.getNickname())){
                                 rp.setState(PLAY);
+                                client.setState(PLAY);
                             } else {
                                 rp.setState(WAIT_TURN);
                             }
@@ -159,7 +179,13 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
         System.out.println("Received command: " + input);
         lobby.getController().update(input);
+
         client.setState(WAIT_TURN);
+        for(RemotePlayer rp: lobby.getListOfPlayers()) {
+            if (rp.getNickname().equals(client.getNickname())) {
+                rp.setState(WAIT_TURN);
+            }
+        }
     }
 
     @Override
@@ -172,3 +198,4 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
 }
+*/

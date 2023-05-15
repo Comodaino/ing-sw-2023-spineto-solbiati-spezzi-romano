@@ -2,6 +2,7 @@ package Distributed.ServerRMI;
 
 import Distributed.ClientRMI.Client;
 import Distributed.RemoteHandler;
+import Distributed.States;
 import Model.BoardView;
 
 import java.rmi.*;
@@ -18,7 +19,7 @@ public interface Server extends Remote {
      * Checks if there are no other players with the same nickname connected to the server
      * @param nickname the nickname which will be checked
      */
-    public String checkNickname(String nickname) throws RemoteException;
+    public String checkNicknameRMI(String nickname) throws RemoteException;
 
     /**
      * Deletes a client from the server
@@ -44,7 +45,7 @@ public interface Server extends Remote {
      * @return BoardView the serializable model view BoardView
      */
     public BoardView getBoardView(Integer lobbyID) throws RemoteException;
-
+    public States myState(Client client) throws RemoteException;
     public void waitCommand(Client client, String input) throws RemoteException;
     public void playCommand(Client client, String input) throws RemoteException;
     public void endCommand(Client client) throws RemoteException;

@@ -6,5 +6,6 @@ public enum States {
     WAIT_SETTINGS,
     WAIT_TURN,
     END,
-    CLOSE
+    CLOSE,
+    ERROR
 }

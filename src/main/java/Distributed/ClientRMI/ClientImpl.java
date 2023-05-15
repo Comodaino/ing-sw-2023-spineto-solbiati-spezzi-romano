@@ -10,6 +10,8 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
     private String nickname;
@@ -54,7 +56,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public String setNickname(ServerApp server) throws RemoteException{
+    public String setNickname(Server server) throws RemoteException{
         String nickname = null;
         boolean found = false;
 
@@ -63,7 +65,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
             Scanner scanIn = new Scanner(System.in);
             nickname = scanIn.nextLine();
 
-            nickname = server.checkNickname(nickname);
+            nickname = server.checkNicknameRMI(nickname);
             if(nickname==null){
                 System.out.println("Nickname already chosen! Please be more original and retry");
             }
@@ -75,33 +77,38 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     public void run(String serverHost) throws Exception {
+        boolean endOfGame = false;
         Server server = null;
         // take a reference of the server from the registry
-        server = (Server) Naming.lookup("rmi://" + serverHost + "/Server");
+        server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerApp");
 
         // join
         server.register(this);
 
         // main loop
-        while(true){
+        while(!endOfGame){
 
             try {
-                while (!state.equals(States.CLOSE)){
+                while (!this.state.equals(States.CLOSE)){
                     switch (state) {
-
                         case WAIT_SETTINGS:
-                            if (owner) { //TODO: modifica in modo che si possa fare anche /leave
+                            if (owner) { //TODO: modifica in modo che si possa fare anche /leave per un giocatore non owner
                                 System.out.println("Choose a command:");
-                                System.out.println("/start, /firstMatch, /notFirstMatch, /closeLobby");
+                                System.out.println("/start, /firstMatch, /notFirstMatch, /closeLobby or /leave");
                                 Scanner input = new Scanner(System.in);
                                 server.waitCommand(this, input.nextLine());
-                            } else { System.out.println("Wait for the owner..."); } //TODO: write this just one time
+                            } else {
+                                this.state = server.myState(this);
+                                System.out.println("Wait for the owner..."); //TODO: write this just one time
+                                TimeUnit.SECONDS.sleep(5);
+                            }
                             break;
 
                         case WAIT_TURN:
+                            TimeUnit.SECONDS.sleep(5);
                             System.out.println("Wait for your turn..."); //TODO: write this just one time
                             view = server.getBoardView(lobbyID);
-                            if(view.getCurrentPlayer().getNickname().equals(this.nickname)){
+                            if(view!=null && view.getCurrentPlayer().getNickname().equals(this.nickname)){
                                 this.state = States.PLAY;
                             }
                             break;
@@ -111,26 +118,18 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
                             System.out.println("/add, /remove");
                             Scanner input = new Scanner(System.in);
                             server.playCommand(this, input.nextLine());
+                            view = server.getBoardView(lobbyID);
                             break;
 
                         case END:
                             server.endCommand(this);
+                            endOfGame = true;
                             break;
                     }
                 }
             } catch (IOException e){
                 System.err.println(e.getMessage());
             }
-
-            /* Scanner scanIn = new Scanner(System.in);
-            switch (scanIn.nextLine()) {
-                case "/closeLobby":
-                    server.closeLobby(this);
-                    break;
-                case "/leave":
-                    server.leave(this);
-                    return;
-            } */
         }
     }
 

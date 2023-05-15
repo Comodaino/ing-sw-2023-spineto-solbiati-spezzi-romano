@@ -88,7 +88,7 @@ public class Lobby {
 
     public GameController getController() { return this.controller; }
 
-    public Object getBoardView() {
+    public BoardView getBoardView() {
         return boardView;
     }
     public void setID(Integer i) { this.ID = i; }

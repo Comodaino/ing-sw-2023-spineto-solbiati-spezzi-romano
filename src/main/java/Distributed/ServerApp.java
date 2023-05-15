@@ -37,7 +37,7 @@ public class ServerApp {
     }
 
     public void startServer() throws IOException {
-        openLobby = new Lobby();
+        openLobby = new Lobby(this);
         lobbies.add(openLobby);
         ServerImpl serverRMI = new ServerImpl(this);
         serverRMI.start();
@@ -63,7 +63,7 @@ public class ServerApp {
             socket.getOutputStream().flush();
             synchronized (lobbies) {
                 if (!openLobby.isOpen()) {
-                    openLobby = new Lobby();
+                    openLobby = new Lobby(this);
                     lobbies.add(openLobby);
                     System.out.println("Created new lobby");
                 }
@@ -99,7 +99,7 @@ public class ServerApp {
     public void addPlayer(Client client, RemotePlayer rp) throws RemoteException {
         synchronized (lobbies) {
             if (!lobbies.get(lobbies.size() - 1).isOpen()) {
-                lobbies.add(new Lobby());
+                lobbies.add(new Lobby(this));
                 lobbies.get(lobbies.size() - 1).setID(lobbies.size());
             }
             //Adds the player in the list of RemotePlayer of the Lobby the client joined

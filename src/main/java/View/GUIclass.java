@@ -3,25 +3,29 @@ package View;
 import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Model.Board;
+import Model.BoardView;
+import Model.TileType;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.util.HashMap;
 
 public class GUIclass extends JFrame{
     private RemotePlayer player;
     private AbstractClient client;
     private State state;
     private boolean chair;
-
-    public static void Play(AbstractClient client) {
+    private BoardView boardView;
+    public static void Play(AbstractClient client,BoardView boardView) {
 
         JFrame play = new JFrame("Play");
         play.setLocationRelativeTo(null);
         play.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,createBoard(),createShelf(client));
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,createBoard(boardView),createShelf(client));
         splitPane.setDividerLocation(0.5);
 
         panel.add(splitPane);
@@ -30,7 +34,7 @@ public class GUIclass extends JFrame{
         play.setVisible(true);
 
     }
-    public static JPanel createBoard(){
+    public static JPanel createBoard(BoardView boardView){
         JPanel board = new BoardPanel();
         // board.setLayout(new OverlayLayout(board));
         Border border1 = BorderFactory.createLineBorder(Color.BLACK);
@@ -43,7 +47,7 @@ public class GUIclass extends JFrame{
         tilePanel.setOpaque(false);
         tilePanel.setPreferredSize(new Dimension(750,750));
 
-        ImageIcon  imageCat1 = new ImageIcon("/Users/alessandraromano/Desktop/git_tutorial/ProvaMarket/foto/Tile/Gatti1.1.png");
+        ImageIcon  imageCat1 = new ImageIcon("View/resources/Gatti1.1.png");
         imageCat1.setImage(imageCat1.getImage().getScaledInstance(70,70,50));
         JLabel tileCat1 = new JLabel(imageCat1);
         tileCat1.setBounds(10,10,imageCat1.getIconWidth(),imageCat1.getIconHeight());
@@ -55,6 +59,13 @@ public class GUIclass extends JFrame{
         mainPanel.add(tilePanel);
 
         board.add(tilePanel);
+        /* HashMap<String,ImageIcon>  imageMap = new HashMap<String,ImageIcon>();
+        imageMap = (HashMap<String, ImageIcon>) boardView.getTileBuffer();
+        if(boardView.getTile(0,0).getType()== TileType.ONE){
+
+        }
+        */
+
         return board;
     }
     public static JPanel createShelf(AbstractClient client){
@@ -65,7 +76,7 @@ public class GUIclass extends JFrame{
         TitledBorder titledBorder2 = BorderFactory.createTitledBorder(border2, "MyShelf");
         shelf.setBorder(titledBorder2);
 
-        ImageIcon imageShelf = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/bookshelf.png");
+        ImageIcon imageShelf = new ImageIcon("View/resources/bookshelf.png");
         imageShelf.setImage(imageShelf.getImage().getScaledInstance(500,500,30));
 
         JLabel imageOfShelf = new JLabel(imageShelf);
@@ -73,7 +84,7 @@ public class GUIclass extends JFrame{
         shelf.add(imageOfShelf, BorderLayout.NORTH);
 
         if(client.getPlayer().getModelPlayer().getChair() == true){
-            ImageIcon imageChair = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/firstplayertoken.png");
+            ImageIcon imageChair = new ImageIcon("View/resources/firstplayertoken.png");
             JLabel chairImage = new JLabel(imageChair);
             shelf.add(chairImage,BorderLayout.WEST);
             imageChair.setImage(imageChair.getImage().getScaledInstance(100,100,100));
@@ -90,29 +101,29 @@ public class GUIclass extends JFrame{
         int persGoal = player1.getModelPlayer().getGoal().CreatePersonalGoal();
         switch (persGoal){
 
-            case 0: ImageIcon imagePersGoal1 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals12.png");
+            case 0: ImageIcon imagePersGoal1 = new ImageIcon("View/resources/Personal Goal /Personal_Goals12.png");
                     return imagePersGoal1;
-            case 1: ImageIcon imagePersGoal2 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals9.png");
+            case 1: ImageIcon imagePersGoal2 = new ImageIcon("View/resources/Personal Goal /Personal_Goals9.png");
                     return imagePersGoal2;
-            case 2: ImageIcon imagePersGoal3 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals2.png");
+            case 2: ImageIcon imagePersGoal3 = new ImageIcon("View/resources/Personal Goal /Personal_Goals2.png");
                     return imagePersGoal3;
-            case 3: ImageIcon imagePersGoal4 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals3.png");
+            case 3: ImageIcon imagePersGoal4 = new ImageIcon("View/resources/Personal Goal /Personal_Goals3.png");
                     return imagePersGoal4;
-            case 4: ImageIcon imagePersGoal5 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals4.png");
+            case 4: ImageIcon imagePersGoal5 = new ImageIcon("View/resources/Personal Goal /Personal_Goals4.png");
                     return imagePersGoal5;
-            case 5: ImageIcon imagePersGoal6 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals11.png");
+            case 5: ImageIcon imagePersGoal6 = new ImageIcon("View/resources/Personal Goal /Personal_Goals11.png");
                     return imagePersGoal6;
-            case 6: ImageIcon imagePersGoal7 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals5.png");
+            case 6: ImageIcon imagePersGoal7 = new ImageIcon("View/resources/Personal Goal /Personal_Goals5.png");
                     return imagePersGoal7;
-            case 7: ImageIcon imagePersGoal8 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals10.png");
+            case 7: ImageIcon imagePersGoal8 = new ImageIcon("View/resources/Personal Goal /Personal_Goals10.png");
                     return imagePersGoal8;
-            case 8: ImageIcon imagePersGoal9 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals.png");
+            case 8: ImageIcon imagePersGoal9 = new ImageIcon("View/resources/Personal Goal /Personal_Goals.png");
                     return imagePersGoal9;
-            case 9: ImageIcon imagePersGoal10 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals6.png");
+            case 9: ImageIcon imagePersGoal10 = new ImageIcon("View/resources/Personal Goal /Personal_Goals6.png");
                     return imagePersGoal10;
-            case 10:ImageIcon imagePersGoal11 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals8.png");
+            case 10:ImageIcon imagePersGoal11 = new ImageIcon("View/resources/Personal Goal /Personal_Goals8.png");
                     return imagePersGoal11;
-            case 11:ImageIcon imagePersGoal12 = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/Personal Goal /Personal_Goals7.png");
+            case 11:ImageIcon imagePersGoal12 = new ImageIcon("View/resources/Personal Goal /Personal_Goals7.png");
                     return imagePersGoal12;
         }
         return null;
@@ -130,15 +141,16 @@ public class GUIclass extends JFrame{
 
     }
 
-    public void GUIclass(AbstractClient client){;
+    public void GUIclass(AbstractClient client, BoardView boardView){;
         this.player= client.getPlayer();
+        this.boardView = boardView;
         switch (this.state){
             case HOME:{
                 Home();
             }
                 break;
             case PLAY: {
-                Play(client);
+                Play(client,boardView);
             }
                 break;
             case LOBBY:{

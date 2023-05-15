@@ -123,4 +123,9 @@ public class ClientAppSocket implements AbstractClient {
     public RemotePlayer getPlayer() {
         return this.player;
     }
+
+    @Override
+    public BoardView getBoardView() {
+        return boardView;
+    }
 }

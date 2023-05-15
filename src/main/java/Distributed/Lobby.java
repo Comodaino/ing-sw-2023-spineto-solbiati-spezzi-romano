@@ -15,10 +15,12 @@ public class Lobby {
     private boolean firstMatch;
     private BoardView boardView;
     private GameController controller;
-    public Lobby(){
+    private ServerApp serverApp;
+    public Lobby(ServerApp serverApp){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.ID = null;
+        this.serverApp = serverApp;
         this.open = true;
     }
 
@@ -82,9 +84,10 @@ public class Lobby {
         for(RemotePlayer p: lp){
             p.setState(States.CLOSE);
         }
+        serverApp.removeLobby(this);
     }
 
-    public Object getBoardView() {
+    public BoardView getBoardView() {
         return boardView;
     }
     public void setID(Integer i) { this.ID = i; }

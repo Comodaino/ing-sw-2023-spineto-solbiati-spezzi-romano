@@ -20,6 +20,7 @@ public class RemotePlayer implements Serializable {
 
     public RemotePlayer(ConnectionType type){
         this.type = type;
+        this.owner = false;
         modelPlayer = new Player("Nico", true, null);
         this.nickname = "Ale";
         this.state = INIT;
@@ -35,7 +36,7 @@ public class RemotePlayer implements Serializable {
         return nickname;
     }
 
-    public void setAsChair() {
+    public void setOwner() {
         owner = true;
     }
 

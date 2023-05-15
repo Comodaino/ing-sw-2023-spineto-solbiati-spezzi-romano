@@ -1,6 +1,8 @@
 package Distributed.ClientRMI;
 
+import Distributed.ServerApp;
 import Distributed.ServerRMI.Server;
+import Distributed.States;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -20,6 +22,11 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     @Override
+    public String setNickname(ServerApp server) throws RemoteException {
+        return null;//TODO IMPLEMENT
+    }
+
+    @Override
     public String getNickname(){
         return this.nickname;
     }
@@ -29,7 +36,6 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         this.lobbyID = lobbyID;
     }
 
-    @Override
     public String setNickname(Server server) throws RemoteException{
         String nickname = null;
         boolean found = false;

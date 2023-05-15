@@ -25,9 +25,7 @@ public class Lobby {
     public void addPlayer(RemotePlayer p){
         if(open){
             if(lp.isEmpty()){
-                p.setOwner(true); //the first player to join the lobby become the owner
-            } else {
-                p.setOwner(false);
+                p.setOwner(); //the first player to join the lobby become the owner
             }
             lp.add(p);
             if(lp.size()==4) this.open = false;

@@ -12,7 +12,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
-import java.util.Set;
 
 //TODO check synchronization
 public class ServerImpl extends UnicastRemoteObject implements Server {
@@ -36,8 +35,8 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public void register(Client client) throws RemoteException {
         //Creates a new RemotePlayer and sets its nickname, asking it to the client
-        RMIPlayer rp = new RMIPlayer(); //TODO: check the constructor
-        String nickname = client.setNickname(this);
+        RMIPlayer rp = new RMIPlayer(11); //TODO: check the constructor
+        String nickname = client.setNickname(serverApp);
         rp.setNickname(nickname);
 
         //If the lobby is closed, creates a new lobby and sets its ID
@@ -61,14 +60,14 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     @Override
     public void update(RemoteHandler o, Object arg) throws RemoteException { //TODO ClientHandlerRMI instead of RemoteHandler
-        o.getGameController().update(o, arg);
+        o.getGameController().update(arg.toString());
     }
 
     @Override
     public String checkNickname(String nickname) throws RemoteException {
-        synchronized (lobbies) {
+        synchronized (serverApp.getLobbies()) {
             //Iterates on each RemotePlayer in each Lobby and return null if the nickname is already taken
-            for (Lobby l : lobbies) {
+            for (Lobby l : serverApp.getLobbies()) {
                 for (RemotePlayer rp : l.getListOfPlayers()) {
                     if (rp.getNickname().equals(nickname)) {
                         return null;

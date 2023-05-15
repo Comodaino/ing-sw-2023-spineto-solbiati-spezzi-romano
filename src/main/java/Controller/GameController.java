@@ -183,13 +183,6 @@ public class GameController{
     }
 }
 
-
-addCommand(int c)
-
-...
-String arg = ""/add " + playerNickname +" " + c"
-gameCNTROLLER.UPDATE(RemotePlayer, )
-
 /* possible commands:
 *  /add playerName column
 *  /remove playerName row column

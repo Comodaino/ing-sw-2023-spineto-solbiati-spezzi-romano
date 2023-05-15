@@ -104,6 +104,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             player.setState(WAIT);
             out.println("/wait");
             out.flush();
+            objOut.writeObject(this.player);
+            objOut.flush();
         } else System.out.println("Nickname not available");
     }
 
@@ -143,7 +145,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
 
     public void playCommand(String input){
         System.out.println("Received command: " + input);
-        gameController.update(this, input);
+        gameController.update(input);
     }
 
     public RemotePlayer getPlayer() {

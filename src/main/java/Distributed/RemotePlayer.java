@@ -4,12 +4,13 @@ import Controller.GameController;
 import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Player;
 
+import java.io.Serializable;
 import java.net.Socket;
 
 import static Distributed.States.INIT;
 
 //TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
-public class RemotePlayer {
+public class RemotePlayer implements Serializable {
     private Player modelPlayer;
     private ConnectionType type;
     private String nickname;

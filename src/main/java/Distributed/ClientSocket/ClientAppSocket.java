@@ -2,6 +2,7 @@ package Distributed.ClientSocket;
 
 import Distributed.AbstractClient;
 import Distributed.Lobby;
+import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
 import View.TextualUI;
@@ -28,9 +29,11 @@ public class ClientAppSocket implements AbstractClient {
     private States state;
     private ObjectInputStream objIn;
     private ViewInterface view;
+    private RemotePlayer player;
 
     public ClientAppSocket(int port, String typeOfView) throws IOException {
         this.port = port;
+        this.player = null;
         if(typeOfView.equals("TUI")) view = new TextualUI(this);
         state = States.INIT;
     }
@@ -97,6 +100,9 @@ public class ClientAppSocket implements AbstractClient {
                         state = States.INIT;
                         break;
                     case "/wait":
+                        if(this.player == null){
+                            player = (RemotePlayer) objIn.readObject();
+                        }
                         state = States.WAIT;
                         break;
                     case "/play":
@@ -126,5 +132,10 @@ public class ClientAppSocket implements AbstractClient {
     public void println(String arg) throws IOException {
         stdOut.write(arg);
         stdOut.flush();
+    }
+
+    @Override
+    public RemotePlayer getPlayer() {
+        return this.player;
     }
 }

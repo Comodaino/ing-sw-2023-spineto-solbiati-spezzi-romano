@@ -1,26 +1,27 @@
 package Distributed;
 
 
-import Distributed.RMI.server.ServerImpl;
+import Distributed.ClientRMI.Client;
+import Distributed.ServerRMI.ServerImpl;
 import Distributed.ServerSocket.ClientHandlerSocket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServerApp {
     private int port;
-    private final Set<Lobby> lobbySet;
+    private final List<Lobby> lobbies;
     private Lobby openLobby;
 
     public ServerApp(int port) {
         this.port = port;
-        this.lobbySet = new HashSet<Lobby>();
+        this.lobbies = new ArrayList<Lobby>();
     }
 
     public static void main(String[] args) {
@@ -37,7 +38,7 @@ public class ServerApp {
 
     public void startServer() throws IOException {
         openLobby = new Lobby();
-        lobbySet.add(openLobby);
+        lobbies.add(openLobby);
         ServerImpl serverRMI = new ServerImpl(this);
         serverRMI.start();
         System.out.println("Server ready");
@@ -57,38 +58,56 @@ public class ServerApp {
         //Accepts new players and creates another lobby if it's full
 
 
-        while(true) {
+        while (true) {
             Socket socket = serverSocket.accept();
             socket.getOutputStream().flush();
+            synchronized (lobbies) {
                 if (!openLobby.isOpen()) {
                     openLobby = new Lobby();
-                    lobbySet.add(openLobby);
+                    lobbies.add(openLobby);
                     System.out.println("Created new lobby");
                 }
-            executor.submit(new ClientHandlerSocket(socket, openLobby));
-            System.out.println("Passed socket to handler");
+                executor.submit(new ClientHandlerSocket(socket, openLobby, this));
+                System.out.println("Passed socket to handler");
+            }
         }
+    }
 
+    public void removeLobby(Lobby lobby) {
+        this.lobbies.remove(lobby);
     }
-    public void removeLobby(Lobby lobby){
-        this.lobbySet.remove(lobby);
-    }
-    public String checkNickname(String input){
+
+    public String checkNickname(String input) {
         boolean found = true;
-        for(Lobby l: lobbySet){
-            for(RemotePlayer p:  l.getListOfPlayers()){
-                if(p.getNickname().equals(input)){
+        for (Lobby l : lobbies) {
+            for (RemotePlayer p : l.getListOfPlayers()) {
+                if (p.getNickname().equals(input)) {
                     found = false;
                     break;
                 }
             }
-            if(!found) break;
+            if (!found) break;
         }
-        if(found) return input;
+        if (found) return input;
         return null;
     }
 
-    public void register(Distributed.RMI.client.ClientImpl client) {
-        //TODO IMPL
+    public List<Lobby> getLobbies() {
+        return lobbies;
+    }
+
+    public void addPlayer(Client client, RemotePlayer rp) throws RemoteException {
+        synchronized (lobbies) {
+            if (!lobbies.get(lobbies.size() - 1).isOpen()) {
+                lobbies.add(new Lobby());
+                lobbies.get(lobbies.size() - 1).setID(lobbies.size());
+            }
+            //Adds the player in the list of RemotePlayer of the Lobby the client joined
+            lobbies.get(lobbies.size() - 1).addPlayer(rp);
+            //Sets lobbyID and clientID in Client
+            client.setLobbyID(lobbies.get(lobbies.size() - 1).getID());
+            System.out.println(rp.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
+            System.out.println("owner: " + rp.isOwner());
+        }
     }
 }

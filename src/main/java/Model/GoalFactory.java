@@ -2,7 +2,9 @@ package Model;
 
 import Model.CommonGoals.*;
 
-public class GoalFactory {
+import java.io.Serializable;
+
+public class GoalFactory implements Serializable {
     private int i;
     public GoalFactory(){
     }

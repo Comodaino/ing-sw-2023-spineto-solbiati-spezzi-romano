@@ -22,21 +22,24 @@ public class Lobby {
         this.open = true;
     }
 
-    /**
-     *
-     * @param p
-     * @return returns true if there are 4 player in the lobby
-     */
     public void addPlayer(RemotePlayer p){
-        if(lp.isEmpty()) p.setAsChair();
-        lp.add(p);
-        if(lp.size()==4) this.open = false;
+        if(open){
+            if(lp.isEmpty()){
+                p.setOwner(true); //the first player to join the lobby become the owner
+            } else {
+                p.setOwner(false);
+            }
+            lp.add(p);
+            if(lp.size()==4) this.open = false;
+        }
     }
 
-    public void closeLobby() {
+    public boolean closeLobby() {
         if(lp.size()>=2){
             this.open = false;
+            return true; //lobby closed
         }
+        return false; //lobby not closed
     }
 
     public void setFirstMatch(boolean firstMatch) {
@@ -88,4 +91,9 @@ public class Lobby {
     }
     public void setID(Integer i) { this.ID = i; }
     public Integer getID() { return this.ID; }
+    public void sendMessage(RemotePlayer player, String message){
+        for(RemotePlayer p: lp){
+            //TODO IMPLEMENT
+        }
+    }
 }

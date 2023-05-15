@@ -3,15 +3,18 @@ package View;
 import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Model.Board;
+import Model.BoardView;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-public class GUIclass extends JFrame{
+public class GUIclass extends JFrame implements ViewInterface {
+    private State state;
+    private BoardView boardView;
     private RemotePlayer player;
     private AbstractClient client;
-    private State state;
     private boolean chair;
 
     public static void Play(AbstractClient client) {
@@ -72,7 +75,7 @@ public class GUIclass extends JFrame{
 
         shelf.add(imageOfShelf, BorderLayout.NORTH);
 
-        if(client.getPlayer().getModelPlayer().getChair() == true){
+        if(client.getPlayer().getModelPlayer().getChair()){
             ImageIcon imageChair = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/firstplayertoken.png");
             JLabel chairImage = new JLabel(imageChair);
             shelf.add(chairImage,BorderLayout.WEST);
@@ -151,5 +154,12 @@ public class GUIclass extends JFrame{
 
 
 
+    }
+
+    public void setState(State state){
+        this.state = state;
+    }
+    public void setBoardView(BoardView boardView) {
+        this.boardView = boardView;
     }
 }

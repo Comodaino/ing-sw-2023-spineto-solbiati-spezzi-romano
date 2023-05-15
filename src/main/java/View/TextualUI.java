@@ -2,12 +2,13 @@ package View;
 
 import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
+import Model.BoardView;
 
 import java.util.Scanner;
 
-public class TextualUI extends ViewInterface {
-
+public class TextualUI implements ViewInterface {
     private State state;
+    private BoardView boardView;
     private final Scanner input;
     private RemotePlayer player;
 
@@ -59,5 +60,11 @@ public class TextualUI extends ViewInterface {
             client.println(input.nextLine());
             //TODO inserire controllo nickname
         }
+    }
+    public void setState(State state){
+        this.state = state;
+    }
+    public void setBoardView(BoardView boardView) {
+        this.boardView = boardView;
     }
 }

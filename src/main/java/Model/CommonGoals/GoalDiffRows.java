@@ -12,6 +12,7 @@ public class GoalDiffRows extends CommonGoal{
     public GoalDiffRows(int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalDiffRows";
     @Override
     public int getScore(Player p){
         int numOfRows = 0;

@@ -9,7 +9,6 @@ import java.net.Socket;
 
 import static Distributed.States.INIT;
 
-//TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
 public class RemotePlayer implements Serializable {
     private Player modelPlayer;
     private ConnectionType type;

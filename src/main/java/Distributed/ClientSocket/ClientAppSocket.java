@@ -33,12 +33,16 @@ public class ClientAppSocket implements AbstractClient {
     public ClientAppSocket(int port, String typeOfView) throws IOException {
         this.port = port;
         this.player = null;
-        if(typeOfView.equals("TUI")) this.view = new TextualUI(this);
+        if(typeOfView.equals("TUI")) {
+            System.out.println("creating TUI");
+            this.view = new TextualUI(this);
+        }
         else this.view  = new GUIclass();
         state = States.INIT;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        System.out.println("arg: " + args[0]);
         ClientAppSocket client = new ClientAppSocket(25565, args[0]);
         client.Connect();
     }

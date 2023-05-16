@@ -12,6 +12,7 @@ public class GoalCouples extends CommonGoal{
     public GoalCouples (int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalCouples";
     @Override
     public int getScore(Player p){
         int numOfCouples = 0;

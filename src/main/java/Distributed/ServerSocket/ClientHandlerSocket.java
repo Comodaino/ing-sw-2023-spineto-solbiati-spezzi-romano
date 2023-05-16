@@ -143,7 +143,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      * @throws IOException
      */
 
-    public void playCommand(String input){
+    public void playCommand(String input) throws IOException {
         System.out.println("Received command: " + input);
         gameController.update(input);
     }

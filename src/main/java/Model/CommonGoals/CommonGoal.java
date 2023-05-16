@@ -13,6 +13,7 @@ import java.util.List;
 public abstract class CommonGoal extends Goal {
     protected List<Player> completed;
     protected int numOfPlayer;
+    protected String name;
     public CommonGoal(int numOfPlayer) {
         this.completed = new ArrayList<Player>();
         this.numOfPlayer = numOfPlayer;
@@ -62,4 +63,6 @@ public abstract class CommonGoal extends Goal {
         }
         return 0;
     }
+
+    public String getName() { return name; }
 }

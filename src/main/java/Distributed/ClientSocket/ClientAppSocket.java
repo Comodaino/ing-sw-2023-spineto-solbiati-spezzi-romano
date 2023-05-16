@@ -44,10 +44,10 @@ public class ClientAppSocket implements AbstractClient {
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("arg: " + args[0]);
         ClientAppSocket client = new ClientAppSocket(25565, args[0]);
-        client.Connect();
+        client.connect();
     }
 
-    public void Connect() throws IOException, InterruptedException {
+    public void connect() throws IOException, InterruptedException {
         socket = new Socket(address, port);
         objIn = new ObjectInputStream(socket.getInputStream());
         in = new Scanner(new InputStreamReader(socket.getInputStream()));
@@ -78,34 +78,38 @@ public class ClientAppSocket implements AbstractClient {
             System.out.println("input");
             String input = in.nextLine();
             System.out.println("RECEIVED: " + input);
-            if (input.charAt(0) == '/') {
-                switch (input) {
-                    case "/init":
-                        state = States.INIT;
-                        view.setState(State.HOME);
-                        break;
-                    case "/wait":
-                        if(this.player == null){
-                            player = (RemotePlayer) objIn.readObject();
-                        }
-                        state = States.WAIT;
-                        view.setState(State.LOBBY);
-                        break;
-                    case "/play":
-                        state = States.PLAY;
-                        view.setState(State.PLAY);
-                        break;
-                    case "/end":
-                        state = States.END;
-                        view.setState(State.LOBBY);
-                        break;
-                    case "/close":
-                        state = States.CLOSE;
-                        view.setState(State.CLOSE);
-                        break;
-                    case "/update":
-                        boardView = (BoardView) objIn.readObject();
-                        update();
+            if(input.equals("/nickname")){
+                view.update("/nickname");
+            }else {
+                if (input.charAt(0) == '/') {
+                    switch (input) {
+                        case "/init":
+                            state = States.INIT;
+                            view.setState(State.HOME);
+                            break;
+                        case "/wait":
+                            if (this.player == null) {
+                                player = (RemotePlayer) objIn.readObject();
+                            }
+                            state = States.WAIT;
+                            view.setState(State.LOBBY);
+                            break;
+                        case "/play":
+                            state = States.PLAY;
+                            view.setState(State.PLAY);
+                            break;
+                        case "/end":
+                            state = States.END;
+                            view.setState(State.LOBBY);
+                            break;
+                        case "/close":
+                            state = States.CLOSE;
+                            view.setState(State.CLOSE);
+                            break;
+                        case "/update":
+                            boardView = (BoardView) objIn.readObject();
+                            update(null);
+                    }
                 }
             }
             if (input.charAt(0) == '+') {
@@ -116,7 +120,9 @@ public class ClientAppSocket implements AbstractClient {
     }
 
 
-    public void update(){}
+    public void update(String arg) throws IOException {
+        view.update(arg);
+    }
 
     @Override
     public void println(String arg){

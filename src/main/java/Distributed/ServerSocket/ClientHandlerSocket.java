@@ -5,12 +5,13 @@ import Distributed.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.Scanner;
 
 import static Distributed.States.*;
 
-public class ClientHandlerSocket extends RemoteHandler implements Runnable {
+public class ClientHandlerSocket extends RemoteHandler implements Runnable, Serializable {
     private final Socket socket;
     private final SocketPlayer player;
     private final ObjectOutputStream objOut;
@@ -106,7 +107,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
             out.flush();
             objOut.writeObject(this.player);
             objOut.flush();
-        } else System.out.println("Nickname not available");
+        } else {
+
+            System.out.println("Nickname not available");
+        }
     }
 
     /**

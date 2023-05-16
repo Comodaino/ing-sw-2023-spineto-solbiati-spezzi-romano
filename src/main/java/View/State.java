@@ -4,5 +4,6 @@ public enum State{
     HOME,
     LOBBY,
     PLAY,
-    CLOSE
+    CLOSE,
+    END
 }

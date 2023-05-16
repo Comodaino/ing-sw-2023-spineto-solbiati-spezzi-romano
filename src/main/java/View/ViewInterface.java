@@ -10,5 +10,4 @@ public abstract interface ViewInterface  {
     void update(String arg) throws IOException;
 
     public void setState(State state);
-    public void setBoardView(BoardView boardView);
 }

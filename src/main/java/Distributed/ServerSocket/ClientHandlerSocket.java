@@ -75,7 +75,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     }
 
     /**
-     * writes the serializble ModelView to the client's socket
+     * Writes the serializable ModelView to the client's socket
      *
      * @throws IOException
      */
@@ -102,7 +102,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         if (nicknameChecker(input)) {
             System.out.println("Nickname is available");
             player.setNickname(input);
-            player.setState(WAIT);
+            player.setState(WAIT_SETTINGS);
             out.println("/wait");
             out.flush();
             objOut.writeObject(this.player);
@@ -114,7 +114,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     }
 
     /**
-     * filters all input coming from non-chair members of the lobby, the lobby-chair can start the match, close the lobby or set the match as "FIrst Match"
+     * Filters all input coming from non-chair members of the lobby, the lobby-chair can start the match, close the lobby or set the match as "First Match"
      *
      * @throws IOException
      */
@@ -162,7 +162,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             System.out.println("RECEIVED " + input);
             if(input.charAt(0)=='/') {
                 switch (player.getState()) {
-                    case WAIT:
+                    case WAIT_SETTINGS:
                         waitCommand(input);
                         break;
                     case PLAY:
@@ -190,7 +190,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                     out.println("/init");
                     out.flush();
                     break;
-                case WAIT:
+                case WAIT_SETTINGS:
                     out.println("/wait");
                     out.flush();
                     break;

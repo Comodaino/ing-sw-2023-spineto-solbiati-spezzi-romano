@@ -2,8 +2,9 @@ package Distributed.ServerRMI;
 
 import Distributed.ClientRMI.Client;
 import Distributed.RemoteHandler;
+import Distributed.States;
+import Model.BoardView;
 
-import java.io.IOException;
 import java.rmi.*;
 
 public interface Server extends Remote {
@@ -15,24 +16,16 @@ public interface Server extends Remote {
     public void register(Client client) throws RemoteException;
 
     /**
+     * Checks if there are no other players with the same nickname connected to the server
+     * @param nickname the nickname which will be checked
+     */
+    public String checkNicknameRMI(String nickname) throws RemoteException;
+
+    /**
      * Deletes a client from the server
      * @param client the client to delete
      */
     public void leave(Client client) throws RemoteException;
-
-    /**
-     * Notifies the server that a client has made his move
-     * @param o the ClientHandler which handle the client who generated the event
-     * @param arg the move made by the client
-     */
-    //TODO: IMPLEMENTS THE SAME METHOD IN CONTROLLER with ClientHandlerRMI instead of RemoteHandler
-    public void update(RemoteHandler o, Object arg) throws IOException;
-
-    /**
-     * Checks if there are no other players with the same nickname connected to the server
-     * @param nickname the nickname which will be checked
-     */
-    public String checkNickname(String nickname) throws RemoteException;
 
     /**
      * If the client is the owner of the lobby and there >= 2 players in the lobby, it closes the lobby
@@ -40,7 +33,20 @@ public interface Server extends Remote {
      */
     public boolean closeLobby(Client client) throws RemoteException;
 
-    public void waitCommand(Client client) throws RemoteException;
-    public void playCommand(Client client) throws RemoteException;
+    /**
+     * Notifies the server that a client has made his move
+     * @param client the client who generated the event
+     * @param command the move made by the client
+     */
+    public void update(Client client, String command) throws RemoteException;
+
+    /**
+     * @param lobbyID the ID of the lobby of the client who is requiring the model view
+     * @return BoardView the serializable model view BoardView
+     */
+    public BoardView getBoardView(Integer lobbyID) throws RemoteException;
+    public States myState(Client client) throws RemoteException;
+    public void waitCommand(Client client, String input) throws RemoteException;
+    public void playCommand(Client client, String input) throws RemoteException;
     public void endCommand(Client client) throws RemoteException;
 }

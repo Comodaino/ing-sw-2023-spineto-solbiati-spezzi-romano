@@ -13,6 +13,7 @@ public class GoalEight extends CommonGoal{
     public GoalEight(int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalEight";
     @Override
     public int getScore(Player p){
         int count = 0;

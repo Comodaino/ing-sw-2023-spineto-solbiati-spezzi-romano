@@ -16,6 +16,7 @@ public class GoalRow extends CommonGoal{
     public GoalRow(int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalRows";
     @Override
     public int getScore(Player p){
         List<Color> buffer = new ArrayList<Color>();

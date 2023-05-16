@@ -11,6 +11,7 @@ public class GoalAngles extends CommonGoal{
     public GoalAngles(int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalAngles";
     @Override
     public int getScore(Player p){
         if(!this.completed.contains(p) && p.getShelf().getTile(0, 0) != null &&

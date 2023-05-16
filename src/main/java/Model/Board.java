@@ -15,15 +15,13 @@ import static Model.CellType.*;
  * @author Alessio
  */
 public class Board implements Serializable {
-    private Cell[][] matrix;
-    private List<Player> listOfPlayer;
+    private final Cell[][] matrix;
+    private final List<Player> listOfPlayer;
     private Player winner;
-    private boolean firstMatch;
-    private Set<CommonGoal> setOfCommonGoal;
-    private EndGoal endGoal;
-    private List<Tile> tileBuffer;
-    private GoalFactory goalFactory;
-    private Bag bag;
+    private final Set<CommonGoal> setOfCommonGoal;
+    private final EndGoal endGoal;
+    private final List<Tile> tileBuffer;
+    private final Bag bag;
     private Player currentPlayer;
     public final BoardView boardView;
     private final int[] coordBuffer;
@@ -68,9 +66,8 @@ public class Board implements Serializable {
 
         this.coordBuffer = new int[]{-1, -1, -1, -1, -1, -1};
         this.listOfPlayer = pl;
-        this.firstMatch = fm;
         this.endGoal = new EndGoal();
-        this.goalFactory = new GoalFactory();
+        GoalFactory goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();
         recharge();
 
@@ -107,10 +104,10 @@ public class Board implements Serializable {
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 if(!matrix[i][j].isEmpty()){
-                    if(!matrix[i+1][j].isEmpty()){
+                    if(!matrix[i+1][j].isEmpty() && adjacentFree(i+1, j)){
                         found=true;
                     }
-                    if(!matrix[i][j+1].isEmpty()){
+                    if(!matrix[i][j+1].isEmpty() && adjacentFree(i, j+1)){
                         found=true;
                     }
                 }
@@ -171,5 +168,11 @@ public class Board implements Serializable {
 
     public Player getWinner() {
         return winner;
+    }
+    public boolean adjacentFree(int r, int c){
+        if(this.getCell(r, c).isEmpty()) return false;
+        if(r == 0 || c == 0 ) return true;
+        if(r == 8 || c == 8) return true;
+        return (this.getCell(r + 1, c).isEmpty() || this.getCell(r, c + 1).isEmpty()) || (this.getCell(r + 1, c).isEmpty() || this.getCell(r, c + 1).isEmpty());
     }
 }

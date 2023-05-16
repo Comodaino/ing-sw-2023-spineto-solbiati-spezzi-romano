@@ -115,7 +115,7 @@ public class GameController{
      */
     private void playRemove(String[] input) {
         System.out.println("remove " + Arrays.toString(input));
-        if(inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adiacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
+        if(inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
             gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
             gameBoard.checkRecharge();
         }
@@ -150,7 +150,7 @@ public class GameController{
     }
 
 
-    public boolean adiacentFree(int r, int c){
+    public boolean adjacentFree(int r, int c){
         if(gameBoard.getCell(r, c).isEmpty()) return false;
         if(r == 0 || c == 0 ) return true;
         if(r == 8 || c == 8) return true;

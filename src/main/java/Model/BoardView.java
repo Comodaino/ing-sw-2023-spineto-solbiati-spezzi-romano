@@ -1,6 +1,6 @@
 package Model;
 
-import Model.CommonGoals.CommonGoal;
+import Model.CommonGoals.*;
 
 import java.io.Serializable;
 import java.util.List;

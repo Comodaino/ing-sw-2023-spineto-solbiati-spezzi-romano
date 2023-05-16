@@ -7,14 +7,17 @@ public abstract class RemoteHandler {
     protected States state;
     protected GameController gameController;
     protected ConnectionType type;
+    protected ServerApp serverApp;
     /**
      *
      * @param input
      * @return return true if the input nickname is available
      */
     protected boolean nicknameChecker(String input) {
-        for(RemotePlayer p: lobby.getListOfPlayers()){
-            if(p.getNickname().equals(input)) return false;
+        for(Lobby l: serverApp.getLobbies()){
+            for(RemotePlayer p: l.getListOfPlayers()){
+                if(p.getNickname().equals(input)) return false;
+            }
         }
         return true;
     }

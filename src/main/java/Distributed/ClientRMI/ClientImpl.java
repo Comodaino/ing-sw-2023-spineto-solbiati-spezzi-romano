@@ -1,15 +1,19 @@
-package Distributed.RMI.client;
-import Distributed.ClientRMI.Client;
-import Distributed.ServerApp;
+package Distributed.ClientRMI;
 
-import java.rmi.*;
-import java.rmi.server.*;
+import Distributed.ServerApp;
+import Distributed.ServerRMI.Server;
+import Distributed.States;
+
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 public class ClientImpl extends UnicastRemoteObject implements Client {
     private String nickname;
-    private Integer clientID;
+    private Integer clientID; //maybe it is not necessary because the nickname is already unique
     private Integer lobbyID;
+    private States state;
 
     public ClientImpl() throws RemoteException {
         nickname = null;
@@ -18,18 +22,21 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
     }
 
     @Override
+    public String setNickname(ServerApp server) throws RemoteException {
+        return null;//TODO IMPLEMENT
+    }
+
+    @Override
     public String getNickname(){
         return this.nickname;
     }
 
     @Override
-    public void setIDs(Integer clientID, Integer lobbyID){
-        this.clientID = clientID;
+    public void setLobbyID(Integer lobbyID){
         this.lobbyID = lobbyID;
     }
 
-    @Override
-    public String setNickname(ServerApp server) throws RemoteException{
+    public String setNickname(Server server) throws RemoteException{
         String nickname = null;
         boolean found = false;
 
@@ -49,18 +56,74 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
         return this.nickname;
     }
 
-    public void doJob(String serverHost) throws Exception {
-        ServerApp server;
-        // take a reference of the server from the registry
-        server = (ServerApp) Naming.lookup("rmi://" + serverHost + "/Server");
-        // join
-        server.register(this);
-        // main loop [...]
-        //server.leave(this);
+    @Override
+    public Integer getClientID() throws RemoteException {
+        return this.clientID;
     }
 
-    public static void main(String args[]) throws Exception {
-        ClientImpl client = new ClientImpl();
-        client.doJob("localhost");
+    @Override
+    public Integer getLobbyID() throws RemoteException {
+        return this.lobbyID;
+    }
+
+    @Override
+    public void printMsg(String message){
+        System.out.println(message);
+    }
+
+    public void run(String serverHost) throws Exception {
+        Server server = null;
+        // take a reference of the server from the registry
+        server = (Server) Naming.lookup("rmi://" + serverHost + "/Server");
+
+        // join
+        server.register(this);
+
+        // main loop
+        while(true){
+
+            /* try {
+                while (!state.equals(States.CLOSE)){
+                    switch (state) {
+                        case WAIT:
+                            server.waitCommand(this);
+                            break;
+                        case PLAY:
+                            server.playCommand(this);
+                            break;
+                        case END:
+                            server.endCommand(this);
+                            break;
+                    }
+                }
+            } catch (IOException e){
+                System.err.println(e.getMessage());
+            } */
+
+            Scanner scanIn = new Scanner(System.in);
+            switch (scanIn.nextLine()) {
+                case "/closeLobby":
+                    server.closeLobby(this);
+                    break;
+                case "/leave":
+                    server.leave(this);
+                    return;
+            }
+        }
+    }
+
+    public static void main(String args[]) {
+        ClientImpl client = null;
+        try {
+            client = new ClientImpl();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            client.run("localhost");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

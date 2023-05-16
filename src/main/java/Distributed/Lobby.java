@@ -15,28 +15,31 @@ public class Lobby {
     private boolean firstMatch;
     private BoardView boardView;
     private GameController controller;
-    public Lobby(){
+    private ServerApp serverApp;
+    public Lobby(ServerApp serverApp){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.ID = null;
+        this.serverApp = serverApp;
         this.open = true;
     }
 
-    /**
-     *
-     * @param p
-     * @return returns true if there are 4 player in the lobby
-     */
     public void addPlayer(RemotePlayer p){
-        if(lp.isEmpty()) p.setAsChair();
-        lp.add(p);
-        if(lp.size()==4) this.open = false;
+        if(open){
+            if(lp.isEmpty()){
+                p.setOwner(); //the first player to join the lobby become the owner
+            }
+            lp.add(p);
+            if(lp.size()==4) this.open = false;
+        }
     }
 
-    public void closeLobby() {
+    public boolean closeLobby() {
         if(lp.size()>=2){
             this.open = false;
+            return true; //lobby closed
         }
+        return false; //lobby not closed
     }
 
     public void setFirstMatch(boolean firstMatch) {
@@ -81,11 +84,17 @@ public class Lobby {
         for(RemotePlayer p: lp){
             p.setState(States.CLOSE);
         }
+        serverApp.removeLobby(this);
     }
 
-    public Object getBoardView() {
+    public BoardView getBoardView() {
         return boardView;
     }
     public void setID(Integer i) { this.ID = i; }
     public Integer getID() { return this.ID; }
+    public void sendMessage(RemotePlayer player, String message){
+        for(RemotePlayer p: lp){
+            //TODO IMPLEMENT
+        }
+    }
 }

@@ -4,6 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Model.Board;
 import Model.BoardView;
+import Model.CellType;
 import Model.TileType;
 
 import javax.swing.*;
@@ -34,18 +35,30 @@ public class GUIclass extends JFrame{
         play.setVisible(true);
 
     }
-    public static JPanel createBoard(BoardView boardView){
+    public static JPanel createBoard(BoardView boardView, AbstractClient client){
         JPanel board = new BoardPanel();
-        // board.setLayout(new OverlayLayout(board));
+
         Border border1 = BorderFactory.createLineBorder(Color.BLACK);
         TitledBorder titledBorder1 = BorderFactory.createTitledBorder(border1, "The Board");
         board.setBorder(titledBorder1);
         board.setPreferredSize(new Dimension(750,750));
 
-        JPanel tilePanel = new JPanel(new FlowLayout());
-        tilePanel.setLayout(null);
+        JPanel tilePanel = new JPanel(new GridLayout(9,9));
         tilePanel.setOpaque(false);
         tilePanel.setPreferredSize(new Dimension(750,750));
+        client.
+
+        for(int i=0; i<9;i++){
+            for (int j=0; j<9; j++){
+                if(boardView.getCell(i,j).getType()== CellType.ONE){
+                    JLabel empty = new JLabel();
+                    empty.setPreferredSize(new Dimension(70,70));
+                    tilePanel.add(empty);
+                }else {
+                        if()
+                }
+            }
+        }
 
         ImageIcon  imageCat1 = new ImageIcon("View/resources/Gatti1.1.png");
         imageCat1.setImage(imageCat1.getImage().getScaledInstance(70,70,50));
@@ -59,12 +72,8 @@ public class GUIclass extends JFrame{
         mainPanel.add(tilePanel);
 
         board.add(tilePanel);
-        /* HashMap<String,ImageIcon>  imageMap = new HashMap<String,ImageIcon>();
-        imageMap = (HashMap<String, ImageIcon>) boardView.getTileBuffer();
-        if(boardView.getTile(0,0).getType()== TileType.ONE){
 
-        }
-        */
+      //  if(boardView.getTile(0,0).getType()== TileType.ONE){
 
         return board;
     }
@@ -143,6 +152,7 @@ public class GUIclass extends JFrame{
 
     public void GUIclass(AbstractClient client, BoardView boardView){;
         this.player= client.getPlayer();
+        this.client = client;
         this.boardView = boardView;
         switch (this.state){
             case HOME:{

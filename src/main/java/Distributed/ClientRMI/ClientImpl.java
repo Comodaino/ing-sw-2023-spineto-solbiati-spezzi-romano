@@ -4,6 +4,7 @@ import Distributed.ServerRMI.Server;
 import Distributed.ServerApp;
 import Distributed.States;
 import Model.BoardView;
+import Model.Player;
 
 import java.io.IOException;
 import java.rmi.Naming;
@@ -78,6 +79,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
 
     public void run(String serverHost) throws Exception {
         boolean endOfGame = false;
+        int numOfAdd, numOfRemove;
         Server server = null;
         // take a reference of the server from the registry
         server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerApp");
@@ -100,25 +102,54 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
                             } else {
                                 this.state = server.myState(this);
                                 System.out.println("Wait for the owner..."); //TODO: write this just one time
-                                TimeUnit.SECONDS.sleep(5);
+                                TimeUnit.SECONDS.sleep(20);
                             }
                             break;
 
                         case WAIT_TURN:
-                            TimeUnit.SECONDS.sleep(5);
                             System.out.println("Wait for your turn..."); //TODO: write this just one time
+                            TimeUnit.SECONDS.sleep(20);
                             view = server.getBoardView(lobbyID);
                             if(view!=null && view.getCurrentPlayer().getNickname().equals(this.nickname)){
                                 this.state = States.PLAY;
+                                server.setRemoteState(States.PLAY);
                             }
                             break;
 
                         case PLAY:
-                            System.out.println("Choose a command:");
-                            System.out.println("/add, /remove");
-                            Scanner input = new Scanner(System.in);
-                            server.playCommand(this, input.nextLine());
-                            view = server.getBoardView(lobbyID);
+                            numOfRemove = 0;
+                            numOfAdd = 0;
+                            while(numOfAdd<1 && numOfRemove<3){
+                                System.out.println("Choose a command. You can remove max 3 tiles and add them just one time");
+                                System.out.println("/add [column], /remove [row][column]");
+                                Scanner input = new Scanner(System.in);
+                                String command = input.nextLine();
+
+                                String[] arg = command.split(" ");
+                                if (arg[0].charAt(0) == '/') {
+                                    switch (arg[0]) {
+                                        case "/remove":
+                                            numOfRemove++;
+                                            break;
+                                        case "/add":
+                                            numOfAdd++;
+                                            break;
+                                        default:
+                                            System.out.println("Command not valid!");
+                                    }
+                                }
+
+                                server.playCommand(this, command);
+                                view = server.getBoardView(lobbyID);
+                                if(view!=null) {
+                                    for(Player p: view.getDonePlayers()){
+                                        if(p.getNickname().equals(this.nickname)) {
+                                            this.state = States.END;
+                                            server.setRemoteState(States.END);
+                                        }
+                                    }
+                                }
+                            }
                             break;
 
                         case END:

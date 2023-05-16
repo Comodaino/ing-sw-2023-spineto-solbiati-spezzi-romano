@@ -5,6 +5,8 @@ import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
 import Model.Player;
 
+import java.io.Serializable;
+
 public class RMIPlayer extends RemotePlayer {
     private String nickname;
     private Player modelPlayer;

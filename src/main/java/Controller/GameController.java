@@ -28,9 +28,7 @@ public class GameController {
         return gameBoard;
     }
     public BoardView getBoardView() { return boardView; }
-    public void setBoardView(BoardView boardView){
-        this.boardView=gameBoard.boardView;
-    }
+    public void setBoardView(BoardView boardView) { this.boardView=gameBoard.boardView; }
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -67,6 +65,7 @@ public class GameController {
     public GameController(List<Player> pl, boolean firstMatch) {
         this.gameBoard = new Board(firstMatch, pl);
         this.donePlayers = new ArrayList<Player>();
+        this.boardView = new BoardView(gameBoard);
         for (Player player : pl) {
             if (player.getChair()) {
                 this.currentPlayer = player;

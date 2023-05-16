@@ -159,6 +159,10 @@ public class ServerApp extends UnicastRemoteObject implements Server {
 
     @Override
     public void leave(Client client) throws RemoteException {
+        if(client.isOwner()){
+            closeLobby(client);
+        }
+
         synchronized (lobbies) {
             for (Lobby l : lobbies) {
                 for (RemotePlayer rp : l.getListOfPlayers()) {
@@ -167,7 +171,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
                         client.setState(CLOSE);
                         rp.setState(CLOSE);
                         System.out.println(client.getNickname() + " has left the server");
-                        return;
+                        break;
                     }
                 }
             }
@@ -304,6 +308,10 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         Integer lobbyID = client.getLobbyID();
         synchronized (lobbies){
             lobby = lobbies.get(lobbyID-1);
+        }
+
+        for(RemotePlayer rp: lobby.getListOfPlayers()) {
+            rp.setState(CLOSE);
         }
 
     }

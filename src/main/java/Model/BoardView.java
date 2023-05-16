@@ -1,6 +1,6 @@
 package Model;
 
-import Model.CommonGoals.CommonGoal;
+import Model.CommonGoals.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,4 +26,5 @@ public class BoardView implements Serializable {
         return board.getSetOfCommonGoal();
     }
     public EndGoal getEndGoal() { return board.getEndGoal(); }
+    public Player getWinner() { return board.getWinner(); }
 }

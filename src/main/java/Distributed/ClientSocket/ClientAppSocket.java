@@ -6,6 +6,7 @@ import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
 import View.GUIclass;
+import View.State;
 import View.TextualUI;
 import View.ViewInterface;
 
@@ -24,9 +25,6 @@ public class ClientAppSocket implements AbstractClient {
     private PrintWriter out;
     private BoardView boardView;
     private final String address = "127.0.0.1";
-    private final File viewFile = new File("viewInput");
-    private final Scanner stdIn = new Scanner(viewFile);
-    private final FileWriter stdOut = new FileWriter(viewFile);
     private States state;
     private ObjectInputStream objIn;
     private ViewInterface view;
@@ -51,16 +49,6 @@ public class ClientAppSocket implements AbstractClient {
         in = new Scanner(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         if (in.nextLine().equals("ready")) System.out.println("Client starting");
-        Thread th1 = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    outputHandler();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
         Thread th2 = new Thread() {
             @Override
             public void run() {
@@ -72,7 +60,6 @@ public class ClientAppSocket implements AbstractClient {
             }
         };
         System.out.println("Handlers created");
-        th1.start();
         th2.start();
         while (state != States.CLOSE) {
             TimeUnit.SECONDS.sleep(1);
@@ -80,15 +67,6 @@ public class ClientAppSocket implements AbstractClient {
         in.close();
         socket.close();
 
-    }
-
-    public synchronized void outputHandler() throws InterruptedException {
-        while (state!=States.CLOSE) {
-            System.out.println("output");
-            if (state == States.INIT) System.out.println("/nickname");
-            out.println(stdIn.nextLine());
-            out.flush();
-        }
     }
 
     public void inputHandler() throws InterruptedException, IOException, ClassNotFoundException {
@@ -100,21 +78,26 @@ public class ClientAppSocket implements AbstractClient {
                 switch (input) {
                     case "/init":
                         state = States.INIT;
+                        view.setState(State.HOME);
                         break;
                     case "/wait":
                         if(this.player == null){
                             player = (RemotePlayer) objIn.readObject();
                         }
                         state = States.WAIT;
+                        view.setState(State.LOBBY);
                         break;
                     case "/play":
                         state = States.PLAY;
+                        view.setState(State.PLAY);
                         break;
                     case "/end":
                         state = States.END;
+                        view.setState(State.LOBBY);
                         break;
                     case "/close":
                         state = States.CLOSE;
+                        view.setState(State.CLOSE);
                         break;
                     case "/update":
                         boardView = (BoardView) objIn.readObject();
@@ -128,16 +111,21 @@ public class ClientAppSocket implements AbstractClient {
         }
     }
 
+
     public void update(){}
 
     @Override
-    public void println(String arg) throws IOException {
-        stdOut.write(arg);
-        stdOut.flush();
+    public void println(String arg){
+        out.println(arg);
     }
 
     @Override
     public RemotePlayer getPlayer() {
         return this.player;
+    }
+
+    @Override
+    public BoardView getBoardView() {
+        return boardView;
     }
 }

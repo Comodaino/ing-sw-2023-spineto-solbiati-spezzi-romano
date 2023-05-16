@@ -17,6 +17,7 @@ import static Model.CellType.*;
 public class Board implements Serializable {
     private Cell[][] matrix;
     private List<Player> listOfPlayer;
+    private Player winner;
     private boolean firstMatch;
     private Set<CommonGoal> setOfCommonGoal;
     private EndGoal endGoal;
@@ -167,4 +168,8 @@ public class Board implements Serializable {
     public void setCurrentPlayer(Player cp){ this.currentPlayer= cp;}
 
     public int[] getCoordBuffer() { return coordBuffer;}
+
+    public Player getWinner() {
+        return winner;
+    }
 }

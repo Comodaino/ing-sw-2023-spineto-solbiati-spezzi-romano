@@ -14,7 +14,7 @@ public abstract class RemoteHandler {
      * @return return true if the input nickname is available
      */
     protected boolean nicknameChecker(String input) {
-        for(Lobby l: serverApp.getLobbySet()){
+        for(Lobby l: serverApp.getLobbies()){
             for(RemotePlayer p: l.getListOfPlayers()){
                 if(p.getNickname().equals(input)) return false;
             }

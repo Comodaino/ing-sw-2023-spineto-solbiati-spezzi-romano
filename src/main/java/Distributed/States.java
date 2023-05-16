@@ -1,6 +1,8 @@
 package Distributed;
 
-public enum States {
+import java.io.Serializable;
+
+public enum States implements Serializable {
     INIT,
     PLAY,
     WAIT,

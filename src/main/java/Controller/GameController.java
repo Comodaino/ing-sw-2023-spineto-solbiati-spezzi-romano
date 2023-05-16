@@ -7,6 +7,7 @@ import Model.CommonGoals.CommonGoal;
 import Model.Player;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  * it represents the entirety of the controller in the MVC patter
  * @author Alessio
  */
-public class GameController{
+public class GameController implements Serializable {
 
     private Board gameBoard;
     private BoardView boardView;

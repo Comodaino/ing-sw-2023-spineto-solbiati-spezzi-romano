@@ -66,6 +66,7 @@ public class GameController{
     public GameController(List<Player> pl, boolean firstMatch) {
         this.gameBoard = new Board(firstMatch, pl);
         this.donePlayers = new ArrayList<Player>();
+        this.boardView = new BoardView(gameBoard);
         for (Player player : pl) {
             if (player.getChair()) {
                 this.currentPlayer = player;

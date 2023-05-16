@@ -15,8 +15,7 @@ public class TextualUI implements ViewInterface {
     private final RemotePlayer player;
     private final AbstractClient client;
 
-    public TextualUI(AbstractClient client) {
-        System.out.println("Created TUI");
+    public TextualUI(AbstractClient client) throws IOException {
         this.player = client.getPlayer();
         this.state = State.HOME;
         this.input = new Scanner(System.in);
@@ -33,6 +32,7 @@ public class TextualUI implements ViewInterface {
         };
 
         th.start();
+        update(null);
     }
 
     public void inputHandler() throws IOException {
@@ -137,14 +137,15 @@ public class TextualUI implements ViewInterface {
     }
 
     public void homePrint(String arg) throws IOException {
-        if (arg.equals("/nickname")) {
-            System.out.println("nickname already used, please insert another nickname:  ");
-            inputHandler();
-        } else {
-            System.out.println("insert your nickname:  ");
-            inputHandler();
+        if (arg != null) {
+            if (arg.equals("/nickname")) {
+                System.out.println("nickname already used, please insert another nickname:  ");
+                inputHandler();
+            } else {
+                System.out.println("insert your nickname:  ");
+                inputHandler();
+            }
         }
-
     }
 
     @Override

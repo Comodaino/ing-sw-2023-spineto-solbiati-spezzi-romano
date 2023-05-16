@@ -2,18 +2,16 @@ package View;
 
 import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
-import Model.Board;
 import Model.BoardView;
 import Model.CellType;
-import Model.TileType;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.HashMap;
+import java.io.IOException;
 
-public class GUIclass extends JFrame{
+public class GUIclass extends JFrame implements ViewInterface{
     private RemotePlayer player;
     private AbstractClient client;
     private State state;
@@ -26,7 +24,7 @@ public class GUIclass extends JFrame{
         play.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,createBoard(boardView),createShelf(client));
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,createBoard(boardView, client),createShelf(client));
         splitPane.setDividerLocation(0.5);
 
         panel.add(splitPane);
@@ -46,7 +44,7 @@ public class GUIclass extends JFrame{
         JPanel tilePanel = new JPanel(new GridLayout(9,9));
         tilePanel.setOpaque(false);
         tilePanel.setPreferredSize(new Dimension(750,750));
-        client.
+        //client.
 
         for(int i=0; i<9;i++){
             for (int j=0; j<9; j++){
@@ -54,8 +52,6 @@ public class GUIclass extends JFrame{
                     JLabel empty = new JLabel();
                     empty.setPreferredSize(new Dimension(70,70));
                     tilePanel.add(empty);
-                }else {
-                        if()
                 }
             }
         }
@@ -169,9 +165,13 @@ public class GUIclass extends JFrame{
                 break;
         }
     }
-    public void update(String arg, Board board){
+    @Override
+    public void update(String arg) throws IOException {
 
+    }
 
-
+    @Override
+    public void setState(State state) {
+        this.state=state;
     }
 }

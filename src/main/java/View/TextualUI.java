@@ -14,12 +14,22 @@ public class TextualUI implements ViewInterface {
     private final Scanner input;
     private final RemotePlayer player;
     private final AbstractClient client;
+    private final String os;
 
     public TextualUI(AbstractClient client) throws IOException {
+
+        this.os = System.getProperty("os.name");
         this.player = client.getPlayer();
         this.state = State.HOME;
         this.input = new Scanner(System.in);
         this.client = client;
+        System.out.println(os);
+        switch (os){
+            case "Linux": Runtime.getRuntime().exec("/usr/bin/x-terminal-emulator --disable-factory -e cat README.txt");
+                break;
+        }
+
+
         Thread th = new Thread() {
             @Override
             public void run() {

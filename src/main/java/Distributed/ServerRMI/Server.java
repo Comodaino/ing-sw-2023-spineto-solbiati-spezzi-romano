@@ -3,6 +3,7 @@ package Distributed.ServerRMI;
 import Distributed.ClientRMI.Client;
 import Distributed.RemoteHandler;
 
+import java.io.IOException;
 import java.rmi.*;
 
 public interface Server extends Remote {
@@ -25,7 +26,7 @@ public interface Server extends Remote {
      * @param arg the move made by the client
      */
     //TODO: IMPLEMENTS THE SAME METHOD IN CONTROLLER with ClientHandlerRMI instead of RemoteHandler
-    public void update(RemoteHandler o, Object arg) throws RemoteException;
+    public void update(RemoteHandler o, Object arg) throws IOException;
 
     /**
      * Checks if there are no other players with the same nickname connected to the server

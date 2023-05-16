@@ -17,6 +17,7 @@ import static Model.CellType.*;
 public class Board implements Serializable {
     private final Cell[][] matrix;
     private final List<Player> listOfPlayer;
+    private final List<Player> donePlayers;
     private Player winner;
     private final Set<CommonGoal> setOfCommonGoal;
     private final EndGoal endGoal;
@@ -64,6 +65,7 @@ public class Board implements Serializable {
             throw new RuntimeException(e);
         };
 
+        this.donePlayers = new ArrayList<Player>();
         this.coordBuffer = new int[]{-1, -1, -1, -1, -1, -1};
         this.listOfPlayer = pl;
         this.endGoal = new EndGoal();
@@ -174,5 +176,10 @@ public class Board implements Serializable {
         if(r == 0 || c == 0 ) return true;
         if(r == 8 || c == 8) return true;
         return (this.getCell(r + 1, c).isEmpty() || this.getCell(r, c + 1).isEmpty()) || (this.getCell(r + 1, c).isEmpty() || this.getCell(r, c + 1).isEmpty());
+    }
+    public void addToDone(Player p){ this.donePlayers.add(p);}
+
+    public List<Player> getDonePlayers() {
+        return donePlayers;
     }
 }

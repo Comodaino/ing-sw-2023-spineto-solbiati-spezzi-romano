@@ -1,6 +1,5 @@
 package Controller;
 
-import Distributed.ConnectionType;
 import Distributed.States;
 import Model.Board;
 import Model.BoardView;
@@ -52,8 +51,7 @@ public class GameController{
     }
     private void serverUpdater() throws IOException {
         for(Player p: pl){
-            if(p.getRemotePlayer().getType().equals(ConnectionType.SOCKET)) p.getRemotePlayer().update();
-            //if(p.getRemotePlayer().getType().equals(ConnectionType.Socket)) //TODO IMPLEMENT ONCE RMI IS DONE
+            p.getRemotePlayer().update();
         }
     }
     //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view
@@ -81,15 +79,17 @@ public class GameController{
      *                 method. It is format is /command [par 0] [par 1] ...
      * @author Alessio
      */
-    public void update(String arg) {
+    public void update(String arg) throws IOException {
             String[] input = arg.split(" ");
             if (input[0].charAt(0) == '/') {
                 switch (input[0]) {
                     case "/remove":
                         playRemove(input);
+                        serverUpdater();
                         break;
                     case "/add":
                         playAdd(input);
+                        serverUpdater();
                         break;
                 }
             }
@@ -104,6 +104,7 @@ public class GameController{
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                 donePlayers.add(currentPlayer);
+                gameBoard.addToDone(currentPlayer);
                 currentPlayer.getRemotePlayer().setState(States.END);
             }
         }
@@ -142,6 +143,7 @@ public class GameController{
                         }
                         if (currentPlayer.getShelf().isFull()) {
                             while (gameBoard.getTileBuffer().size() != 0) gameBoard.getTileBuffer().remove(0);
+                            playEndGame();
                         }
                     }
                 }

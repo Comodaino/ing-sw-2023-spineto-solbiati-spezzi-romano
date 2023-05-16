@@ -6,6 +6,7 @@ import Distributed.RemoteHandler;
 import Distributed.RemotePlayer;
 import Distributed.ServerApp;
 
+import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -59,7 +60,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void update(RemoteHandler o, Object arg) throws RemoteException { //TODO ClientHandlerRMI instead of RemoteHandler
+    public void update(RemoteHandler o, Object arg) throws IOException { //TODO ClientHandlerRMI instead of RemoteHandler
         o.getGameController().update(arg.toString());
     }
 

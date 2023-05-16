@@ -16,6 +16,7 @@ public class TextualUI implements ViewInterface {
     private final AbstractClient client;
 
     public TextualUI(AbstractClient client) {
+        System.out.println("Created TUI");
         this.player = client.getPlayer();
         this.state = State.HOME;
         this.input = new Scanner(System.in);

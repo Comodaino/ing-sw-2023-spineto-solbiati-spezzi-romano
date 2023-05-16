@@ -1,20 +1,26 @@
 package View;
 
 import Distributed.AbstractClient;
+import Distributed.ClientSocket.ClientAppSocket;
 import Distributed.RemotePlayer;
-import Model.BoardView;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.io.IOException;
 
-public class GUIclass extends JFrame{
+public class GUIclass extends JFrame implements ViewInterface{
     private RemotePlayer player;
     private AbstractClient client;
     private State state;
     private boolean chair;
-    public static void Play(AbstractClient client) {
+    public static void main (String[] args) throws IOException, InterruptedException {
+        ClientAppSocket client= new ClientAppSocket(25565,"GUI");
+        client.Connect();
+        play(client);
+    }
+    public static void play(AbstractClient client) {
 
         JFrame play = new JFrame("Play");
         play.setLocationRelativeTo(null);
@@ -42,12 +48,14 @@ public class GUIclass extends JFrame{
         tilePanel.setOpaque(false);
         tilePanel.setPreferredSize(new Dimension(750,750));
         client.getBoardView();
-
+/*
         for(int i=0; i<9;i++) {
             for (int j = 0; j < 9; j++) {
 
             }
         }
+
+ */
 /*
         ImageIcon  imageCat1 = new ImageIcon("View/resources/Gatti1.1.png");
         imageCat1.setImage(imageCat1.getImage().getScaledInstance(70,70,50));
@@ -157,7 +165,7 @@ public class GUIclass extends JFrame{
             }
             break;
             case PLAY: {
-                Play(client);
+                play(client);
             }
             break;
             case LOBBY:{
@@ -166,5 +174,10 @@ public class GUIclass extends JFrame{
             break;
         }
 
+    }
+
+    @Override
+    public void setState(State state) {
+        this.state=state;
     }
 }

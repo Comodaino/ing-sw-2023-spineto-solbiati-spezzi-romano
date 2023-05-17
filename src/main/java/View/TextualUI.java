@@ -85,6 +85,7 @@ public class TextualUI implements ViewInterface {
         }
     }
 
+
     private void showShelf() {
         System.out.println("YOUR SHELF:");
         for (int i = 0; i < 6; i++) {

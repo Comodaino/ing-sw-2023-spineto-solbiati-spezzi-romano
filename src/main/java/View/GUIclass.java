@@ -139,11 +139,14 @@ public class GUIclass extends JFrame implements ViewInterface{
     }
     public static void Home(){
         JFrame home = new JFrame();
-        home.setLayout(new BorderLayout());
-        // TODO aggiungere immagine logo a NORTH
-        // TODO aggiungere pulsante start a SOUTH
-        // TODO sistemare update nel caso in cui il  nickname è sbagliato
-
+        home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel homePanel = new JPanel();
+        JLabel nickname = new Nickname();
+        homePanel.setPreferredSize(new Dimension(1200,800));
+        homePanel.add(nickname);
+        home.add(homePanel);
+        home.pack();
+        home.setVisible(true);
 
     }
     public static void Lobby(){

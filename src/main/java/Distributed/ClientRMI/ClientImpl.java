@@ -1,7 +1,6 @@
 package Distributed.ClientRMI;
 
 import Distributed.ServerRMI.Server;
-import Distributed.ServerApp;
 import Distributed.States;
 import Model.BoardView;
 import Model.Player;
@@ -93,7 +92,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
             try {
                 while (!this.state.equals(States.CLOSE)){
                     switch (state) {
-                        case WAIT_SETTINGS:
+                        case WAIT:
                             if (owner) { //TODO: modifica in modo che si possa fare anche /leave per un giocatore non owner
                                 System.out.println("Choose a command:");
                                 System.out.println("/start, /firstMatch, /notFirstMatch, /closeLobby or /leave");
@@ -112,7 +111,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
                             view = server.getBoardView(lobbyID);
                             if(view!=null && view.getCurrentPlayer().getNickname().equals(this.nickname)){
                                 this.state = States.PLAY;
-                                server.setRemoteState(States.PLAY);
+                                //TODO server.setRemoteState(States.PLAY);
                             }
                             break;
 
@@ -145,7 +144,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client {
                                     for(Player p: view.getDonePlayers()){
                                         if(p.getNickname().equals(this.nickname)) {
                                             this.state = States.END;
-                                            server.setRemoteState(States.END);
+                                            //TODO server.setRemoteState(States.END);
                                         }
                                     }
                                 }

@@ -59,7 +59,6 @@ public class Lobby {
     }
     public void startGame(){
         List<Player> modelPlayerList = new ArrayList<Player>();
-        //TODO NEED TO DECIDE BETWEEN TWO CONTROLLERS OR ONE
         for(RemotePlayer p: lp){
             Player tmpPlayer = new Player(p.getNickname(),p.isOwner(), p);
             modelPlayerList.add(tmpPlayer);
@@ -97,4 +96,6 @@ public class Lobby {
             //TODO IMPLEMENT
         }
     }
+
+    public GameController getController() { return controller; }
 }

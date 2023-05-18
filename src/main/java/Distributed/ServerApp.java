@@ -152,8 +152,8 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         //If the lobby is closed, creates a new lobby and sets its ID, adds the player in the list of RemotePlayer of the Lobby the client joined
         addPlayer(client, rp);
         //Sets the client state in WAIT
-        client.setState(WAIT);
-        rp.setState(WAIT);
+        client.setState(WAIT_SETTING);
+        rp.setState(WAIT_SETTING);
     }
 
     @Override

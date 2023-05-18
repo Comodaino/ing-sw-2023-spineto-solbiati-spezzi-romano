@@ -34,4 +34,7 @@ public abstract class RemoteHandler {
     }
     public void endCommand(){ state=States.WAIT_SETTING; }
     public void update(){}
+
+    public void message(String arg) {
+    }
 }

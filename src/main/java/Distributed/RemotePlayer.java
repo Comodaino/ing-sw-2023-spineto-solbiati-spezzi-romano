@@ -65,4 +65,6 @@ public class RemotePlayer implements Serializable {
     public States getState() {
         return state;
     }
+
+    public void message(String arg) {}
 }

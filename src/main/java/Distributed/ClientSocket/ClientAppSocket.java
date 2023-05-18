@@ -83,7 +83,7 @@ public class ClientAppSocket implements AbstractClient {
 
     public void inputHandler() throws InterruptedException, IOException, ClassNotFoundException {
         while (state!=States.CLOSE) {
-            System.out.println("input");
+            System.out.println("waiting for input");
             String input = in.nextLine();
             System.out.println("RECEIVED: " + input);
             if(input.startsWith("/wait")){
@@ -123,14 +123,18 @@ public class ClientAppSocket implements AbstractClient {
                         case "/update":
                             boardView = (BoardView) objIn.readObject();
                             update(null);
+                        default:
+                            if(input.startsWith("/message")){
+                                System.out.println(input);
+                                //TODO update(input);
+                            }
                     }
                     view.update(null);
                 }
             }
 
-            if (input.charAt(0) == '+') {
-                String[] message = input.split(" ", 2);
-                System.out.print("[" + message[0] + "]: " + message[1]);
+            if (input.charAt(0) != '/' && state!=States.INIT) {
+                out.println(input);
             }
         }
     }

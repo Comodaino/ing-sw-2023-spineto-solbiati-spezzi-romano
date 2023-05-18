@@ -55,7 +55,6 @@ public class GameController implements Serializable {
             p.getRemotePlayer().update();
         }
     }
-    //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view
 
     /**
      * GameController constructor

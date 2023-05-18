@@ -49,8 +49,9 @@ public class ClientAppSocket implements AbstractClient {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("arg: " + args[0]);
-        ClientAppSocket client = new ClientAppSocket(25565, args[0]);
+        System.out.println("Choose type of view:");
+        Scanner scanner = new Scanner(System.in);
+        ClientAppSocket client = new ClientAppSocket(25565, scanner.nextLine());
         client.connect();
     }
 

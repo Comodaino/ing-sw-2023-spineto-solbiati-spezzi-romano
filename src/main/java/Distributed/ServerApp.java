@@ -236,7 +236,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
             }
         }
 
-        return ERROR;
+        return null; //TODO CHECK ERROR
     }
 
     @Override

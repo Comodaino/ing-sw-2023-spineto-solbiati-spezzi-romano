@@ -1,7 +1,5 @@
 package View;
 
-import Model.BoardView;
-
 import java.io.IOException;
 
 //TODO CHECK IF IT NEEDS TO BE OBSERVABLE

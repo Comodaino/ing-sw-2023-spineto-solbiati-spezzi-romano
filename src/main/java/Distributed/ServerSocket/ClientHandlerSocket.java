@@ -96,14 +96,15 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      *
      * @throws IOException
      */
-    private void initCommand(String input) throws IOException {
+    private void initCommand(String input){
         System.out.println("INIT");
         System.out.println("Received " + input);
         if (nicknameChecker(input)) {
             System.out.println("Nickname is available");
             player.setNickname(input);
             player.setState(WAIT);
-            out.println("/wait");
+            if(player.isOwner()) out.println("/wait owner");
+            else out.println("/wait");
             out.flush();
         } else {
 

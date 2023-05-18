@@ -46,14 +46,15 @@ public class TextualUI implements ViewInterface {
 
     @Override
     public void update(String arg) throws IOException {
+        System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
                 System.out.println("WELCOME TO MY SHELFIE !\n");
                 homePrint(arg);
                 break;
             case LOBBY:
-                if (player.isOwner()) {
-                    if (arg.equals("/commands")) System.out.println("command not valid, please try again");
+                if (client.isOwner()) {
+                    if (arg!= null && arg.equals("/commands")) System.out.println("command not valid, please try again");
                     System.out.println("Commands you can use:");
                     System.out.println("/start to start the game");
                     System.out.println("/firstMatch if this is your first match\nOR");

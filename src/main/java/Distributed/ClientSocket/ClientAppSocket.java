@@ -1,7 +1,6 @@
 package Distributed.ClientSocket;
 
 import Distributed.AbstractClient;
-import Distributed.Lobby;
 import Distributed.RemotePlayer;
 import Distributed.ServerSocket.SocketPlayer;
 import Distributed.States;
@@ -11,16 +10,18 @@ import View.State;
 import View.TextualUI;
 import View.ViewInterface;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 
 public class ClientAppSocket implements AbstractClient {
     private final int port;
-    private List<Lobby> lobbyList;
+    private boolean owner;
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
@@ -38,6 +39,7 @@ public class ClientAppSocket implements AbstractClient {
         this.tmpNickname = null;
         this.player = null;
         this.nickname = null;
+        this.owner = false;
         if(typeOfView.equals("TUI")) {
             System.out.println("creating TUI");
             this.view = new TextualUI(this);
@@ -83,6 +85,11 @@ public class ClientAppSocket implements AbstractClient {
             System.out.println("input");
             String input = in.nextLine();
             System.out.println("RECEIVED: " + input);
+            if(input.startsWith("/wait")){
+                String[] tmpInput = input.split(" ");
+                if(tmpInput.length>1 && tmpInput[1].equals("owner")) this.owner = true;
+                input = tmpInput[0];
+            }
             if(input.equals("/nickname")){
                 view.update("/nickname");
             }else {
@@ -95,6 +102,7 @@ public class ClientAppSocket implements AbstractClient {
                         case "/wait":
                             if (this.nickname == null) {
                                 this.nickname = tmpNickname;
+                                System.out.println("Setted nickname: " + nickname);
                             }
                             state = States.WAIT;
                             view.setState(State.LOBBY);
@@ -115,8 +123,10 @@ public class ClientAppSocket implements AbstractClient {
                             boardView = (BoardView) objIn.readObject();
                             update(null);
                     }
+                    view.update(null);
                 }
             }
+
             if (input.charAt(0) == '+') {
                 String[] message = input.split(" ", 2);
                 System.out.print("[" + message[0] + "]: " + message[1]);
@@ -143,5 +153,12 @@ public class ClientAppSocket implements AbstractClient {
     @Override
     public BoardView getBoardView() {
         return boardView;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+    public boolean isOwner(){
+        return owner;
     }
 }

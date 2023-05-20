@@ -49,7 +49,7 @@ public class TextualUI implements ViewInterface {
                 break;
             case LOBBY:
                 if (player.isOwner()) {
-                    if (arg.equals("/commands") && arg != null) System.out.println("command not valid, please try again");
+                    if (arg!=null && arg.equals("/commands")) System.out.println("command not valid, please try again");
                     System.out.println("Commands you can use:");
                     System.out.println("/start to start the game");
                     System.out.println("/firstMatch if this is your first match\nOR");
@@ -60,9 +60,9 @@ public class TextualUI implements ViewInterface {
             case PLAY:
                 System.out.println("Your turn!");
                 showBoard();
-                showCommonGoals();
-                showOthersShelf();
                 showYourShelf();
+                showOthersShelf();
+                showCommonGoals();
                 System.out.println("Commands you can use:");
                 System.out.println("/add column  -- add tile in the column of your shelf");
                 System.out.println("/remove row column   -- remove tile[row][column] from the board");
@@ -175,7 +175,7 @@ public class TextualUI implements ViewInterface {
     }
 
     public void homePrint(String arg) throws IOException {
-        if (arg.equals("/nickname") && arg!=null){
+        if (arg!=null && arg.equals("/nickname")){
             System.out.println("nickname already used, please insert another nickname:  ");
             inputHandler();
         } else {

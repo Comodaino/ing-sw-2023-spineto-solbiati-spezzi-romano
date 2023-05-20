@@ -15,7 +15,8 @@ public class TextualUI implements ViewInterface {
     private final RemotePlayer player;
     private final AbstractClient client;
 
-    public TextualUI(AbstractClient client) {
+    public TextualUI(AbstractClient client) throws IOException {
+
         this.player = client.getPlayer();
         this.state = State.HOME;
         this.input = new Scanner(System.in);
@@ -42,6 +43,7 @@ public class TextualUI implements ViewInterface {
 
     @Override
     public void update(String arg) throws IOException {
+        System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
                 System.out.println("WELCOME TO MY SHELFIE !\n");
@@ -83,7 +85,6 @@ public class TextualUI implements ViewInterface {
                 break;
         }
     }
-
     private void showCommonGoals() {
         System.out.println("COMMON GOALS:");
         client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));

@@ -1,6 +1,8 @@
 package Distributed;
 
-public enum ConnectionType {
+import java.io.Serializable;
+
+public enum ConnectionType implements Serializable {
     SOCKET,
     RMI
 }

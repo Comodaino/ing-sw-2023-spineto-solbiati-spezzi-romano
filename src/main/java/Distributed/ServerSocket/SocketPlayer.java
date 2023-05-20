@@ -27,4 +27,7 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     public void update(){
         handler.update();
     }
+    public void message(String arg){
+        handler.message(arg);
+    }
 }

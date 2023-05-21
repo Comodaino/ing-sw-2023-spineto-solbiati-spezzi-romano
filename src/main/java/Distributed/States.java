@@ -1,9 +1,13 @@
 package Distributed;
 
-public enum States {
+import java.io.Serializable;
+
+public enum States implements Serializable {
     INIT,
     PLAY,
-    WAIT,
+    WAIT_SETTING,
+    WAIT_TURN,
     END,
-    CLOSE
+    CLOSE,
+    ERRORClientAppSocket
 }

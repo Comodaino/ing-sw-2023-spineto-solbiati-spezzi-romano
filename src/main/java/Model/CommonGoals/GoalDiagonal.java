@@ -11,6 +11,7 @@ public class GoalDiagonal extends CommonGoal{
     public GoalDiagonal(int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalDiagonal";
     @Override
     public int getScore(Player p){
         boolean found = false;

@@ -9,7 +9,7 @@ public class BoardPanel extends JPanel  {
     public BoardPanel(){
         super();
         setOpaque(false);
-        imageBoard = new ImageIcon("/Users/alessandraromano/Desktop/ALE/Proj Soft Eng/resources/livingroom.png");
+        imageBoard = new ImageIcon("View/resources/livingroom.png");
 
     }
     @Override

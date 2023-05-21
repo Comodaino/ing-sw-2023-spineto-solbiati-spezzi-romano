@@ -12,6 +12,7 @@ public class GoalQuartets extends CommonGoal{
     public GoalQuartets(int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalQuartets";
     @Override
     public int getScore(Player p){
         int numOfQuartets = 0, n = 0;

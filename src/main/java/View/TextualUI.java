@@ -12,17 +12,15 @@ public class TextualUI implements ViewInterface {
 
     private State state;
     private final Scanner input;
-    private final RemotePlayer player;
-    private final AbstractClient client;
+    private RemotePlayer player;
+    private AbstractClient client;
 
     public TextualUI(AbstractClient client) throws IOException {
 
-        this.player = client.getPlayer();
+        //this.player = client.getPlayer();
         this.state = State.HOME;
         this.input = new Scanner(System.in);
         this.client = client;
-
-
         Thread th = new Thread() {
             @Override
             public void run() {
@@ -33,9 +31,8 @@ public class TextualUI implements ViewInterface {
                 }
             }
         };
-
+        update();
         th.start();
-        update(null);
     }
 
     public void inputHandler() throws IOException {
@@ -50,11 +47,11 @@ public class TextualUI implements ViewInterface {
         switch (this.state) {
             case HOME:
                 System.out.println("WELCOME TO MY SHELFIE !\n");
-                homePrint(arg);
+                if (arg != null) homePrint(arg);
                 break;
             case LOBBY:
-                if (client.isOwner()) {
-                    if (arg!= null && arg.equals("/commands")) System.out.println("command not valid, please try again");
+                if (player != null && player.isOwner()) {
+                    if (arg!=null && arg.equals("/commands")) System.out.println("command not valid, please try again");
                     System.out.println("Commands you can use:");
                     System.out.println("/start to start the game");
                     System.out.println("/firstMatch if this is your first match\nOR");
@@ -65,11 +62,14 @@ public class TextualUI implements ViewInterface {
             case PLAY:
                 System.out.println("Your turn!");
                 showBoard();
-                showShelf();
+                showYourShelf();
+                showOthersShelf();
+                showCommonGoals();
                 System.out.println("Commands you can use:");
                 System.out.println("/add column  -- add tile in the column of your shelf");
                 System.out.println("/remove row column   -- remove tile[row][column] from the board");
                 inputHandler();
+                if (player!=null) System.out.println("your score:\t" + player.getModelPlayer().getScore());
                 break;
             case END:
                 String winner = client.getBoardView().getWinner().getNickname();
@@ -86,35 +86,76 @@ public class TextualUI implements ViewInterface {
         }
     }
 
+    public void update() throws IOException {
+        update(null);
+    }
+    private void showCommonGoals() {
+        System.out.println("COMMON GOALS:");
+        client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));
+    }
 
-    private void showShelf() {
-        System.out.println("YOUR SHELF:");
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                Tile tile = player.getModelPlayer().getShelf().getTile(i, j);
-                if (tile == null) {
-                    System.out.print("    ");
-                } else {
-                    System.out.print(" " + tile.getColor().name().charAt(0));
-                    switch (tile.getType()) {
-                        case ONE:
-                            System.out.print("1 ");
-                            break;
-                        case TWO:
-                            System.out.print("2 ");
-                            break;
-                        case THREE:
-                            System.out.print("3 ");
-                            break;
+    private void showOthersShelf() {
+        System.out.println("OTHERS' SHELVES:");
+        for (Player p : client.getBoardView().getListOfPlayer()) {
+            if (!p.equals(player.getModelPlayer()))
+                System.out.println(p.getNickname() + " SHELF:");
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 5; j++) {
+                    Tile tile = p.getShelf().getTile(i, j);
+                    if (tile == null) {
+                        System.out.print("    ");
+                    } else {
+                        System.out.print(" " + tile.getColor().name().charAt(0));
+                        switch (tile.getType()) {
+                            case ONE:
+                                System.out.print("1 ");
+                                break;
+                            case TWO:
+                                System.out.print("2 ");
+                                break;
+                            case THREE:
+                                System.out.print("3 ");
+                                break;
+                        }
                     }
+                    System.out.print("\n");
                 }
-                System.out.print("\n");
             }
         }
+
+    }
+
+    private void showYourShelf() {
+        if (player != null) {
+            System.out.println("YOUR SHELF:");
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 5; j++) {
+                    Tile tile = player.getModelPlayer().getShelf().getTile(i, j);
+                    if (tile == null) {
+                        System.out.print("    ");
+                    } else {
+                        System.out.print(" " + tile.getColor().name().charAt(0));
+                        switch (tile.getType()) {
+                            case ONE:
+                                System.out.print("1 ");
+                                break;
+                            case TWO:
+                                System.out.print("2 ");
+                                break;
+                            case THREE:
+                                System.out.print("3 ");
+                                break;
+                        }
+                    }
+                    System.out.print("\n");
+                }
+            }
+        }
+        System.out.println("NO SHELF AVAILABLE");
     }
 
     private void showBoard() {
-        System.out.println("showing the BOARD...");
+        System.out.println("showing BOARD...");
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Tile tile = client.getBoardView().getCell(i, j).getTile();
@@ -142,19 +183,24 @@ public class TextualUI implements ViewInterface {
     }
 
     public void homePrint(String arg) throws IOException {
-        if (arg != null) {
-            if (arg.equals("/nickname")) {
-                System.out.println("nickname already used, please insert another nickname:  ");
-                inputHandler();
-            } else {
-                System.out.println("insert your nickname:  ");
-                inputHandler();
-            }
+        if (arg!=null && arg.equals("/nickname")){
+            System.out.println("nickname already used, please insert another nickname:  ");
+            inputHandler();
+        } else {
+            System.out.println("insert your nickname:  ");
+            inputHandler();
         }
+
     }
 
     @Override
     public void setState(State state) {
         this.state = state;
+    }
+
+    @Override
+    public void setClient(AbstractClient client){
+        this.client = client;
+        this.player = client.getPlayer();
     }
 }

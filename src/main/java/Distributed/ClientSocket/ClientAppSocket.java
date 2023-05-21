@@ -106,6 +106,7 @@ public class ClientAppSocket implements AbstractClient {
                                 System.out.println("Setted nickname: " + nickname);
                             }
                             state = States.WAIT_SETTING;
+                            view.setClient(this);
                             view.setState(State.LOBBY);
                             break;
                         case "/play":

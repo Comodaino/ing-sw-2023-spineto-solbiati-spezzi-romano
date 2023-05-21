@@ -90,7 +90,6 @@ public class ClientAppSocket implements AbstractClient {
                 String[] tmpInput = input.split(" ");
                 if(tmpInput.length>1 && tmpInput[1].equals("owner")) {
                     this.owner = true;
-                    this.player.setOwner();
                 }
                 input = tmpInput[0];
             }

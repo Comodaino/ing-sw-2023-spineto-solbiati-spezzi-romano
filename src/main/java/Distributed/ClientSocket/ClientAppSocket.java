@@ -88,7 +88,10 @@ public class ClientAppSocket implements AbstractClient {
             System.out.println("RECEIVED: " + input);
             if(input.startsWith("/wait")){
                 String[] tmpInput = input.split(" ");
-                if(tmpInput.length>1 && tmpInput[1].equals("owner")) this.owner = true;
+                if(tmpInput.length>1 && tmpInput[1].equals("owner")) {
+                    this.owner = true;
+                    this.player.setOwner();
+                }
                 input = tmpInput[0];
             }
             if(input.equals("/nickname")){

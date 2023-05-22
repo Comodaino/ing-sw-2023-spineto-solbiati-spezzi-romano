@@ -44,8 +44,10 @@ public interface Server extends Remote {
      * @param lobbyID the ID of the lobby of the client who is requiring the model view
      * @return BoardView the serializable model view BoardView
      */
-    public BoardView getBoardView(Integer lobbyID) throws RemoteException;
+    public void getBoardView(Integer lobbyID) throws RemoteException;
+    public void setRemoteState(Client client, States state) throws RemoteException;
     public States myState(Client client) throws RemoteException;
+    public boolean isOwner(Client client) throws RemoteException;
     public void waitCommand(Client client, String input) throws RemoteException;
     public void playCommand(Client client, String input) throws RemoteException;
     public void endCommand(Client client) throws RemoteException;

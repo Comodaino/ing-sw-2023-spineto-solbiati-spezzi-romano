@@ -2,13 +2,13 @@ package Distributed;
 
 
 import Distributed.ClientRMI.Client;
-import Distributed.ServerRMI.RMIPlayer;
 import Distributed.ServerRMI.Server;
 //import Distributed.ServerRMI.ServerImpl;
 import Distributed.ServerSocket.ClientHandlerSocket;
-import Model.BoardView;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.AlreadyBoundException;
@@ -147,7 +147,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     @Override
     public void register(Client client) throws RemoteException {
         //Creates a new RemotePlayer and sets its nickname, asking it to the client
-        RMIPlayer rp = new RMIPlayer(client);
+        RemotePlayer rp = new RemotePlayer(ConnectionType.RMI);
         String nickname = client.setNickname(this);
         rp.setNickname(nickname);
         //If the lobby is closed, creates a new lobby and sets its ID, adds the player in the list of RemotePlayer of the Lobby the client joined
@@ -159,21 +159,27 @@ public class ServerApp extends UnicastRemoteObject implements Server {
 
     @Override
     public void leave(Client client) throws RemoteException {
-        if(client.isOwner()){
-            closeLobby(client);
+        Lobby lobby = null;
+        Integer lobbyID = client.getLobbyID();
+        synchronized (lobbies){
+            lobby = lobbies.get(lobbyID-1);
         }
 
-        synchronized (lobbies) {
-            for (Lobby l : lobbies) {
-                for (RemotePlayer rp : l.getListOfPlayers()) {
-                    if (client.getNickname().equals(rp.getNickname())) {
-                        l.getListOfPlayers().remove(rp);
-                        client.setState(CLOSE);
-                        rp.setState(CLOSE);
-                        System.out.println(client.getNickname() + " has left the server");
-                        break;
-                    }
-                }
+        if(client.isOwner()){
+            if (lobby.getListOfPlayers().size() == 1) {
+                closeLobby(client);
+            } else {
+                lobby.getListOfPlayers().get(1).setOwner(true);
+            }
+        }
+
+        for (RemotePlayer rp : lobby.getListOfPlayers()) {
+            if (client.getNickname().equals(rp.getNickname())) {
+                lobby.getListOfPlayers().remove(rp);
+                client.setState(CLOSE);
+                rp.setState(CLOSE);
+                System.out.println(client.getNickname() + " has left the server");
+                break;
             }
         }
     }
@@ -217,9 +223,19 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public BoardView getBoardView(Integer lobbyID) {
-        synchronized (lobbies) { //TODO: ask if this is necessary, since this method does not modify the list of lobby
-            return (BoardView) lobbies.get(lobbyID-1).getBoardView();
+    public void getBoardView(Integer lobbyID) { //serializes the board view
+        Lobby lobby = null;
+        synchronized (lobbies) {
+            lobby = lobbies.get(lobbyID - 1);
+        }
+        try{
+            FileOutputStream fileOut = new FileOutputStream("src/main/java/Distributed/serialized/boardView_conf");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(lobby.getBoardView());
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -238,6 +254,36 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         }
 
         return ERROR;
+    }
+
+    public boolean isOwner(Client client) throws RemoteException {
+        Lobby lobby = null;
+        Integer lobbyID = client.getLobbyID();
+        synchronized (lobbies){
+            lobby = lobbies.get(lobbyID-1);
+        }
+
+        for(RemotePlayer rp: lobby.getListOfPlayers()) {
+            if (rp.getNickname().equals(client.getNickname())) {
+                return rp.isOwner();
+            }
+        }
+
+        return false;
+    }
+
+    public void setRemoteState(Client client, States state) throws RemoteException {
+        Lobby lobby = null;
+        Integer lobbyID = client.getLobbyID();
+        synchronized (lobbies){
+            lobby = lobbies.get(lobbyID-1);
+        }
+
+        for(RemotePlayer rp: lobby.getListOfPlayers()) {
+            if (rp.getNickname().equals(client.getNickname())) {
+                rp.setState(state);
+            }
+        }
     }
 
     @Override
@@ -291,14 +337,16 @@ public class ServerApp extends UnicastRemoteObject implements Server {
             lobby = lobbies.get(lobbyID-1);
         }
 
-        System.out.println("Received command: " + input);
-        lobby.getController().update(input);
-
-        client.setState(WAIT_TURN);
-        for(RemotePlayer rp: lobby.getListOfPlayers()) {
-            if (rp.getNickname().equals(client.getNickname())) {
-                rp.setState(WAIT_TURN);
+        if(input.equals("stop")){
+            client.setState(WAIT_TURN);
+            for(RemotePlayer rp: lobby.getListOfPlayers()) {
+                if (rp.getNickname().equals(client.getNickname())) {
+                    rp.setState(WAIT_TURN);
+                }
             }
+        } else {
+            System.out.println("Received command: " + input);
+            lobby.getController().update(input);
         }
     }
 

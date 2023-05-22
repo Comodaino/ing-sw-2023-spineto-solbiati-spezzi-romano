@@ -50,7 +50,7 @@ public class TextualUI implements ViewInterface {
                 if (arg != null) homePrint(arg);
                 break;
             case LOBBY:
-                if (player != null && player.isOwner()) {
+                if (client.isOwner()) {
                     if (arg!=null && arg.equals("/commands")) System.out.println("command not valid, please try again");
                     System.out.println("Commands you can use:");
                     System.out.println("/start to start the game");

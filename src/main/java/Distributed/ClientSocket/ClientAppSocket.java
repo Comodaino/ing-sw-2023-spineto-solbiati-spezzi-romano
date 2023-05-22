@@ -125,7 +125,7 @@ public class ClientAppSocket implements AbstractClient {
                             break;
                         case "/update":
                             boardView = (BoardView) objIn.readObject();
-                            update(null);
+                            view.update(null);
                         default:
                             if(input.startsWith("/message")){
                                 System.out.println(input);
@@ -142,10 +142,6 @@ public class ClientAppSocket implements AbstractClient {
         }
     }
 
-
-    public void update(String arg) throws IOException {
-        view.update(arg);
-    }
 
     @Override
     public void println(String arg){

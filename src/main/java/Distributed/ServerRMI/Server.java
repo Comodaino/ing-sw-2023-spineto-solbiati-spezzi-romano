@@ -47,7 +47,7 @@ public interface Server extends Remote {
      */
     public BoardView getBoardView(Integer lobbyID) throws RemoteException;
     public States myState(Client client) throws RemoteException;
-    public void waitCommand(Client client, String input) throws RemoteException;
+    public void waitCommand(Client client, String input) throws IOException;
     public void playCommand(Client client, String input) throws IOException;
     public void endCommand(Client client) throws RemoteException;
 }

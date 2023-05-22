@@ -61,8 +61,9 @@ public class GameController implements Serializable {
      * @param pl list of players
      * @author Alessio
      */
-    public GameController(List<Player> pl, boolean firstMatch) {
+    public GameController(List<Player> pl, boolean firstMatch) throws IOException {
         this.gameBoard = new Board(firstMatch, pl);
+        this.pl = pl;
         this.donePlayers = new ArrayList<Player>();
         this.boardView = new BoardView(gameBoard);
         for (Player player : pl) {
@@ -71,6 +72,7 @@ public class GameController implements Serializable {
                 break;
             }
         }
+        serverUpdater();
     }
 
     /**

@@ -4,6 +4,7 @@ import Controller.GameController;
 import Model.BoardView;
 import Model.Player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +58,10 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
-    public void startGame(){
+    public void startGame() throws IOException {
         List<Player> modelPlayerList = new ArrayList<Player>();
         for(RemotePlayer p: lp){
+            System.out.println("ué");
             Player tmpPlayer = new Player(p.getNickname(),p.isOwner(), p);
             modelPlayerList.add(tmpPlayer);
             p.setModelPlayer(tmpPlayer);

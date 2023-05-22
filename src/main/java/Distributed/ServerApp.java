@@ -240,7 +240,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void waitCommand(Client client, String input) throws RemoteException {
+    public void waitCommand(Client client, String input) throws IOException {
         Lobby lobby = null;
         Integer lobbyID = client.getLobbyID();
         synchronized (lobbies){

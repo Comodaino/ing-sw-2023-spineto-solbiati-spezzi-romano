@@ -10,10 +10,7 @@ import View.State;
 import View.TextualUI;
 import View.ViewInterface;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -85,7 +82,6 @@ public class ClientAppSocket implements AbstractClient {
         while (state!=States.CLOSE) {
             System.out.println("waiting for input");
             String input = in.nextLine();
-            if(input.startsWith("py")) input = input.substring(2);
             System.out.println("RECEIVED: " + input);
 
 
@@ -119,9 +115,7 @@ public class ClientAppSocket implements AbstractClient {
                             view.update();
                             break;
                         case "/play":
-                            state = States.PLAY;
-                            view.setState(State.PLAY);
-                            view.update();
+                            playCommand();
                             break;
                         case "/end":
                             state = States.END;
@@ -136,6 +130,8 @@ public class ClientAppSocket implements AbstractClient {
                         case "/update":
                                 this.boardView = (BoardView) objIn.readObject();
                                 System.out.println("updating...");
+                                if(state != States.PLAY) playCommand();
+
                             break;
                         default:
                             if(input.startsWith("/message")){
@@ -180,5 +176,10 @@ public class ClientAppSocket implements AbstractClient {
     }
     public boolean isOwner(){
         return owner;
+    }
+    public void playCommand() throws IOException {
+        state = States.PLAY;
+        view.setState(State.PLAY);
+        view.update();
     }
 }

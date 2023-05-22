@@ -36,7 +36,5 @@ public abstract class RemoteHandler {
     }
     public void endCommand(){ state=States.WAIT_SETTING; }
     public void update() throws IOException {}
-
-    public void message(String arg) {
-    }
+    public void message(String arg) {}
 }

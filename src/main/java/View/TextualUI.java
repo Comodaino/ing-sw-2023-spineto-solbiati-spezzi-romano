@@ -44,7 +44,6 @@ public class TextualUI implements ViewInterface {
     @Override
     public void update(String arg) throws IOException {
         System.out.println("update: " + this.state);
-        if (arg != null) {
             switch (this.state) {
                 case HOME:
                     System.out.println("WELCOME TO MY SHELFIE !\n");
@@ -52,7 +51,7 @@ public class TextualUI implements ViewInterface {
                     break;
                 case LOBBY:
                     if (client.isOwner()) {
-                        if (arg.equals("/commands"))
+                        if (arg!= null && arg.equals("/commands"))
                             System.out.println("command not valid, please try again");
                         System.out.println("Commands you can use:");
                         System.out.println("/start to start the game");
@@ -86,7 +85,6 @@ public class TextualUI implements ViewInterface {
                     System.out.println("The lobby has been closed, thank you for playing!");
                     break;
             }
-        }
     }
     public void update() throws IOException {
         System.out.println("update: " + this.state);

@@ -138,7 +138,7 @@ public class TextualUI implements ViewInterface {
     private void showOthersShelf() {
         System.out.println("OTHERS' SHELVES:");
         for (Player p : client.getBoardView().getListOfPlayer()) {
-            if (!p.equals(player.getModelPlayer()))
+            if (!p.getNickname().equals(player.getModelPlayer().getNickname()))
                 System.out.println(p.getNickname() + " SHELF:");
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {

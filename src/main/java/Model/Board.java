@@ -68,6 +68,9 @@ public class Board implements Serializable {
         this.donePlayers = new ArrayList<Player>();
         this.coordBuffer = new int[]{-1, -1, -1, -1, -1, -1};
         this.listOfPlayer = pl;
+        for(Player p: listOfPlayer){
+            System.out.println(":: " + p.getNickname());
+        }
         this.endGoal = new EndGoal();
         GoalFactory goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();

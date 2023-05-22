@@ -1,11 +1,13 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * Pgtype is the type defining Personal Goals.
  * Parameters line and col that represent coordinate, and color of Tile
  * @author alessandra
  */
-public class Pgtype {
+public class Pgtype implements Serializable {
     private int line,col;
     private Color color;
 

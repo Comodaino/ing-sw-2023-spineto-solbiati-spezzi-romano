@@ -1,6 +1,8 @@
 package Model;
 
-public enum CellType {
+import java.io.Serializable;
+
+public enum CellType implements Serializable {
     ONE,
     TWO,
     THREE,

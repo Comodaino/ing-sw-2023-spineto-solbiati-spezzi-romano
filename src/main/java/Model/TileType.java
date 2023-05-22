@@ -1,6 +1,8 @@
 package Model;
 
-public enum TileType {
+import java.io.Serializable;
+
+public enum TileType implements Serializable {
     ONE,
     TWO,
     THREE;

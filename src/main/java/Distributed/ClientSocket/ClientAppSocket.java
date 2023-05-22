@@ -85,7 +85,10 @@ public class ClientAppSocket implements AbstractClient {
         while (state!=States.CLOSE) {
             System.out.println("waiting for input");
             String input = in.nextLine();
+            if(input.startsWith("py")) input = input.substring(2);
             System.out.println("RECEIVED: " + input);
+
+
             if(input.startsWith("/wait")){
                 String[] tmpInput = input.split(" ");
                 if(tmpInput.length>1 && tmpInput[1].equals("owner")) {
@@ -93,6 +96,8 @@ public class ClientAppSocket implements AbstractClient {
                 }
                 input = tmpInput[0];
             }
+
+
             if(input.equals("/nickname")){
                 view.update("/nickname");
             }else {
@@ -105,7 +110,7 @@ public class ClientAppSocket implements AbstractClient {
                         case "/wait":
                             if (this.nickname == null) {
                                 this.nickname = tmpNickname;
-                                System.out.println("Setted nickname: " + nickname);
+                                System.out.println("Set nickname: " + nickname);
                             }
                             state = States.WAIT_SETTING;
                             view.setClient(this);
@@ -124,20 +129,24 @@ public class ClientAppSocket implements AbstractClient {
                             view.setState(State.CLOSE);
                             break;
                         case "/update":
-                            boardView = (BoardView) objIn.readObject();
-                            view.update(null);
+                                this.boardView = (BoardView) objIn.readObject();
+                                System.out.println("updating...");
+                            break;
                         default:
                             if(input.startsWith("/message")){
                                 System.out.println(input);
                                 //TODO update(input);
                             }
+                            break;
                     }
-                    view.update(null);
+                    view.update();
                 }
             }
 
             if (input.charAt(0) != '/' && state!=States.INIT) {
+                System.out.println("unclePear");
                 out.println(input);
+                out.flush();
             }
         }
     }
@@ -147,6 +156,7 @@ public class ClientAppSocket implements AbstractClient {
     public void println(String arg){
         if(state.equals(States.INIT)) this.tmpNickname = arg;
         out.println(arg);
+        out.flush();
     }
 
     @Override

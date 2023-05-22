@@ -1,6 +1,7 @@
 package Controller;
 
-import Distributed.States;
+import Distributed.Lobby;
+import Distributed.RemotePlayer;
 import Model.Board;
 import Model.BoardView;
 import Model.CommonGoals.CommonGoal;
@@ -24,6 +25,7 @@ public class GameController implements Serializable {
     private Player currentPlayer;
     private List<Player> pl;
     private List<Player> donePlayers;
+    private Lobby lobby;
     public Board getBoard() {
         return gameBoard;
     }
@@ -51,8 +53,9 @@ public class GameController implements Serializable {
         gameBoard.setCurrentPlayer(currentPlayer);
     }
     private void serverUpdater() throws IOException {
-        for(Player p: pl){
-            p.getRemotePlayer().update();
+
+        for(RemotePlayer p: lobby.getListOfPlayers()){
+            p.update();
         }
     }
 
@@ -61,9 +64,10 @@ public class GameController implements Serializable {
      * @param pl list of players
      * @author Alessio
      */
-    public GameController(List<Player> pl, boolean firstMatch) throws IOException {
+    public GameController(List<Player> pl, boolean firstMatch, Lobby lobby) throws IOException {
         this.gameBoard = new Board(firstMatch, pl);
         this.pl = pl;
+        this.lobby = lobby;
         this.donePlayers = new ArrayList<Player>();
         this.boardView = new BoardView(gameBoard);
         for (Player player : pl) {
@@ -107,7 +111,7 @@ public class GameController implements Serializable {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                 donePlayers.add(currentPlayer);
                 gameBoard.addToDone(currentPlayer);
-                currentPlayer.getRemotePlayer().setState(States.END);
+                currentPlayer.setAsEnded();
             }
         }
     }

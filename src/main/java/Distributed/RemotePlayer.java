@@ -3,6 +3,7 @@ package Distributed;
 import Controller.GameController;
 import Model.Player;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import static Distributed.States.INIT;
@@ -18,7 +19,7 @@ public class RemotePlayer implements Serializable {
     public RemotePlayer(ConnectionType type){
         this.type = type;
         this.owner = false;
-        modelPlayer = new Player("Nico", true, null);
+        modelPlayer = new Player("Nico", true);
         this.nickname = "Ale";
         this.state = INIT;
     }
@@ -45,7 +46,7 @@ public class RemotePlayer implements Serializable {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
-    public void update(){}
+    public void update() throws IOException {}
     public void setState(States state) {
         this.state = state;
     }

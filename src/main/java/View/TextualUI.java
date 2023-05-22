@@ -14,6 +14,7 @@ public class TextualUI implements ViewInterface {
     private final Scanner input;
     private RemotePlayer player;
     private AbstractClient client;
+    public static final String RESET = "\033[0m";
 
     public TextualUI(AbstractClient client) throws IOException {
 
@@ -46,7 +47,7 @@ public class TextualUI implements ViewInterface {
         System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
-                    System.out.println("WELCOME TO MY SHELFIE !\n");
+                    System.out.println( ConsoleColors.RED + "WELCOME TO MY SHELFIE !\n" );
                     homePrint(arg);
                     break;
                 case LOBBY:

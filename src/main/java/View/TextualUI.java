@@ -88,7 +88,6 @@ public class TextualUI implements ViewInterface {
             }
         }
     }
-    @override
     public void update() throws IOException {
         System.out.println("update: " + this.state);
         switch (this.state) {

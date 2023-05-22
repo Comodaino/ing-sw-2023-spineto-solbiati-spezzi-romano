@@ -160,6 +160,7 @@ public class ClientAppSocket implements AbstractClient {
     @Override
     public void println(String arg){
         if(state.equals(States.INIT)) this.tmpNickname = arg;
+        System.out.println("SENDING: " + arg);
         out.println(arg);
         out.flush();
     }

@@ -106,6 +106,7 @@ public class ClientAppSocket implements AbstractClient {
                         case "/init":
                             state = States.INIT;
                             view.setState(State.HOME);
+                            view.update();
                             break;
                         case "/wait":
                             if (this.nickname == null) {
@@ -115,18 +116,22 @@ public class ClientAppSocket implements AbstractClient {
                             state = States.WAIT_SETTING;
                             view.setClient(this);
                             view.setState(State.LOBBY);
+                            view.update();
                             break;
                         case "/play":
                             state = States.PLAY;
                             view.setState(State.PLAY);
+                            view.update();
                             break;
                         case "/end":
                             state = States.END;
                             view.setState(State.LOBBY);
+                            view.update();
                             break;
                         case "/close":
                             state = States.CLOSE;
                             view.setState(State.CLOSE);
+                            view.update();
                             break;
                         case "/update":
                                 this.boardView = (BoardView) objIn.readObject();
@@ -137,9 +142,9 @@ public class ClientAppSocket implements AbstractClient {
                                 System.out.println(input);
                                 //TODO update(input);
                             }
+                            view.update();
                             break;
                     }
-                    view.update();
                 }
             }
 

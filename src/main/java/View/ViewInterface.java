@@ -8,6 +8,7 @@ import java.io.IOException;
 public abstract interface ViewInterface  {
 
     void update(String arg) throws IOException;
+    void update();
 
     public void setState(State state);
 

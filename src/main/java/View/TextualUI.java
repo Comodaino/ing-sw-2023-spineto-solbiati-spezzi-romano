@@ -44,14 +44,59 @@ public class TextualUI implements ViewInterface {
     @Override
     public void update(String arg) throws IOException {
         System.out.println("update: " + this.state);
+        if (arg != null) {
+            switch (this.state) {
+                case HOME:
+                    System.out.println("WELCOME TO MY SHELFIE !\n");
+                    homePrint(arg);
+                    break;
+                case LOBBY:
+                    if (client.isOwner()) {
+                        if (arg.equals("/commands"))
+                            System.out.println("command not valid, please try again");
+                        System.out.println("Commands you can use:");
+                        System.out.println("/start to start the game");
+                        System.out.println("/firstMatch if this is your first match\nOR");
+                        System.out.println("/notFirstMatch if you have already played");
+                        inputHandler();
+                    } else System.out.println("wait for the owner to start the game");
+                    break;
+                case PLAY:
+                    System.out.println("Your turn!");
+                    showBoard();
+                    showYourShelf();
+                    showOthersShelf();
+                    showCommonGoals();
+                    System.out.println("Commands you can use:");
+                    System.out.println("/add column  -- add tile in the column of your shelf");
+                    System.out.println("/remove row column   -- remove tile[row][column] from the board");
+                    inputHandler();
+                    if (player != null) System.out.println("your score:\t" + player.getModelPlayer().getScore());
+                    break;
+                case END:
+                    String winner = client.getBoardView().getWinner().getNickname();
+                    System.out.println("SCORES:");
+                    for (Player p : client.getBoardView().getListOfPlayer()) {
+                        System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
+                    }
+                    System.out.println("The winner is......");
+                    System.out.println("\t\t\t\t\t" + winner + "\t\t\t\t\t");
+                    break;
+                case CLOSE:
+                    System.out.println("The lobby has been closed, thank you for playing!");
+                    break;
+            }
+        }
+    }
+    @override
+    public void update() throws IOException {
+        System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
                 System.out.println("WELCOME TO MY SHELFIE !\n");
-                if (arg != null) homePrint(arg);
                 break;
             case LOBBY:
                 if (client.isOwner()) {
-                    if (arg!=null && arg.equals("/commands")) System.out.println("command not valid, please try again");
                     System.out.println("Commands you can use:");
                     System.out.println("/start to start the game");
                     System.out.println("/firstMatch if this is your first match\nOR");
@@ -69,7 +114,7 @@ public class TextualUI implements ViewInterface {
                 System.out.println("/add column  -- add tile in the column of your shelf");
                 System.out.println("/remove row column   -- remove tile[row][column] from the board");
                 inputHandler();
-                if (player!=null) System.out.println("your score:\t" + player.getModelPlayer().getScore());
+                if (player != null) System.out.println("your score:\t" + player.getModelPlayer().getScore());
                 break;
             case END:
                 String winner = client.getBoardView().getWinner().getNickname();
@@ -86,9 +131,6 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    public void update() throws IOException {
-        update(null);
-    }
     private void showCommonGoals() {
         System.out.println("COMMON GOALS:");
         client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));
@@ -183,7 +225,7 @@ public class TextualUI implements ViewInterface {
     }
 
     public void homePrint(String arg) throws IOException {
-        if (arg!=null && arg.equals("/nickname")){
+        if (arg != null && arg.equals("/nickname")) {
             System.out.println("nickname already used, please insert another nickname:  ");
             inputHandler();
         } else {
@@ -199,7 +241,7 @@ public class TextualUI implements ViewInterface {
     }
 
     @Override
-    public void setClient(AbstractClient client){
+    public void setClient(AbstractClient client) {
         this.client = client;
         this.player = client.getPlayer();
     }

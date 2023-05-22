@@ -117,7 +117,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      *
      * @throws IOException
      */
-    private void waitCommand(String input){
+    private void waitCommand(String input) throws IOException {
         System.out.println("WAIT");
         if (player.isOwner()) {
             switch (input) {

@@ -88,7 +88,9 @@ public class ClientAppSocket implements AbstractClient {
             System.out.println("RECEIVED: " + input);
             if(input.startsWith("/wait")){
                 String[] tmpInput = input.split(" ");
-                if(tmpInput.length>1 && tmpInput[1].equals("owner")) this.owner = true;
+                if(tmpInput.length>1 && tmpInput[1].equals("owner")) {
+                    this.owner = true;
+                }
                 input = tmpInput[0];
             }
             if(input.equals("/nickname")){
@@ -123,7 +125,7 @@ public class ClientAppSocket implements AbstractClient {
                             break;
                         case "/update":
                             boardView = (BoardView) objIn.readObject();
-                            update(null);
+                            view.update(null);
                         default:
                             if(input.startsWith("/message")){
                                 System.out.println(input);
@@ -140,10 +142,6 @@ public class ClientAppSocket implements AbstractClient {
         }
     }
 
-
-    public void update(String arg) throws IOException {
-        view.update(arg);
-    }
 
     @Override
     public void println(String arg){

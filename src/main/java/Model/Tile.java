@@ -8,7 +8,7 @@ import java.util.Random;
  * @author Clara
  */
 public class Tile implements Serializable {
-    private Color color;
+    private final Color color;
     private TileType type;
 
     public Tile(Color c){

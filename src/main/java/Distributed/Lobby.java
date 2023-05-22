@@ -61,13 +61,12 @@ public class Lobby {
     public void startGame() throws IOException {
         List<Player> modelPlayerList = new ArrayList<Player>();
         for(RemotePlayer p: lp){
-            System.out.println("ué");
-            Player tmpPlayer = new Player(p.getNickname(),p.isOwner(), p);
+            Player tmpPlayer = new Player(p.getNickname(),p.isOwner());
             modelPlayerList.add(tmpPlayer);
             p.setModelPlayer(tmpPlayer);
             p.setState(States.PLAY);
         }
-        controller = new GameController(modelPlayerList, firstMatch);
+        controller = new GameController(modelPlayerList, firstMatch, this);
         for(RemotePlayer p: lp) {
                 p.setController(controller);
         }

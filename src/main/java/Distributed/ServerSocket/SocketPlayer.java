@@ -4,6 +4,7 @@ import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
 import Model.Player;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 
@@ -24,7 +25,7 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     public Socket getSocket() {
         return socket;
     }
-    public void update(){
+    public void update() throws IOException {
         handler.update();
     }
     public void message(String arg){

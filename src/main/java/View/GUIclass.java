@@ -170,6 +170,11 @@ public class GUIclass extends JFrame implements ViewInterface{
 }
 
     @Override
+    public void update() throws IOException {
+
+    }
+
+    @Override
     public void setState(State state) {
         this.state=state;
     }

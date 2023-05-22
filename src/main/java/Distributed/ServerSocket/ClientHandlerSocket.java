@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 import static Distributed.States.*;
 
+;
+
 public class ClientHandlerSocket extends RemoteHandler implements Runnable, Serializable {
     private final Socket socket;
     private final SocketPlayer player;
@@ -37,7 +39,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      */
     public void run() {
 
-        Thread th1 = new Thread(){
+        Thread th1 = new Thread() {
             @Override
             public void run() {
                 try {
@@ -47,7 +49,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 }
             }
         };
-        Thread th2 = new Thread(){
+        Thread th2 = new Thread() {
             @Override
             public void run() {
                 try {
@@ -62,7 +64,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         out.println("ready");
         out.flush();
         System.out.println("Message sent");
-        if(player.getState() == CLOSE) {
+        if (player.getState() == CLOSE) {
             out.println("/close");
             out.flush();
             in.close();
@@ -79,16 +81,14 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      *
      * @throws IOException
      */
-    public void update() {
-        try {
-            out.println("/update");
-            out.flush();
-            objOut.writeObject(lobby.getBoardView());
-            objOut.flush();
+    public void update() throws IOException {
+        objOut.writeObject(lobby.getBoardView());
+        objOut.flush();
+        objOut.reset();
+        out.println("/update");
+        out.flush();
+        System.out.println("update sent");
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -96,14 +96,14 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      *
      * @throws IOException
      */
-    private void initCommand(String input){
+    private void initCommand(String input) {
         System.out.println("INIT");
         System.out.println("Received " + input);
         if (nicknameChecker(input)) {
             System.out.println("Nickname is available");
             player.setNickname(input);
             player.setState(WAIT_SETTING);
-            if(player.isOwner()) out.println("/wait owner");
+            if (player.isOwner()) out.println("/wait owner");
             else out.println("/wait");
             out.flush();
         } else {
@@ -124,6 +124,9 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 case "/start":
                     lobby.startGame();
                     player.setState(PLAY);
+
+                    update();
+
                     out.println("/play");
                     out.flush();
                     break;
@@ -160,7 +163,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             System.out.println("waiting for input");
             String input = in.nextLine();
             System.out.println("RECEIVED " + input);
-            if(input.charAt(0)=='/') {
+            if (input.charAt(0) == '/') {
                 switch (player.getState()) {
                     case WAIT_SETTING:
                         waitCommand(input);
@@ -170,7 +173,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                     case END:
                         endCommand();
                 }
-            }else {
+            } else {
                 if (player.getState().equals(INIT)) {
                     initCommand(input);
                 } else lobby.sendMessage(player, input);

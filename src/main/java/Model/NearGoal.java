@@ -1,10 +1,12 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * This goal is checked at the end of a player's game and checks for clusters of tiles of the same color
  * @author Alessio
  */
-public class NearGoal extends Goal {
+public class NearGoal extends Goal implements Serializable {
     private int score;
     private boolean matrix[][];
 

@@ -4,9 +4,10 @@ import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
 import Model.Player;
 
+import java.io.Serializable;
 import java.net.Socket;
 
-public class SocketPlayer extends RemotePlayer {
+public class SocketPlayer extends RemotePlayer implements Serializable {
     private final ConnectionType type;
     private Player modelPlayer;
     private String nickname;
@@ -25,5 +26,8 @@ public class SocketPlayer extends RemotePlayer {
     }
     public void update(){
         handler.update();
+    }
+    public void message(String arg){
+        handler.message(arg);
     }
 }

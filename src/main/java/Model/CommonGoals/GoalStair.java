@@ -13,6 +13,7 @@ public class GoalStair extends CommonGoal{
     public GoalStair(int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalStairs";
     @Override
     public int getScore(Player p){
         int n = 0;

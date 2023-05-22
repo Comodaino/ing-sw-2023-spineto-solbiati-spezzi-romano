@@ -5,12 +5,13 @@ import Distributed.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.Scanner;
 
 import static Distributed.States.*;
 
-public class ClientHandlerSocket extends RemoteHandler implements Runnable {
+public class ClientHandlerSocket extends RemoteHandler implements Runnable, Serializable {
     private final Socket socket;
     private final SocketPlayer player;
     private final ObjectOutputStream objOut;
@@ -95,16 +96,20 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      *
      * @throws IOException
      */
-    private void initCommand(String input) throws IOException {
+    private void initCommand(String input){
         System.out.println("INIT");
         System.out.println("Received " + input);
         if (nicknameChecker(input)) {
             System.out.println("Nickname is available");
             player.setNickname(input);
-            player.setState(WAIT_SETTINGS);
-            out.println("/wait");
+            player.setState(WAIT_SETTING);
+            if(player.isOwner()) out.println("/wait owner");
+            else out.println("/wait");
             out.flush();
-        } else System.out.println("Nickname not available");
+        } else {
+
+            System.out.println("Nickname not available");
+        }
     }
 
     /**
@@ -112,7 +117,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      *
      * @throws IOException
      */
-    private void waitCommand(String input) throws IOException, InterruptedException {
+    private void waitCommand(String input) throws IOException {
         System.out.println("WAIT");
         if (player.isOwner()) {
             switch (input) {
@@ -141,7 +146,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
      * @throws IOException
      */
 
-    public void playCommand(String input){
+    public void playCommand(String input) throws IOException {
         System.out.println("Received command: " + input);
         gameController.update(input);
     }
@@ -152,11 +157,12 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
 
     public synchronized void inputHandler() throws IOException, InterruptedException {
         while (!player.getState().equals(CLOSE)) {
+            System.out.println("waiting for input");
             String input = in.nextLine();
             System.out.println("RECEIVED " + input);
             if(input.charAt(0)=='/') {
                 switch (player.getState()) {
-                    case WAIT_SETTINGS:
+                    case WAIT_SETTING:
                         waitCommand(input);
                         break;
                     case PLAY:
@@ -164,12 +170,11 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                     case END:
                         endCommand();
                 }
-            }else{
-                if(player.getState().equals(INIT)){
+            }else {
+                if (player.getState().equals(INIT)) {
                     initCommand(input);
-                }else lobby.sendMessage(player, input);
+                } else lobby.sendMessage(player, input);
             }
-            System.out.println(player.getState());
             notifyAll();
         }
     }
@@ -184,7 +189,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                     out.println("/init");
                     out.flush();
                     break;
-                case WAIT_SETTINGS:
+                case WAIT_SETTING:
+                    System.out.println("WAIT");
                     out.println("/wait");
                     out.flush();
                     break;
@@ -199,6 +205,29 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable {
                     break;
             }
         }
+    }
+
+    @Override
+    public void message(String arg) {
+        System.out.println("/message " + arg);
+        switch (player.getState()) {
+            case INIT:
+                out.println("/init");
+                out.flush();
+                break;
+            case WAIT_SETTING:
+                out.println("/wait");
+                out.flush();
+                break;
+            case PLAY:
+                out.println("/play");
+                out.flush();
+                break;
+            case END:
+                out.println("/end");
+                out.flush();
+                break;
+        } //TODO CHANGE IMPLEMENTATION ONCE TUI IS FINISHED
     }
 }
 

@@ -1,6 +1,5 @@
 package Controller;
 
-import Distributed.ConnectionType;
 import Distributed.States;
 import Model.Board;
 import Model.BoardView;
@@ -29,14 +28,15 @@ public class GameController implements Serializable {
         return gameBoard;
     }
     public BoardView getBoardView() { return boardView; }
-    public void setBoardView(BoardView boardView) { this.boardView=gameBoard.boardView; }
+    public void setBoardView(BoardView boardView){
+        this.boardView=gameBoard.boardView;
+    }
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
     public void setCurrentPlayer(Player p){
         this.currentPlayer= p;
-        boardView.setCurrentPlayer(p);
     }
     /**
      * Controls who the current player is by making the player next to the old current player the new current player
@@ -52,19 +52,18 @@ public class GameController implements Serializable {
     }
     private void serverUpdater() throws IOException {
         for(Player p: pl){
-            if(p.getRemotePlayer().getType().equals(ConnectionType.SOCKET)) p.getRemotePlayer().update();
-            //if(p.getRemotePlayer().getType().equals(ConnectionType.Socket)) //TODO IMPLEMENT ONCE RMI IS DONE
+            p.getRemotePlayer().update();
         }
     }
-    //TODO The following constructor needs to be reviewed and modified after the lesson about sockets and view
 
     /**
      * GameController constructor
      * @param pl list of players
      * @author Alessio
      */
-    public GameController(List<Player> pl, boolean firstMatch) {
+    public GameController(List<Player> pl, boolean firstMatch) throws IOException {
         this.gameBoard = new Board(firstMatch, pl);
+        this.pl = pl;
         this.donePlayers = new ArrayList<Player>();
         this.boardView = new BoardView(gameBoard);
         for (Player player : pl) {
@@ -73,6 +72,7 @@ public class GameController implements Serializable {
                 break;
             }
         }
+        serverUpdater();
     }
 
     /**
@@ -81,18 +81,20 @@ public class GameController implements Serializable {
      *                 method. It is format is /command [par 0] [par 1] ...
      * @author Alessio
      */
-    public void update(String arg) {
-        String[] input = arg.split(" ");
-        if (input[0].charAt(0) == '/') {
-            switch (input[0]) {
-                case "/remove":
-                    playRemove(input);
-                    break;
-                case "/add":
-                    playAdd(input);
-                    break;
+    public void update(String arg) throws IOException {
+            String[] input = arg.split(" ");
+            if (input[0].charAt(0) == '/') {
+                switch (input[0]) {
+                    case "/remove":
+                        playRemove(input);
+                        serverUpdater();
+                        break;
+                    case "/add":
+                        playAdd(input);
+                        serverUpdater();
+                        break;
+                }
             }
-        }
     }
 
     /**
@@ -104,6 +106,7 @@ public class GameController implements Serializable {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                 donePlayers.add(currentPlayer);
+                gameBoard.addToDone(currentPlayer);
                 currentPlayer.getRemotePlayer().setState(States.END);
             }
         }
@@ -128,7 +131,7 @@ public class GameController implements Serializable {
      */
     private void playAdd(String[] input) {
         System.out.println("add");
-        if(columnAvailable(gameBoard.getTileBuffer().size(),input[1].charAt(0) - 48))  {
+        if(columnAvaiable(gameBoard.getTileBuffer().size(),input[1].charAt(0) - 48))  {
             for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
                 if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                     while (gameBoard.getTileBuffer().size() > 0) {
@@ -142,6 +145,7 @@ public class GameController implements Serializable {
                         }
                         if (currentPlayer.getShelf().isFull()) {
                             while (gameBoard.getTileBuffer().size() != 0) gameBoard.getTileBuffer().remove(0);
+                            playEndGame();
                         }
                     }
                 }
@@ -174,7 +178,7 @@ public class GameController implements Serializable {
         return true;
     }
 
-    public boolean columnAvailable(int c, int size){
+    public boolean columnAvaiable(int c, int size){
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)){
                 return !gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(6-size ,c);
@@ -183,3 +187,9 @@ public class GameController implements Serializable {
         return false;
     }
 }
+
+/* possible commands:
+*  /add playerName column
+*  /remove playerName row column
+*
+* */

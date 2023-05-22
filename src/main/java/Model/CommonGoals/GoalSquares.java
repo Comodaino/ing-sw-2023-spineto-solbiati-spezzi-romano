@@ -10,6 +10,7 @@ import Model.Player;
  */
 public class GoalSquares extends CommonGoal{
     public GoalSquares(int numOfPlayer){ super(numOfPlayer); }
+    private static final String name ="GoalSquares";
     @Override
     public int getScore(Player p) {
         int numOfSquares = 0;

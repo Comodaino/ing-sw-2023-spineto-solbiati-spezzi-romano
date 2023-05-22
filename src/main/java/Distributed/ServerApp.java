@@ -22,7 +22,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static Distributed.States.*;
-import static Distributed.States.WAIT_TURN;
 
 public class ServerApp extends UnicastRemoteObject implements Server {
     private int port;
@@ -53,7 +52,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     public void startServer() throws IOException {
-        openLobby = new Lobby();
+        openLobby = new Lobby(this);
         openLobby.setID(1);
         lobbies.add(openLobby);
         //ServerImpl serverRMI = new ServerImpl(this);
@@ -81,7 +80,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
             socket.getOutputStream().flush();
             synchronized (lobbies) {
                 if (!openLobby.isOpen()) {
-                    openLobby = new Lobby();
+                    openLobby = new Lobby(this);
                     lobbies.add(openLobby);
                     System.out.println("Created new lobby");
                 }
@@ -118,7 +117,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         synchronized (lobbies) {
             //If the lobby is closed, creates a new lobby and sets its ID
             if (!lobbies.get(lobbies.size() - 1).isOpen()) {
-                lobbies.add(new Lobby());
+                lobbies.add(new Lobby(this));
                 lobbies.get(lobbies.size() - 1).setID(lobbies.size());
             }
             //Adds the player in the list of RemotePlayer of the Lobby the client joined
@@ -153,8 +152,8 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         //If the lobby is closed, creates a new lobby and sets its ID, adds the player in the list of RemotePlayer of the Lobby the client joined
         addPlayer(client, rp);
         //Sets the client state in WAIT
-        client.setState(WAIT_SETTINGS);
-        rp.setState(WAIT_SETTINGS);
+        client.setState(WAIT_SETTING);
+        rp.setState(WAIT_SETTING);
     }
 
     @Override
@@ -185,7 +184,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void update(Client client, String command) throws RemoteException {
+    public void update(Client client, String command) throws IOException {
         synchronized (lobbies) { //TODO: ask if this is necessary, since this method does not modify the list of lobby
             lobbies.get(client.getLobbyID() - 1).getController().update(command);
         }
@@ -253,7 +252,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
             }
         }
 
-        return ERROR;
+        return null; //TODO CHECK ERROR
     }
 
     public boolean isOwner(Client client) throws RemoteException {
@@ -287,7 +286,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void waitCommand(Client client, String input) throws RemoteException {
+    public void waitCommand(Client client, String input) throws IOException {
         Lobby lobby = null;
         Integer lobbyID = client.getLobbyID();
         synchronized (lobbies){
@@ -330,7 +329,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void playCommand(Client client, String input) throws RemoteException {
+    public void playCommand(Client client, String input) throws IOException {
         Lobby lobby = null;
         Integer lobbyID = client.getLobbyID();
         synchronized (lobbies){
@@ -363,5 +362,4 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         }
 
     }
-
 }

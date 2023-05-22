@@ -11,6 +11,7 @@ public class GoalCross extends CommonGoal{
     public GoalCross(int numOfPlayer){
         super(numOfPlayer);
     }
+    private static final String name ="GoalCross";
     @Override
     public int getScore(Player p){
         boolean found = false;

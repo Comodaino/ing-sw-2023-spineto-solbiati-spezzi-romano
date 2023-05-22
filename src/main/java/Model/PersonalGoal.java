@@ -27,38 +27,62 @@ public class PersonalGoal extends Goal {
     /**
      * this method create a random Personal goal through the getPersGoal method
      */
-    public Random CreatePersonalGoal(){
+    public int CreatePersonalGoal() {
         Random rand = new Random();
-        rand.nextInt(12);
 
+        int j = 0;
         switch (rand.nextInt(12)) {
 
-            case 0:  getPersGoal(1);
+            case 0:
+                getPersGoal(1);
+                j = 0;
                 break;
-            case 1:  getPersGoal(7);
+            case 1:
+                getPersGoal(7);
+                j = 1;
                 break;
-            case 2:  getPersGoal(13);
+            case 2:
+                getPersGoal(13);
+                j = 2;
                 break;
-            case 3:  getPersGoal(19);
+            case 3:
+                getPersGoal(19);
+                j = 3;
                 break;
-            case 4:  getPersGoal(25);
+            case 4:
+                getPersGoal(25);
+                j = 4;
                 break;
-            case 5:  getPersGoal(31);
+            case 5:
+                getPersGoal(31);
+                j = 5;
                 break;
-            case 6:  getPersGoal(37);
+            case 6:
+                getPersGoal(37);
+                j = 6;
                 break;
-            case 7:  getPersGoal(43);
+            case 7:
+                getPersGoal(43);
+                j = 7;
                 break;
-            case 8:  getPersGoal(49);
+            case 8:
+                getPersGoal(49);
+                j = 8;
                 break;
-            case 9:  getPersGoal(55);
+            case 9:
+                getPersGoal(55);
+                j = 9;
                 break;
-            case 10:  getPersGoal(61);
+            case 10:
+                getPersGoal(61);
+                j = 10;
                 break;
-            case 11:  getPersGoal(67);
+            case 11:
+                getPersGoal(67);
+                j = 11;
                 break;
         }
-        return rand;
+        return j;
     }
 
     /**

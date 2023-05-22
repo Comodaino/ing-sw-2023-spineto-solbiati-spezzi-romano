@@ -4,6 +4,7 @@ import Controller.GameController;
 import Model.BoardView;
 import Model.Player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,19 +16,19 @@ public class Lobby {
     private boolean firstMatch;
     private BoardView boardView;
     private GameController controller;
-    public Lobby(){
+    private ServerApp serverApp;
+    public Lobby(ServerApp serverApp){
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.ID = null;
+        this.serverApp = serverApp;
         this.open = true;
     }
 
     public void addPlayer(RemotePlayer p){
         if(open){
             if(lp.isEmpty()){
-                p.setOwner(true); //the first player to join the lobby become the owner
-            } else {
-                p.setOwner(false);
+                p.setOwner(); //the first player to join the lobby become the owner
             }
             lp.add(p);
             if(lp.size()==4) this.open = false;
@@ -57,21 +58,18 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
-    public void startGame(){
+    public void startGame() throws IOException {
         List<Player> modelPlayerList = new ArrayList<Player>();
-        //TODO: NEED TO DECIDE BETWEEN TWO CONTROLLERS OR ONE
         for(RemotePlayer p: lp){
+            System.out.println("ué");
             Player tmpPlayer = new Player(p.getNickname(),p.isOwner(), p);
             modelPlayerList.add(tmpPlayer);
             p.setModelPlayer(tmpPlayer);
             p.setState(States.PLAY);
         }
         controller = new GameController(modelPlayerList, firstMatch);
-        //TODO: GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
         for(RemotePlayer p: lp) {
-            if (p.getType().equals(ConnectionType.SOCKET))
                 p.setController(controller);
-            //TODO: else p.getHandler().setGameController(tmpControllerRMI);
         }
         boardView = controller.getBoardView();
     }
@@ -84,9 +82,8 @@ public class Lobby {
         for(RemotePlayer p: lp){
             p.setState(States.CLOSE);
         }
+        serverApp.removeLobby(this);
     }
-
-    public GameController getController() { return this.controller; }
 
     public BoardView getBoardView() {
         return boardView;
@@ -94,8 +91,11 @@ public class Lobby {
     public void setID(Integer i) { this.ID = i; }
     public Integer getID() { return this.ID; }
     public void sendMessage(RemotePlayer player, String message){
+        System.out.println("sending: " + message);
         for(RemotePlayer p: lp){
-            //TODO IMPLEMENT
+            p.message("[" + player.getNickname() + "] : " + message);
         }
     }
+
+    public GameController getController() { return controller; }
 }

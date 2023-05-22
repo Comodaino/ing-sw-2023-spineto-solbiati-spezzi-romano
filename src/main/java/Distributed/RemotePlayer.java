@@ -1,16 +1,12 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ClientRMI.Client;
-import Distributed.ServerSocket.ClientHandlerSocket;
 import Model.Player;
 
 import java.io.Serializable;
-import java.net.Socket;
 
 import static Distributed.States.INIT;
 
-//TODO MIGHT BE A GOOD IDEA TO MAKE IT ABSTRACT
 public class RemotePlayer implements Serializable {
     private Player modelPlayer;
     private ConnectionType type;
@@ -21,12 +17,11 @@ public class RemotePlayer implements Serializable {
 
     public RemotePlayer(ConnectionType type){
         this.type = type;
+        this.owner = false;
+        modelPlayer = new Player("Nico", true, null);
+        this.nickname = "Ale";
         this.state = INIT;
     }
-
-    public RemotePlayer(Socket socket, ClientHandlerSocket remoteHandler, ConnectionType type){
-    }
-
     public Player getModelPlayer() {
         return modelPlayer;
     }
@@ -35,15 +30,13 @@ public class RemotePlayer implements Serializable {
         return nickname;
     }
 
-    public void setAsChair() {
+    public void setOwner() {
         owner = true;
     }
 
     public boolean isOwner() {
         return owner;
     }
-
-    public void setOwner(boolean owner) { this.owner = owner; }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -52,14 +45,9 @@ public class RemotePlayer implements Serializable {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
-
     public void update(){}
-
     public void setState(States state) {
         this.state = state;
-    }
-    public States getState() {
-        return state;
     }
 
     public void setController(GameController controller) {
@@ -73,4 +61,10 @@ public class RemotePlayer implements Serializable {
     public ConnectionType getType() {
         return type;
     }
+
+    public States getState() {
+        return state;
+    }
+
+    public void message(String arg) {}
 }

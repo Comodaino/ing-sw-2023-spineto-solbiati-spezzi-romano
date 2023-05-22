@@ -95,6 +95,10 @@ public class Lobby {
             p.message("[" + player.getNickname() + "] : " + message);
         }
     }
-
+    public void updateAll() throws IOException {
+        for(RemotePlayer p: lp){
+            p.update();
+        }
+    }
     public GameController getController() { return controller; }
 }

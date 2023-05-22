@@ -63,6 +63,7 @@ public class TextualUI implements ViewInterface {
                     break;
                 case PLAY:
                     System.out.println("Your turn!");
+                    for(Player p: client.getBoardView().getListOfPlayer()) System.out.println("porcodio");
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
@@ -137,7 +138,7 @@ public class TextualUI implements ViewInterface {
     private void showOthersShelf() {
         System.out.println("OTHERS' SHELVES:");
         for (Player p : client.getBoardView().getListOfPlayer()) {
-            if (!p.getNickname().equals(player.getModelPlayer().getNickname()))
+            if (!p.getNickname().equals(client.getNickname())) //TODO THIS WAS CHANGED
                 System.out.println(p.getNickname() + " SHELF:");
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {

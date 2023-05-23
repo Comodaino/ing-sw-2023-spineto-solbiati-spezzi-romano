@@ -85,7 +85,7 @@ public class ClientAppSocket implements AbstractClient {
         while (state!=States.CLOSE) {
             System.out.println("waiting for input");
             String input = in.nextLine();
-            if(input.startsWith("py")) input = input.substring(2);
+            if(input.startsWith("py")) input = input.substring(3);
             System.out.println("RECEIVED: " + input);
 
 

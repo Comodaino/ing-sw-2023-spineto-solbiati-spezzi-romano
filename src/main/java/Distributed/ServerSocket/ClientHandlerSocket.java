@@ -1,6 +1,7 @@
 package Distributed.ServerSocket;
 
 import Distributed.*;
+import Model.Board;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -20,7 +21,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     private final Lobby lobby;
     private Scanner in;
     private PrintWriter out;
-    private Object lock;
 
     public ClientHandlerSocket(Socket socket, Lobby lobby, ServerApp serverApp) throws IOException {
         this.socket = socket;
@@ -52,11 +52,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         Thread th2 = new Thread() {
             @Override
             public void run() {
-                try {
-                    outputHandler();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                //outputHandler();
+
             }
         };
         th1.start();
@@ -82,12 +79,15 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      * @throws IOException
      */
     public void update() throws IOException {
+        out.println("/update");
+        out.flush();
+
+
         objOut.writeObject(lobby.getBoardView());
         objOut.flush();
         objOut.reset();
-        out.println("/update");
-        out.flush();
-        System.out.println("update sent");
+        System.out.println("board sent");
+
 
     }
 
@@ -123,12 +123,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             switch (input) {
                 case "/start":
                     lobby.startGame();
+                    lobby.updateAll();
                     player.setState(PLAY);
-
-                    update();
-
-                    out.println("/play");
-                    out.flush();
                     break;
                 case "/firstMatch":
                     lobby.setFirstMatch(true);
@@ -173,43 +169,46 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                     case END:
                         endCommand();
                 }
+                this.notifyAll();
             } else {
                 if (player.getState().equals(INIT)) {
                     initCommand(input);
-                } else lobby.sendMessage(player, input);
+                }
             }
-            notifyAll();
+
         }
     }
 
-    public synchronized void outputHandler() throws InterruptedException {
-        out.println("/init");
-        out.flush();
-        while (!player.getState().equals(CLOSE)) {
-            this.wait();
-            switch (player.getState()) {
-                case INIT:
-                    out.println("/init");
-                    out.flush();
-                    break;
-                case WAIT_SETTING:
-                    System.out.println("WAIT");
-                    out.println("/wait");
-                    out.flush();
-                    break;
-                case PLAY:
-                    System.out.println("PLAY");
-                    out.println("/play");
-                    out.flush();
-                    break;
-                case END:
-                    out.println("/end");
-                    out.flush();
-                    break;
+    /*
+        public synchronized void outputHandler() throws InterruptedException {
+            out.println("/init");
+            out.flush();
+            while (!player.getState().equals(CLOSE)) {
+                this.wait();
+                System.out.println("REFRESH");
+                switch (player.getState()) {
+                    case INIT:
+                        out.println("/init");
+                        out.flush();
+                        break;
+                    case WAIT_SETTING:
+                        System.out.println("WAIT");
+                        out.println("/wait");
+                        out.flush();
+                        break;
+                    case PLAY:
+                        System.out.println("PLAY");
+                        out.println("/play");
+                        out.flush();
+                        break;
+                    case END:
+                        out.println("/end");
+                        out.flush();
+                        break;
+                }
             }
         }
-    }
-
+    */
     @Override
     public void message(String arg) {
         System.out.println("/message " + arg);

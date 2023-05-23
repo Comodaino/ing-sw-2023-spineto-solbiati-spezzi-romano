@@ -8,4 +8,5 @@ public interface AbstractClient {
     RemotePlayer getPlayer();
     boolean isOwner();
     BoardView getBoardView();
+    String getNickname();
 }

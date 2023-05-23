@@ -53,10 +53,7 @@ public class GameController implements Serializable {
         gameBoard.setCurrentPlayer(currentPlayer);
     }
     private void serverUpdater() throws IOException {
-
-        for(RemotePlayer p: lobby.getListOfPlayers()){
-            p.update();
-        }
+        lobby.updateAll();
     }
 
     /**
@@ -76,7 +73,6 @@ public class GameController implements Serializable {
                 break;
             }
         }
-        serverUpdater();
     }
 
     /**

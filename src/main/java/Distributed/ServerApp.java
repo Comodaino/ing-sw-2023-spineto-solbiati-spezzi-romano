@@ -55,8 +55,6 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         openLobby = new Lobby(this);
         openLobby.setID(1);
         lobbies.add(openLobby);
-        //ServerImpl serverRMI = new ServerImpl(this);
-        //serverRMI.start();
         start();
         System.out.println("Server RMI ready");
         socketAccepter();

@@ -14,6 +14,7 @@ public class TextualUI implements ViewInterface {
     private final Scanner input;
     private RemotePlayer player;
     private AbstractClient client;
+    public static final String RESET = "\033[0m";
 
     public TextualUI(AbstractClient client) throws IOException {
 
@@ -44,15 +45,17 @@ public class TextualUI implements ViewInterface {
     @Override
     public void update(String arg) throws IOException {
         System.out.println("update: " + this.state);
-        if (arg != null) {
             switch (this.state) {
                 case HOME:
-                    System.out.println("WELCOME TO MY SHELFIE !\n");
+                    //String fmt = "%1$4s";
+                    //Console cnsl = System.console();
+                    //cnsl.printf(fmt, "WELCOME");
+                    System.out.println("\u001B[33m" + "\t\t\tWELCOME TO MY SHELFIE !\n" + RESET );
                     homePrint(arg);
                     break;
                 case LOBBY:
                     if (client.isOwner()) {
-                        if (arg.equals("/commands"))
+                        if (arg!= null && arg.equals("/commands"))
                             System.out.println("command not valid, please try again");
                         System.out.println("Commands you can use:");
                         System.out.println("/start to start the game");
@@ -63,6 +66,7 @@ public class TextualUI implements ViewInterface {
                     break;
                 case PLAY:
                     System.out.println("Your turn!");
+                    for(Player p: client.getBoardView().getListOfPlayer()) System.out.println("porcodio");
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
@@ -86,7 +90,6 @@ public class TextualUI implements ViewInterface {
                     System.out.println("The lobby has been closed, thank you for playing!");
                     break;
             }
-        }
     }
     public void update() throws IOException {
         System.out.println("update: " + this.state);
@@ -138,7 +141,7 @@ public class TextualUI implements ViewInterface {
     private void showOthersShelf() {
         System.out.println("OTHERS' SHELVES:");
         for (Player p : client.getBoardView().getListOfPlayer()) {
-            if (!p.getNickname().equals(player.getModelPlayer().getNickname()))
+            if (!p.getNickname().equals(client.getNickname())) //TODO THIS WAS CHANGED
                 System.out.println(p.getNickname() + " SHELF:");
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {

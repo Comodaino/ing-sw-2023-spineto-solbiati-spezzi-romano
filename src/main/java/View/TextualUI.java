@@ -47,7 +47,10 @@ public class TextualUI implements ViewInterface {
         System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
-                    System.out.println(ConsoleColors.CYAN_BACKGROUND + "\t\t\tWELCOME TO MY SHELFIE !\n" + RESET );
+                    //String fmt = "%1$4s";
+                    //Console cnsl = System.console();
+                    //cnsl.printf(fmt, "WELCOME");
+                    System.out.println("\u001B[33m" + "\t\t\tWELCOME TO MY SHELFIE !\n" + RESET );
                     homePrint(arg);
                     break;
                 case LOBBY:

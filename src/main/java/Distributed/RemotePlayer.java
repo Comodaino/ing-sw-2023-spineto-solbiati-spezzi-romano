@@ -69,4 +69,7 @@ public class RemotePlayer implements Serializable {
     }
 
     public void message(String arg) {}
+
+    public void endMatch() {
+    }
 }

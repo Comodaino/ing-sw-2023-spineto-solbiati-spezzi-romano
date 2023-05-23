@@ -53,7 +53,7 @@ public class ClientAppSocket implements AbstractClient {
         client.connect();
     }
 
-    public void connect() throws IOException, InterruptedException, ClassNotFoundException {
+    public void connect() throws IOException, ClassNotFoundException {
         socket = new Socket(address, port);
         objIn = new ObjectInputStream(socket.getInputStream());
         in = new Scanner(new InputStreamReader(socket.getInputStream()));
@@ -83,7 +83,10 @@ public class ClientAppSocket implements AbstractClient {
             }
             input = tmpInput[0];
         }
-
+        if(input.startsWith("/message")){
+            String tmp = input.substring(8);
+            view.addChatMessage(tmp);
+        }
 
         if (input.equals("/nickname")) {
             view.update("/nickname");
@@ -121,7 +124,6 @@ public class ClientAppSocket implements AbstractClient {
                     case "/update":
                         this.boardView = (BoardView) objIn.readObject();
                         System.out.println("updating...");
-                        //if (state == States.WAIT_SETTING) playCommand();
                         break;
                     default:
                         if (input.startsWith("/message")) {

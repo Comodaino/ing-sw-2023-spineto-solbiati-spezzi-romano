@@ -32,4 +32,9 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     public void message(String arg){
         handler.message(arg);
     }
+
+    @Override
+    public void endMatch() {
+        handler.endMatch();
+    }
 }

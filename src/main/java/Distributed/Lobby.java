@@ -75,6 +75,7 @@ public class Lobby {
     public void endMatch() {
         for(RemotePlayer p: lp){
             p.setState(States.END);
+            p.endMatch();
         }
     }
     public void close() {
@@ -89,11 +90,12 @@ public class Lobby {
     }
     public void setID(Integer i) { this.ID = i; }
     public Integer getID() { return this.ID; }
-    public void sendMessage(RemotePlayer player, String message){
+    public void sendMessage(String message) throws IOException, InterruptedException {
         System.out.println("sending: " + message);
         for(RemotePlayer p: lp){
-            p.message("[" + player.getNickname() + "] : " + message);
+            p.message(message);
         }
+        updateAll();
     }
     public void updateAll() throws IOException, InterruptedException {
         for(RemotePlayer p: lp){
@@ -101,4 +103,5 @@ public class Lobby {
         }
     }
     public GameController getController() { return controller; }
+
 }

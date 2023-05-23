@@ -156,20 +156,42 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         return player;
     }
 
+    public void endMatch(){
+        try {
+            outSocket("/end");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void endCommand() {
+        try {
+            outSocket("/wait");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        player.setState(WAIT_SETTING);
+    }
+
     public void inputHandler() throws IOException, InterruptedException {
         while (!player.getState().equals(CLOSE)) {
             System.out.println("waiting for input");
             String input = in.nextLine();
             System.out.println("RECEIVED " + input);
-            if (input.charAt(0) == '/') {
+            if(input.startsWith("/message")){
+                lobby.sendMessage(input);
+            } else if (input.charAt(0) == '/') {
                 switch (player.getState()) {
                     case WAIT_SETTING:
                         waitCommand(input);
                         break;
                     case PLAY:
                         playCommand(input);
+                        break;
                     case END:
                         endCommand();
+                        break;
                 }
             } else {
                 if (player.getState().equals(INIT)) {
@@ -202,22 +224,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
 
     @Override
     public void message(String arg) {
-        System.out.println("/message " + arg);
         try {
-            switch (player.getState()) {
-                case INIT:
-                    outSocket("/init");
-                    break;
-                case WAIT_SETTING:
-                    outSocket("/wait");
-                    break;
-                case PLAY:
-                    outSocket("/play");
-                    break;
-                case END:
-                    outSocket("/end");
-                    break;
-            } //TODO CHANGE IMPLEMENTATION ONCE TUI IS FINISHED
+            outSocket(arg);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

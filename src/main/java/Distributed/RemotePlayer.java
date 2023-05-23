@@ -1,6 +1,7 @@
 package Distributed;
 
 import Controller.GameController;
+import Model.BoardView;
 import Model.Player;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class RemotePlayer implements Serializable {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
-    public void update() throws IOException {}
+    public void update(BoardView boardView) throws IOException {}
     public void setState(States state) {
         this.state = state;
     }

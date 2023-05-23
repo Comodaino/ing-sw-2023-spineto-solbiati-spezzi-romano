@@ -183,28 +183,53 @@ public class TextualUI implements ViewInterface {
 
     private void showYourShelf() {
         if (player != null) {
+            String tType = null;
             System.out.println("YOUR SHELF:");
             for (int i = 0; i < 6; i++) {
+                if(i==0) System.out.println("\t \t======================");
+                System.out.print("\t"+ i + "\t");
                 for (int j = 0; j < 5; j++) {
                     Tile tile = player.getModelPlayer().getShelf().getTile(i, j);
+                    if(j==0){
+                        System.out.println("|");
+                    }
                     if (tile == null) {
-                        System.out.print("    ");
+                        System.out.print("   |");
                     } else {
-                        System.out.print(" " + tile.getColor().name().charAt(0));
                         switch (tile.getType()) {
                             case ONE:
-                                System.out.print("1 ");
+                                tType = " 1 ";
                                 break;
                             case TWO:
-                                System.out.print("2 ");
+                                tType = " 2 ";
                                 break;
                             case THREE:
-                                System.out.print("3 ");
+                                tType = " 3 ";
+                                break;
+                        }
+                        switch (tile.getColor()) {
+                            case WHITE:
+                                System.out.print(ConsoleColors.WHITE_BACKGROUND + ConsoleColors.BLACK + tType + RESET + "|");
+                                break;
+                            case YELLOW:
+                                System.out.print(ConsoleColors.YELLOW_BACKGROUND + ConsoleColors.BLACK + tType + RESET + "|");
+                                break;
+                            case LIGHTBLUE:
+                                System.out.print(ConsoleColors.CYAN_BACKGROUND + ConsoleColors.BLACK + tType + RESET + "|");
+                                break;
+                            case GREEN:
+                                System.out.print(ConsoleColors.GREEN_BACKGROUND + ConsoleColors.BLACK + tType + RESET + "|");
+                                break;
+                            case BLUE:
+                                System.out.print(ConsoleColors.BLUE_BACKGROUND + ConsoleColors.BLACK + tType + RESET + "|");
+                                break;
+                            case PINK:
+                                System.out.print(ConsoleColors.PURPLE_BACKGROUND + ConsoleColors.BLACK + tType + RESET + "|");
                                 break;
                         }
                     }
-                    System.out.print("\n");
                 }
+                System.out.println("\n==========================");
             }
         }
         System.out.println("NO SHELF AVAILABLE");
@@ -213,56 +238,54 @@ public class TextualUI implements ViewInterface {
     private void showBoard() {
         System.out.println("\t\t\tBOARD:");
         String tType = null;
-        String color = null;
         for (int i = 0; i < 9; i++) {
-            System.out.println("--------------------------------------------");
+            System.out.print("\t" + i + "\t");
             for (int j = 0; j < 9; j++) {
+                if(i==0 && j==0){
+                    System.out.println("_____________________________________");
+                }
                 Tile tile = client.getBoardView().getCell(i, j).getTile();
                 if(j==0){
-                    System.out.print("| ");
+                    System.out.print("|");
                 }
                 if (tile == (null)) {
-                    System.out.print("  |");
+                    System.out.print("   |");
                 } else {
                     switch (tile.getType()) {
                         case ONE:
-                            tType = "1 |";
+                            tType = " 1 ";
                             break;
                         case TWO:
-                            tType = "2 |";
+                            tType = " 2 ";
                             break;
                         case THREE:
-                            tType = "3 |";
+                            tType = " 3 ";
                             break;
                     }
                     switch (tile.getColor()) {
                         case WHITE:
-                            color = ConsoleColors.WHITE_BACKGROUND;
+                            System.out.print(ConsoleColors.WHITE_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
                             break;
                         case YELLOW:
-                            color = ConsoleColors.YELLOW_BACKGROUND;
+                            System.out.print(ConsoleColors.YELLOW_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
                             break;
                         case LIGHTBLUE:
-                            color = ConsoleColors.CYAN_BACKGROUND;
+                            System.out.print(ConsoleColors.CYAN_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
                             break;
                         case GREEN:
-                            color = ConsoleColors.GREEN_BACKGROUND;
+                            System.out.print(ConsoleColors.GREEN_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
                             break;
                         case BLUE:
-                            color = ConsoleColors.BLUE_BACKGROUND;
+                            System.out.print(ConsoleColors.BLUE_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
                             break;
                         case PINK:
-                            color = ConsoleColors.PURPLE_BACKGROUND;
+                            System.out.print(ConsoleColors.PURPLE_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
                             break;
                     }
-                    System.out.print(color + ConsoleColors.BLACK + tType + RESET);
-                }
-                if(j==8){
-                    System.out.print("\n");
                 }
             }
-            System.out.print("--------------------------------------------\n");
-        }
+            System.out.println("\n+---+---+---+---+---+---+---+---+---+");
+        }System.out.println("\t\t  0   1   2   3   4   5   6   7   8");
     }
 
     public void homePrint(String arg) throws IOException {

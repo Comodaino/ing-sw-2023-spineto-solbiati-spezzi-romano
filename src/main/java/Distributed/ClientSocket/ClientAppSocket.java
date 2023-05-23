@@ -84,8 +84,8 @@ public class ClientAppSocket implements AbstractClient {
     public void inputHandler() throws InterruptedException, IOException, ClassNotFoundException {
         while (state!=States.CLOSE) {
             System.out.println("waiting for input");
+
             String input = in.nextLine();
-            if(input.startsWith("py")) input = input.substring(3);
             System.out.println("RECEIVED: " + input);
 
 
@@ -119,9 +119,7 @@ public class ClientAppSocket implements AbstractClient {
                             view.update();
                             break;
                         case "/play":
-                            state = States.PLAY;
-                            view.setState(State.PLAY);
-                            view.update();
+                            playCommand();
                             break;
                         case "/end":
                             state = States.END;
@@ -136,6 +134,7 @@ public class ClientAppSocket implements AbstractClient {
                         case "/update":
                                 this.boardView = (BoardView) objIn.readObject();
                                 System.out.println("updating...");
+                                if(state==States.WAIT_SETTING) playCommand();
                             break;
                         default:
                             if(input.startsWith("/message")){
@@ -154,6 +153,13 @@ public class ClientAppSocket implements AbstractClient {
                 out.flush();
             }
         }
+    }
+
+    private void playCommand() throws IOException {
+        state = States.PLAY;
+        view.setState(State.PLAY);
+        view.update();
+
     }
 
 

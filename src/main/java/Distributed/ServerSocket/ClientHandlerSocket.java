@@ -1,7 +1,7 @@
 package Distributed.ServerSocket;
 
 import Distributed.*;
-import Model.Board;
+import Model.BoardView;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -78,14 +78,14 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      *
      * @throws IOException
      */
-    public void update() throws IOException {
+    public void update(BoardView boardView) throws IOException {
         out.println("/update");
         out.flush();
 
-
-        objOut.writeObject(lobby.getBoardView());
-        objOut.flush();
+        objOut.writeObject(boardView);
         objOut.reset();
+        objOut.flush();
+
         System.out.println("board sent");
 
 
@@ -147,14 +147,14 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
 
     public void playCommand(String input) throws IOException {
         System.out.println("Received command: " + input);
-        gameController.update(input);
+        lobby.getController().update(input);
     }
 
     public RemotePlayer getPlayer() {
         return player;
     }
 
-    public synchronized void inputHandler() throws IOException, InterruptedException {
+    public void inputHandler() throws IOException, InterruptedException {
         while (!player.getState().equals(CLOSE)) {
             System.out.println("waiting for input");
             String input = in.nextLine();
@@ -169,7 +169,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                     case END:
                         endCommand();
                 }
-                this.notifyAll();
             } else {
                 if (player.getState().equals(INIT)) {
                     initCommand(input);
@@ -180,7 +179,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     }
 
     /*
-        public synchronized void outputHandler() throws InterruptedException {
+        public void outputHandler() throws InterruptedException {
             out.println("/init");
             out.flush();
             while (!player.getState().equals(CLOSE)) {

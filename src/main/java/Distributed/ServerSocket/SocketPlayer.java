@@ -2,6 +2,7 @@ package Distributed.ServerSocket;
 
 import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
+import Model.BoardView;
 import Model.Player;
 
 import java.io.IOException;
@@ -25,8 +26,8 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     public Socket getSocket() {
         return socket;
     }
-    public void update() throws IOException {
-        handler.update();
+    public void update(BoardView boardView) throws IOException {
+        handler.update(boardView);
     }
     public void message(String arg){
         handler.message(arg);

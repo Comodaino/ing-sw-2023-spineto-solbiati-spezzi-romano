@@ -97,7 +97,7 @@ public class Lobby {
     }
     public void updateAll() throws IOException {
         for(RemotePlayer p: lp){
-            p.update();
+            p.update(boardView);
         }
     }
     public GameController getController() { return controller; }

@@ -183,4 +183,9 @@ public class GUIclass extends JFrame implements ViewInterface{
     public void setClient(AbstractClient client) {
         this.client=client;
     }
+
+    @Override
+    public void addChatMessage(String tmp) {
+
+    }
 }

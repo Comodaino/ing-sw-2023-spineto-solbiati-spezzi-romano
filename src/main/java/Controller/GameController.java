@@ -36,7 +36,7 @@ public class GameController implements Serializable {
     }
 
     public void setBoardView(BoardView boardView) {
-        this.boardView = gameBoard.boardView;
+        this.boardView = boardView;
     }
 
     public Player getCurrentPlayer() {
@@ -130,9 +130,17 @@ public class GameController implements Serializable {
      */
     private void playRemove(String[] input) {
         System.out.println("remove " + Arrays.toString(input));
+        gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
+        gameBoard.checkRecharge();
         if (inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
-            gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
-            gameBoard.checkRecharge();
+
+        }
+        try {
+            serverUpdater();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -286,4 +286,9 @@ public class TextualUI implements ViewInterface {
         this.client = client;
         this.player = client.getPlayer();
     }
+
+    @Override
+    public void addChatMessage(String tmp) {
+
+    }
 }

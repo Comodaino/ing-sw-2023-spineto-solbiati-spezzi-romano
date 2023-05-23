@@ -95,7 +95,7 @@ public class TextualUI implements ViewInterface {
         System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
-                System.out.println("WELCOME TO MY SHELFIE !\n");
+                System.out.println("\u001B[33m" + "\t\t\tWELCOME TO MY SHELFIE !\n" + RESET );
                 break;
             case LOBBY:
                 if (client.isOwner()) {

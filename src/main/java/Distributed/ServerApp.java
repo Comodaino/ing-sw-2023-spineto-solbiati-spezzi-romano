@@ -176,7 +176,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void update(Client client, String command) throws IOException {
+    public void update(Client client, String command) throws IOException, InterruptedException {
         synchronized (lobbies) { //TODO: ask if this is necessary, since this method does not modify the list of lobby
             lobbies.get(client.getLobbyID() - 1).getController().update(command);
         }
@@ -281,7 +281,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void playCommand(Client client, String input) throws IOException {
+    public void playCommand(Client client, String input) throws IOException, InterruptedException {
         Lobby lobby = null;
         Integer lobbyID = client.getLobbyID();
         synchronized (lobbies){

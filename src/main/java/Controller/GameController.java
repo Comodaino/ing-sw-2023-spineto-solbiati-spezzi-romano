@@ -1,7 +1,6 @@
 package Controller;
 
 import Distributed.Lobby;
-import Distributed.RemotePlayer;
 import Model.Board;
 import Model.BoardView;
 import Model.CommonGoals.CommonGoal;
@@ -52,7 +51,7 @@ public class GameController implements Serializable {
         } while (donePlayers.contains(currentPlayer));
         gameBoard.setCurrentPlayer(currentPlayer);
     }
-    private void serverUpdater() throws IOException {
+    private void serverUpdater() throws IOException, InterruptedException {
         lobby.updateAll();
     }
 
@@ -81,7 +80,7 @@ public class GameController implements Serializable {
      *                 method. It is format is /command [par 0] [par 1] ...
      * @author Alessio
      */
-    public void update(String arg) throws IOException {
+    public void update(String arg) throws IOException, InterruptedException {
             String[] input = arg.split(" ");
             if (input[0].charAt(0) == '/') {
                 switch (input[0]) {

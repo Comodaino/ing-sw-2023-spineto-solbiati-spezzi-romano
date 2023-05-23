@@ -95,7 +95,7 @@ public class Lobby {
             p.message("[" + player.getNickname() + "] : " + message);
         }
     }
-    public void updateAll() throws IOException {
+    public void updateAll() throws IOException, InterruptedException {
         for(RemotePlayer p: lp){
             p.update(boardView);
         }

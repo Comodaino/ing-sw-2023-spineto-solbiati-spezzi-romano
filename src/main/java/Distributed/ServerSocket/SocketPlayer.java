@@ -26,7 +26,7 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     public Socket getSocket() {
         return socket;
     }
-    public void update(BoardView boardView) throws IOException {
+    public void update(BoardView boardView) throws IOException, InterruptedException {
         handler.update(boardView);
     }
     public void message(String arg){

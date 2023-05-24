@@ -147,7 +147,7 @@ public class GUIclass extends JFrame implements ViewInterface{
     }
 
     public void GUIclass(AbstractClient client, BoardView boardView){;
-        this.player= client.getPlayer();
+        //this.player= client.getPlayer();
         this.client = client;
         this.boardView = boardView;
         switch (this.state){
@@ -167,6 +167,11 @@ public class GUIclass extends JFrame implements ViewInterface{
     }
     @Override
     public void update(String arg) throws IOException {
+
+    }
+
+    @Override
+    public void update() throws IOException {
 
     }
 

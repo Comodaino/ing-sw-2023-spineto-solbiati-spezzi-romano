@@ -1,201 +1,180 @@
-/*
 package Distributed.ServerRMI;
 
 import Distributed.ClientRMI.Client;
+import Distributed.ConnectionType;
 import Distributed.Lobby;
 import Distributed.RemotePlayer;
-import Distributed.ServerApp;
 import Distributed.States;
 import Model.BoardView;
-import Model.Player;
 
+import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
-import static Distributed.States.*;
+import static Distributed.States.PLAY;
 
-//TODO check synchronization
 public class ServerImpl extends UnicastRemoteObject implements Server {
-    private final ServerApp serverApp;
+    private List<Lobby> lobbies;
+    private Registry registry;
+    private Lobby openLobby;
 
-    public ServerImpl(ServerApp serverApp) throws RemoteException {
-        this.serverApp = serverApp;
+    public ServerImpl() throws RemoteException {
+        this.registry = null;
+        this.lobbies = new ArrayList<>();
+    }
+
+    public static void main(String[] args) {
+        ServerImpl server = null;
+        try {
+            server = new ServerImpl();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+        server.start();
     }
 
     public void start() {
-        Registry registry = null;
         try {
             registry = LocateRegistry.createRegistry(1099); //Creates RMI Registry
-            registry.bind("Server", this); //Binds the name of the server with this server
+            registry.bind("Server", this); //Binds the name of the server with this object
         } catch (RemoteException | AlreadyBoundException e) {
             throw new RuntimeException(e);
         }
+
+        this.openLobby = new Lobby(this);
+        this.lobbies.add(openLobby);
+        openLobby.setID(1);
         System.out.println("Server bound and ready");
     }
 
     @Override
-    public void register(Client client) throws RemoteException {
-        //Creates a new RemotePlayer and sets its nickname, asking it to the client
-        RMIPlayer rp = new RMIPlayer(client);
-        String nickname = client.setNickname(serverApp);
-        rp.setNickname(nickname);
-        //If the lobby is closed, creates a new lobby and sets its ID, adds the player in the list of RemotePlayer of the Lobby the client joined
-        this.serverApp.addPlayer(client, rp);
-        //Sets the client state in WAIT
-        client.setState(WAIT_SETTINGS);
-        rp.setState(WAIT_SETTINGS);
+    public void handler(Client client, String arg) throws RemoteException{
+        States clientState = client.getState();
+
+        switch(clientState){
+            case INIT:
+                initCommand(client, arg);
+                break;
+            case WAIT:
+                if(client.isOwner()) {
+                    waitCommand(client, arg);
+                }
+                break;
+            case PLAY:
+                playCommand(client, arg);
+                break;
+            case END:
+                break;
+        }
+    }
+
+    public void initCommand(Client client, String nickname) throws RemoteException {
+        if(checkNickname(nickname)!=null) {
+            RemotePlayer rp = new RemotePlayer(ConnectionType.RMI);
+            rp.setNickname(nickname);
+            client.setNickname(nickname);
+            addPlayer(client, rp);
+            client.setState(States.WAIT);
+            client.update();
+
+        } else client.update("/nickname");
+    }
+
+    public void waitCommand(Client client, String arg) throws RemoteException {
+        Lobby lobby = null;
+        synchronized(lobbies) {
+            lobby = lobbies.get(client.getLobbyID()-1);
+        }
+
+        switch (arg) {
+            case "/start":
+                lobby.startGame();
+                for(Client c: lobby.getListOfClients()){
+                    c.setState(PLAY);
+                    c.update();
+                }
+                break;
+            case "/firstMatch":
+                lobby.setFirstMatch(true);
+                System.out.println("First match: " + lobby.isFirstMatch());
+                break;
+            case "/notFirstMatch":
+                lobby.setFirstMatch(false);
+                System.out.println("First match: " + lobby.isFirstMatch());
+                break;
+            case "/closeLobby":
+                lobby.close();
+                break;
+        }
+    }
+
+    public void playCommand(Client client, String command) throws RemoteException {
+        Lobby lobby = null;
+        synchronized(lobbies) {
+            lobby = lobbies.get(client.getLobbyID()-1);
+        }
+
+        System.out.println("Received command: " + command);
+        try {
+            lobby.getController().update(command);
+            for(Client c: lobby.getListOfClients()){
+                c.update("/boardView");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void leave(Client client) throws RemoteException {
-        synchronized (serverApp.getLobbies()) {
-            for (Lobby l : serverApp.getLobbies()) {
-                for (RemotePlayer rp : l.getListOfPlayers()) {
-                    if (client.getNickname().equals(rp.getNickname())) {
-                        l.getListOfPlayers().remove(rp);
-                        client.setState(CLOSE);
-                        rp.setState(CLOSE);
-                        System.out.println(client.getNickname() + " has left the server");
-                        return;
+    public BoardView getBoardView(Client client) throws RemoteException {
+        Lobby lobby = null;
+        synchronized(lobbies) {
+            lobby = lobbies.get(client.getLobbyID()-1);
+        }
+        return lobby.getBoardView();
+    }
+
+    //LOCAL FUNCTIONS
+    public String checkNickname(String input) {
+        boolean found = true;
+        synchronized(lobbies) {
+            for(Lobby l : lobbies) {
+                for(RemotePlayer rp : l.getListOfPlayers()) {
+                    if(rp.getNickname().equals(input)) {
+                        found = false;
+                        break;
                     }
                 }
+                if(!found) break;
             }
         }
+        if(found) return input;
+        return null;
     }
 
-    @Override
-    public void update(Client client, String command) throws RemoteException {
-        synchronized (serverApp.getLobbies()) { //TODO: ask if this is necessary, since this method does not modify the list of lobby
-            serverApp.getLobbies().get(client.getLobbyID() - 1).getController().update(command);
-        }
-    }
-
-    @Override
-    public String checkNicknameRMI(String nickname) throws RemoteException {
-        synchronized (serverApp.getLobbies()) {
-            //Iterates on each RemotePlayer in each Lobby and return null if the nickname is already taken
-            for (Lobby l : serverApp.getLobbies()) {
-                for (RemotePlayer rp : l.getListOfPlayers()) {
-                    if (rp.getNickname().equals(nickname)) {
-                        return null;
-                    }
-                }
+    public void addPlayer(Client client, RemotePlayer rp) throws RemoteException {
+        synchronized (lobbies) {
+            //If the lobby is closed, creates a new lobby and sets its ID
+            if (!lobbies.get(lobbies.size() - 1).isOpen()) {
+                lobbies.add(new Lobby(this));
+                lobbies.get(lobbies.size() - 1).setID(lobbies.size());
             }
-        }
-        System.out.println("OK");
-        return nickname;
-    }
 
-    @Override
-    public boolean closeLobby(Client client) throws RemoteException {
-        synchronized (serverApp.getLobbies()) {
-            List<RemotePlayer> rps = serverApp.getLobbies().get(client.getLobbyID() - 1).getListOfPlayers();
-            for (RemotePlayer rp : rps) {
-                if (rp.isOwner() && rp.getNickname().equals(client.getNickname())) {
-                    //Searches the client who is trying to close the lobby: if it is the owner of the lobby, then it closes the lobby
-                    return serverApp.getLobbies().get(client.getLobbyID() - 1).closeLobby();
-                }
+            //Adds the player in the list of RemotePlayer of the Lobby the client joined
+            lobbies.get(lobbies.size() - 1).addPlayer(rp);
+            if(rp.getConnectionType().equals(ConnectionType.RMI)){
+                lobbies.get(lobbies.size() - 1).addClientRMI(client);
             }
-        }
-        client.printMsg("You cannot close the lobby because you're not the owner");
-        return false;
-    }
 
-    @Override
-    public BoardView getBoardView(Integer lobbyID) {
-        synchronized (serverApp.getLobbies()) { //TODO: ask if this is necessary, since this method does not modify the list of lobby
-            return (BoardView) serverApp.getLobbies().get(lobbyID-1).getBoardView();
+            //Sets lobbyID in Client and if it is owner of the lobby or not
+            client.setOwner(rp.isOwner());
+            client.setLobbyID(lobbies.get(lobbies.size() - 1).getID());
+            System.out.println(rp.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
+            System.out.println("owner: " + rp.isOwner());
         }
     }
-
-    @Override
-    public States myState(Client client) throws RemoteException {
-        Lobby lobby = null;
-        synchronized (serverApp.getLobbies()){
-            lobby = serverApp.getLobbies().get(client.getLobbyID()-1);
-        }
-
-        for(RemotePlayer rp: lobby.getListOfPlayers()) {
-            if (rp.getNickname().equals(client.getNickname())) {
-                return rp.getState();
-            }
-        }
-
-        return ERROR;
-    }
-
-    @Override
-    public void waitCommand(Client client, String input) throws RemoteException {
-        Lobby lobby = null;
-        synchronized (serverApp.getLobbies()){
-            lobby = serverApp.getLobbies().get(client.getLobbyID()-1);
-        }
-
-        if(input.equals("/leave")){
-            leave(client);
-        } else if(client.isOwner()){
-            switch (input) {
-                case "/start":
-                    if(closeLobby(client)){
-                        lobby.startGame();
-                        for(RemotePlayer rp: lobby.getListOfPlayers()){
-                            if(rp.getNickname().equals(client.getNickname())){
-                                rp.setState(PLAY);
-                                client.setState(PLAY);
-                            } else {
-                                rp.setState(WAIT_TURN);
-                            }
-                        }
-                    } else {
-                        client.printMsg("You cannot start the game because there are no other players in the lobby");
-                    }
-                    break;
-                case "/firstMatch":
-                    lobby.setFirstMatch(true);
-                    break;
-                case "/notFirstMatch":
-                    lobby.setFirstMatch(false);
-                    break;
-                case "/closeLobby":
-                    closeLobby(client);
-                    break;
-                default:
-                    client.printMsg("Command not valid");
-                    break;
-            }
-        } else { client.printMsg("You're not the owner of the lobby!"); }
-    }
-
-    @Override
-    public void playCommand(Client client, String input) throws RemoteException {
-        Lobby lobby = null;
-        synchronized (serverApp.getLobbies()){
-            lobby = serverApp.getLobbies().get(client.getLobbyID()-1);
-        }
-
-        System.out.println("Received command: " + input);
-        lobby.getController().update(input);
-
-        client.setState(WAIT_TURN);
-        for(RemotePlayer rp: lobby.getListOfPlayers()) {
-            if (rp.getNickname().equals(client.getNickname())) {
-                rp.setState(WAIT_TURN);
-            }
-        }
-    }
-
-    @Override
-    public void endCommand(Client client) throws RemoteException {
-        Lobby lobby = null;
-        synchronized (serverApp.getLobbies()){
-            lobby = serverApp.getLobbies().get(client.getLobbyID()-1);
-        }
-
-    }
-
 }
-*/

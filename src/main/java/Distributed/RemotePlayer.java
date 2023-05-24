@@ -30,6 +30,8 @@ public class RemotePlayer implements Serializable {
         return nickname;
     }
 
+    public ConnectionType getConnectionType() { return this.type; }
+
     public void setOwner() {
         owner = true;
     }

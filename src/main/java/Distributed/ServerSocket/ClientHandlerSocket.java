@@ -102,12 +102,11 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         if (nicknameChecker(input)) {
             System.out.println("Nickname is available");
             player.setNickname(input);
-            player.setState(WAIT_SETTING);
+            player.setState(States.WAIT);
             if(player.isOwner()) out.println("/wait owner");
             else out.println("/wait");
             out.flush();
         } else {
-
             System.out.println("Nickname not available");
         }
     }
@@ -162,7 +161,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             System.out.println("RECEIVED " + input);
             if(input.charAt(0)=='/') {
                 switch (player.getState()) {
-                    case WAIT_SETTING:
+                    case WAIT:
                         waitCommand(input);
                         break;
                     case PLAY:
@@ -189,7 +188,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                     out.println("/init");
                     out.flush();
                     break;
-                case WAIT_SETTING:
+                case WAIT:
                     System.out.println("WAIT");
                     out.println("/wait");
                     out.flush();
@@ -215,7 +214,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 out.println("/init");
                 out.flush();
                 break;
-            case WAIT_SETTING:
+            case WAIT:
                 out.println("/wait");
                 out.flush();
                 break;

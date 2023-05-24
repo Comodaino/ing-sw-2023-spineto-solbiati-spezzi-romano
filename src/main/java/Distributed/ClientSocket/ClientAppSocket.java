@@ -95,7 +95,7 @@ public class ClientAppSocket implements AbstractClient {
             }
             if(input.equals("/nickname")){
                 view.update("/nickname");
-            }else {
+            } else {
                 if (input.charAt(0) == '/') {
                     switch (input) {
                         case "/init":
@@ -107,7 +107,7 @@ public class ClientAppSocket implements AbstractClient {
                                 this.nickname = tmpNickname;
                                 System.out.println("Setted nickname: " + nickname);
                             }
-                            state = States.WAIT_SETTING;
+                            state = States.WAIT;
                             view.setClient(this);
                             view.setState(State.LOBBY);
                             break;
@@ -153,12 +153,10 @@ public class ClientAppSocket implements AbstractClient {
     public RemotePlayer getPlayer() {
         return this.player;
     }
-
     @Override
     public BoardView getBoardView() {
         return boardView;
     }
-
     public String getNickname() {
         return nickname;
     }

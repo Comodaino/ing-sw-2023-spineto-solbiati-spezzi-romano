@@ -32,7 +32,7 @@ public abstract class RemoteHandler {
     public ConnectionType getType() {
         return type;
     }
-    public void endCommand(){ state=States.WAIT_SETTING; }
+    public void endCommand(){ state=States.WAIT; }
     public void update(){}
 
     public void message(String arg) {

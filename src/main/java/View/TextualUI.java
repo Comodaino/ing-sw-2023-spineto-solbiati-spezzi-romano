@@ -14,6 +14,7 @@ public class TextualUI implements ViewInterface {
     private final Scanner input;
     private RemotePlayer player;
     private AbstractClient client;
+    public static final String RESET = "\033[0m";
 
     public TextualUI(AbstractClient client) throws IOException {
 
@@ -44,15 +45,23 @@ public class TextualUI implements ViewInterface {
     @Override
     public void update(String arg) throws IOException {
         System.out.println("update: " + this.state);
-        if (arg != null) {
             switch (this.state) {
                 case HOME:
-                    System.out.println("WELCOME TO MY SHELFIE !\n");
+                    //String fmt = "%1$4s";
+                    //Console cnsl = System.console();
+                    //cnsl.printf(fmt, "WELCOME");
+                    System.out.println(ConsoleColors.YELLOW_BOLD + "\n" +
+                            "\t\t _    _ _____ _     _____ ________  ________   _____ _____  ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
+                            "\t\t| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  | |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
+                            "\t\t| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | | | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
+                            "\t\t| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | | | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
+                            "\t\t\\  /|  / |___| |___| \\__ |/ \\_/ / |  | | |___    | | \\ \\_/ / | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
+                            "\t\t \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/  \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n"+ RESET );
                     homePrint(arg);
                     break;
                 case LOBBY:
                     if (client.isOwner()) {
-                        if (arg.equals("/commands"))
+                        if (arg!= null && arg.equals("/commands"))
                             System.out.println("command not valid, please try again");
                         System.out.println("Commands you can use:");
                         System.out.println("/start to start the game");
@@ -63,7 +72,6 @@ public class TextualUI implements ViewInterface {
                     break;
                 case PLAY:
                     System.out.println("Your turn!");
-                    for(Player p: client.getBoardView().getListOfPlayer()) System.out.println("porcodio");
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
@@ -87,13 +95,19 @@ public class TextualUI implements ViewInterface {
                     System.out.println("The lobby has been closed, thank you for playing!");
                     break;
             }
-        }
     }
     public void update() throws IOException {
         System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
-                System.out.println("WELCOME TO MY SHELFIE !\n");
+                System.out.println(ConsoleColors.YELLOW_BOLD + "\n" +
+                        "\t\t _    _ _____ _     _____ ________  ________   _____ _____  ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
+                        "\t\t| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  | |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
+                        "\t\t| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | | | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
+                        "\t\t| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | | | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
+                        "\t\t\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ / | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
+                        "\t\t \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/  \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n"+ RESET );
+                System.out.print("Insert your nickname:\t");
                 break;
             case LOBBY:
                 if (client.isOwner()) {
@@ -145,7 +159,7 @@ public class TextualUI implements ViewInterface {
                 for (int j = 0; j < 5; j++) {
                     Tile tile = p.getShelf().getTile(i, j);
                     if (tile == null) {
-                        System.out.print("    ");
+                        System.out.print("      ");
                     } else {
                         System.out.print(" " + tile.getColor().name().charAt(0));
                         switch (tile.getType()) {
@@ -197,30 +211,57 @@ public class TextualUI implements ViewInterface {
     }
 
     private void showBoard() {
-        System.out.println("showing BOARD...");
+        System.out.println("\t\t\tBOARD:");
+        String tType = null;
+        String color = null;
         for (int i = 0; i < 9; i++) {
+            System.out.println("--------------------------------------------");
             for (int j = 0; j < 9; j++) {
                 Tile tile = client.getBoardView().getCell(i, j).getTile();
+                if(j==0){
+                    System.out.print("| ");
+                }
                 if (tile == (null)) {
-                    System.out.print("|    |");
+                    System.out.print("  |");
                 } else {
-                    System.out.print("| " + tile.getColor().name().charAt(0));
                     switch (tile.getType()) {
                         case ONE:
-                            System.out.print("1 |");
+                            tType = "1 |";
                             break;
                         case TWO:
-                            System.out.print("2 |");
+                            tType = "2 |";
                             break;
                         case THREE:
-                            System.out.print("3 |");
+                            tType = "3 |";
                             break;
                     }
+                    switch (tile.getColor()) {
+                        case WHITE:
+                            color = ConsoleColors.WHITE_BACKGROUND;
+                            break;
+                        case YELLOW:
+                            color = ConsoleColors.YELLOW_BACKGROUND;
+                            break;
+                        case LIGHTBLUE:
+                            color = ConsoleColors.CYAN_BACKGROUND;
+                            break;
+                        case GREEN:
+                            color = ConsoleColors.GREEN_BACKGROUND;
+                            break;
+                        case BLUE:
+                            color = ConsoleColors.BLUE_BACKGROUND;
+                            break;
+                        case PINK:
+                            color = ConsoleColors.PURPLE_BACKGROUND;
+                            break;
+                    }
+                    System.out.print(color + ConsoleColors.BLACK + tType + RESET);
                 }
-
-
+                if(j==8){
+                    System.out.print("\n");
+                }
             }
-            System.out.print("\n");
+            System.out.print("--------------------------------------------\n");
         }
     }
 
@@ -238,5 +279,16 @@ public class TextualUI implements ViewInterface {
     @Override
     public void setState(State state) {
         this.state = state;
+    }
+
+    @Override
+    public void setClient(AbstractClient client) {
+        this.client = client;
+        this.player = client.getPlayer();
+    }
+
+    @Override
+    public void addChatMessage(String tmp) {
+
     }
 }

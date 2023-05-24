@@ -166,8 +166,7 @@ public class GUIclass extends JFrame implements ViewInterface{
     }
     @Override
     public void update(String arg) throws IOException {
-
-    }
+}
 
     @Override
     public void update() throws IOException {
@@ -182,6 +181,11 @@ public class GUIclass extends JFrame implements ViewInterface{
     @Override
     public void setClient(AbstractClient client) {
         this.client=client;
+    }
+
+    @Override
+    public void addChatMessage(String tmp) {
+
     }
 }
 */

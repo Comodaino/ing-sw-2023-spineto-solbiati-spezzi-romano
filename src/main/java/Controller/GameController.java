@@ -1,7 +1,6 @@
 package Controller;
 
 import Distributed.Lobby;
-import Distributed.RemotePlayer;
 import Model.Board;
 import Model.BoardView;
 import Model.CommonGoals.CommonGoal;
@@ -16,6 +15,7 @@ import java.util.List;
 /**
  * Game controller controls the flow of the match, taking command using the update() method of the observable-observer pattern,
  * it represents the entirety of the controller in the MVC patter
+ *
  * @author Alessio
  */
 public class GameController implements Serializable {
@@ -26,38 +26,49 @@ public class GameController implements Serializable {
     private List<Player> pl;
     private List<Player> donePlayers;
     private Lobby lobby;
+
     public Board getBoard() {
         return gameBoard;
     }
-    public BoardView getBoardView() { return boardView; }
-    public void setBoardView(BoardView boardView){
-        this.boardView=gameBoard.boardView;
+
+    public BoardView getBoardView() {
+        return boardView;
     }
+
+    public void setBoardView(BoardView boardView) {
+        this.boardView = boardView;
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player p){
-        this.currentPlayer= p;
+    public void setCurrentPlayer(Player p) {
+        this.currentPlayer = p;
     }
+
     /**
      * Controls who the current player is by making the player next to the old current player the new current player
+     *
      * @author Alessio
      */
     protected void spinHandler() {
-        int i = gameBoard.getListOfPlayer().indexOf(currentPlayer);
+        int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
         do {
+            i += 1;
             if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
             else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
         } while (donePlayers.contains(currentPlayer));
         gameBoard.setCurrentPlayer(currentPlayer);
     }
-    private void serverUpdater() throws IOException {
+
+    private void serverUpdater() throws IOException, InterruptedException {
         lobby.updateAll();
     }
 
     /**
      * GameController constructor
+     *
      * @param pl list of players
      * @author Alessio
      */
@@ -76,25 +87,24 @@ public class GameController implements Serializable {
     }
 
     /**
-     *
-     * @param arg   an argument passed to the {@code notifyObservers}
-     *                 method. It is format is /command [par 0] [par 1] ...
+     * @param arg an argument passed to the {@code notifyObservers}
+     *            method. It is format is /command [par 0] [par 1] ...
      * @author Alessio
      */
-    public void update(String arg) throws IOException {
-            String[] input = arg.split(" ");
-            if (input[0].charAt(0) == '/') {
-                switch (input[0]) {
-                    case "/remove":
-                        playRemove(input);
-                        serverUpdater();
-                        break;
-                    case "/add":
-                        playAdd(input);
-                        serverUpdater();
-                        break;
-                }
+    public void update(String arg) throws IOException, InterruptedException {
+        String[] input = arg.split(" ");
+        if (input[0].charAt(0) == '/') {
+            switch (input[0]) {
+                case "/remove":
+                    playRemove(input);
+                    serverUpdater();
+                    break;
+                case "/add":
+                    playAdd(input);
+                    serverUpdater();
+                    break;
             }
+        }
     }
 
     /**
@@ -114,24 +124,35 @@ public class GameController implements Serializable {
 
     /**
      * Removes a tile from the board and checks for recharge
+     *
      * @param input input[0] is the command, preceded by /, input[1] is the row coordinate, input[2] is the column coordinate
      * @author Alessio
      */
     private void playRemove(String[] input) {
         System.out.println("remove " + Arrays.toString(input));
-        if(inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
-            gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
-            gameBoard.checkRecharge();
+        gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
+        gameBoard.checkRecharge();
+        if (inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
+
+        }
+        try {
+            serverUpdater();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
+
     /**
      * Adds a tile to the current player shelf tanking it from the board buffer
+     *
      * @param input input[0] is the command, preceded by /, input[1] is the column coordinate
      * @author Alessio
      */
     private void playAdd(String[] input) {
         System.out.println("add");
-        if(columnAvaiable(gameBoard.getTileBuffer().size(),input[1].charAt(0) - 48))  {
+        if (columnAvaiable(gameBoard.getTileBuffer().size(), input[1].charAt(0) - 48)) {
             for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
                 if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                     while (gameBoard.getTileBuffer().size() > 0) {
@@ -146,6 +167,7 @@ public class GameController implements Serializable {
                         if (currentPlayer.getShelf().isFull()) {
                             while (gameBoard.getTileBuffer().size() != 0) gameBoard.getTileBuffer().remove(0);
                             playEndGame();
+                            checkEnd();
                         }
                     }
                 }
@@ -155,41 +177,48 @@ public class GameController implements Serializable {
     }
 
 
-    public boolean adjacentFree(int r, int c){
-        if(gameBoard.getCell(r, c).isEmpty()) return false;
-        if(r == 0 || c == 0 ) return true;
-        if(r == 8 || c == 8) return true;
+
+    public boolean adjacentFree(int r, int c) {
+        if (gameBoard.getCell(r, c).isEmpty()) return false;
+        if (r == 0 || c == 0) return true;
+        if (r == 8 || c == 8) return true;
         return (gameBoard.getCell(r + 1, c).isEmpty() || gameBoard.getCell(r, c + 1).isEmpty()) || (gameBoard.getCell(r + 1, c).isEmpty() || gameBoard.getCell(r, c + 1).isEmpty());
     }
 
-    public boolean inLine(int r, int c){
+    public boolean inLine(int r, int c) {
         //TODO NEEDS TESTING
-        if(gameBoard.getTileBuffer().isEmpty()) return true;
+        if (gameBoard.getTileBuffer().isEmpty()) return true;
         boolean row = true;
         boolean column = true;
-        for(int i = 0; i<3 && gameBoard.getCoordBuffer()[i]!= -1; i++){
-            if( row && gameBoard.getCoordBuffer()[i] == r + 2 - i ){
+        for (int i = 0; i < 3 && gameBoard.getCoordBuffer()[i] != -1; i++) {
+            if (row && gameBoard.getCoordBuffer()[i] == r + 2 - i) {
                 column = false;
-            }else{
+            } else {
                 row = false;
-                if( !column || gameBoard.getCoordBuffer()[i +1 ] != c + 2 - i ) return false;
+                if (!column || gameBoard.getCoordBuffer()[i + 1] != c + 2 - i) return false;
             }
         }
         return true;
     }
 
-    public boolean columnAvaiable(int c, int size){
+    public boolean columnAvaiable(int c, int size) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
-            if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)){
-                return !gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(6-size ,c);
+            if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
+                return !gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(6 - size, c);
             }
         }
         return false;
     }
+
+    private void checkEnd(){
+        if(donePlayers.size() == gameBoard.getListOfPlayer().size()){
+            lobby.endMatch();
+        }
+    }
 }
 
 /* possible commands:
-*  /add playerName column
-*  /remove playerName row column
-*
-* */
+ *  /add playerName column
+ *  /remove playerName row column
+ *
+ * */

@@ -55,7 +55,7 @@ public class TextualUI implements ViewInterface {
                             "\t\t| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  | |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
                             "\t\t| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | | | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
                             "\t\t| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | | | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
-                            "\t\t\\  /|  / |___| |___| \\__/\\ \\_/ / |  | | |___    | | \\ \\_/ / | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
+                            "\t\t\\  /|  / |___| |___| \\__ |/ \\_/ / |  | | |___    | | \\ \\_/ / | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
                             "\t\t \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/  \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n"+ RESET );
                     homePrint(arg);
                     break;
@@ -105,7 +105,7 @@ public class TextualUI implements ViewInterface {
                         "\t\t| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  | |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
                         "\t\t| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | | | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
                         "\t\t| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | | | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
-                        "\t\t\\  /|  / |___| |___| \\__/\\ \\_/ / |  | | |___    | | \\ \\_/ / | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
+                        "\t\t\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ / | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
                         "\t\t \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/  \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n"+ RESET );
                 System.out.print("Insert your nickname:\t");
                 break;
@@ -159,7 +159,7 @@ public class TextualUI implements ViewInterface {
                 for (int j = 0; j < 5; j++) {
                     Tile tile = p.getShelf().getTile(i, j);
                     if (tile == null) {
-                        System.out.print("    ");
+                        System.out.print("      ");
                     } else {
                         System.out.print(" " + tile.getColor().name().charAt(0));
                         switch (tile.getType()) {
@@ -309,5 +309,10 @@ public class TextualUI implements ViewInterface {
     public void setClient(AbstractClient client) {
         this.client = client;
         this.player = client.getPlayer();
+    }
+
+    @Override
+    public void addChatMessage(String tmp) {
+
     }
 }

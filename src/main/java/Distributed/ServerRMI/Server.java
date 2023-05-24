@@ -39,7 +39,7 @@ public interface Server extends Remote {
      * @param client the client who generated the event
      * @param command the move made by the client
      */
-    public void update(Client client, String command) throws IOException;
+    public void update(Client client, String command) throws IOException, InterruptedException;
 
     /**
      * @param lobbyID the ID of the lobby of the client who is requiring the model view
@@ -48,6 +48,6 @@ public interface Server extends Remote {
     public BoardView getBoardView(Integer lobbyID) throws RemoteException;
     public States myState(Client client) throws RemoteException;
     public void waitCommand(Client client, String input) throws IOException;
-    public void playCommand(Client client, String input) throws IOException;
+    public void playCommand(Client client, String input) throws IOException, InterruptedException;
     public void endCommand(Client client) throws RemoteException;
 }

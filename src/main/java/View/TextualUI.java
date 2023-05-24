@@ -236,14 +236,15 @@ public class TextualUI implements ViewInterface {
     }
 
     private void showBoard() {
-        System.out.println("\t\t\tBOARD:");
+        System.out.println("\t\t\t\t\tBOARD:");
         String tType = null;
         for (int i = 0; i < 9; i++) {
-            System.out.print("\t" + i + "\t");
             for (int j = 0; j < 9; j++) {
                 if(i==0 && j==0){
-                    System.out.println("_____________________________________");
+                    System.out.println("\t\t_____________________________________");
                 }
+                if(j==0)
+                    System.out.print("\t" +i + "\t");
                 Tile tile = client.getBoardView().getCell(i, j).getTile();
                 if(j==0){
                     System.out.print("|");
@@ -264,27 +265,27 @@ public class TextualUI implements ViewInterface {
                     }
                     switch (tile.getColor()) {
                         case WHITE:
-                            System.out.print(ConsoleColors.WHITE_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET + "|");
                             break;
                         case YELLOW:
-                            System.out.print(ConsoleColors.YELLOW_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + "|");
                             break;
                         case LIGHTBLUE:
-                            System.out.print(ConsoleColors.CYAN_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET + "|");
                             break;
                         case GREEN:
-                            System.out.print(ConsoleColors.GREEN_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + "|");
                             break;
                         case BLUE:
-                            System.out.print(ConsoleColors.BLUE_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET + "|");
                             break;
                         case PINK:
-                            System.out.print(ConsoleColors.PURPLE_BACKGROUND + ConsoleColors.BLACK + tType + RESET);
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "|");
                             break;
                     }
                 }
             }
-            System.out.println("\n+---+---+---+---+---+---+---+---+---+");
+            System.out.println("\n\t\t+---+---+---+---+---+---+---+---+---+");
         }System.out.println("\t\t  0   1   2   3   4   5   6   7   8");
     }
 

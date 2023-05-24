@@ -1,6 +1,7 @@
 package View;
 
 import Distributed.AbstractClient;
+import Distributed.ClientSocket.ClientAppSocket;
 
 import java.io.IOException;
 
@@ -10,5 +11,4 @@ public abstract interface ViewInterface  {
     void update(String arg) throws IOException;
     void update()throws IOException ;
     public void setState(State state);
-    public void setClient(AbstractClient client);
 }

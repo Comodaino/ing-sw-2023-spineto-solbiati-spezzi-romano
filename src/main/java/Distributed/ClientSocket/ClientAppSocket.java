@@ -5,7 +5,6 @@ import Distributed.RemotePlayer;
 import Distributed.ServerSocket.SocketPlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.GUIclass;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -41,7 +40,6 @@ public class ClientAppSocket implements AbstractClient {
             System.out.println("creating TUI");
             this.view = new TextualUI(this);
         }
-        else this.view  = new GUIclass();
         state = States.INIT;
     }
 
@@ -110,7 +108,6 @@ public class ClientAppSocket implements AbstractClient {
                                 System.out.println("Set nickname: " + nickname);
                             }
                             state = States.WAIT_SETTING;
-                            view.setClient(this);
                             view.setState(State.LOBBY);
                             view.update();
                             break;
@@ -159,11 +156,6 @@ public class ClientAppSocket implements AbstractClient {
         System.out.println("SENDING: " + arg);
         out.println(arg);
         out.flush();
-    }
-
-    @Override
-    public RemotePlayer getPlayer() {
-        return this.player;
     }
 
     @Override

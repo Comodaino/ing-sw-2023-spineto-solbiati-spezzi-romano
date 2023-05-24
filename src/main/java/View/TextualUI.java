@@ -239,10 +239,4 @@ public class TextualUI implements ViewInterface {
     public void setState(State state) {
         this.state = state;
     }
-
-    @Override
-    public void setClient(AbstractClient client) {
-        this.client = client;
-        this.player = client.getPlayer();
-    }
 }

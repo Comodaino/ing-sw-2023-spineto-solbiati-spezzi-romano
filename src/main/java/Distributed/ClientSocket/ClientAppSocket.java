@@ -98,7 +98,7 @@ public class ClientAppSocket implements AbstractClient {
                             this.nickname = tmpNickname;
                             System.out.println("Set nickname: " + nickname);
                         }
-                        state = States.WAIT_SETTING;
+                        state = States.WAIT;
                         view.setClient(this);
                         view.setState(State.LOBBY);
                         view.update();

@@ -122,9 +122,7 @@ public class ServerApp {
             }
             //Adds the player in the list of RemotePlayer of the Lobby the client joined
             lobbies.get(lobbies.size() - 1).addPlayer(rp);
-            if (rp.getConnectionType().equals(ConnectionType.RMI)) {
-                lobbies.get(lobbies.size() - 1).addClientRMI(client);
-            }
+
             //Sets lobbyID in Client and if it is owner of the lobby or not
             client.setOwner(rp.isOwner());
             client.setLobbyID(lobbies.get(lobbies.size() - 1).getID());

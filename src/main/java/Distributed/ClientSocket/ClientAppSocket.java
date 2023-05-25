@@ -1,6 +1,7 @@
 package Distributed.ClientSocket;
 
 import Distributed.AbstractClient;
+import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
 import View.State;
@@ -167,5 +168,8 @@ public class ClientAppSocket implements AbstractClient {
 
     public boolean isOwner() {
         return owner;
+    }
+    public RemotePlayer getPlayer(){
+        return null;
     }
 }

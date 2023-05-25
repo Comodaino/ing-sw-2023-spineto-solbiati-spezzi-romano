@@ -84,6 +84,7 @@ public class GameController implements Serializable {
                 break;
             }
         }
+        this.gameBoard.setCurrentPlayer(this.currentPlayer);
     }
 
     /**

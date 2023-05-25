@@ -125,7 +125,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             switch (input) {
                 case "/start":
                     lobby.startGame();
-                    lobby.updateAll();
                     player.setState(PLAY);
                     break;
                 case "/firstMatch":
@@ -138,6 +137,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                     lobby.close();
                     break;
             }
+            lobby.updateAll();
         }
     }
 
@@ -150,18 +150,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     public void playCommand(String input) throws IOException, InterruptedException {
         System.out.println("Received command: " + input);
         lobby.getController().update(input);
-    }
-
-    public RemotePlayer getPlayer() {
-        return player;
-    }
-
-    public void endMatch(){
-        try {
-            outSocket("/end");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -239,6 +227,17 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         }
         out.reset();
         out.flush();
+    }
+    public void endMatch(){
+        try {
+            outSocket("/end");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public RemotePlayer getPlayer() {
+        return player;
     }
 }
 

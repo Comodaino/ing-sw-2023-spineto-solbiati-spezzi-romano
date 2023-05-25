@@ -17,7 +17,8 @@ public class Lobby {
     private BoardView boardView;
     private GameController controller;
     private ServerApp serverApp;
-    public Lobby(ServerApp serverApp){
+
+    public Lobby(ServerApp serverApp) {
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.ID = null;
@@ -25,22 +26,67 @@ public class Lobby {
         this.open = true;
     }
 
-    public void addPlayer(RemotePlayer p){
-        if(open){
-            if(lp.isEmpty()){
+    public void addPlayer(RemotePlayer p) {
+        if (open) {
+            if (lp.isEmpty()) {
                 p.setOwner(); //the first player to join the lobby become the owner
             }
             lp.add(p);
-            if(lp.size()==4) this.open = false;
+            if (lp.size() == 4) this.open = false;
         }
     }
 
     public boolean closeLobby() {
-        if(lp.size()>=2){
+        if (lp.size() >= 2) {
             this.open = false;
             return true; //lobby closed
         }
         return false; //lobby not closed
+    }
+
+
+    public void startGame() throws IOException {
+        List<Player> modelPlayerList = new ArrayList<Player>();
+        for (RemotePlayer p : lp) {
+            Player tmpPlayer = new Player(p.getNickname(), p.isOwner());
+            modelPlayerList.add(tmpPlayer);
+            p.setModelPlayer(tmpPlayer);
+            p.setState(States.PLAY);
+        }
+        controller = new GameController(modelPlayerList, firstMatch, this);
+        for (RemotePlayer p : lp) {
+            p.setController(controller);
+        }
+        boardView = controller.getBoardView();
+    }
+
+    public void endMatch() {
+        for (RemotePlayer p : lp) {
+            p.setState(States.END);
+            p.endMatch();
+        }
+    }
+
+    public void close() {
+        for (RemotePlayer p : lp) {
+            p.setState(States.CLOSE);
+        }
+        serverApp.removeLobby(this);
+    }
+
+
+    public void sendMessage(String message) throws IOException, InterruptedException {
+        System.out.println("sending: " + message);
+        for (RemotePlayer p : lp) {
+            p.message(message);
+        }
+        updateAll();
+    }
+
+    public void updateAll() throws IOException, InterruptedException {
+        for (RemotePlayer p : lp) {
+            p.update(boardView);
+        }
     }
 
     public void setFirstMatch(boolean firstMatch) {
@@ -58,50 +104,19 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
-    public void startGame() throws IOException {
-        List<Player> modelPlayerList = new ArrayList<Player>();
-        for(RemotePlayer p: lp){
-            Player tmpPlayer = new Player(p.getNickname(),p.isOwner());
-            modelPlayerList.add(tmpPlayer);
-            p.setModelPlayer(tmpPlayer);
-            p.setState(States.PLAY);
-        }
-        controller = new GameController(modelPlayerList, firstMatch, this);
-        for(RemotePlayer p: lp) {
-                p.setController(controller);
-        }
-        boardView = controller.getBoardView();
-    }
-    public void endMatch() {
-        for(RemotePlayer p: lp){
-            p.setState(States.END);
-            p.endMatch();
-        }
-    }
-    public void close() {
-        for(RemotePlayer p: lp){
-            p.setState(States.CLOSE);
-        }
-        serverApp.removeLobby(this);
-    }
-
     public BoardView getBoardView() {
         return boardView;
     }
-    public void setID(Integer i) { this.ID = i; }
-    public Integer getID() { return this.ID; }
-    public void sendMessage(String message) throws IOException, InterruptedException {
-        System.out.println("sending: " + message);
-        for(RemotePlayer p: lp){
-            p.message(message);
-        }
-        updateAll();
+
+    public void setID(Integer i) {
+        this.ID = i;
     }
-    public void updateAll() throws IOException, InterruptedException {
-        for(RemotePlayer p: lp){
-            p.update(boardView);
-        }
+
+    public Integer getID() {
+        return this.ID;
     }
-    public GameController getController() { return controller; }
+    public GameController getController() {
+        return controller;
+    }
 
 }

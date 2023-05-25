@@ -6,6 +6,7 @@ import Distributed.ServerRMI.Server;
 import Distributed.States;
 import Model.BoardView;
 import View.GUIclass;
+import View.State;
 import View.TextualUI;
 import View.ViewInterface;
 
@@ -32,7 +33,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         owner = false;
         state = States.INIT;
 
-        if(typeOfView.equals("TUI")) {
+        if (typeOfView.equals("TUI")) {
             try {
                 this.view = new TextualUI(this);
             } catch (IOException e) {
@@ -53,6 +54,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
     @Override
     public void update() throws RemoteException {
+        System.out.println("state: " + this.state);
         try {
             view.update();
         } catch (IOException e) {
@@ -61,10 +63,10 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     }
 
     @Override
-    public void update(String arg) throws RemoteException { //TODO add boardView as a parameter?
+    public void update(BoardView boardView) throws RemoteException { //TODO add boardView as a parameter?
+        this.boardView = boardView;
         try {
-            if(arg.equals("/boardView")) this.boardView = server.getBoardView(this);
-            view.update(arg);
+            view.update();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -114,7 +116,23 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     public Integer getLobbyID() throws RemoteException { return this.lobbyID; }
 
     @Override
-    public void setState(States state) throws RemoteException { this.state = state; }
+    public void setState(States state) throws RemoteException {
+        this.state = state;
+        switch (state) {
+            case PLAY:
+                view.setState(State.PLAY);
+                break;
+            case WAIT:
+                view.setState(State.LOBBY);
+                break;
+            case END:
+                view.setState(State.END);
+                break;
+            case CLOSE:
+                view.setState(State.CLOSE);
+                break;
+        }
+    }
 
     @Override
     public States getState() throws RemoteException { return this.state; }

@@ -90,13 +90,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             lobby = lobbies.get(client.getLobbyID()-1);
         }
 
-        switch (arg) {
+        switch(arg) {
             case "/start":
                 lobby.startGame();
-                for(Client c: lobby.getListOfClients()){
-                    c.setState(PLAY);
-                    c.update();
-                }
                 break;
             case "/firstMatch":
                 lobby.setFirstMatch(true);

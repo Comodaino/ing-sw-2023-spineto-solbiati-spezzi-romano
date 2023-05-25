@@ -8,7 +8,7 @@ import java.rmi.*;
 
 public interface Client extends Remote {
     public void update() throws RemoteException;
-    public void update(String arg) throws RemoteException;
+    public void update(BoardView boardView) throws RemoteException;
     public void setNickname(String nickname) throws RemoteException;
     public String getNickname() throws RemoteException;
     public void setLobbyID(Integer lobbyID) throws RemoteException;

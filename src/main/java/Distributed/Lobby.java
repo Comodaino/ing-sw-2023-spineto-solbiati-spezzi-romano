@@ -26,13 +26,14 @@ public class Lobby {
         this.open = true;
     }
 
-    public void addPlayer(RemotePlayer p) {
+    public void addPlayer(RemotePlayer p) throws IOException, InterruptedException {
         if (open) {
             if (lp.isEmpty()) {
                 p.setOwner(); //the first player to join the lobby become the owner
             }
             lp.add(p);
             if (lp.size() == 4) this.open = false;
+            updateAll();
         }
     }
 

@@ -1,6 +1,7 @@
 package Distributed;
 
 import Controller.GameController;
+import Distributed.ClientRMI.Client;
 import Model.BoardView;
 import Model.Player;
 
@@ -9,7 +10,7 @@ import java.io.Serializable;
 
 import static Distributed.States.INIT;
 
-public class RemotePlayer implements Serializable {
+public abstract class RemotePlayer implements Serializable {
     private Player modelPlayer;
     private ConnectionType type;
     private String nickname;
@@ -72,6 +73,6 @@ public class RemotePlayer implements Serializable {
 
     public void message(String arg) {}
 
-    public void endMatch() {
-    }
+    public void endMatch() { }
+    public Client getClient() { return null; }
 }

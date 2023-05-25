@@ -1,5 +1,6 @@
 package Distributed.ServerSocket;
 
+import Distributed.ClientRMI.Client;
 import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
 import Model.BoardView;
@@ -32,7 +33,6 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     public void message(String arg){
         handler.message(arg);
     }
-
     @Override
     public void endMatch() {
         handler.endMatch();

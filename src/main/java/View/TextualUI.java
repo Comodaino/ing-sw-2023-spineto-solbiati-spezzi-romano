@@ -64,7 +64,9 @@ public class TextualUI implements ViewInterface {
                         System.out.println("/start to start the game");
                         System.out.println("/firstMatch if this is your first match\nOR");
                         System.out.println("/notFirstMatch if you have already played");
-                    } else System.out.println("wait for the owner to start the game");
+                    } else {
+                        System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
+                    }
                     break;
                 case PLAY:
                     System.out.println("Your turn!");
@@ -101,30 +103,42 @@ public class TextualUI implements ViewInterface {
                         "\t\t| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | |  | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
                         "\t\t| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | |  | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
                         "\t\t\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ /  | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
-                        "\t\t \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/   \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n"+ RESET );
+                        "\t\t \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/   \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n" + RESET);
                 System.out.print("Insert your nickname:\t");
                 break;
             case LOBBY:
                 if (client.isOwner()) {
-                    System.out.println("Commands you can use:");
+                    System.out.println("COMMANDS AVAILABLE:");
                     System.out.println("/start to start the game");
-                    System.out.println("/firstMatch if this is your first match\nOR");
-                    System.out.println("/notFirstMatch if you have already played");
-                } else System.out.println("wait for the owner to start the game");
+                    System.out.println("/firstMatch if this is your first match\t\tOR\t\t/notFirstMatch if you have already played");
+                } else
+                    System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
                 break;
             case PLAY:
-                System.out.println("Your turn!");
-                showBoard();
-                showYourShelf();
-                showOthersShelf();
-                showGoals();
-                System.out.println("Commands you can use:");
-                System.out.println("/add column  -- add tile in the column of your shelf");
-                System.out.println("/remove row column   -- remove tile[row][column] from the board");
-                for(Player p: client.getBoardView().getListOfPlayer()) {
-                    if (p.getNickname().equals(client.getNickname()))
-                        System.out.println("your score:\t" + p.getScore());
-                }break;
+                Player currentPlayer = null;
+                for(Player p : client.getBoardView().getListOfPlayer()){
+                    if(p.getNickname().equals(client.getBoardView().getCurrentPlayer().getNickname())){
+                        currentPlayer = p;
+                    }
+                }
+                if (yourTurn(currentPlayer.getNickname())){
+                    System.out.println("Your turn!");
+                    showBoard();
+                    showYourShelf();
+                    showOthersShelf();
+                    showGoals();
+                    System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
+                    System.out.println("/add n  ---> to add a tile in the column \"n\" of your shelf");
+                    System.out.println("/remove row column   --->to remove the tile[row][column] from the board");
+                }
+                else{
+                    System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
+                    showBoard();
+                    showOthersShelf();
+                    showGoals();
+                    showYourScore();
+                }
+              break;
             case END:
                 String winner = client.getBoardView().getWinner().getNickname();
                 System.out.println("SCORES:");
@@ -137,6 +151,17 @@ public class TextualUI implements ViewInterface {
             case CLOSE:
                 System.out.println("The lobby has been closed, thank you for playing!");
                 break;
+        }
+    }
+
+    private boolean yourTurn(String currPlayer) throws RemoteException {
+        return currPlayer.equals(client.getNickname());
+    }
+
+    private void showYourScore() throws RemoteException {
+        for(Player p: client.getBoardView().getListOfPlayer()) {
+            if (p.getNickname().equals(client.getNickname()))
+                System.out.println(ConsoleColors.PURPLE_UNDERLINED + "YOUR SCORE:\t" + p.getScore() + RESET);
         }
     }
 
@@ -324,7 +349,7 @@ public class TextualUI implements ViewInterface {
         }System.out.println("\t\t  0   1   2   3   4   5   6   7   8");
     }
 
-    public void homePrint(String arg) throws IOException {
+    public void homePrint(String arg){
         if (arg != null && arg.equals("/nickname")) {
             System.out.println("nickname already used, please insert another nickname:  ");
         } else {
@@ -348,4 +373,5 @@ public class TextualUI implements ViewInterface {
     public void addChatMessage(String tmp) {
 
     }
+
 }

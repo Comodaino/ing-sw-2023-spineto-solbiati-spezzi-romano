@@ -67,7 +67,7 @@ public class TextualUI implements ViewInterface {
                     } else System.out.println("wait for the owner to start the game");
                     break;
                 case PLAY:
-                    System.out.println("Your turn!");
+                    if(client.getNickname().equals(client.getBoardView().getCurrentPlayer().getNickname())) System.out.println("Your turn!");
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
@@ -113,7 +113,7 @@ public class TextualUI implements ViewInterface {
                 } else System.out.println("wait for the owner to start the game");
                 break;
             case PLAY:
-                System.out.println("Your turn!");
+                if(client.getNickname().equals(client.getBoardView().getCurrentPlayer().getNickname())) System.out.println("Your turn!");
                 showBoard();
                 showYourShelf();
                 showOthersShelf();

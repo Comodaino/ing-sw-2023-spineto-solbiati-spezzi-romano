@@ -10,7 +10,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.IOException;
-
+/*
 public class GUIclass extends JFrame implements ViewInterface{
     private RemotePlayer player;
     private AbstractClient client;
@@ -87,7 +87,6 @@ public class GUIclass extends JFrame implements ViewInterface{
         JLabel imageOfShelf = new JLabel(imageShelf);
 
         shelf.add(imageOfShelf, BorderLayout.NORTH);
-
         if(client.getPlayer().getModelPlayer().getChair() == true){
             ImageIcon imageChair = new ImageIcon("View/resources/firstplayertoken.png");
             JLabel chairImage = new JLabel(imageChair);
@@ -147,7 +146,7 @@ public class GUIclass extends JFrame implements ViewInterface{
     }
 
     public void GUIclass(AbstractClient client, BoardView boardView){;
-        //this.player= client.getPlayer();
+        this.player= client.getPlayer();
         this.client = client;
         this.boardView = boardView;
         switch (this.state){
@@ -167,8 +166,7 @@ public class GUIclass extends JFrame implements ViewInterface{
     }
     @Override
     public void update(String arg) throws IOException {
-
-    }
+}
 
     @Override
     public void update() throws IOException {
@@ -184,4 +182,10 @@ public class GUIclass extends JFrame implements ViewInterface{
     public void setClient(AbstractClient client) {
         this.client=client;
     }
+
+    @Override
+    public void addChatMessage(String tmp) {
+
+    }
 }
+*/

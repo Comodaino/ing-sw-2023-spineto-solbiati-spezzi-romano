@@ -2,6 +2,8 @@ package Distributed;
 
 import Controller.GameController;
 
+import java.io.IOException;
+
 public abstract class RemoteHandler {
     protected Lobby lobby;
     protected States state;
@@ -32,9 +34,7 @@ public abstract class RemoteHandler {
     public ConnectionType getType() {
         return type;
     }
-    public void endCommand(){ state=States.WAIT; }
-    public void update(){}
-
-    public void message(String arg) {
-    }
+    public void endCommand(){ state=States.WAIT_SETTING; }
+    public void update() throws IOException {}
+    public void message(String arg) {}
 }

@@ -2,6 +2,7 @@ package Model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -10,7 +11,7 @@ import java.util.Scanner;
  * represent PersonalGoal with an ArrayList of type Pgtype
  * @author alessandra
  */
-public class PersonalGoal extends Goal {
+public class PersonalGoal extends Goal implements Serializable {
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
 

@@ -5,7 +5,6 @@ import Model.Player;
 import Model.Tile;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class TextualUI implements ViewInterface {
@@ -37,9 +36,6 @@ public class TextualUI implements ViewInterface {
 
     public void inputHandler() throws IOException {
 
-        while(state!=State.CLOSE){
-            client.println(input.nextLine());
-        }
     }
 
     @Override
@@ -140,7 +136,7 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    private void showGoals() throws RemoteException {
+    private void showGoals() {
         System.out.print("COMMON GOALS:\t\t");
         client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));
         System.out.print("PRIVATE GOALS:\t\t");
@@ -152,7 +148,7 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    private void showOthersShelf() throws RemoteException {
+    private void showOthersShelf() {
         System.out.println("OTHERS' SHELVES:");
         for (Player p : client.getBoardView().getListOfPlayer()) {
             if (!p.getNickname().equals(client.getNickname())) {
@@ -212,7 +208,7 @@ public class TextualUI implements ViewInterface {
 
     }
 
-    private void showYourShelf() throws RemoteException {
+    private void showYourShelf() {
         for (Player player: client.getBoardView().getListOfPlayer()) {
             if (player.getNickname().equals(client.getNickname())) {
                 System.out.println("YOUR SHELF:");

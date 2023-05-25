@@ -132,15 +132,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         }
     }
 
-    @Override
-    public BoardView getBoardView(Client client) throws RemoteException {
-        Lobby lobby = null;
-        synchronized(lobbies) {
-            lobby = lobbies.get(client.getLobbyID()-1);
-        }
-        return lobby.getBoardView();
-    }
-
     //LOCAL FUNCTIONS
     public String checkNickname(String input) {
         boolean found = true;

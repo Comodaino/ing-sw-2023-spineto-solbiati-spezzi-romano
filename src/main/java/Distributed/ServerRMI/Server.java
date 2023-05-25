@@ -11,5 +11,4 @@ import java.rmi.*;
 
 public interface Server extends Remote {
     public void handler(Client client, String arg) throws RemoteException;
-    public BoardView getBoardView(Client client) throws RemoteException;
 }

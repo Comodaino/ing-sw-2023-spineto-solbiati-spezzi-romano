@@ -6,6 +6,7 @@ import Model.Player;
 import Model.Tile;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class TextualUI implements ViewInterface {
@@ -37,9 +38,10 @@ public class TextualUI implements ViewInterface {
     }
 
     public void inputHandler() throws IOException {
-        String command = input.nextLine();
-        client.println(command);
-
+        while(this.state != State.CLOSE) {
+            String command = input.nextLine();
+            client.println(command);
+        }
     }
 
     @Override
@@ -67,7 +69,6 @@ public class TextualUI implements ViewInterface {
                         System.out.println("/start to start the game");
                         System.out.println("/firstMatch if this is your first match\nOR");
                         System.out.println("/notFirstMatch if you have already played");
-                        inputHandler();
                     } else System.out.println("wait for the owner to start the game");
                     break;
                 case PLAY:
@@ -79,7 +80,6 @@ public class TextualUI implements ViewInterface {
                     System.out.println("Commands you can use:");
                     System.out.println("/add column  -- add tile in the column of your shelf");
                     System.out.println("/remove row column   -- remove tile[row][column] from the board");
-                    inputHandler();
                     if (player != null) System.out.println("your score:\t" + player.getModelPlayer().getScore());
                     break;
                 case END:
@@ -115,7 +115,6 @@ public class TextualUI implements ViewInterface {
                     System.out.println("/start to start the game");
                     System.out.println("/firstMatch if this is your first match\nOR");
                     System.out.println("/notFirstMatch if you have already played");
-                    inputHandler();
                 } else System.out.println("wait for the owner to start the game");
                 break;
             case PLAY:
@@ -127,7 +126,6 @@ public class TextualUI implements ViewInterface {
                 System.out.println("Commands you can use:");
                 System.out.println("/add column  -- add tile in the column of your shelf");
                 System.out.println("/remove row column   -- remove tile[row][column] from the board");
-                inputHandler();
                 if (player != null) System.out.println("your score:\t" + player.getModelPlayer().getScore());
                 break;
             case END:
@@ -150,7 +148,7 @@ public class TextualUI implements ViewInterface {
         client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));
     }
 
-    private void showOthersShelf() {
+    private void showOthersShelf() throws RemoteException {
         System.out.println("OTHERS' SHELVES:");
         for (Player p : client.getBoardView().getListOfPlayer()) {
             if (!p.getNickname().equals(client.getNickname())) //TODO THIS WAS CHANGED
@@ -284,7 +282,7 @@ public class TextualUI implements ViewInterface {
     @Override
     public void setClient(AbstractClient client) {
         this.client = client;
-        this.player = client.getPlayer();
+        //this.player = client.getPlayer();
     }
 
     @Override

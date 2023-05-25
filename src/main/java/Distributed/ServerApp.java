@@ -48,10 +48,12 @@ public class ServerApp extends UnicastRemoteObject implements Server {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void startServer() throws IOException {
+    public void startServer() throws IOException, InterruptedException {
         openLobby = new Lobby(this);
         openLobby.setID(1);
         lobbies.add(openLobby);
@@ -60,7 +62,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         socketAccepter();
     }
 
-    public void socketAccepter() throws IOException {
+    public void socketAccepter() throws IOException, InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
 
@@ -111,7 +113,7 @@ public class ServerApp extends UnicastRemoteObject implements Server {
         return lobbies;
     }
 
-    public void addPlayer(Client client, RemotePlayer rp) throws RemoteException {
+    public void addPlayer(Client client, RemotePlayer rp) throws IOException, InterruptedException {
         synchronized (lobbies) {
             //If the lobby is closed, creates a new lobby and sets its ID
             if (!lobbies.get(lobbies.size() - 1).isOpen()) {
@@ -142,12 +144,13 @@ public class ServerApp extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void register(Client client) throws RemoteException {
+    public void register(Client client) throws IOException, InterruptedException {
         //Creates a new RemotePlayer and sets its nickname, asking it to the client
         RMIPlayer rp = new RMIPlayer(client);
         String nickname = client.setNickname(this);
         rp.setNickname(nickname);
         //If the lobby is closed, creates a new lobby and sets its ID, adds the player in the list of RemotePlayer of the Lobby the client joined
+        addPlayer(client, rp);
         addPlayer(client, rp);
         //Sets the client state in WAIT
         client.setState(WAIT_SETTING);

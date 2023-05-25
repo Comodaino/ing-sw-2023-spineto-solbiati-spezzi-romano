@@ -14,7 +14,7 @@ public interface Server extends Remote {
      * Adds a client to a new lobby (if there is not any lobby open) and creates a model and a controller for that lobby
      * @param client the client to register
      */
-    public void register(Client client) throws RemoteException;
+    public void register(Client client) throws IOException, InterruptedException;
 
     /**
      * Checks if there are no other players with the same nickname connected to the server

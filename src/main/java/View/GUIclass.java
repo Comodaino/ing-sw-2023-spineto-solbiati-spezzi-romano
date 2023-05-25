@@ -10,7 +10,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.IOException;
-
+/*
 public class GUIclass extends JFrame implements ViewInterface{
     private RemotePlayer player;
     private AbstractClient client;
@@ -87,7 +87,6 @@ public class GUIclass extends JFrame implements ViewInterface{
         JLabel imageOfShelf = new JLabel(imageShelf);
 
         shelf.add(imageOfShelf, BorderLayout.NORTH);
-
         if(client.getPlayer().getModelPlayer().getChair() == true){
             ImageIcon imageChair = new ImageIcon("View/resources/firstplayertoken.png");
             JLabel chairImage = new JLabel(imageChair);
@@ -189,3 +188,4 @@ public class GUIclass extends JFrame implements ViewInterface{
 
     }
 }
+*/

@@ -1,11 +1,8 @@
 package Distributed.ClientSocket;
 
 import Distributed.AbstractClient;
-import Distributed.RemotePlayer;
-import Distributed.ServerSocket.SocketPlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.GUIclass;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -20,6 +17,7 @@ import java.util.Scanner;
 
 public class ClientAppSocket implements AbstractClient {
     private final int port;
+    private final String typeOfView;
     private boolean owner;
     private Socket socket;
     private Scanner in;
@@ -29,20 +27,15 @@ public class ClientAppSocket implements AbstractClient {
     private States state;
     private ObjectInputStream objIn;
     private ViewInterface view;
-    private SocketPlayer player;
     private String tmpNickname;
     private String nickname;
 
     public ClientAppSocket(int port, String typeOfView) throws IOException {
         this.port = port;
         this.tmpNickname = null;
-        this.player = null;
         this.nickname = null;
         this.owner = false;
-        if (typeOfView.equals("TUI")) {
-            System.out.println("creating TUI");
-            this.view = new TextualUI(this);
-        } else this.view = new GUIclass();
+        this.typeOfView = typeOfView;
         state = States.INIT;
     }
 
@@ -61,6 +54,13 @@ public class ClientAppSocket implements AbstractClient {
         String input = (String) objIn.readObject();
         if (input.equals("start")) System.out.println("Client starting");
 
+        inputHandler();
+
+        if (typeOfView.equals("TUI")) {
+            System.out.println("creating TUI");
+            this.view = new TextualUI(this);
+        } //else this.view = new GUIclass();
+
         while (state != States.CLOSE) {
             inputHandler();
         }
@@ -73,73 +73,76 @@ public class ClientAppSocket implements AbstractClient {
         System.out.println("waiting for input");
 
         String input  = (String) objIn.readObject();
-        System.out.println("RECEIVED: " + input);
+        if(input != null) {
+
+            System.out.println("RECEIVED: " + input);
 
 
-        if (input.startsWith("/wait")) {
-            String[] tmpInput = input.split(" ");
-            if (tmpInput.length > 1 && tmpInput[1].equals("owner")) {
-                this.owner = true;
+            if (input.startsWith("/wait")) {
+                String[] tmpInput = input.split(" ");
+                if (tmpInput.length > 1 && tmpInput[1].equals("owner")) {
+                    this.owner = true;
+                }
+                input = tmpInput[0];
             }
-            input = tmpInput[0];
-        }
-        if(input.startsWith("/message")){
-            String tmp = input.substring(8);
-            view.addChatMessage(tmp);
-        }
+            if (input.startsWith("/message")) {
+                String tmp = input.substring(8);
+                view.addChatMessage(tmp);
+            }
 
-        if (input.equals("/nickname")) {
-            view.update("/nickname");
-        } else {
-            if (input.charAt(0) == '/') {
-                switch (input) {
-                    case "/init":
-                        state = States.INIT;
-                        view.setState(State.HOME);
-                        view.update();
-                        break;
-                    case "/wait":
-                        if (this.nickname == null) {
-                            this.nickname = tmpNickname;
-                            System.out.println("Set nickname: " + nickname);
-                        }
-                        state = States.WAIT_SETTING;
-                        view.setClient(this);
-                        view.setState(State.LOBBY);
-                        view.update();
-                        break;
-                    case "/play":
-                        playCommand();
-                        break;
-                    case "/end":
-                        state = States.END;
-                        view.setState(State.LOBBY);
-                        view.update();
-                        break;
-                    case "/close":
-                        state = States.CLOSE;
-                        view.setState(State.CLOSE);
-                        view.update();
-                        break;
-                    case "/update":
-                        this.boardView = (BoardView) objIn.readObject();
-                        System.out.println("updating...");
-                        break;
-                    default:
-                        if (input.startsWith("/message")) {
-                            System.out.println(input);
-                            //TODO update(input);
-                        }
-                        view.update();
-                        break;
+            if (input.equals("/nickname")) {
+                view.update("/nickname");
+            } else {
+                if (input.charAt(0) == '/') {
+                    switch (input) {
+                        case "/init":
+                            state = States.INIT;
+                            view.setState(State.HOME);
+                            view.update();
+                            break;
+                        case "/wait":
+                            if (this.nickname == null) {
+                                this.nickname = tmpNickname;
+                                System.out.println("Set nickname: " + nickname);
+                            }
+                            state = States.WAIT_SETTING;
+                            view.setClient(this);
+                            view.setState(State.LOBBY);
+                            view.update();
+                            break;
+                        case "/play":
+                            playCommand();
+                            break;
+                        case "/end":
+                            state = States.END;
+                            view.setState(State.LOBBY);
+                            view.update();
+                            break;
+                        case "/close":
+                            state = States.CLOSE;
+                            view.setState(State.CLOSE);
+                            view.update();
+                            break;
+                        case "/update":
+                            this.boardView = (BoardView) objIn.readObject();
+                            System.out.println("updating...");
+                            break;
+                        default:
+                            if (input.startsWith("/message")) {
+                                System.out.println(input);
+                                //TODO update(input);
+                            }
+                            view.update();
+                            break;
+                    }
                 }
             }
-        }
 
-        if (input.charAt(0) != '/' && state != States.INIT) {
-            System.out.println("unclePear");
-            out.println(input);
-            out.flush();
+            if (input.charAt(0) != '/' && state != States.INIT) {
+                System.out.println("unclePear");
+                out.println(input);
+                out.flush();
+            }
         }
     }
 
@@ -159,16 +162,13 @@ public class ClientAppSocket implements AbstractClient {
         out.flush();
     }
 
-    @Override
-    public RemotePlayer getPlayer() {
-        return this.player;
-    }
 
     @Override
     public BoardView getBoardView() {
         return boardView;
     }
 
+    @Override
     public String getNickname() {
         return nickname;
     }

@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import static Distributed.States.*;
 
@@ -20,7 +21,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     private final Lobby lobby;
     private Scanner in;
 
-    public ClientHandlerSocket(Socket socket, Lobby lobby, ServerApp serverApp) throws IOException {
+    public ClientHandlerSocket(Socket socket, Lobby lobby, ServerApp serverApp) throws IOException, InterruptedException {
         this.socket = socket;
         this.lobby = lobby;
         this.serverApp = serverApp;
@@ -46,15 +47,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 }
             }
         };
-        Thread th2 = new Thread() {
-            @Override
-            public void run() {
-                //outputHandler();
-
-            }
-        };
         th1.start();
-        th2.start();
         try {
             outSocket("ready");
         } catch (IOException e) {
@@ -62,18 +55,23 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         }
 
         System.out.println("Message sent");
-        if (player.getState() == CLOSE) {
+        while (player.getState() != CLOSE) {
             try {
-                outSocket("/close");
-            } catch (IOException e) {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            in.close();
-            try {
-                socket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        }
+        try {
+            outSocket("/close");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        in.close();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -125,7 +123,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             switch (input) {
                 case "/start":
                     lobby.startGame();
-                    lobby.updateAll();
                     player.setState(PLAY);
                     break;
                 case "/firstMatch":
@@ -138,6 +135,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                     lobby.close();
                     break;
             }
+            lobby.updateAll();
         }
     }
 
@@ -150,18 +148,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     public void playCommand(String input) throws IOException, InterruptedException {
         System.out.println("Received command: " + input);
         lobby.getController().update(input);
-    }
-
-    public RemotePlayer getPlayer() {
-        return player;
-    }
-
-    public void endMatch(){
-        try {
-            outSocket("/end");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -179,7 +165,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             System.out.println("waiting for input");
             String input = in.nextLine();
             System.out.println("RECEIVED " + input);
-            if(input.startsWith("/message")){
+            if (input.startsWith("/message")) {
                 lobby.sendMessage(input);
             } else if (input.charAt(0) == '/') {
                 switch (player.getState()) {
@@ -239,6 +225,18 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         }
         out.reset();
         out.flush();
+    }
+
+    public void endMatch() {
+        try {
+            outSocket("/end");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public RemotePlayer getPlayer() {
+        return player;
     }
 }
 

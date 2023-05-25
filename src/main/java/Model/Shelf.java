@@ -34,8 +34,7 @@ public class Shelf implements Serializable {
         }
         return false;
     }
-
-
+    
     public Tile getTile(int r, int c) {
         return matrix[r][c];
     }
@@ -55,7 +54,7 @@ public class Shelf implements Serializable {
     public boolean isFull() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                if (this.matrix[i][j].equals(null)) {
+                if (this.matrix[i][j]==null) {
                     return false;
                 }
             }

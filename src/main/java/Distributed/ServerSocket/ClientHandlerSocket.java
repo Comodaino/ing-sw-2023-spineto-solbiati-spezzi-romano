@@ -109,6 +109,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         } else {
 
             System.out.println("Nickname not available");
+            outSocket("/nickname");
         }
     }
 
@@ -152,12 +153,13 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
 
     @Override
     public void endCommand() {
+        player.setState(WAIT);
         try {
             outSocket("/wait");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        player.setState(WAIT);
+
     }
 
     public void inputHandler() throws IOException, InterruptedException {

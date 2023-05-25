@@ -47,7 +47,7 @@ public class TextualUI implements ViewInterface {
         System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
-                    System.out.println(ConsoleColors.RED_BOLD + ConsoleColors.YELLOW_BACKGROUND + "\n" +
+                    System.out.println(ConsoleColors.RED_BOLD + "\n" +
                             "\t\t _    _ _____ _     _____ ________  ________   _____ _____  ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
                             "\t\t| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  | |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
                             "\t\t| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | | | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +

@@ -15,8 +15,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Distributed.States.PLAY;
-
 public class ServerImpl extends UnicastRemoteObject implements Server {
     private List<Lobby> lobbies;
     private Registry registry;
@@ -54,6 +52,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public void handler(Client client, String arg) throws RemoteException{
         States clientState = client.getState();
+        Lobby lobby = null;
 
         switch(clientState){
             case INIT:
@@ -70,18 +69,26 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             case END:
                 break;
         }
+
+        synchronized(lobbies) {
+            lobby = lobbies.get(client.getLobbyID()-1);
+        }
+        try {
+            lobby.updateAll();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void initCommand(Client client, String nickname) throws RemoteException {
         if(checkNickname(nickname)!=null) {
-            RemotePlayer rp = new RemotePlayer(ConnectionType.RMI);
+            RMIPlayer rp = new RMIPlayer(client);
             rp.setNickname(nickname);
             client.setNickname(nickname);
             addPlayer(client, rp);
             client.setState(States.WAIT);
-            client.update();
 
-        } else client.update("/nickname");
+        } else client.update(null, "/nickname");
     }
 
     public void waitCommand(Client client, String arg) throws RemoteException {
@@ -105,6 +112,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             case "/closeLobby":
                 lobby.close();
                 break;
+            default:
+                client.update(null, "/command");
+                break;
         }
     }
 
@@ -117,10 +127,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         System.out.println("Received command: " + command);
         try {
             lobby.getController().update(command);
-            for(Client c: lobby.getListOfClients()){
-                c.update("/boardView");
-            }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -162,9 +169,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
             //Adds the player in the list of RemotePlayer of the Lobby the client joined
             lobbies.get(lobbies.size() - 1).addPlayer(rp);
-            if(rp.getConnectionType().equals(ConnectionType.RMI)){
-                lobbies.get(lobbies.size() - 1).addClientRMI(client);
-            }
 
             //Sets lobbyID in Client and if it is owner of the lobby or not
             client.setOwner(rp.isOwner());

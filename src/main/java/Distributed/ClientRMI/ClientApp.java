@@ -1,11 +1,9 @@
 package Distributed.ClientRMI;
 
 import Distributed.AbstractClient;
-import Distributed.RemotePlayer;
 import Distributed.ServerRMI.Server;
 import Distributed.States;
 import Model.BoardView;
-import View.GUIclass;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -39,7 +37,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } else this.view = new GUIclass();
+        } //else this.view = new GUIclass(); //TODO implement after GUI
     }
 
 
@@ -54,7 +52,6 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
     @Override
     public void update() throws RemoteException {
-        System.out.println("state: " + this.state);
         try {
             view.update();
         } catch (IOException e) {
@@ -63,10 +60,10 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     }
 
     @Override
-    public void update(BoardView boardView) throws RemoteException { //TODO add boardView as a parameter?
+    public void update(BoardView boardView, String arg) throws RemoteException {
         this.boardView = boardView;
         try {
-            view.update();
+            view.update(arg);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -97,9 +94,6 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
 
     //SETTER AND GETTER METHODS
-    @Override
-    public RemotePlayer getPlayer() { return null; } //TODO check if it is necessary
-
     @Override
     public BoardView getBoardView() { return this.boardView; }
 

@@ -121,15 +121,17 @@ public class TextualUI implements ViewInterface {
                         currentPlayer = p;
                     }
                 }
-                if (yourTurn(currentPlayer.getNickname())){
+                if (client.getNickname().equals(currentPlayer.getNickname())){
                     System.out.println("Your turn!");
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
+                    tileBuffer();
                     showGoals();
+                    showYourScore();
                     System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
-                    System.out.println("/add n  ---> to add a tile in the column \"n\" of your shelf");
-                    System.out.println("/remove row column   --->to remove the tile[row][column] from the board");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/add C" + RESET + "  ---> to add a tile in the column C of your shelf");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  --->to remove the tile[row][column] from the board");
                 }
                 else{
                     System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
@@ -153,11 +155,6 @@ public class TextualUI implements ViewInterface {
                 break;
         }
     }
-
-    private boolean yourTurn(String currPlayer) throws RemoteException {
-        return currPlayer.equals(client.getNickname());
-    }
-
     private void showYourScore() throws RemoteException {
         for(Player p: client.getBoardView().getListOfPlayer()) {
             if (p.getNickname().equals(client.getNickname()))
@@ -186,16 +183,16 @@ public class TextualUI implements ViewInterface {
                 for (int i = 0; i < 6; i++) {
                     for (int j = 0; j < 5; j++) {
                         if(i==0 && j==0){
-                            System.out.println("\t=======================");
+                            System.out.println("  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "=======================" + RESET);
                         }
                         if(j==0)
-                            System.out.print("\t" +i);
+                            System.out.print(i + " ");
                         Tile tile = p.getShelf().getTile(i, j);
                         if(j==0){
-                            System.out.print("||");
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"||" + RESET);
                         }
                         if (tile == (null)) {
-                            System.out.print("   |");
+                            System.out.print("   " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                         } else {
                             switch (tile.getType()) {
                                 case ONE:
@@ -228,10 +225,10 @@ public class TextualUI implements ViewInterface {
                                     System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "|");
                                     break;
                             }
-                        }if(j==4) System.out.print("|");
+                        }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
-                    System.out.println("\n\t++===+===+===+===+===++");
-                }System.out.println("\t   0   1   2   3   4   ");
+                    System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
+                }System.out.println("\t 0   1   2   3   4   ");
             }
         }
 
@@ -245,16 +242,16 @@ public class TextualUI implements ViewInterface {
                 for (int i = 0; i < 6; i++) {
                     for (int j = 0; j < 5; j++) {
                         if(i==0 && j==0){
-                            System.out.println("\t=======================");
+                            System.out.println("  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "=======================" + RESET);
                         }
                         if(j==0)
-                            System.out.print("\t" +i );
+                            System.out.print(i + " ");
                         Tile tile = player.getShelf().getTile(i, j);
                         if(j==0){
-                            System.out.print("||");
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"||" + RESET);
                         }
                         if (tile == (null)) {
-                            System.out.print("   |");
+                            System.out.print("   " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                         } else {
                             switch (tile.getType()) {
                                 case ONE:
@@ -287,9 +284,9 @@ public class TextualUI implements ViewInterface {
                                     System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "|");
                                     break;
                             }
-                        }if(j==4) System.out.print("|");
+                        }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
-                    System.out.println("\n\t++===+===+===+===+===++");
+                    System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
                 }System.out.println("\t   0   1   2   3   4   ");
             }
         }
@@ -304,7 +301,7 @@ public class TextualUI implements ViewInterface {
                     System.out.println("\t\t_____________________________________");
                 }
                 if(j==0)
-                    System.out.print("\t" +i + "\t");
+                    System.out.print("\t" + i + "\t");
                 Tile tile = client.getBoardView().getCell(i, j).getTile();
                 if(j==0){
                     System.out.print("|");
@@ -372,6 +369,54 @@ public class TextualUI implements ViewInterface {
     @Override
     public void addChatMessage(String tmp) {
 
+    }
+
+    public void tileBuffer(){
+        System.out.print(ConsoleColors.BLUE_UNDERLINED + "TILE BUFFER:" + RESET + "\t\t");
+        String tType = null;
+        if(client.getBoardView().getTileBuffer().size() == 0){
+            System.out.println("empty");
+        } else {
+            for (int i = 0; i < client.getBoardView().getTileBuffer().size(); i++) {
+                Tile tile = client.getBoardView().getTileBuffer().get(i);
+                if (tile == (null)) {
+                    System.out.print(" - ");
+                } else {
+                    switch (tile.getType()) {
+                        case ONE:
+                            tType = " 1 ";
+                            break;
+                        case TWO:
+                            tType = " 2 ";
+                            break;
+                        case THREE:
+                            tType = " 3 ";
+                            break;
+                    }
+                    switch (tile.getColor()) {
+                        case WHITE:
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.WHITE_BACKGROUND + tType + RESET + "\t");
+                            break;
+                        case YELLOW:
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + "\t");
+                            break;
+                        case LIGHTBLUE:
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.CYAN_BACKGROUND +   tType + RESET + "\t");
+                            break;
+                        case GREEN:
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + "\t");
+                            break;
+                        case BLUE:
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.BLUE_BACKGROUND + tType + RESET + "\t");
+                            break;
+                        case PINK:
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "\t");
+                            break;
+                    }
+                }
+            }
+            System.out.println();
+        }
     }
 
 }

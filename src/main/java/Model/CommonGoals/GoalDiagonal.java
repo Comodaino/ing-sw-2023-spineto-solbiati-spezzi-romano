@@ -43,4 +43,8 @@ public class GoalDiagonal extends CommonGoal{
         }
         return 0;
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 }

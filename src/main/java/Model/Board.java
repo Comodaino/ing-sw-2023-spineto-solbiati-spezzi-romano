@@ -79,8 +79,13 @@ public class Board implements Serializable {
         setOfCommonGoal = new HashSet<CommonGoal>();
         Random rand = new Random();
         setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
-        if(fm) setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
-
+        if(fm) {
+            CommonGoal tmpGoal;
+            do {
+                tmpGoal = goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size());
+            }while(!setOfCommonGoal.contains(tmpGoal));
+            setOfCommonGoal.add(tmpGoal);
+        }
         this.boardView = new BoardView(this);
     }
 
@@ -140,8 +145,6 @@ public class Board implements Serializable {
             }
         }
     }
-
-    public void addPlayer(Player player){ listOfPlayer.add(player); }
 
     public Tile getTile(int r, int c){
         return matrix[r][c].getTile();

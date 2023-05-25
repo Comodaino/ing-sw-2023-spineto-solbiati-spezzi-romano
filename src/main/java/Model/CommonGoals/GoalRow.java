@@ -44,4 +44,9 @@ public class GoalRow extends CommonGoal{
         }
         return 0;
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

@@ -27,6 +27,7 @@ public class GameController implements Serializable {
     private List<Player> donePlayers;
     private Lobby lobby;
 
+    private int numberOfRemove;
     public Board getBoard() {
         return gameBoard;
     }
@@ -76,6 +77,7 @@ public class GameController implements Serializable {
         this.gameBoard = new Board(firstMatch, pl);
         this.pl = pl;
         this.lobby = lobby;
+        this.numberOfRemove = 0;
         this.donePlayers = new ArrayList<Player>();
         this.boardView = new BoardView(gameBoard);
         for (Player player : pl) {
@@ -131,17 +133,14 @@ public class GameController implements Serializable {
      */
     private void playRemove(String[] input) {
         System.out.println("remove " + Arrays.toString(input));
-        gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
-        gameBoard.checkRecharge();
-        if (inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
-
+        if(numberOfRemove>=3){
+            System.out.println("Invalid Move");
+            return;
         }
-        try {
-            serverUpdater();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) &&  adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
+            gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
+            gameBoard.checkRecharge();
+            numberOfRemove += 1;
         }
     }
 
@@ -178,12 +177,11 @@ public class GameController implements Serializable {
     }
 
 
-
     public boolean adjacentFree(int r, int c) {
         if (gameBoard.getCell(r, c).isEmpty()) return false;
         if (r == 0 || c == 0) return true;
         if (r == 8 || c == 8) return true;
-        return (gameBoard.getCell(r + 1, c).isEmpty() || gameBoard.getCell(r, c + 1).isEmpty()) || (gameBoard.getCell(r + 1, c).isEmpty() || gameBoard.getCell(r, c + 1).isEmpty());
+        return (gameBoard.getCell(r + 1, c).isEmpty() || gameBoard.getCell(r, c + 1).isEmpty()) || (gameBoard.getCell(r - 1, c).isEmpty() || gameBoard.getCell(r, c - 1).isEmpty());
     }
 
     public boolean inLine(int r, int c) {
@@ -204,15 +202,15 @@ public class GameController implements Serializable {
 
     public boolean columnAvaiable(int c, int size) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
-            if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
+            if (gameBoard.getListOfPlayer().get(i).getNickname().equals(currentPlayer.getNickname())) {
                 return !gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
             }
         }
         return false;
     }
 
-    private void checkEnd(){
-        if(donePlayers.size() == gameBoard.getListOfPlayer().size()){
+    private void checkEnd() {
+        if (donePlayers.size() == gameBoard.getListOfPlayer().size()) {
             lobby.endMatch();
         }
     }

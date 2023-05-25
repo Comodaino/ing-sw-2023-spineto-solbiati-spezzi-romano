@@ -115,7 +115,7 @@ public class ClientAppSocket implements AbstractClient {
                             break;
                         case "/end":
                             state = States.END;
-                            view.setState(State.LOBBY);
+                            view.setState(State.END);
                             view.update();
                             break;
                         case "/close":
@@ -179,4 +179,5 @@ public class ClientAppSocket implements AbstractClient {
     public RemotePlayer getPlayer(){
         return null;
     }
+
 }

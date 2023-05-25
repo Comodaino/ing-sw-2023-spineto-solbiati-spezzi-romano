@@ -86,7 +86,6 @@ public class Board implements Serializable {
             }while(!setOfCommonGoal.contains(tmpGoal));
             setOfCommonGoal.add(tmpGoal);
         }
-
         this.boardView = new BoardView(this);
     }
 

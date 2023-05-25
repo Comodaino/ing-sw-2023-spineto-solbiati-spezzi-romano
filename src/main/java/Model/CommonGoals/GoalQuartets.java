@@ -84,4 +84,8 @@ public class GoalQuartets extends CommonGoal{
             }
         }
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 }

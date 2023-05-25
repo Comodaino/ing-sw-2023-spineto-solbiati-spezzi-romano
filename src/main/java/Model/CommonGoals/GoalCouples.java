@@ -71,4 +71,8 @@ public class GoalCouples extends CommonGoal{
             }
         }
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 }

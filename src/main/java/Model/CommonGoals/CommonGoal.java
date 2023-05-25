@@ -66,5 +66,5 @@ public abstract class CommonGoal extends Goal implements Serializable {
         return 0;
     }
 
-    public String getName() { return name; }
+    public String getName() { return this.name; }
 }

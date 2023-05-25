@@ -53,9 +53,8 @@ public class ClientAppSocket implements AbstractClient {
         in = new Scanner(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         String input = (String) objIn.readObject();
-        if (input.equals("start")) System.out.println("Client starting");
+        if (input.equals("ready")) System.out.println("Client starting");
 
-        inputHandler();
 
         if (typeOfView.equals("TUI")) {
             System.out.println("creating TUI");
@@ -106,7 +105,7 @@ public class ClientAppSocket implements AbstractClient {
                                 this.nickname = tmpNickname;
                                 System.out.println("Set nickname: " + nickname);
                             }
-                            state = States.WAIT_SETTING;
+                            state = States.WAIT;
                             view.setClient(this);
                             view.setState(State.LOBBY);
                             view.update();

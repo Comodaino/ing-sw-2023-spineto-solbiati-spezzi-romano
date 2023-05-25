@@ -42,21 +42,19 @@ public class ServerApp {
 
         try {
             server.startServer();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void startServer() throws IOException {
+    public void startServer() throws IOException, InterruptedException {
         openLobby = new Lobby(this);
         openLobby.setID(1);
         lobbies.add(openLobby);
         socketAccepter();
     }
 
-    public void socketAccepter() throws IOException {
+    public void socketAccepter() throws IOException, InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
 

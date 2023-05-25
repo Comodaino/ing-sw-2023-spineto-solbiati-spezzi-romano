@@ -1,11 +1,8 @@
 package Distributed.ClientSocket;
 
 import Distributed.AbstractClient;
-import Distributed.RemotePlayer;
-import Distributed.ServerSocket.SocketPlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.GUIclass;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -29,20 +26,18 @@ public class ClientAppSocket implements AbstractClient {
     private States state;
     private ObjectInputStream objIn;
     private ViewInterface view;
-    private SocketPlayer player;
     private String tmpNickname;
     private String nickname;
 
     public ClientAppSocket(int port, String typeOfView) throws IOException {
         this.port = port;
         this.tmpNickname = null;
-        this.player = null;
         this.nickname = null;
         this.owner = false;
         if (typeOfView.equals("TUI")) {
             System.out.println("creating TUI");
             this.view = new TextualUI(this);
-        } else this.view = new GUIclass();
+        } //else this.view = new GUIclass();
         state = States.INIT;
     }
 
@@ -159,16 +154,13 @@ public class ClientAppSocket implements AbstractClient {
         out.flush();
     }
 
-    @Override
-    public RemotePlayer getPlayer() {
-        return this.player;
-    }
 
     @Override
     public BoardView getBoardView() {
         return boardView;
     }
 
+    @Override
     public String getNickname() {
         return nickname;
     }

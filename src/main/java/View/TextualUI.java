@@ -35,9 +35,10 @@ public class TextualUI implements ViewInterface {
     }
 
     public void inputHandler() throws IOException {
-        String command = input.nextLine();
-        client.println(command);
 
+        while(state!=State.CLOSE){
+            client.println(input.nextLine());
+        }
     }
 
     @Override
@@ -62,7 +63,6 @@ public class TextualUI implements ViewInterface {
                         System.out.println("/start to start the game");
                         System.out.println("/firstMatch if this is your first match\nOR");
                         System.out.println("/notFirstMatch if you have already played");
-                        inputHandler();
                     } else System.out.println("wait for the owner to start the game");
                     break;
                 case PLAY:
@@ -74,8 +74,7 @@ public class TextualUI implements ViewInterface {
                     System.out.println("Commands you can use:");
                     System.out.println("/add column  -- add tile in the column of your shelf");
                     System.out.println("/remove row column   -- remove tile[row][column] from the board");
-                    inputHandler();
-                    if (client.getPlayer() != null) System.out.println("your score:\t" + client.getPlayer().getModelPlayer().getScore());
+                    //if (client.getPlayer() != null) System.out.println("your score:\t" + client.getPlayer().getModelPlayer().getScore());
                     break;
                 case END:
                     String winner = client.getBoardView().getWinner().getNickname();
@@ -110,7 +109,6 @@ public class TextualUI implements ViewInterface {
                     System.out.println("/start to start the game");
                     System.out.println("/firstMatch if this is your first match\nOR");
                     System.out.println("/notFirstMatch if you have already played");
-                    inputHandler();
                 } else System.out.println("wait for the owner to start the game");
                 break;
             case PLAY:
@@ -122,7 +120,6 @@ public class TextualUI implements ViewInterface {
                 System.out.println("Commands you can use:");
                 System.out.println("/add column  -- add tile in the column of your shelf");
                 System.out.println("/remove row column   -- remove tile[row][column] from the board");
-                inputHandler();
                 for(Player p: client.getBoardView().getListOfPlayer()) {
                     if (p.getNickname().equals(client.getNickname()))
                         System.out.println("your score:\t" + p.getScore());
@@ -329,10 +326,8 @@ public class TextualUI implements ViewInterface {
     public void homePrint(String arg) throws IOException {
         if (arg != null && arg.equals("/nickname")) {
             System.out.println("nickname already used, please insert another nickname:  ");
-            inputHandler();
         } else {
             System.out.println("insert your nickname:  ");
-            inputHandler();
         }
 
     }

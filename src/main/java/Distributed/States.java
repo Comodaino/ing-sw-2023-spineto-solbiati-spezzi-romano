@@ -5,8 +5,7 @@ import java.io.Serializable;
 public enum States implements Serializable {
     INIT,
     PLAY,
-    WAIT_SETTING,
-    WAIT_TURN,
+    WAIT,
     END,
     CLOSE,
     ERRORClientAppSocket

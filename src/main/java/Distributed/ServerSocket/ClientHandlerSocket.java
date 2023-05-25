@@ -103,7 +103,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         if (nicknameChecker(input)) {
             System.out.println("Nickname is available");
             player.setNickname(input);
-            player.setState(WAIT_SETTING);
+            player.setState(WAIT);
             if (player.isOwner()) outSocket("/wait owner");
             else outSocket("/wait");
         } else {
@@ -157,7 +157,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        player.setState(WAIT_SETTING);
+        player.setState(WAIT);
     }
 
     public void inputHandler() throws IOException, InterruptedException {
@@ -169,7 +169,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 lobby.sendMessage(input);
             } else if (input.charAt(0) == '/') {
                 switch (player.getState()) {
-                    case WAIT_SETTING:
+                    case WAIT:
                         waitCommand(input);
                         break;
                     case PLAY:
@@ -194,7 +194,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             case INIT:
                 outSocket("/init");
                 break;
-            case WAIT_SETTING:
+            case WAIT:
                 System.out.println("WAIT");
                 outSocket("/wait");
                 break;

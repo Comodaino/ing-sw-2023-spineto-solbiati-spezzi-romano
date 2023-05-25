@@ -204,7 +204,7 @@ public class GameController implements Serializable {
     public boolean columnAvaiable(int c, int size) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
-                return !gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(6 - size, c);
+                return !gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
             }
         }
         return false;

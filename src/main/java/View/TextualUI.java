@@ -180,9 +180,9 @@ public class TextualUI implements ViewInterface {
             if (!p.getNickname().equals(client.getNickname())) {
                 System.out.println(p.getNickname() + " SHELF:");
                 String tType = null;
-                for (int i = 0; i < 6; i++) {
+                for (int i = 5; i >=0; i--) {
                     for (int j = 0; j < 5; j++) {
-                        if(i==0 && j==0){
+                        if(i==5 && j==0){
                             System.out.println("  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "=======================" + RESET);
                         }
                         if(j==0)
@@ -239,9 +239,9 @@ public class TextualUI implements ViewInterface {
             if (player.getNickname().equals(client.getNickname())) {
                 System.out.println("YOUR SHELF:");
                 String tType = null;
-                for (int i = 0; i < 6; i++) {
+                for (int i = 5; i >=0; i--) {
                     for (int j = 0; j < 5; j++) {
-                        if(i==0 && j==0){
+                        if(i==5 && j==0){
                             System.out.println("  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "=======================" + RESET);
                         }
                         if(j==0)
@@ -287,7 +287,7 @@ public class TextualUI implements ViewInterface {
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
                     System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
-                }System.out.println("\t   0   1   2   3   4   ");
+                }System.out.println("\t 0   1   2   3   4   ");
             }
         }
     }

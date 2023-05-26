@@ -1,15 +1,5 @@
 package View;
 
-import Distributed.AbstractClient;
-import Distributed.RemotePlayer;
-import Model.BoardView;
-import Model.CellType;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
-import java.io.IOException;
 /*
 public class GUIclass extends JFrame implements ViewInterface{
     private RemotePlayer player;
@@ -40,7 +30,8 @@ public class GUIclass extends JFrame implements ViewInterface{
         TitledBorder titledBorder1 = BorderFactory.createTitledBorder(border1, "The Board");
         board.setBorder(titledBorder1);
         board.setPreferredSize(new Dimension(750,750));
-
+1.2
+Sono tutti al sicuro?
         JPanel tilePanel = new JPanel(new GridLayout(9,9));
         tilePanel.setOpaque(false);
         tilePanel.setPreferredSize(new Dimension(750,750));

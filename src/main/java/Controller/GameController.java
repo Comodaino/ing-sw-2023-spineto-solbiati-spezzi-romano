@@ -28,6 +28,7 @@ public class GameController implements Serializable {
     private Lobby lobby;
 
     private int numberOfRemove;
+
     public Board getBoard() {
         return gameBoard;
     }
@@ -133,11 +134,11 @@ public class GameController implements Serializable {
      */
     private void playRemove(String[] input) {
         System.out.println("remove " + Arrays.toString(input));
-        if(numberOfRemove>=3){
+        if (numberOfRemove >= 3) {
             System.out.println("Invalid Move");
             return;
         }
-        if (inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) &&  adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
+        if (inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
             gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
             gameBoard.checkRecharge();
             numberOfRemove += 1;
@@ -152,7 +153,7 @@ public class GameController implements Serializable {
      */
     private void playAdd(String[] input) {
         System.out.println("add");
-        if (columnAvaiable(gameBoard.getTileBuffer().size(), input[1].charAt(0) - 48)) {
+        if (columnAvaiable(input[1].charAt(0) - 48, gameBoard.getTileBuffer().size())) {
             for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
                 if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                     while (gameBoard.getTileBuffer().size() > 0) {
@@ -203,7 +204,7 @@ public class GameController implements Serializable {
     public boolean columnAvaiable(int c, int size) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).getNickname().equals(currentPlayer.getNickname())) {
-                return !gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
+                return gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
             }
         }
         return false;

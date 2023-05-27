@@ -8,7 +8,7 @@ public class SheldPanel extends JPanel {
     public SheldPanel(){
         super();
         setOpaque(false);
-        backgroundImage = new ImageIcon("View/resources/sfondo parquet.jpg");
+        backgroundImage = new ImageIcon("View/images/sfondoparquet.jpg");
     }
     @Override
     protected void paintComponent(Graphics g){

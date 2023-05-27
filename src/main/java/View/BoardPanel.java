@@ -1,20 +1,26 @@
 package View;
 
+import javafx.geometry.Insets;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+
 import javax.swing.*;
+import javax.swing.text.Element;
+import javax.swing.text.html.ImageView;
 import java.awt.*;
 
-public class BoardPanel extends JPanel  {
-    private ImageIcon imageBoard;
+public class BoardPanel extends StackPane {
+    private ImageView imageView;
 
-    public BoardPanel(){
+    public BoardPanel() {
         super();
-        setOpaque(false);
-        imageBoard = new ImageIcon("View/resources/livingroom.png");
+        getStyleClass().add("board-panel");
+        setOpaqueInsets(new Insets(0));
+
+        Image imageBoard = new Image("images/boards/livingroom.png");
+        BackgroundImage backgroundImage = new BackgroundImage(imageBoard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+
 
     }
-    @Override
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);
-        g.drawImage(imageBoard.getImage(),0,0,getWidth(),getHeight(),this);
-    }
+
 }

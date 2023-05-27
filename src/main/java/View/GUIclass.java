@@ -1,4 +1,4 @@
-package View;
+/*package View;
 
 import Distributed.AbstractClient;
 import Distributed.ClientSocket.ClientAppSocket;
@@ -14,10 +14,10 @@ public class GUIclass extends JFrame implements ViewInterface{
     private RemotePlayer player;
     private AbstractClient client;
     private State state;
-    private boolean chair;
+
     public static void main (String[] args) throws IOException, InterruptedException {
         ClientAppSocket client= new ClientAppSocket(25565,"GUI");
-        client.Connect();
+        client.connect();
         play(client);
     }
     public static void play(AbstractClient client) {
@@ -64,7 +64,7 @@ public class GUIclass extends JFrame implements ViewInterface{
         tilePanel.add(tileCat1);
 
 
- */
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new OverlayLayout(mainPanel));
         mainPanel.add(board);
@@ -84,15 +84,15 @@ public class GUIclass extends JFrame implements ViewInterface{
         TitledBorder titledBorder2 = BorderFactory.createTitledBorder(border2, "MyShelf");
         shelf.setBorder(titledBorder2);
 
-        ImageIcon imageShelf = new ImageIcon("View/resources/boards/bookshelf.png");
+        ImageIcon imageShelf = new ImageIcon("View/images/boards/bookshelf.png");
         imageShelf.setImage(imageShelf.getImage().getScaledInstance(500,500,30));
 
         JLabel imageOfShelf = new JLabel(imageShelf);
 
         shelf.add(imageOfShelf, BorderLayout.NORTH);
 
-        if(client.getPlayer().getModelPlayer().getChair() == true){
-            ImageIcon imageChair = new ImageIcon("View/resources/misc/firstplayertoken.png");
+        if(client.getPlayer().getModelPlayer().getChair()){
+            ImageIcon imageChair = new ImageIcon("View/images/misc/firstplayertoken.png");
             JLabel chairImage = new JLabel(imageChair);
             shelf.add(chairImage,BorderLayout.WEST);
             imageChair.setImage(imageChair.getImage().getScaledInstance(100,100,100));
@@ -157,7 +157,6 @@ public class GUIclass extends JFrame implements ViewInterface{
         this.player= player;
         this.client = client;
         this.state = state;
-        this.chair = chair;
 
     }
     public void update(String arg){
@@ -184,3 +183,4 @@ public class GUIclass extends JFrame implements ViewInterface{
         this.state=state;
     }
 }
+        */

@@ -105,6 +105,12 @@ public class GameController implements Serializable {
                     playAdd(input);
                     serverUpdater();
                     break;
+                case "/end":
+                    playEndGame();
+                    serverUpdater();
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -113,6 +119,7 @@ public class GameController implements Serializable {
      * Ends the game for a single player and makes him wait for the other players to finish
      */
     private void playEndGame() {
+        System.out.println("ENDING THE GAME");
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
@@ -120,6 +127,9 @@ public class GameController implements Serializable {
                 donePlayers.add(currentPlayer);
                 gameBoard.addToDone(currentPlayer);
                 currentPlayer.setAsEnded();
+                if(gameBoard.getDonePlayers().size() == gameBoard.getListOfPlayer().size()){
+                    lobby.endMatch();
+                }
             }
         }
     }

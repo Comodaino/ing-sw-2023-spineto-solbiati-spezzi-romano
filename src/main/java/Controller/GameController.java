@@ -240,6 +240,6 @@ public class GameController implements Serializable {
 
 /* possible commands:
  *  /add playerName column
- *  /remove playerName row column
+ *  /remove playerName row column (can repeat row column maximum 3 times)
  *
  * */

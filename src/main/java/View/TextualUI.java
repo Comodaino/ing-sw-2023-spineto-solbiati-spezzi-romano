@@ -363,7 +363,6 @@ public class TextualUI implements ViewInterface {
     @Override
     public void setClient(AbstractClient client) {
         this.client = client;
-       // this.player = client.getPlayer();
     }
 
     @Override

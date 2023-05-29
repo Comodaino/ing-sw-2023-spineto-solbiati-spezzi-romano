@@ -58,18 +58,26 @@ public class GUIApp extends Application implements ViewInterface{
 
 
     public void play(AbstractClient client,Stage primaryStage) throws RemoteException {
-        BorderPane mainPane = new BorderPane();
+        GridPane mainPane = new GridPane();
         Scene scene = new Scene(mainPane);
         primaryStage.setScene(scene);
 
-        Pane shelfPane = createShelf(client);
+        Image imageBackgroungShelf = new Image("images/misc/sfondoparquet.jpg");
+        ImageView imageViewShelf = new ImageView(imageBackgroungShelf);
+        BoxBlur blur = new BoxBlur(3, 3, 3);
+        imageViewShelf.setEffect(blur);
 
-        SplitPane splitPane = new SplitPane();
-        Pane boardPane = createBoard(client,splitPane);
-        splitPane.getItems().addAll(boardPane,shelfPane);
-        splitPane.setDividerPosition(0, 0.5);
-        splitPane.setOrientation(Orientation.HORIZONTAL);
-        mainPane.setCenter(splitPane);
+        imageViewShelf.setPreserveRatio(true);
+        imageViewShelf.fitWidthProperty().bind(mainPane.widthProperty());
+        imageViewShelf.fitHeightProperty().bind(mainPane.heightProperty());
+        mainPane.setBackground(new Background(new BackgroundImage(imageBackgroungShelf, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+
+        Pane commongoal = getCommonGoal(client);
+        mainPane.add(commongoal, 0, 1);
+
+
+       mainPane.add(createShelf(client,mainPane), 1, 0);
+       mainPane.add(createBoard(client), 0, 0);
 
         primaryStage.setTitle("Play");
         primaryStage.setOnCloseRequest(e -> {
@@ -77,59 +85,64 @@ public class GUIApp extends Application implements ViewInterface{
         });
         primaryStage.show();
     }
-    public Pane createBoard(AbstractClient client,SplitPane splitPane){
+    public Pane createBoard(AbstractClient client){
         Pane boardPane = new Pane();
 
         Image imageBoard = new Image("images/boards/livingroom.png");
         ImageView imageView = new ImageView(imageBoard);
 
         imageView.setPreserveRatio(true);
-        imageView.fitWidthProperty().bind(boardPane.widthProperty());
-        imageView.fitHeightProperty().bind(boardPane.heightProperty());
+        imageView.setFitHeight(700);
+        imageView.setFitWidth(700);
 
         boardPane.getChildren().addAll(imageView);
-
-        boardPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-            double splitPaneWidth = newValue.doubleValue();
-            double boardPaneWidth = splitPaneWidth / 2;
-            boardPane.setPrefWidth(boardPaneWidth);
-        });
-
         return boardPane;
     }
-    public Pane createShelf(AbstractClient client) throws RemoteException {
+    public Pane getCommonGoal(AbstractClient client){
+        Pane commonGoalPane = new Pane();
+        Constant commonGoal = new Constant();
+        Image imageCommonGoal1 = new Image("images/common goal cards/1.jpg");
+        ImageView imageView = new ImageView(imageCommonGoal1);
+
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(150);
+        imageView.setFitWidth(150);
+
+        commonGoalPane.getChildren().addAll(imageView);
+        return commonGoalPane;
+    }
+    public Pane createShelf(AbstractClient client, GridPane mainPane) throws RemoteException {
+
+
         Pane shelfPane = new Pane();
 
-        shelfPane.setPadding(new Insets(10, 10, 10, 10));
-        BorderPane shelfBorderPane = new BorderPane();
-        shelfBorderPane.setPrefSize(300,750);
-        shelfBorderPane.getStyleClass().add("shelf-pane");
         Image imageShelf = new Image("images/boards/bookshelf.png");
         ImageView shelfImageView = new ImageView(imageShelf);
         shelfImageView.setFitWidth(300);
+        shelfImageView.setFitHeight(300);
+        mainPane.add(shelfImageView, 1, 0);
 
         shelfImageView.setPreserveRatio(true);
-        shelfBorderPane.setTop(shelfImageView);
-        VBox vbox = new VBox();
-        vbox.setSpacing(10);
-        vbox.setStyle("-fx-padding: 10px;");
 
-        if (true) {
+
+       // if (true) {
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
             chairImageView.setFitWidth(100);
+            chairImageView.setFitHeight(100);
             chairImageView.setPreserveRatio(true);
-            vbox.getChildren().add(chairImageView);
-        }
+            mainPane.add(chairImageView, 1, 1);
+       //  }
 
         Image personalGoalImage = createPersonalGoal(client);
         ImageView personalGoalImageView = new ImageView(personalGoalImage);
         personalGoalImageView.setFitWidth(150);
+        personalGoalImageView.setFitHeight(150);
         personalGoalImageView.setPreserveRatio(true);
-        vbox.getChildren().add(personalGoalImageView);
+           mainPane.add(personalGoalImageView, 2, 1);
 
-        shelfBorderPane.setRight(vbox);
-        shelfPane.getChildren().add(shelfBorderPane);
+
+        shelfPane.getChildren().addAll();
         return shelfPane;
     }
 

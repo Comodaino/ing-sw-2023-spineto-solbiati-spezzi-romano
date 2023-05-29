@@ -38,7 +38,7 @@ class PersonalGoalTest {
     public void testGetScorePlayerIs1(){
         Shelf  playerShelf = new Shelf();
         PersonalGoal personalGoal = new PersonalGoal(playerShelf);
-        Player player= new Player("Paolo",false, null);
+        Player player= new Player("Paolo",false);
         Tile t1 = new Tile(Color.GREEN);
         playerShelf.addTile(0,t1);
         personalGoal.getPersGoal(1);
@@ -97,7 +97,7 @@ class PersonalGoalTest {
     public void testGetScoreShelAndPlayerfIs2() {
         Shelf  playerShelf = new Shelf();
         PersonalGoal personalGoal = new PersonalGoal(playerShelf);
-        Player player= new Player("Paolo",false, null);
+        Player player= new Player("Paolo",false);
         Tile t1 = new Tile(Color.LIGHTBLUE);
         playerShelf.addTile(1,t1);
         player.getShelf().addTile(1,t1);
@@ -119,7 +119,7 @@ class PersonalGoalTest {
     public void testGetScoreShelAndPlayerfIs12() throws FileNotFoundException {
         Shelf  playerShelf = new Shelf();
         PersonalGoal personalGoal = new PersonalGoal(playerShelf);
-        Player player= new Player("ALE",false, null);
+        Player player= new Player("ALE",false);
         File personalGoalTest= new File("src/test/java/Model/Test_confs/PersonalGoalTest_conf");
         Scanner reader = new Scanner(personalGoalTest);
         String pg = reader.nextLine();

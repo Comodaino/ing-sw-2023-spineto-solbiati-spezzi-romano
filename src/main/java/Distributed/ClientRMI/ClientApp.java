@@ -73,7 +73,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         this.server = (Server) Naming.lookup("rmi://" + serverHost + "/Server"); // take a reference of the server from the registry
     }
 
-    public static void main(String args[]) {
+    public static void execute() {
         System.out.println("Choose type of view:");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();

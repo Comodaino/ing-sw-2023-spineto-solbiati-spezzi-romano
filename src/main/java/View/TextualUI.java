@@ -143,7 +143,8 @@ public class TextualUI implements ViewInterface {
                 }
               break;
             case END:
-                String winner = client.getBoardView().getWinner().getNickname();
+                String winner = null;
+                if(client.getBoardView().getWinner()!=null) winner = client.getBoardView().getWinner().getNickname();
                 System.out.println("SCORES:");
                 for (Player p : client.getBoardView().getListOfPlayer()) {
                     System.out.println(p.getNickname() + "\t---->\t" + p.getScore());

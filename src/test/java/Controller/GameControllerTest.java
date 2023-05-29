@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -13,13 +14,12 @@ import java.util.Scanner;
 
 class GameControllerTest extends Observable{
     @Test
-    public void inputTestTwo() throws FileNotFoundException {
+    public void inputTestTwo() throws IOException {
         List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true, null));
-        playerList.add(new Player("player2", false, null));
-        GameController testController = new GameController(playerList, false);
+        playerList.add(new Player("player1", true));
+        playerList.add(new Player("player2", false));
+        GameController testController = new GameController(playerList, false, null);
         Board gameBoard = testController.getBoard();
-        this.addObserver(testController);
         File commands = new File("src/test/java/Controller/controllerTestConf2");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
@@ -30,14 +30,13 @@ class GameControllerTest extends Observable{
         }
     }
     @Test
-    public void inputTestThree() throws FileNotFoundException {
+    public void inputTestThree() throws IOException {
         List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", false, null));
-        playerList.add(new Player("player2", true, null));
-        playerList.add(new Player("player3", false, null));
-        GameController testController = new GameController(playerList, false);
+        playerList.add(new Player("player1", false));
+        playerList.add(new Player("player2", true));
+        playerList.add(new Player("player3", false));
+        GameController testController = new GameController(playerList, false, null);
         Board gameBoard = testController.getBoard();
-        this.addObserver(testController);
         File commands = new File("src/test/java/Controller/controllerTestConf2");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){

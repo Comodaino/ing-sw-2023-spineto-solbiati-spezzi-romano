@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EndGoalTest {
     @Test
     void TestGetSCore(){
-        Player player = new Player("Ale",false, null);
+        Player player = new Player("Ale",false);
         EndGoal endGoal = new EndGoal();
         endGoal.getStatus();
         Shelf playerShelf = new Shelf();
@@ -26,7 +26,7 @@ class EndGoalTest {
     }
     @Test
     void TestGetScoreIs1() throws FileNotFoundException {
-        Player player = new Player("Ale",false, null);
+        Player player = new Player("Ale",false);
         EndGoal endGoal = new EndGoal();
         Shelf shelf = new Shelf();
 

@@ -1,9 +1,12 @@
 package Distributed;
 
 import Controller.GameController;
+import Distributed.ServerRMI.Server;
 import Model.BoardView;
 import Model.Player;
 
+import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +19,9 @@ public class Lobby {
     private BoardView boardView;
     private GameController controller;
     private ServerApp serverApp;
-    public Lobby(ServerApp serverApp){
+    private Server server; //TODO delete after unification of ServerImpl and ServerApp
+
+    public Lobby(ServerApp serverApp) {
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.ID = null;
@@ -24,22 +29,84 @@ public class Lobby {
         this.open = true;
     }
 
-    public void addPlayer(RemotePlayer p){
-        if(open){
-            if(lp.isEmpty()){
+    public Lobby(Server server) { //TODO delete after unification of ServerImpl and ServerApp
+        this.lp = new ArrayList<RemotePlayer>();
+        this.firstMatch = false;
+        this.ID = null;
+        this.server = server;
+        this.open = true;
+    }
+
+    public void addPlayer(RemotePlayer p) {
+        if (open) {
+            if (lp.isEmpty()) {
                 p.setOwner(); //the first player to join the lobby become the owner
             }
             lp.add(p);
-            if(lp.size()==4) this.open = false;
+            if (lp.size() == 4) this.open = false;
         }
     }
 
     public boolean closeLobby() {
-        if(lp.size()>=2){
+        if (lp.size() >= 2) {
             this.open = false;
             return true; //lobby closed
         }
         return false; //lobby not closed
+    }
+
+
+    public void startGame() throws RemoteException {
+        List<Player> modelPlayerList = new ArrayList<Player>();
+        for(RemotePlayer p : lp) {
+            Player tmpPlayer = new Player(p.getNickname(), p.isOwner());
+            modelPlayerList.add(tmpPlayer);
+            p.setModelPlayer(tmpPlayer);
+            p.setState(States.PLAY);
+        }
+        try {
+            controller = new GameController(modelPlayerList, firstMatch, this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for(RemotePlayer p : lp) {
+            p.setController(controller);
+            p.setState(States.PLAY);
+            if(p.getConnectionType().equals(ConnectionType.RMI)){
+                p.getClient().setState(States.PLAY);
+            }
+        }
+        boardView = controller.getBoardView();
+        this.open = false;
+    }
+
+    public void endMatch() {
+        for (RemotePlayer p : lp) {
+            p.setState(States.END);
+            p.endMatch();
+        }
+    }
+
+    public void close() {
+        for (RemotePlayer p : lp) {
+            p.setState(States.CLOSE);
+        }
+        serverApp.removeLobby(this);
+    }
+
+
+    public void sendMessage(String message) throws IOException, InterruptedException {
+        System.out.println("sending: " + message);
+        for (RemotePlayer p : lp) {
+            p.message(message);
+        }
+        updateAll();
+    }
+
+    public void updateAll() throws IOException, InterruptedException {
+        for (RemotePlayer p : lp) {
+            p.update(boardView);
+        }
     }
 
     public void setFirstMatch(boolean firstMatch) {
@@ -57,44 +124,19 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
-    public void startGame(){
-        List<Player> modelPlayerList = new ArrayList<Player>();
-        //TODO NEED TO DECIDE BETWEEN TWO CONTROLLERS OR ONE
-        for(RemotePlayer p: lp){
-            Player tmpPlayer = new Player(p.getNickname(),p.isOwner(), p);
-            modelPlayerList.add(tmpPlayer);
-            p.setModelPlayer(tmpPlayer);
-            p.setState(States.PLAY);
-        }
-        controller = new GameController(modelPlayerList, firstMatch);
-        //TODO GameControllerRMI tmpControllerRMI = new GameControllerRMI(modelPlayerList, firstMatch);
-        for(RemotePlayer p: lp) {
-            if (p.getType().equals(ConnectionType.SOCKET))
-                p.setController(controller);
-            //TODO else p.getHandler().setGameController(tmpControllerRMI);
-        }
-        boardView = controller.getBoardView();
-    }
-    public void endMatch() {
-        for(RemotePlayer p: lp){
-            p.setState(States.END);
-        }
-    }
-    public void close() {
-        for(RemotePlayer p: lp){
-            p.setState(States.CLOSE);
-        }
-        serverApp.removeLobby(this);
-    }
-
     public BoardView getBoardView() {
         return boardView;
     }
-    public void setID(Integer i) { this.ID = i; }
-    public Integer getID() { return this.ID; }
-    public void sendMessage(RemotePlayer player, String message){
-        for(RemotePlayer p: lp){
-            //TODO IMPLEMENT
-        }
+
+    public void setID(Integer i) {
+        this.ID = i;
     }
+
+    public Integer getID() {
+        return this.ID;
+    }
+    public GameController getController() {
+        return controller;
+    }
+
 }

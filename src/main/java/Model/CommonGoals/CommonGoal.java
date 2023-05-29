@@ -2,6 +2,8 @@ package Model.CommonGoals;
 
 import Model.Goal;
 import Model.Player;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
  * It represents the 12 different common goal cards; for each game there are one or two CommonGoal cards.
  * @author Nicolò
  */
-public abstract class CommonGoal extends Goal {
+public abstract class CommonGoal extends Goal implements Serializable {
     protected List<Player> completed;
     protected int numOfPlayer;
     protected String name;
@@ -64,5 +66,5 @@ public abstract class CommonGoal extends Goal {
         return 0;
     }
 
-    public String getName() { return name; }
+    public String getName() { return this.name; }
 }

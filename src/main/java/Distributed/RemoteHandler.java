@@ -2,6 +2,8 @@ package Distributed;
 
 import Controller.GameController;
 
+import java.io.IOException;
+
 public abstract class RemoteHandler {
     protected Lobby lobby;
     protected States state;
@@ -33,7 +35,6 @@ public abstract class RemoteHandler {
         return type;
     }
     public void endCommand(){ state=States.WAIT; }
-    public void update(){
-        //TODO ADVERTISE THERE AS BEEN A CHANGE IN THE BOARDVIEW
-    }
+    public void update() throws IOException {}
+    public void message(String arg) {}
 }

@@ -1,10 +1,13 @@
 package Model;
+
+import java.io.Serializable;
+
 /**
  * EndGoal verify if a player is the first to finish a game
  * and if this is true, a point is awarded to the player
  * @author alessandra
  */
-public class EndGoal extends Goal{
+public class EndGoal extends Goal implements Serializable {
     private boolean status;
     public final int value=1;
 

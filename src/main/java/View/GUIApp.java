@@ -4,6 +4,8 @@ package View;
 import Distributed.AbstractClient;
 import Distributed.ClientSocket.ClientAppSocket;
 import Distributed.RemotePlayer;
+import Distributed.States;
+import Model.Player;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -21,6 +23,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 public class GUIApp extends Application implements ViewInterface{
     private RemotePlayer player;
@@ -32,36 +35,40 @@ public class GUIApp extends Application implements ViewInterface{
         launch(args);
     }
 
-    public void start(Stage primaryStage) {
-       /* try {
-            ClientAppSocket client = new ClientAppSocket(25565, "GUI");
-            client.connect();
-           // play(client, primaryStage);
-            home(primaryStage);
-        } catch (IOException | InterruptedException e) {
+    public void start(Stage primaryStage) throws RemoteException {
+      /*  try {
+            ClientAppSocket clientSocket = new ClientAppSocket(25565, "GUI");
+            clientSocket.connect();
+          //  setState(State.HOME);
+           // update(clientSocket.getNickname());
+        } catch (IOException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
 
+       */
 
-        */
+
+      //  home(primaryStage);
+        play(client,primaryStage);
         primaryStage.show();
     }
 
 
-    public void play(AbstractClient client,Stage primaryStage) {
+    public void play(AbstractClient client,Stage primaryStage) throws RemoteException {
         BorderPane mainPane = new BorderPane();
-        Scene scene = new Scene(mainPane, 1200, 800);
+        Scene scene = new Scene(mainPane);
         primaryStage.setScene(scene);
 
-        SplitPane splitPane = new SplitPane();
-        splitPane.setDividerPosition(0, 0.5);
-        splitPane.setOrientation(Orientation.HORIZONTAL);
-
-        Pane boardPane = createBoard(client);
         Pane shelfPane = createShelf(client);
 
-        splitPane.getItems().addAll(boardPane, shelfPane);
+        SplitPane splitPane = new SplitPane();
+        Pane boardPane = createBoard(client,splitPane);
+        splitPane.getItems().addAll(boardPane,shelfPane);
+        splitPane.setDividerPosition(0, 0.5);
+        splitPane.setOrientation(Orientation.HORIZONTAL);
         mainPane.setCenter(splitPane);
 
         primaryStage.setTitle("Play");
@@ -70,21 +77,27 @@ public class GUIApp extends Application implements ViewInterface{
         });
         primaryStage.show();
     }
-    public Pane createBoard(AbstractClient client){
+    public Pane createBoard(AbstractClient client,SplitPane splitPane){
         Pane boardPane = new Pane();
-        BorderPane boardBorderPane = new BorderPane();
-        Image imageBoard = new Image("images/boards/livingroom.png");
-        BackgroundImage backgroundImage = new BackgroundImage(imageBoard, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        boardBorderPane.setBackground(new Background(backgroundImage));
-        boardBorderPane.setPrefSize(750,750);
-        boardBorderPane.getStyleClass().add("board-pane");
 
-        client.getBoardView();
-        boardPane.getChildren().addAll(boardBorderPane);
+        Image imageBoard = new Image("images/boards/livingroom.png");
+        ImageView imageView = new ImageView(imageBoard);
+
+        imageView.setPreserveRatio(true);
+        imageView.fitWidthProperty().bind(boardPane.widthProperty());
+        imageView.fitHeightProperty().bind(boardPane.heightProperty());
+
+        boardPane.getChildren().addAll(imageView);
+
+        boardPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+            double splitPaneWidth = newValue.doubleValue();
+            double boardPaneWidth = splitPaneWidth / 2;
+            boardPane.setPrefWidth(boardPaneWidth);
+        });
 
         return boardPane;
     }
-    public Pane createShelf(AbstractClient client){
+    public Pane createShelf(AbstractClient client) throws RemoteException {
         Pane shelfPane = new Pane();
 
         shelfPane.setPadding(new Insets(10, 10, 10, 10));
@@ -95,14 +108,13 @@ public class GUIApp extends Application implements ViewInterface{
         ImageView shelfImageView = new ImageView(imageShelf);
         shelfImageView.setFitWidth(300);
 
-
         shelfImageView.setPreserveRatio(true);
         shelfBorderPane.setTop(shelfImageView);
         VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setStyle("-fx-padding: 10px;");
 
-        if (client.getPlayer().getModelPlayer().getChair()) {
+        if (true) {
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
             chairImageView.setFitWidth(100);
@@ -122,9 +134,10 @@ public class GUIApp extends Application implements ViewInterface{
     }
 
     public Image createPersonalGoal(AbstractClient client) {
-        RemotePlayer player1 = client.getPlayer();
+Player p = new Player("Ale",true);
+     //   Player p= client.getBoardView().getListOfPlayer().get(0);
         Constant c = new Constant();
-        int persGoal = player1.getModelPlayer().getGoal().CreatePersonalGoal();
+        int persGoal = p.getGoal().CreatePersonalGoal();
         String imagePath;
 
         switch (persGoal) {
@@ -179,16 +192,40 @@ public class GUIApp extends Application implements ViewInterface{
         imageView.fitWidthProperty().bind(stage.widthProperty());
         imageView.fitHeightProperty().bind(stage.heightProperty());
 
-        Label nickname = new Label("Inserisci il tuo nickname");
+        Label nickname = new Label("Enter your nickname");
         nickname.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
         TextField nicknameField = new TextField();
-        nicknameField.setPromptText("Inserisci il tuo nickname");
+        nicknameField.setPromptText("Enter your nickname");
         nicknameField.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
 
         Button button = new Button("Play");
         VBox contentBox = new VBox(10);
         contentBox.getChildren().addAll(nickname, nicknameField, button);
         contentBox.setStyle("-fx-alignment: center; -fx-padding: 100px; -fx-background-color: white; -fx-opacity: 0.5;");
+        final String[] nicknameString = new String[1];
+        String regex = "^[a-zA-Z0-9 ]+$";
+
+
+        button.setOnAction(e -> {
+            String inp = nicknameField.getText();
+            inp= inp.replace(" ", "");
+            if (inp.length() <= 10 && inp.length() > 0 && inp.matches(regex)){
+                nicknameString[0] = inp;
+                nickname.setText("Your nickname is: "+nicknameString[0]);
+                primaryStage.close();
+                setState(State.PLAY);
+                try {
+                    update(nicknameString[0]);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else {
+                nicknameField.clear();
+                nickname.setText("Error, retype your nickname");
+                nicknameField.setPromptText("Nickname too long or empty");
+            }
+        });
+
         contentBox.setTranslateY(360);
         contentBox.setTranslateX(500);
 
@@ -223,10 +260,26 @@ public class GUIApp extends Application implements ViewInterface{
         }
         }
 
-        @Override
+    @Override
+    public void update() throws IOException {
+
+    }
+
+
+    @Override
         public void setState(State state) {
             this.state = state;
         }
+
+    @Override
+    public void setClient(AbstractClient client) {
+
+    }
+
+    @Override
+    public void addChatMessage(String tmp) {
+
+    }
       /*  public GUIApp(AbstractClient client, RemotePlayer player, State state) {
         this.player = player;
         this.client = client;

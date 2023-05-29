@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author alessandra
  */
 public class Cell implements Serializable {
-    private CellType type;
+    private final CellType type;
     private Tile containedTile;
 
     /**

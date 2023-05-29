@@ -1,15 +1,16 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ServerSocket.ClientHandlerSocket;
+import Distributed.ClientRMI.Client;
+import Model.BoardView;
 import Model.Player;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.net.Socket;
 
 import static Distributed.States.INIT;
 
-public class RemotePlayer implements Serializable {
+public abstract class RemotePlayer implements Serializable {
     private Player modelPlayer;
     private ConnectionType type;
     private String nickname;
@@ -20,13 +21,10 @@ public class RemotePlayer implements Serializable {
     public RemotePlayer(ConnectionType type){
         this.type = type;
         this.owner = false;
-        modelPlayer = new Player("Nico", true, null);
+        modelPlayer = new Player("Nico", true);
         this.nickname = "Ale";
         this.state = INIT;
     }
-    public RemotePlayer(Socket socket, ClientHandlerSocket remoteHandler, ConnectionType type){
-    }
-
     public Player getModelPlayer() {
         return modelPlayer;
     }
@@ -34,6 +32,8 @@ public class RemotePlayer implements Serializable {
     public String getNickname() {
         return nickname;
     }
+
+    public ConnectionType getConnectionType() { return this.type; }
 
     public void setOwner() {
         owner = true;
@@ -50,7 +50,7 @@ public class RemotePlayer implements Serializable {
     public void setModelPlayer(Player modelPlayer) {
         this.modelPlayer = modelPlayer;
     }
-    public void update(){}
+    public void update(BoardView boardView) throws IOException, InterruptedException {}
     public void setState(States state) {
         this.state = state;
     }
@@ -70,4 +70,9 @@ public class RemotePlayer implements Serializable {
     public States getState() {
         return state;
     }
+
+    public void message(String arg) {}
+
+    public void endMatch() { }
+    public Client getClient() { return null; }
 }

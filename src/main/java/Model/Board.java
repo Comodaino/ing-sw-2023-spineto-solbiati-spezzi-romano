@@ -68,6 +68,9 @@ public class Board implements Serializable {
         this.donePlayers = new ArrayList<Player>();
         this.coordBuffer = new int[]{-1, -1, -1, -1, -1, -1};
         this.listOfPlayer = pl;
+        for(Player p: listOfPlayer){
+            System.out.println(":: " + p.getNickname());
+        }
         this.endGoal = new EndGoal();
         GoalFactory goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();
@@ -76,8 +79,13 @@ public class Board implements Serializable {
         setOfCommonGoal = new HashSet<CommonGoal>();
         Random rand = new Random();
         setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
-        if(fm) setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
-
+        if(fm) {
+            CommonGoal tmpGoal;
+            do {
+                tmpGoal = goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size());
+            }while(!setOfCommonGoal.contains(tmpGoal));
+            setOfCommonGoal.add(tmpGoal);
+        }
         this.boardView = new BoardView(this);
     }
 
@@ -137,8 +145,6 @@ public class Board implements Serializable {
             }
         }
     }
-
-    public void addPlayer(Player player){ listOfPlayer.add(player); }
 
     public Tile getTile(int r, int c){
         return matrix[r][c].getTile();

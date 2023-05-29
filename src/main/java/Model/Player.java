@@ -1,7 +1,5 @@
 package Model;
 
-import Distributed.RemotePlayer;
-
 import java.io.Serializable;
 
 /**
@@ -17,22 +15,21 @@ public class Player implements Serializable {
     private PersonalGoal myGoal;
     private int score;
     private NearGoal nearGoal;
-    private RemotePlayer remotePlayer;
+    private boolean ended;
 
-    public Player(String n, boolean c, RemotePlayer remotePlayer){
-        this.remotePlayer = remotePlayer;
+    public Player(String n, boolean c){
         this.score=0;
         this.chair = c;
         this.nickname = n;
         this.myShelf = new Shelf();
         this.myGoal = new PersonalGoal(this.myShelf);
         this.nearGoal = new NearGoal();
+        this.ended = false;
     }
 
     public String getNickname(){
         return this.nickname;
     }
-
     public boolean getChair(){
         return this.chair;
     }
@@ -63,7 +60,11 @@ public class Player implements Serializable {
         return this.nearGoal;
     }
 
-    public RemotePlayer getRemotePlayer() {
-        return remotePlayer;
+    public boolean isEnded() {
+        return ended;
+    }
+
+    public void setAsEnded() {
+        this.ended = true;
     }
 }

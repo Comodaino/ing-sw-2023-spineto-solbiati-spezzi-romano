@@ -1,17 +1,30 @@
 package Distributed.ServerRMI;
 
+import Distributed.ClientRMI.Client;
 import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
-import Model.Player;
+import Model.BoardView;
+
+import java.io.IOException;
 
 public class RMIPlayer extends RemotePlayer {
-    private int id;
-    private String nickname;
-    private Player modelPlayer;
-    public RMIPlayer(int id){
+    Client client;
+
+    public RMIPlayer(Client client){
         super(ConnectionType.RMI);
-        this.id = id;
-        this.modelPlayer=null;
-        this.nickname= null;
+        this.client = client;
     }
+
+    @Override
+    public void endMatch() {
+        super.endMatch();
+    }
+
+    @Override
+    public void update(BoardView boardView) throws IOException, InterruptedException {
+        client.update(boardView, "");
+    }
+
+    @Override
+    public Client getClient() { return this.client; }
 }

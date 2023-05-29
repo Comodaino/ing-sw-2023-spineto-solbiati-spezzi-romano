@@ -63,4 +63,8 @@ public class GoalSquares extends CommonGoal{
         }
         return counter + 1;
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 }

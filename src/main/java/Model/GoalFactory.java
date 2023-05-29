@@ -5,7 +5,6 @@ import Model.CommonGoals.*;
 import java.io.Serializable;
 
 public class GoalFactory implements Serializable {
-    private int i;
     public GoalFactory(){
     }
 

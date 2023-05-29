@@ -44,4 +44,8 @@ public class GoalColumn extends CommonGoal{
         }
         return 0;
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 }

@@ -1,9 +1,12 @@
 package Distributed.ServerSocket;
 
+import Distributed.ClientRMI.Client;
 import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
+import Model.BoardView;
 import Model.Player;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 
@@ -24,7 +27,14 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     public Socket getSocket() {
         return socket;
     }
-    public void update(){
-        handler.update();
+    public void update(BoardView boardView) throws IOException, InterruptedException {
+        handler.update(boardView);
+    }
+    public void message(String arg){
+        handler.message(arg);
+    }
+    @Override
+    public void endMatch() {
+        handler.endMatch();
     }
 }

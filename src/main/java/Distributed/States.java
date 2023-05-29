@@ -7,5 +7,6 @@ public enum States implements Serializable {
     PLAY,
     WAIT,
     END,
-    CLOSE
+    CLOSE,
+    ERRORClientAppSocket
 }

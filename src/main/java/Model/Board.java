@@ -25,8 +25,6 @@ public class Board implements Serializable {
     private final Bag bag;
     private Player currentPlayer;
     public final BoardView boardView;
-    private final int[] coordBuffer;
-
     /**
      * Constructor of the board
      * @param fm represents if it's the first match for the players
@@ -66,7 +64,6 @@ public class Board implements Serializable {
         };
 
         this.donePlayers = new ArrayList<Player>();
-        this.coordBuffer = new int[]{-1, -1, -1, -1, -1, -1};
         this.listOfPlayer = pl;
         for(Player p: listOfPlayer){
             System.out.println(":: " + p.getNickname());
@@ -100,8 +97,6 @@ public class Board implements Serializable {
             tileBuffer.add(matrix[r][c].getTile());
             matrix[r][c].removeTile();
             int i = tileBuffer.size() - 1;
-            coordBuffer[i] = r;
-            coordBuffer[i + 1] = c;
         }
     }
 
@@ -172,7 +167,6 @@ public class Board implements Serializable {
     public Player getCurrentPlayer() { return currentPlayer; }
     public void setCurrentPlayer(Player cp){ this.currentPlayer= cp;}
 
-    public int[] getCoordBuffer() { return coordBuffer;}
 
     public Player getWinner() {
         return winner;

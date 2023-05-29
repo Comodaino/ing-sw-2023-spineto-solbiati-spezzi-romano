@@ -19,7 +19,7 @@ class NearGoalTest {
         Scanner scanner;
         String inputFile;
         try {
-            File shelfFile = new File("src/test/java/Model/Test_confs/shelfTest1_conf_conf");
+            File shelfFile = new File("src/test/java/Model/Test_confs/shelfTest1_conf");
             scanner = new Scanner(shelfFile);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

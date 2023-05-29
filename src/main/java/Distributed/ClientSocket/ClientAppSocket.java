@@ -24,14 +24,16 @@ public class ClientAppSocket implements AbstractClient {
     private Scanner in;
     private PrintWriter out;
     private BoardView boardView;
-    private final String address = "127.0.0.1";
+    private final String address;
     private States state;
     private ObjectInputStream objIn;
     private ViewInterface view;
     private String tmpNickname;
     private String nickname;
 
-    public ClientAppSocket(int port, String typeOfView) throws IOException {
+    public ClientAppSocket(String address, int port, String typeOfView) throws IOException {
+        if(address==null) this.address = "127.0.0.1";
+        else this.address = address;
         this.port = port;
         this.tmpNickname = null;
         this.nickname = null;
@@ -40,10 +42,10 @@ public class ClientAppSocket implements AbstractClient {
         state = States.INIT;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
-        System.out.println("Choose type of view:");
+    public static void execute(String address) throws IOException, InterruptedException, ClassNotFoundException {
+        System.out.println(">>insert \"TUI\" or \"GUI\"");
         Scanner scanner = new Scanner(System.in);
-        ClientAppSocket client = new ClientAppSocket(25565, scanner.nextLine());
+        ClientAppSocket client = new ClientAppSocket(address, 25565, scanner.nextLine());
         client.connect();
     }
 

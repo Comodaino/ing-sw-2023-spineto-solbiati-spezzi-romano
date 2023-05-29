@@ -39,7 +39,7 @@ class GoalAnglesTest {
     @Test
     void emptyShelf(){
         GoalAngles goal = new GoalAngles(2);
-        Player p = new Player("Nico", true, null);
+        Player p = new Player("Nico", true);
 
         assertEquals(0, goal.getScore(p));
         System.out.println("TEST PASSED");
@@ -48,7 +48,7 @@ class GoalAnglesTest {
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
         GoalAngles goal = new GoalAngles(2);
-        Player p = new Player("Nico", true, null);
+        Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles_conf");
         Scanner reader = new Scanner(shelfConf);
@@ -61,7 +61,7 @@ class GoalAnglesTest {
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
         GoalAngles goal = new GoalAngles(2);
-        Player p = new Player("Nico", true, null);
+        Player p = new Player("Nico", true);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles_conf");
         Scanner reader = new Scanner(shelfConf);
@@ -75,8 +75,8 @@ class GoalAnglesTest {
     @Test
     void goalCompletedByTwoPlayers() throws FileNotFoundException {
         GoalAngles goal = new GoalAngles(2);
-        Player p1 = new Player("Nico", true, null);
-        Player p2 = new Player("Alessio", false, null);
+        Player p1 = new Player("Nico", true);
+        Player p2 = new Player("Alessio", false);
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles_conf");
         Scanner reader1 = new Scanner(shelfConf);
@@ -93,11 +93,10 @@ class GoalAnglesTest {
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
         GoalAngles goal = new GoalAngles(4);
-        Player p1 = new Player("Nico", true, null);
-        Player p2 = new Player("Alessio", false, null);
-        Player p3 = new Player("Clara", false, null);
-        Player p4 = new Player("Alessandra", false, null);
-
+        Player p1 = new Player("Nico", true);
+        Player p2 = new Player("Alessio", false);
+        Player p3 = new Player("Clara", false);
+        Player p4 = new Player("Alessandra", false);
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/angles_conf");
         Scanner reader1 = new Scanner(shelfConf);
         Scanner reader2 = new Scanner(shelfConf);

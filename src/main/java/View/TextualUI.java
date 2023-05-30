@@ -53,7 +53,7 @@ public class TextualUI implements ViewInterface {
 
     @Override
     public void update(String arg) throws IOException {
-        System.out.println("update: " + this.state);
+        //System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
                     System.out.println(ConsoleColors.RED_BOLD + "\n" +
@@ -86,7 +86,6 @@ public class TextualUI implements ViewInterface {
                     System.out.println("Commands you can use:");
                     System.out.println("/add column  -- add tile in the column of your shelf");
                     System.out.println("/remove row column   -- remove tile[row][column] from the board");
-                    //if (client.getPlayer() != null) System.out.println("your score:\t" + client.getPlayer().getModelPlayer().getScore());
                     break;
                 case END:
                     String winner = client.getBoardView().getWinner().getNickname();
@@ -95,7 +94,7 @@ public class TextualUI implements ViewInterface {
                         System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
                     }
                     System.out.println("The winner is......");
-                    System.out.println("\t\t\t\t\t" + winner + "\t\t\t\t\t");
+                    System.out.println("\t\t\t\t\t"+ ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET +"\t\t\t\t\t");
                     break;
                 case CLOSE:
                     System.out.println("The lobby has been closed, thank you for playing!");
@@ -140,8 +139,8 @@ public class TextualUI implements ViewInterface {
                     showYourScore();
                     System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
                     System.out.println(ConsoleColors.GREEN_UNDERLINED + "/add C" + RESET + "  ---> to add a tile in the column C of your shelf");
-                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  --->to remove the tile[row][column] from the board");
-                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1, /remove row2 column2 , /remove row3 column3" + RESET + "  --->to remove 2 or 3 tiles from the board");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  ---> to remove the tile[row][column] from the board");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1 [row2 column2] [row3 column3]" + RESET + "  ---> to remove 2 or 3 tiles from the board");
                 }
                 else{
                     System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
@@ -152,14 +151,17 @@ public class TextualUI implements ViewInterface {
                 }
               break;
             case END:
-                String winner = null;
-                if(client.getBoardView().getWinner()!=null) winner = client.getBoardView().getWinner().getNickname();
+                String winner;
                 System.out.println("SCORES:");
                 for (Player p : client.getBoardView().getListOfPlayer()) {
                     System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
                 }
-                System.out.println("The winner is......");
-                System.out.println("\t\t\t\t\t" + winner + "\t\t\t\t\t");
+                if(client.getBoardView().getWinner()!=null)
+                {
+                    winner = client.getBoardView().getWinner().getNickname();
+                    System.out.println("The winner is......");
+                    System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
+                }else System.out.println("Error: winner is null");
                 break;
             case CLOSE:
                 System.out.println("The lobby has been closed, thank you for playing!");

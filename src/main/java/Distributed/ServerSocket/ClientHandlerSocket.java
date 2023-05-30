@@ -21,6 +21,14 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     private final Lobby lobby;
     private Scanner in;
 
+    /**
+     * Constructor for the Client Handler
+     * @param socket socket connection already activated
+     * @param lobby lobby in which the player is part of
+     * @param serverApp reference to the server that manages the connection
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public ClientHandlerSocket(Socket socket, Lobby lobby, ServerApp serverApp) throws IOException, InterruptedException {
         this.socket = socket;
         this.lobby = lobby;
@@ -77,8 +85,9 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
 
     /**
      * Writes the serializable ModelView to the client's socket
-     *
+     * @param boardView board view to send
      * @throws IOException
+     * @throws InterruptedException
      */
     public void update(BoardView boardView) throws IOException, InterruptedException {
         outSocket("/update");
@@ -146,11 +155,14 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      * @throws IOException
      */
 
-    public void playCommand(String input) throws IOException, InterruptedException {
+    private void playCommand(String input) throws IOException, InterruptedException {
         System.out.println("Received command: " + input);
         lobby.getController().update(input);
     }
 
+    /**
+     * sends the player to the lobby
+     */
     @Override
     public void endCommand() {
         player.setState(WAIT);
@@ -162,7 +174,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
 
     }
 
-    public void inputHandler() throws IOException, InterruptedException {
+    private void inputHandler() throws IOException, InterruptedException {
         while (!player.getState().equals(CLOSE)) {
             System.out.println("waiting for input");
             String input = in.nextLine();
@@ -190,7 +202,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         }
     }
 
-    public void outputHandler() throws IOException {
+    private void outputHandler() throws IOException {
         System.out.println("REFRESH");
         switch (player.getState()) {
             case INIT:
@@ -210,6 +222,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         }
     }
 
+    /**
+     * Sends a chat message to the client
+     * @param arg
+     */
     @Override
     public void message(String arg) {
         try {
@@ -229,6 +245,9 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         out.flush();
     }
 
+    /**
+     * Ends the match for the player
+     */
     public void endMatch() {
         try {
             outSocket("/end");
@@ -237,7 +256,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         }
     }
 
-    public RemotePlayer getPlayer() {
+    private RemotePlayer getPlayer() {
         return player;
     }
 }

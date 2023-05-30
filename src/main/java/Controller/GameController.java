@@ -29,49 +29,12 @@ public class GameController implements Serializable {
     private Lobby lobby;
     private int removeSize;
 
-    public Board getBoard() {
-        return gameBoard;
-    }
-
-    public BoardView getBoardView() {
-        return boardView;
-    }
-
-    public void setBoardView(BoardView boardView) {
-        this.boardView = boardView;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setCurrentPlayer(Player p) {
-        this.currentPlayer = p;
-    }
-
     /**
-     * Controls who the current player is by making the player next to the old current player the new current player
-     *
-     * @author Alessio
-     */
-    protected void spinHandler() {
-        int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
-        do {
-            i += 1;
-            if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
-            else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
-        } while (donePlayers.contains(currentPlayer));
-        gameBoard.setCurrentPlayer(currentPlayer);
-    }
-
-    private void serverUpdater() throws IOException, InterruptedException {
-        lobby.updateAll();
-    }
-
-    /**
-     * GameController constructor
      *
      * @param pl list of players
+     * @param firstMatch setting that changes how the board is built
+     * @param lobby reference to the lobby of the game
+     * @throws IOException
      * @author Alessio
      */
     public GameController(List<Player> pl, boolean firstMatch, Lobby lobby) throws IOException {
@@ -90,35 +53,24 @@ public class GameController implements Serializable {
     }
 
     /**
-     * @param arg an argument passed to the {@code notifyObservers}
-     *            method. It is format is /command [par 0] [par 1] ...
+     * Controls who the current player is by making the player next to the old current player the new current player
+     *
      * @author Alessio
      */
-    public void update(String arg) throws IOException, InterruptedException {
-        String[] input = arg.split(" ");
-        if (input[0].charAt(0) == '/') {
-            switch (input[0]) {
-                case "/remove":
-                    playRemove(input);
-                    serverUpdater();
-                    break;
-                case "/add":
-                    playAdd(input);
-                    serverUpdater();
-                    break;
-                case "/switch":
-                    playswitch(input);
-                    serverUpdater();
-                    break;
-                case "/end":
-                    playEndGame();
-                    serverUpdater();
-                    break;
-                default:
-                    break;
-            }
-        }
+    private void spinHandler() {
+        int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
+        do {
+            i += 1;
+            if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
+            else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
+        } while (donePlayers.contains(currentPlayer));
+        gameBoard.setCurrentPlayer(currentPlayer);
     }
+
+    private void serverUpdater() throws IOException, InterruptedException {
+        lobby.updateAll();
+    }
+
 
     /**
      * Ends the game for a single player and makes him wait for the other players to finish
@@ -139,7 +91,7 @@ public class GameController implements Serializable {
         }
     }
 
-    public void playswitch(String[] input){
+    private void playswitch(String[] input){
         int first = input[1].charAt(0) - 48;
         int second = input[2].charAt(0) - 48;
         Collections.swap(gameBoard.getTileBuffer(), first, second);
@@ -217,14 +169,14 @@ public class GameController implements Serializable {
     }
 
 
-    public boolean adjacentFree(int r, int c) {
+    private boolean adjacentFree(int r, int c) {
         if (gameBoard.getCell(r, c).isEmpty()) return false;
         if (r == 0 || c == 0) return true;
         if (r == 8 || c == 8) return true;
         return ((gameBoard.getCell(r + 1, c).isEmpty() || gameBoard.getCell(r, c + 1).isEmpty()) || (gameBoard.getCell(r - 1, c).isEmpty() || gameBoard.getCell(r, c - 1).isEmpty()));
     }
 
-    public boolean inLine(String[] input) {
+    private boolean inLine(String[] input) {
         if(removeSize == 1) return true;
 
 
@@ -244,7 +196,7 @@ public class GameController implements Serializable {
         return false;
     }
 
-    public boolean columnAvailable(int c, int size) {
+    private boolean columnAvailable(int c, int size) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                 return gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
@@ -258,10 +210,59 @@ public class GameController implements Serializable {
             lobby.endMatch();
         }
     }
+
+
+    /** receives, processes and executes the command passed as parameter, does nothin is the move is invalid or the command is wrong
+     *
+     * @param arg an argument passed to the {@code notifyObservers}
+     *            method. It is format is /command [par 0] [par 1] ...
+     * @author Alessio
+     */
+    public void update(String arg) throws IOException, InterruptedException {
+        String[] input = arg.split(" ");
+        if (input[0].charAt(0) == '/') {
+            switch (input[0]) {
+                case "/remove":
+                    playRemove(input);
+                    serverUpdater();
+                    break;
+                case "/add":
+                    playAdd(input);
+                    serverUpdater();
+                    break;
+                case "/switch":
+                    playswitch(input);
+                    serverUpdater();
+                    break;
+                case "/end":
+                    playEndGame();
+                    serverUpdater();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public Board getBoard() {
+        return gameBoard;
+    }
+
+    public BoardView getBoardView() {
+        return boardView;
+    }
+
+    public void setBoardView(BoardView boardView) {
+        this.boardView = boardView;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player p) {
+        this.currentPlayer = p;
+    }
+
 }
 
-/* possible commands:
- *  /add playerName column
- *  /remove playerName row column (can repeat row column maximum 3 times)
- *
- * */

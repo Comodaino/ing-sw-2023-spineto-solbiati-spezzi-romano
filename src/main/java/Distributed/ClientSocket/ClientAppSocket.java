@@ -31,6 +31,14 @@ public class ClientAppSocket implements AbstractClient {
     private String tmpNickname;
     private String nickname;
 
+
+    /** Client App constructor for socket connection
+     *
+     * @param address ip address of the server
+     * @param port port of the server
+     * @param typeOfView type of interface: GUI or TUI
+     * @throws IOException
+     */
     public ClientAppSocket(String address, int port, String typeOfView) throws IOException {
         if(address==null) this.address = "127.0.0.1";
         else this.address = address;
@@ -42,6 +50,13 @@ public class ClientAppSocket implements AbstractClient {
         state = States.INIT;
     }
 
+    /**
+     * Starts the client
+     * @param address ip address of the server
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws ClassNotFoundException
+     */
     public static void execute(String address) throws IOException, InterruptedException, ClassNotFoundException {
         System.out.println(">>insert \"TUI\" or \"GUI\"");
         Scanner scanner = new Scanner(System.in);
@@ -49,7 +64,7 @@ public class ClientAppSocket implements AbstractClient {
         client.connect();
     }
 
-    public void connect() throws IOException, ClassNotFoundException {
+    private void connect() throws IOException, ClassNotFoundException {
         socket = new Socket(address, port);
         objIn = new ObjectInputStream(socket.getInputStream());
         in = new Scanner(new InputStreamReader(socket.getInputStream()));
@@ -71,7 +86,7 @@ public class ClientAppSocket implements AbstractClient {
 
     }
 
-    public void inputHandler() throws IOException, ClassNotFoundException {
+    private void inputHandler() throws IOException, ClassNotFoundException {
         System.out.println("waiting for input");
 
         String input  = (String) objIn.readObject();
@@ -156,6 +171,10 @@ public class ClientAppSocket implements AbstractClient {
     }
 
 
+    /**
+     * takes the parameter arg and sends it to the server
+     * @param arg string to send to the server
+     */
     @Override
     public void println(String arg) {
         if (state.equals(States.INIT)) this.tmpNickname = arg;

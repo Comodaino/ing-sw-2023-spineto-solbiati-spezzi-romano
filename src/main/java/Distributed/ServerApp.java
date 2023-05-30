@@ -2,6 +2,7 @@ package Distributed;
 
 
 import Distributed.ClientRMI.Client;
+import Distributed.ServerRMI.ServerImpl;
 import Distributed.ServerSocket.ClientHandlerSocket;
 
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class ServerApp {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        ServerImpl.execute();
     }
 
     public void startServer() throws IOException, InterruptedException {

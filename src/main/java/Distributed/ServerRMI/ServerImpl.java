@@ -29,7 +29,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     //Creates an instance of ServerImpl and starts the server
-    public static void main(String[] args) {
+    public static void execute() {
         ServerImpl server = null;
         try {
             server = new ServerImpl();

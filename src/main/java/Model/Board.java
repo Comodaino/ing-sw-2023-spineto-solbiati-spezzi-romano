@@ -1,9 +1,8 @@
 package Model;
 
-import Model.CommonGoals.*;
+import Model.CommonGoals.CommonGoal;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -25,8 +24,6 @@ public class Board implements Serializable {
     private final Bag bag;
     private Player currentPlayer;
     public final BoardView boardView;
-    private final int[] coordBuffer;
-
     /**
      * Constructor of the board
      * @param fm represents if it's the first match for the players
@@ -37,9 +34,10 @@ public class Board implements Serializable {
         matrix = new Cell[9][9];
         bag = new Bag();
 
-        try {
-            File boardConf = new File("src/main/java/Model/Conf/board_conf");
-            Scanner reader = new Scanner(boardConf);
+            InputStream is = getClass().getClassLoader().getResourceAsStream("board_conf");
+           // File boardConf = new File("src/main/java/Model/Conf/board_conf");
+            assert is != null;
+            Scanner reader = new Scanner(is);
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
                 String data = reader.nextLine();
@@ -61,12 +59,8 @@ public class Board implements Serializable {
             }
 
             reader.close();
-        }catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        };
 
         this.donePlayers = new ArrayList<Player>();
-        this.coordBuffer = new int[]{-1, -1, -1, -1, -1, -1};
         this.listOfPlayer = pl;
         for(Player p: listOfPlayer){
             System.out.println(":: " + p.getNickname());
@@ -100,8 +94,6 @@ public class Board implements Serializable {
             tileBuffer.add(matrix[r][c].getTile());
             matrix[r][c].removeTile();
             int i = tileBuffer.size() - 1;
-            coordBuffer[i] = r;
-            coordBuffer[i + 1] = c;
         }
     }
 
@@ -172,7 +164,6 @@ public class Board implements Serializable {
     public Player getCurrentPlayer() { return currentPlayer; }
     public void setCurrentPlayer(Player cp){ this.currentPlayer= cp;}
 
-    public int[] getCoordBuffer() { return coordBuffer;}
 
     public Player getWinner() {
         return winner;

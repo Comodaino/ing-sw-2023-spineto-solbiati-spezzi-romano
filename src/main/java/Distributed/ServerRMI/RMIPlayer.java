@@ -7,6 +7,11 @@ import Model.BoardView;
 
 import java.io.IOException;
 
+/**
+ * RMIPlayer is a class which extends RemotePlayer.
+ * It represent the RMI remote player.
+ * @author Nicolò
+ */
 public class RMIPlayer extends RemotePlayer {
     Client client;
 
@@ -17,7 +22,7 @@ public class RMIPlayer extends RemotePlayer {
 
     @Override
     public void endMatch() {
-        super.endMatch();
+        //TODO implements
     }
 
     @Override

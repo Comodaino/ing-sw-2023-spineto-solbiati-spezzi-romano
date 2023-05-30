@@ -14,6 +14,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
+/**
+ * ClientApp is a class which extends UnicastRemoteObject and implements Client and AbstractClient
+ * It implements the RMI Client and all the methods through which it communicates with the RMI Server amd the ViewInterface
+ * @author Nicolò
+ */
 public class ClientApp extends UnicastRemoteObject implements Client, AbstractClient {
     private String nickname;
     private Integer lobbyID;
@@ -41,6 +46,12 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     }
 
 
+    /**
+     * This method is invoked by the view method inputHandler() to catch the input of a client from the keyboard.
+     * It invokes the server handler method, passing the input of the client as a parameter.
+     * @param arg the input written by the client (caught by the view)
+     * @author Nicolò
+     */
     @Override
     public void println(String arg) {
         try {
@@ -50,6 +61,11 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         }
     }
 
+
+    /**
+     * This method is invoked by the server every time that a move is made. It invokes the view update.
+     * @author Nicolò
+     */
     @Override
     public void update() throws RemoteException {
         try {
@@ -59,6 +75,12 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         }
     }
 
+    /**
+     * This method is invoked by the server every time that a move is made. It invokes the view update and sets the boardView to the client.
+     * @param boardView the serializable boardView
+     * @param arg a message from the server (not always used)
+     * @author Nicolò
+     */
     @Override
     public void update(BoardView boardView, String arg) throws RemoteException {
         this.boardView = boardView;
@@ -69,11 +91,10 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         }
     }
 
-    public void run(String serverHost) throws Exception {
-        this.server = (Server) Naming.lookup("rmi://" + serverHost + "/Server"); // take a reference of the server from the registry
-    }
 
-    public static void main(String args[]) {
+    //Asks the client which type of view it wants
+    //Then creates an instance of ClientApp and "connects" it to the server through the method run()
+    public static void execute() {
         System.out.println("Choose type of view:");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
@@ -90,6 +111,10 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    public void run(String serverHost) throws Exception {
+        this.server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerRMI"); // take a reference of the server from the registry
+        System.out.println("Connecting to the server...");
     }
 
 
@@ -112,7 +137,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     @Override
     public void setState(States state) throws RemoteException {
         this.state = state;
-        switch (state) {
+        switch (state) { //It also sets the state of the view
             case PLAY:
                 view.setState(State.PLAY);
                 break;

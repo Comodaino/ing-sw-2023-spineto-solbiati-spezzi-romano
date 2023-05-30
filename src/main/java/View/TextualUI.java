@@ -36,7 +36,6 @@ public class TextualUI implements ViewInterface {
     }
 
     public void inputHandler() throws IOException {
-
         while(state!=State.CLOSE){
             client.println(input.nextLine());
         }

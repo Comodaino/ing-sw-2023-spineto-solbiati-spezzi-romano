@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -105,6 +106,10 @@ public class GameController implements Serializable {
                     playAdd(input);
                     serverUpdater();
                     break;
+                case "/switch":
+                    playswitch(input);
+                    serverUpdater();
+                    break;
                 case "/end":
                     playEndGame();
                     serverUpdater();
@@ -132,6 +137,13 @@ public class GameController implements Serializable {
                 }
             }
         }
+    }
+
+    public void playswitch(String[] input){
+        int first = input[1].charAt(0) - 48;
+        int second = input[2].charAt(0) - 48;
+        Collections.swap(gameBoard.getTileBuffer(), first, second);
+        System.out.println("swapped");
     }
 
     /**

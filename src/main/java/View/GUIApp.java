@@ -2,18 +2,16 @@ package View;
 
 
 import Distributed.AbstractClient;
-import Distributed.ClientSocket.ClientAppSocket;
 import Distributed.RemotePlayer;
-import Distributed.States;
-import Model.Player;
+import Model.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
@@ -51,7 +49,7 @@ public class GUIApp extends Application implements ViewInterface{
        */
 
 
-      //  home(primaryStage);
+       // home(primaryStage);
         play(client,primaryStage);
         primaryStage.show();
     }
@@ -62,6 +60,15 @@ public class GUIApp extends Application implements ViewInterface{
         Scene scene = new Scene(mainPane);
         primaryStage.setScene(scene);
 
+     /*   ColumnConstraints column1 = new ColumnConstraints();
+        column1.setHgrow(Priority.ALWAYS);
+        RowConstraints row1 = new RowConstraints();
+        row1.setVgrow(Priority.ALWAYS);
+        mainPane.getColumnConstraints().add(column1);
+        mainPane.getRowConstraints().add(row1);
+
+
+      */
         Image imageBackgroungShelf = new Image("images/misc/sfondoparquet.jpg");
         ImageView imageViewShelf = new ImageView(imageBackgroungShelf);
         BoxBlur blur = new BoxBlur(3, 3, 3);
@@ -72,8 +79,8 @@ public class GUIApp extends Application implements ViewInterface{
         imageViewShelf.fitHeightProperty().bind(mainPane.heightProperty());
         mainPane.setBackground(new Background(new BackgroundImage(imageBackgroungShelf, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
-        Pane commongoal = getCommonGoal(client);
-        mainPane.add(commongoal, 0, 1);
+        GridPane commonGoal = getCommonGoal(client);
+        mainPane.add(commonGoal, 0, 1);
 
 
        mainPane.add(createShelf(client,mainPane), 1, 0);
@@ -83,6 +90,7 @@ public class GUIApp extends Application implements ViewInterface{
         primaryStage.setOnCloseRequest(e -> {
             // Gestire l'evento di chiusura
         });
+
         primaryStage.show();
     }
     public Pane createBoard(AbstractClient client){
@@ -92,57 +100,266 @@ public class GUIApp extends Application implements ViewInterface{
         ImageView imageView = new ImageView(imageBoard);
 
         imageView.setPreserveRatio(true);
-        imageView.setFitHeight(700);
-        imageView.setFitWidth(700);
+        imageView.setFitHeight(650);
+        imageView.setFitWidth(650);
 
         boardPane.getChildren().addAll(imageView);
+        boardPane.getChildren().add(fillBoard(client));
         return boardPane;
     }
-    public Pane getCommonGoal(AbstractClient client){
-        Pane commonGoalPane = new Pane();
-        Constant commonGoal = new Constant();
-        Image imageCommonGoal1 = new Image("images/common goal cards/1.jpg");
-        ImageView imageView = new ImageView(imageCommonGoal1);
+    public GridPane fillBoard(AbstractClient client){
 
+        GridPane fillBoardPane = new GridPane();
+        Pane emptyComponent = new Pane();
+       for (int i = 0; i < 9; i++) {
+           for (int j = 0; j < 9; j++) {
+               switch (client.getBoardView().getCell(i, j).getType()){
+                   case ONE:
+                       emptyComponent.setPrefSize(50, 50);
+                       fillBoardPane.add(emptyComponent, i, j);
+                       break;
+                   case TWO:
+                       fillBoardPane.add(getTile(i,j),i,j);
+                       break;
+                   case THREE:
+                       if (client.getBoardView().getListOfPlayer().size()>2){
+                           fillBoardPane.add(getTile(i,j),i,j);
+                       }else {
+                           emptyComponent.setPrefSize(50, 50);
+                           fillBoardPane.add(emptyComponent, i, j);
+                       }
+                       break;
+                   case FOUR:
+                       if (client.getBoardView().getListOfPlayer().size()==4) {
+                           fillBoardPane.add(getTile(i, j), i, j);
+                       }else {
+                           emptyComponent.setPrefSize(50, 50);
+                           fillBoardPane.add(emptyComponent, i, j);
+                       }
+                       break;
+               }
+
+                     Image imageBoard = new Image("images/item tiles/Gatti1.2.png");
+                     ImageView imageView = new ImageView(imageBoard);
+                     imageView.setPreserveRatio(true);
+                     imageView.setFitHeight(50);
+                     imageView.setFitWidth(50);
+                     fillBoardPane.add(imageView, i, j);
+               }
+           }
+
+        return fillBoardPane;
+    }
+    public Button getTile(int row, int column){
+        Button tileButton = new Button();
+        String imageTilePath = null;
+        Constant tile = null;
+        switch (client.getBoardView().getTile(row, column).getColor()){
+            case BLUE:
+            {switch (client.getBoardView().getTile(row, column).getType()) {
+                case ONE:
+                    imageTilePath = tile.getConstantTile() + "Cornici.1.png";
+                    break;
+                case TWO:
+                    imageTilePath = tile.getConstantTile() + "Cornici.2.png";
+                    break;
+                case THREE:
+                    imageTilePath = tile.getConstantTile() + "Cornici.3.png";
+                    break;
+            }
+            break;}
+            case GREEN:
+            {switch (client.getBoardView().getTile(row, column).getType()) {
+                case ONE:
+                    imageTilePath = tile.getConstantTile() + "Gatti1.1.png";
+                    break;
+                case TWO:
+                    imageTilePath = tile.getConstantTile() + "Gatti1.2.png";
+                    break;
+                case THREE:
+                    imageTilePath = tile.getConstantTile() + "Gatti1.3.png";
+                    break;
+            }
+            break;}
+            case YELLOW:
+            {switch (client.getBoardView().getTile(row, column).getType()) {
+                case ONE:
+                    imageTilePath = tile.getConstantTile() + "Giochi1.1.png";
+                    break;
+                case TWO:
+                    imageTilePath = tile.getConstantTile() + "Giochi1.2.png";
+                    break;
+                case THREE:
+                    imageTilePath = tile.getConstantTile() + "Giochi1.3.png";
+                    break;
+            }
+            break;}
+            case WHITE:
+            {switch (client.getBoardView().getTile(row, column).getType()) {
+                case ONE:
+                    imageTilePath = tile.getConstantTile() + "Libri1.1.png";
+                    break;
+                case TWO:
+                    imageTilePath = tile.getConstantTile() + "Libri1.2.png";
+                    break;
+                case THREE:
+                    imageTilePath = tile.getConstantTile() + "Libri1.3.png";
+                    break;
+            }
+            break;}
+            case PINK:
+            {switch (client.getBoardView().getTile(row, column).getType()) {
+                case ONE:
+                    imageTilePath = tile.getConstantTile() + "Piante1.1.png";
+                    break;
+                case TWO:
+                    imageTilePath = tile.getConstantTile() + "Piante1.2.png";
+                    break;
+                case THREE:
+                    imageTilePath = tile.getConstantTile() + "Piante1.3.png";
+                    break;
+            }
+            break;}
+            case LIGHTBLUE:
+            {switch (client.getBoardView().getTile(row, column).getType()) {
+                case ONE:
+                    imageTilePath = tile.getConstantTile() + "Trofei1.1.png";
+                    break;
+                case TWO:
+                    imageTilePath = tile.getConstantTile() + "Trofei1.2.png";
+                    break;
+                case THREE:
+                    imageTilePath = tile.getConstantTile() + "Trofei1.3.png";
+                    break;
+            }
+            break;}
+
+        }
+        tileButton.setPrefSize(50, 50);
+        Image imageTile = new Image(imageTilePath);
+        ImageView imageView = new ImageView(imageTile);
         imageView.setPreserveRatio(true);
-        imageView.setFitHeight(150);
-        imageView.setFitWidth(150);
+        imageView.setFitHeight(50);
+        imageView.setFitWidth(50);
+        tileButton.setGraphic(imageView);
+        return tileButton;
+    }
 
-        commonGoalPane.getChildren().addAll(imageView);
+    public GridPane getCommonGoal(AbstractClient client){
+        GridPane commonGoalPane = new GridPane();
+        Constant commonGoal = new Constant();
+        String imageGoalPath = null;
+        // come prendo il numero dei giocatori?
+        // come viene creato i
+        //client.getPlayer
+
+       // int size = 2;
+        int i = 0;
+
+        for(int j=0;j<2;j++) {
+            i=2+j;
+            switch (i) {
+                case 0:
+                   // new GoalAngles(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "8.jpg";
+                    break;
+                case 1:
+                    //new GoalColumn(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "2.jpg";
+                case 2:
+                   // new GoalCouples(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "4.jpg";
+                    break;
+                case 3:
+                    //new GoalCross(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "10.jpg";
+                    break;
+                case 4:
+                    //new GoalDiagonal(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "11.jpg";
+                    break;
+                case 5:
+                    //new GoalDiffColumns(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "5.jpg";
+                    break;
+                case 6:
+                   // new GoalDiffRows(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "6.jpg";
+                    break;
+                case 7:
+                    //new GoalEight(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "9.jpg";
+                    break;
+                case 8:
+                    //new GoalQuartets(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "3.jpg";
+                    break;
+                case 9:
+                    //new GoalRow(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "7.jpg";
+                    break;
+                case 10:
+                    //new GoalSquares(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "1.jpg";
+                    break;
+                case 11:
+                    //new GoalStair(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "12.jpg";
+                    break;
+            }
+            if(j==0) {
+                Image imageGoal1 = new Image(imageGoalPath);
+                ImageView imageView1 = new ImageView(imageGoal1);
+                imageView1.setPreserveRatio(true);
+                imageView1.setFitHeight(150);
+                imageView1.setFitWidth(150);
+                commonGoalPane.add(imageView1, 0, 0);
+            }else {
+                Image imageGoal2 = new Image(imageGoalPath);
+                ImageView imageView2 = new ImageView(imageGoal2);
+                imageView2.setPreserveRatio(true);
+                imageView2.setFitHeight(150);
+                imageView2.setFitWidth(150);
+                commonGoalPane.add(imageView2, 1, 0);
+            }
+        }
+
         return commonGoalPane;
     }
-    public Pane createShelf(AbstractClient client, GridPane mainPane) throws RemoteException {
+    public GridPane createShelf(AbstractClient client, GridPane mainPane) throws RemoteException {
 
 
-        Pane shelfPane = new Pane();
+        GridPane shelfPane = new GridPane();
 
         Image imageShelf = new Image("images/boards/bookshelf.png");
         ImageView shelfImageView = new ImageView(imageShelf);
         shelfImageView.setFitWidth(300);
         shelfImageView.setFitHeight(300);
-        mainPane.add(shelfImageView, 1, 0);
-
+        shelfPane.add(shelfImageView, 0, 0);
         shelfImageView.setPreserveRatio(true);
 
 
-       // if (true) {
+       // if (client.isOwner()==true) {
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
             chairImageView.setFitWidth(100);
             chairImageView.setFitHeight(100);
             chairImageView.setPreserveRatio(true);
-            mainPane.add(chairImageView, 1, 1);
+        //    shelfPane.add(chairImageView, 0, 1);
        //  }
+HBox hbox = new HBox(3);
+        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setSpacing(10);
 
         Image personalGoalImage = createPersonalGoal(client);
         ImageView personalGoalImageView = new ImageView(personalGoalImage);
         personalGoalImageView.setFitWidth(150);
         personalGoalImageView.setFitHeight(150);
         personalGoalImageView.setPreserveRatio(true);
-           mainPane.add(personalGoalImageView, 2, 1);
-
-
-        shelfPane.getChildren().addAll();
+   //    shelfPane.add(personalGoalImageView, 1, 1);
+        hbox.getChildren().addAll(chairImageView,personalGoalImageView);
+        hbox.setAlignment(Pos.CENTER);
+        shelfPane.add(hbox,0,1);
         return shelfPane;
     }
 
@@ -151,7 +368,7 @@ Player p = new Player("Ale",true);
      //   Player p= client.getBoardView().getListOfPlayer().get(0);
         Constant c = new Constant();
         int persGoal = p.getGoal().CreatePersonalGoal();
-        String imagePath;
+        String imagePath = null;
 
         switch (persGoal) {
             case 0:
@@ -178,7 +395,7 @@ Player p = new Player("Ale",true);
                 imagePath = c.getCostantPersGoal() + "10.png";
                 break;
             case 8:
-                imagePath = c.getCostantPersGoal();
+                imagePath = c.getCostantPersGoal() + ".png";
                 break;
             case 9:
                 imagePath = c.getCostantPersGoal() + "6.png";
@@ -189,8 +406,6 @@ Player p = new Player("Ale",true);
             case 11:
                 imagePath = c.getCostantPersGoal() + "7.png";
                 break;
-            default:
-                imagePath = "";
         }
 
         return new Image(imagePath);

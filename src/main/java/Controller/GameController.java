@@ -26,8 +26,7 @@ public class GameController implements Serializable {
     private List<Player> pl;
     private List<Player> donePlayers;
     private Lobby lobby;
-
-    private int numberOfRemove;
+    private int removeSize;
 
     public Board getBoard() {
         return gameBoard;
@@ -78,7 +77,6 @@ public class GameController implements Serializable {
         this.gameBoard = new Board(firstMatch, pl);
         this.pl = pl;
         this.lobby = lobby;
-        this.numberOfRemove = 0;
         this.donePlayers = new ArrayList<Player>();
         this.boardView = new BoardView(gameBoard);
         for (Player player : pl) {
@@ -107,6 +105,12 @@ public class GameController implements Serializable {
                     playAdd(input);
                     serverUpdater();
                     break;
+                case "/end":
+                    playEndGame();
+                    serverUpdater();
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -115,6 +119,7 @@ public class GameController implements Serializable {
      * Ends the game for a single player and makes him wait for the other players to finish
      */
     private void playEndGame() {
+        System.out.println("ENDING THE GAME");
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
@@ -122,6 +127,9 @@ public class GameController implements Serializable {
                 donePlayers.add(currentPlayer);
                 gameBoard.addToDone(currentPlayer);
                 currentPlayer.setAsEnded();
+                if(gameBoard.getDonePlayers().size() == gameBoard.getListOfPlayer().size()){
+                    lobby.endMatch();
+                }
             }
         }
     }
@@ -129,20 +137,39 @@ public class GameController implements Serializable {
     /**
      * Removes a tile from the board and checks for recharge
      *
-     * @param input input[0] is the command, preceded by /, input[1] is the row coordinate, input[2] is the column coordinate
+     * @param input input[0] is the command, preceded by /, input[1], input[3] and input[5] are the row coordinates, input[2], input[4] and input[6] are the column coordinates
      * @author Alessio
      */
     private void playRemove(String[] input) {
+        switch (input.length) {
+            case 3:
+                removeSize = 1;
+                break;
+            case 5:
+                removeSize = 2;
+                break;
+            case 7:
+                removeSize = 3;
+                break;
+        }
+
+
         System.out.println("remove " + Arrays.toString(input));
-        if (numberOfRemove >= 3) {
-            System.out.println("Invalid Move");
-            return;
+
+        //A triple AND condition was not used to improve readability
+        if (adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
+            if (removeSize < 2 || adjacentFree(input[3].charAt(0) - 48, input[4].charAt(0) - 48)) {
+                if (removeSize < 3 || adjacentFree(input[5].charAt(0) - 48, input[6].charAt(0) - 48)) {
+                    if (inLine(input)) {
+                        gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
+                        if (removeSize > 1) gameBoard.removeTile(input[3].charAt(0) - 48, input[4].charAt(0) - 48);
+                        if (removeSize > 2) gameBoard.removeTile(input[5].charAt(0) - 48, input[6].charAt(0) - 48);
+                        gameBoard.checkRecharge();
+                    }
+                }
+            }
         }
-        if (inLine(input[1].charAt(0) - 48, input[2].charAt(0) - 48) && adjacentFree(input[1].charAt(0) - 48, input[2].charAt(0) - 48)) {
-            gameBoard.removeTile(input[1].charAt(0) - 48, input[2].charAt(0) - 48);
-            gameBoard.checkRecharge();
-            numberOfRemove += 1;
-        }
+
     }
 
     /**
@@ -153,7 +180,7 @@ public class GameController implements Serializable {
      */
     private void playAdd(String[] input) {
         System.out.println("add");
-        if (columnAvaiable(input[1].charAt(0) - 48, gameBoard.getTileBuffer().size())) {
+        if (columnAvailable(gameBoard.getTileBuffer().size(), input[1].charAt(0) - 48)) {
             for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
                 if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                     while (gameBoard.getTileBuffer().size() > 0) {
@@ -182,28 +209,32 @@ public class GameController implements Serializable {
         if (gameBoard.getCell(r, c).isEmpty()) return false;
         if (r == 0 || c == 0) return true;
         if (r == 8 || c == 8) return true;
-        return (gameBoard.getCell(r + 1, c).isEmpty() || gameBoard.getCell(r, c + 1).isEmpty()) || (gameBoard.getCell(r - 1, c).isEmpty() || gameBoard.getCell(r, c - 1).isEmpty());
+        return ((gameBoard.getCell(r + 1, c).isEmpty() || gameBoard.getCell(r, c + 1).isEmpty()) || (gameBoard.getCell(r - 1, c).isEmpty() || gameBoard.getCell(r, c - 1).isEmpty()));
     }
 
-    public boolean inLine(int r, int c) {
-        //TODO NEEDS TESTING
-        if (gameBoard.getTileBuffer().isEmpty()) return true;
-        boolean row = true;
-        boolean column = true;
-        for (int i = 0; i < 3 && gameBoard.getCoordBuffer()[i] != -1; i++) {
-            if (row && gameBoard.getCoordBuffer()[i] == r + 2 - i) {
-                column = false;
-            } else {
-                row = false;
-                if (!column || gameBoard.getCoordBuffer()[i + 1] != c + 2 - i) return false;
-            }
+    public boolean inLine(String[] input) {
+        if(removeSize == 1) return true;
+
+
+        if (removeSize > 1  && (input[1].charAt(0) - 48 == input[3].charAt(0) - 48)){
+            if(removeSize > 2){
+                if((input[1].charAt(0) - 48 == input[5].charAt(0) - 48)) return true;
+            }else return true;
+
         }
-        return true;
+
+        if (removeSize > 1  && (input[2].charAt(0) - 48 == input[4].charAt(0) - 48)){
+            if(removeSize > 2){
+                if((input[2].charAt(0) - 48 == input[6].charAt(0) - 48)) return true;
+            }else return true;
+        }
+
+        return false;
     }
 
-    public boolean columnAvaiable(int c, int size) {
+    public boolean columnAvailable(int c, int size) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
-            if (gameBoard.getListOfPlayer().get(i).getNickname().equals(currentPlayer.getNickname())) {
+            if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                 return gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
             }
         }
@@ -219,6 +250,6 @@ public class GameController implements Serializable {
 
 /* possible commands:
  *  /add playerName column
- *  /remove playerName row column
+ *  /remove playerName row column (can repeat row column maximum 3 times)
  *
  * */

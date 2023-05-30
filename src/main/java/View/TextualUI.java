@@ -49,14 +49,6 @@ public class TextualUI implements ViewInterface {
                     client.println(nick);
             }
         }
-        while(state.equals("HOME")){
-            String nickname = input.nextLine();
-            if(nickname!= null && nickname.length()>10) {
-                System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
-                }
-            else if (nickname!= null) client.println(nickname);
-        }
-
     }
 
     @Override

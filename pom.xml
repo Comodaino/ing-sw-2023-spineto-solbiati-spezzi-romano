@@ -6,6 +6,7 @@
   <artifactId>ing-sw-2023-spineto-solbiati-spezzi-romano</artifactId>
   <version>1.0-SNAPSHOT</version>
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

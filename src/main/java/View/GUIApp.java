@@ -2,6 +2,7 @@ package View;
 
 
 import Distributed.AbstractClient;
+import Distributed.ClientSocket.ClientAppSocket;
 import Distributed.RemotePlayer;
 import Model.*;
 import javafx.application.Application;
@@ -24,15 +25,31 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 
 public class GUIApp extends Application implements ViewInterface{
-    private RemotePlayer player;
     private AbstractClient client;
     private State state;
     private Stage primaryStage;
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args){
         launch(args);
     }
 
+    public GUIApp(AbstractClient client) throws RemoteException {
+        this.client = client;
+        this.state = State.HOME;
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                start();
+            }
+        };
+        try {
+            update();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        thread.start();
+    }
     public void start(Stage primaryStage) throws RemoteException {
       /*  try {
             ClientAppSocket clientSocket = new ClientAppSocket(25565, "GUI");

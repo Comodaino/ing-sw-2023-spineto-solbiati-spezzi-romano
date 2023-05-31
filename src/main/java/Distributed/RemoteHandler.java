@@ -34,7 +34,20 @@ public abstract class RemoteHandler {
     public ConnectionType getType() {
         return type;
     }
+    /**
+     * sends the player to the lobby
+     */
     public void endCommand(){ state=States.WAIT; }
+
+    /**
+     * Writes the serializable ModelView to the client's socket
+     * @throws IOException
+     */
     public void update() throws IOException {}
+
+    /**
+     * Sends a chat message to the client
+     * @param arg
+     */
     public void message(String arg) {}
 }

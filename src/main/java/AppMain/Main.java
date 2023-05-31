@@ -1,3 +1,5 @@
+package AppMain;
+
 import Distributed.ClientRMI.ClientApp;
 import Distributed.ClientSocket.ClientAppSocket;
 import Distributed.ServerApp;

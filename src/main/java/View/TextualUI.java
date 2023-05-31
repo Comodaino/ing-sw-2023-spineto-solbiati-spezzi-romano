@@ -36,14 +36,24 @@ public class TextualUI implements ViewInterface {
     }
 
     public void inputHandler() throws IOException {
-        while(state!=State.CLOSE){
-            client.println(input.nextLine());
+
+        while(state!=State.CLOSE) {
+            if(state!=State.HOME)
+                client.println(input.nextLine());
+            else {
+                String nick = input.nextLine();
+                if(nick!= null && nick.length()>10) {
+                    System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
+                }
+                else if (nick!= null)
+                    client.println(nick);
+            }
         }
     }
 
     @Override
     public void update(String arg) throws IOException {
-        System.out.println("update: " + this.state);
+        //System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
                     System.out.println(ConsoleColors.RED_BOLD + "\n" +
@@ -76,7 +86,6 @@ public class TextualUI implements ViewInterface {
                     System.out.println("Commands you can use:");
                     System.out.println("/add column  -- add tile in the column of your shelf");
                     System.out.println("/remove row column   -- remove tile[row][column] from the board");
-                    //if (client.getPlayer() != null) System.out.println("your score:\t" + client.getPlayer().getModelPlayer().getScore());
                     break;
                 case END:
                     String winner = client.getBoardView().getWinner().getNickname();
@@ -85,7 +94,7 @@ public class TextualUI implements ViewInterface {
                         System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
                     }
                     System.out.println("The winner is......");
-                    System.out.println("\t\t\t\t\t" + winner + "\t\t\t\t\t");
+                    System.out.println("\t\t\t\t\t"+ ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET +"\t\t\t\t\t");
                     break;
                 case CLOSE:
                     System.out.println("The lobby has been closed, thank you for playing!");
@@ -108,8 +117,8 @@ public class TextualUI implements ViewInterface {
             case LOBBY:
                 if (client.isOwner()) {
                     System.out.println("COMMANDS AVAILABLE:");
-                    System.out.println("/start to start the game");
-                    System.out.println("/firstMatch if this is your first match\t\tOR\t\t/notFirstMatch if you have already played");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/start"+ RESET + " to start the game");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/firstMatch"+ RESET + " if this is your first match\t\tOR\t\t" + ConsoleColors.GREEN_UNDERLINED +"/notFirstMatch" + RESET + " if you have already played");
                 } else
                     System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
                 break;
@@ -130,7 +139,8 @@ public class TextualUI implements ViewInterface {
                     showYourScore();
                     System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
                     System.out.println(ConsoleColors.GREEN_UNDERLINED + "/add C" + RESET + "  ---> to add a tile in the column C of your shelf");
-                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  --->to remove the tile[row][column] from the board");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  ---> to remove the tile[row][column] from the board");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1 [row2 column2] [row3 column3]" + RESET + "  ---> to remove 2 or 3 tiles from the board");
                 }
                 else{
                     System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
@@ -141,14 +151,17 @@ public class TextualUI implements ViewInterface {
                 }
               break;
             case END:
-                String winner = null;
-                if(client.getBoardView().getWinner()!=null) winner = client.getBoardView().getWinner().getNickname();
+                String winner;
                 System.out.println("SCORES:");
                 for (Player p : client.getBoardView().getListOfPlayer()) {
                     System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
                 }
-                System.out.println("The winner is......");
-                System.out.println("\t\t\t\t\t" + winner + "\t\t\t\t\t");
+                if(client.getBoardView().getWinner()!=null)
+                {
+                    winner = client.getBoardView().getWinner().getNickname();
+                    System.out.println("The winner is......");
+                    System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
+                }else System.out.println("Error: winner is null");
                 break;
             case CLOSE:
                 System.out.println("The lobby has been closed, thank you for playing!");
@@ -178,7 +191,7 @@ public class TextualUI implements ViewInterface {
         System.out.println("OTHERS' SHELVES:");
         for (Player p : client.getBoardView().getListOfPlayer()) {
             if (!p.getNickname().equals(client.getNickname())) {
-                System.out.println(p.getNickname() + " SHELF:");
+                System.out.println(ConsoleColors.BLUE_BOLD + p.getNickname());
                 String tType = null;
                 for (int i = 5; i >=0; i--) {
                     for (int j = 0; j < 5; j++) {
@@ -293,7 +306,6 @@ public class TextualUI implements ViewInterface {
     }
 
     private void showBoard() {
-        System.out.println("\t\t\t\t\tBOARD:");
         String tType = null;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -363,7 +375,6 @@ public class TextualUI implements ViewInterface {
     @Override
     public void setClient(AbstractClient client) {
         this.client = client;
-       // this.player = client.getPlayer();
     }
 
     @Override

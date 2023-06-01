@@ -4,6 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
+import View.GUIApp;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -72,16 +73,20 @@ public class ClientAppSocket implements AbstractClient {
         in = new Scanner(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         String input = (String) objIn.readObject();
-        if (input.equals("ready")) System.out.println("Client starting");
+        if (input.equals("ready")) {
+            System.out.println("Client starting");
 
 
-        if (typeOfView.equals("TUI")) {
-            System.out.println("creating TUI");
-            this.view = new TextualUI(this);
-        } //else this.view = new GUIclass();
+            if (typeOfView.equals("TUI")) {
+                System.out.println("creating TUI");
+                this.view = new TextualUI(this);
+            } //else
+              //  this.view = new GUIApp(this);
+
 
         while (state != States.CLOSE) {
             inputHandler();
+        }
         }
         in.close();
         socket.close();

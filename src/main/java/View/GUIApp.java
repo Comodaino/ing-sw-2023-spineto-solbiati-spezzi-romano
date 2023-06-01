@@ -1,4 +1,4 @@
-package View;
+/*package View;
 
 
 import Distributed.AbstractClient;
@@ -30,7 +30,7 @@ public class GUIApp extends Application implements ViewInterface{
     private Stage primaryStage;
 
 
-    public static void main(String[] args){
+    public static void execute(String[] args){
         launch(args);
     }
 
@@ -63,7 +63,7 @@ public class GUIApp extends Application implements ViewInterface{
         }
 
 
-       */
+
 
 
        // home(primaryStage);
@@ -85,7 +85,6 @@ public class GUIApp extends Application implements ViewInterface{
         mainPane.getRowConstraints().add(row1);
 
 
-      */
         Image imageBackgroungShelf = new Image("images/misc/sfondoparquet.jpg");
         ImageView imageViewShelf = new ImageView(imageBackgroungShelf);
         BoxBlur blur = new BoxBlur(3, 3, 3);
@@ -524,16 +523,15 @@ Player p = new Player("Ale",true);
     @Override
     public void addChatMessage(String tmp) {
 
-    }
-      /*  public GUIApp(AbstractClient client, RemotePlayer player, State state) {
+    }public GUIApp(AbstractClient client, RemotePlayer player, State state) {
         this.player = player;
         this.client = client;
         this.state = state;
         }
 
-       */
 
 
 
 }
 
+        */

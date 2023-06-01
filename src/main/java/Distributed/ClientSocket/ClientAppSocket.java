@@ -4,7 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.GUIApp;
+//import View.GUIApp;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -80,8 +80,8 @@ public class ClientAppSocket implements AbstractClient {
             if (typeOfView.equals("TUI")) {
                 System.out.println("creating TUI");
                 this.view = new TextualUI(this);
-            } //else
-              //  this.view = new GUIApp(this);
+            }
+
 
 
         while (state != States.CLOSE) {

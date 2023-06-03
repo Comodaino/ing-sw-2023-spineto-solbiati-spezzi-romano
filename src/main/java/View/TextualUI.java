@@ -6,7 +6,7 @@ import Model.Tile;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.Scanner;
+import java.util.*;
 
 public class TextualUI implements ViewInterface {
 
@@ -14,13 +14,16 @@ public class TextualUI implements ViewInterface {
     private final Scanner input;
     private AbstractClient client;
     public static final String RESET = "\033[0m";
+    public static final int maxMsgLenght = 40;
+
+    public String[] msgBuffer;
 
     public TextualUI(AbstractClient client) throws IOException {
 
-        //this.player = client.getPlayer();
         this.state = State.HOME;
         this.input = new Scanner(System.in);
         this.client = client;
+        this.msgBuffer = new String[4];
         Thread th = new Thread() {
             @Override
             public void run() {
@@ -38,8 +41,29 @@ public class TextualUI implements ViewInterface {
     public void inputHandler() throws IOException {
 
         while(state!=State.CLOSE) {
-            if(state!=State.HOME)
-                client.println(input.nextLine());
+            if(state!=State.HOME){
+                String in = input.nextLine();
+                if(in.startsWith("/"))
+                    client.println(in);
+                else{
+                    if(in.length()> maxMsgLenght)
+                        System.out.println("message too long");
+                    else {
+                        if (msgBuffer!= null && msgBuffer.length==3){
+                            msgBuffer[0] = msgBuffer[1];
+                            msgBuffer[1] = msgBuffer[2];
+                            msgBuffer[2] = null;
+                        }
+                        for (int i = 0; i < msgBuffer.length; i++){
+                            if(msgBuffer[i]==null){
+                                msgBuffer[i] = "@" + client.getNickname() + ": " + in;
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            }
             else {
                 String nick = input.nextLine();
                 if(nick!= null && nick.length()>10) {
@@ -140,14 +164,17 @@ public class TextualUI implements ViewInterface {
                     System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
                     System.out.println(ConsoleColors.GREEN_UNDERLINED + "/add C" + RESET + "  ---> to add a tile in the column C of your shelf");
                     System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  ---> to remove the tile[row][column] from the board");
-                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1 [row2 column2] [row3 column3]" + RESET + "  ---> to remove 2 or 3 tiles from the board");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1 [row2 column2] [row3 column3]" + RESET + "  ---> to remove 2 or 3 tiles from the board\n");
+                    chat();
                 }
                 else{
                     System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
                     showBoard();
+                    showYourShelf();
                     showOthersShelf();
                     showGoals();
                     showYourScore();
+                    chat();
                 }
               break;
             case END:
@@ -168,6 +195,17 @@ public class TextualUI implements ViewInterface {
                 break;
         }
     }
+
+    private void chat() {
+        System.out.println(ConsoleColors.PURPLE_UNDERLINED + "CHAT:" + RESET);
+        if(msgBuffer!=null) {
+            for (String s : msgBuffer) {
+                if (s != null)
+                    System.out.println(s);
+            }
+        }
+    }
+
     private void showYourScore() throws RemoteException {
         for(Player p: client.getBoardView().getListOfPlayer()) {
             if (p.getNickname().equals(client.getNickname()))
@@ -182,7 +220,7 @@ public class TextualUI implements ViewInterface {
         for (Player p: client.getBoardView().getListOfPlayer()
              ) {
             if (client.getNickname().equals(p.getNickname()))
-                System.out.println(p.getGoal().toString() + "\t" + p.getNearGoal().toString()); //todo find a way to show goals
+                System.out.println(p.getGoal().toString() + "\n Adjacent tiles"); //todo find a way to show goals
 
         }
     }

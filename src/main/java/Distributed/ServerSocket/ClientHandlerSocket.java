@@ -179,9 +179,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             System.out.println("waiting for input");
             String input = in.nextLine();
             System.out.println("RECEIVED " + input);
-            if (input.startsWith("/message")) {
-                lobby.sendMessage(input);
-            } else if (input.charAt(0) == '/') {
+            if (input.charAt(0) == '/') {
                 switch (player.getState()) {
                     case WAIT:
                         waitCommand(input);

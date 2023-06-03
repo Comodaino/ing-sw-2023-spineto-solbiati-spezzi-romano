@@ -5,6 +5,7 @@ import Model.Board;
 import Model.BoardView;
 import Model.CommonGoals.CommonGoal;
 import Model.Player;
+import Model.Whisper;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -211,6 +212,41 @@ public class GameController implements Serializable {
         }
     }
 
+    private void newMessage(String[] input) {
+
+        String tmp = "[" + input[1] + "]";
+        for(int i = 2; i< input.length; i++){
+            tmp = tmp +  " " +  input[i];
+        }
+
+        if(gameBoard.getChatBuffer().size() >=3) gameBoard.getChatBuffer().remove(0);
+        gameBoard.getChatBuffer().add(tmp);
+    }
+
+    private void newWhisper(String[] input) {
+        String tmp = "[" + input[2] + "](to you)";
+        for(int i = 3; i< input.length; i++){
+            tmp = tmp +  " " +  input[i];
+        }
+
+        int counter = 0;
+        for(Whisper w:   gameBoard.getPersonalChatBuffer()){
+            if(w.getRecipient().equals(input[2])){
+                counter +=1;
+            }
+        }
+        if(counter >= 3){
+            for(Whisper w:   gameBoard.getPersonalChatBuffer()){
+                if(w.getRecipient().equals(input[2])){
+                    gameBoard.getPersonalChatBuffer().remove(w);
+                    break;
+                }
+            }
+        }
+        gameBoard.getPersonalChatBuffer().add(new Whisper(input[1], input[2], tmp));
+    }
+
+
 
     /** receives, processes and executes the command passed as parameter, does nothin is the move is invalid or the command is wrong
      *
@@ -238,11 +274,20 @@ public class GameController implements Serializable {
                     playEndGame();
                     serverUpdater();
                     break;
+                case "/message":
+                    newMessage(input);
+                    serverUpdater();
+                    break;
+                case "/whisper":
+                    newWhisper(input);
+                    serverUpdater();
+                    break;
                 default:
                     break;
             }
         }
     }
+
 
     public Board getBoard() {
         return gameBoard;

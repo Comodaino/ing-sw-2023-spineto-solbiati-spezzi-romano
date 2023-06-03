@@ -29,4 +29,6 @@ public class BoardView implements Serializable {
     public Player getWinner() { return board.getWinner(); }
     public List<Player> getDonePlayers() { return  board.getDonePlayers();}
     public Player getCurrentPlayer() { return board.getCurrentPlayer();}
+    public List<Whisper> getPersonalChatBuffer(){ return board.getPersonalChatBuffer();}
+    public List<String> getChatBuffer(){ return board.getChatBuffer();}
 }

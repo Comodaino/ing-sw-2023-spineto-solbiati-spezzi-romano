@@ -99,15 +99,6 @@ public class Lobby {
         serverApp.removeLobby(this);
     }
 
-
-    public void sendMessage(String message) throws IOException, InterruptedException {
-        System.out.println("sending: " + message);
-        for (RemotePlayer p : lp) {
-            p.message(message);
-        }
-        updateAll();
-    }
-
     public void updateAll() throws IOException, InterruptedException {
         for (RemotePlayer p : lp) {
             p.update(boardView);

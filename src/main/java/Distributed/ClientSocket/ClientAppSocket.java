@@ -83,10 +83,9 @@ public class ClientAppSocket implements AbstractClient {
             }
 
 
-
-        while (state != States.CLOSE) {
-            inputHandler();
-        }
+            while (state != States.CLOSE) {
+                inputHandler();
+            }
         }
         in.close();
         socket.close();
@@ -109,15 +108,10 @@ public class ClientAppSocket implements AbstractClient {
                 }
                 input = tmpInput[0];
             }
-            if (input.startsWith("/message")) {
-                String tmp = input.substring(8);
-                view.addChatMessage(tmp);
-            }
 
             if (input.equals("/nickname")) {
                 view.update("/nickname");
-            }
-            if (!input.startsWith("/message") && !input.startsWith("/nickname"))
+            } else {
                 if (input.charAt(0) == '/') {
                     switch (input) {
                         case "/init":
@@ -137,6 +131,7 @@ public class ClientAppSocket implements AbstractClient {
                             break;
                         case "/play":
                             playCommand();
+                            view.setState(State.PLAY);
                             break;
                         case "/end":
                             state = States.END;
@@ -161,6 +156,7 @@ public class ClientAppSocket implements AbstractClient {
                             break;
                     }
                 }
+            }
         }
 
         assert input != null;
@@ -180,16 +176,32 @@ public class ClientAppSocket implements AbstractClient {
 
 
     /**
-     * takes the parameter arg and sends it to the server
+     * takes the parameter arg and sends it to the server, in case of a message or "/whisper" it reformats the string correctly
      *
      * @param arg string to send to the server
      */
     @Override
     public void println(String arg) {
 
-        if(!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
+        if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
 
         if (state.equals(States.INIT)) this.tmpNickname = arg;
+        if(arg.startsWith("/whisper")) {
+            String[] tmp =  arg.split(" ");
+            String last = tmp[tmp.length-1];
+            String[] tmp2 = new String[tmp.length];
+            tmp2[0] = tmp[0];
+            tmp2[1] = tmp[1];
+            for(int i= 1 ; i < tmp.length - 1; i++ ){
+                tmp2[i+1] = tmp[i];
+            }
+            tmp2[1] = this.nickname;
+            arg = tmp2[0];
+            for(int i = 1; i< tmp.length; i++){
+                arg = arg + " " + tmp2[i];
+            }
+            arg = arg + " " + last;
+        }
         System.out.println("SENDING: " + arg);
         out.println(arg);
         out.flush();

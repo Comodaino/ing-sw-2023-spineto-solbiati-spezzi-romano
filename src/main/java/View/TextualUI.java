@@ -3,6 +3,7 @@ package View;
 import Distributed.AbstractClient;
 import Model.Player;
 import Model.Tile;
+import Model.Whisper;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -14,7 +15,7 @@ public class TextualUI implements ViewInterface {
     private final Scanner input;
     private AbstractClient client;
     public static final String RESET = "\033[0m";
-    public static final int maxMsgLenght = 40;
+    public static final int maxMsgLength = 50;
 
     public String[] msgBuffer;
 
@@ -41,31 +42,12 @@ public class TextualUI implements ViewInterface {
     public void inputHandler() throws IOException {
 
         while(state!=State.CLOSE) {
+            String in = input.nextLine();
             if(state!=State.HOME){
-                String in = input.nextLine();
-                if(in.startsWith("/"))
-                    client.println(in);
-                else{
-                    if(in.length()> maxMsgLenght)
-                        System.out.println("message too long");
-                    else {
-                        if (msgBuffer!= null && msgBuffer.length==3){
-                            msgBuffer[0] = msgBuffer[1];
-                            msgBuffer[1] = msgBuffer[2];
-                            msgBuffer[2] = null;
-                        }
-                        for (int i = 0; i < msgBuffer.length; i++){
-                            if(msgBuffer[i]==null){
-                                msgBuffer[i] = "@" + client.getNickname() + ": " + in;
-                                break;
-                            }
-
-                        }
-                    }
-                }
-            }
-            else {
-                String nick = input.nextLine();
+                if (in.length() <= maxMsgLength) client.println(in);
+                else System.out.println("Input too long, maximum character: " + maxMsgLength);
+            } else {
+                String nick = in;
                 if(nick!= null && nick.length()>10) {
                     System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
                 }
@@ -130,6 +112,7 @@ public class TextualUI implements ViewInterface {
                     break;
             }
     }
+
     public void update() throws IOException {
         System.out.println("update: " + this.state);
         switch (this.state) {
@@ -206,13 +189,13 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    private void chat() {
+    private void chat() throws RemoteException {
         System.out.println(ConsoleColors.PURPLE_UNDERLINED + "CHAT:" + RESET);
-        if(msgBuffer!=null) {
-            for (String s : msgBuffer) {
-                if (s != null)
-                    System.out.println(s);
-            }
+        for(String s: client.getBoardView().getChatBuffer()){
+            System.out.println("--" + s);
+        }
+        for(Whisper s: client.getBoardView().getPersonalChatBuffer()){
+            if(s.getRecipient().equals(client.getNickname())) System.out.println("--" + s.getContent());
         }
     }
 

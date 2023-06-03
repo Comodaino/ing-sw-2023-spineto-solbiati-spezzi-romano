@@ -37,6 +37,10 @@ public class Lobby {
         this.open = true;
     }
 
+    /**
+     * Adds a player to the lobby
+     * @param p tha player that needs to be added
+     */
     public void addPlayer(RemotePlayer p) {
         if (open) {
             if (lp.isEmpty()) {
@@ -47,7 +51,7 @@ public class Lobby {
         }
     }
 
-    public boolean closeLobby() {
+    private boolean closeLobby() {
         if (lp.size() >= 2) {
             this.open = false;
             return true; //lobby closed
@@ -58,6 +62,7 @@ public class Lobby {
 
     public void startGame() throws RemoteException {
         List<Player> modelPlayerList = new ArrayList<Player>();
+        this.open=closeLobby();
         for(RemotePlayer p : lp) {
             Player tmpPlayer = new Player(p.getNickname(), p.isOwner());
             modelPlayerList.add(tmpPlayer);
@@ -92,15 +97,6 @@ public class Lobby {
             p.setState(States.CLOSE);
         }
         serverApp.removeLobby(this);
-    }
-
-
-    public void sendMessage(String message) throws IOException, InterruptedException {
-        System.out.println("sending: " + message);
-        for (RemotePlayer p : lp) {
-            p.message(message);
-        }
-        updateAll();
     }
 
     public void updateAll() throws IOException, InterruptedException {

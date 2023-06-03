@@ -1,9 +1,8 @@
 package Model;
 
-import Model.CommonGoals.*;
+import Model.CommonGoals.CommonGoal;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -24,20 +23,24 @@ public class Board implements Serializable {
     private final List<Tile> tileBuffer;
     private final Bag bag;
     private Player currentPlayer;
-    public final BoardView boardView;
+    private final BoardView boardView;
+    private List<String> chatBuffer;
+    private List<Whisper> personalChatBuffer;
     /**
      * Constructor of the board
      * @param fm represents if it's the first match for the players
      * @param pl list of the players
      */
     public Board(boolean fm, List<Player> pl) {
-
+        chatBuffer = new ArrayList<>();
+        personalChatBuffer = new ArrayList<>();
         matrix = new Cell[9][9];
         bag = new Bag();
 
-        try {
-            File boardConf = new File("src/main/java/Model/Conf/board_conf");
-            Scanner reader = new Scanner(boardConf);
+            InputStream is = getClass().getClassLoader().getResourceAsStream("board_conf");
+           // File boardConf = new File("src/main/java/Model/Conf/board_conf");
+            assert is != null;
+            Scanner reader = new Scanner(is);
 
             for(int i = 0; i<9 && reader.hasNextLine(); i++) {
                 String data = reader.nextLine();
@@ -59,9 +62,6 @@ public class Board implements Serializable {
             }
 
             reader.close();
-        }catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        };
 
         this.donePlayers = new ArrayList<Player>();
         this.listOfPlayer = pl;
@@ -165,8 +165,10 @@ public class Board implements Serializable {
         return endGoal;
     }
     public Player getCurrentPlayer() { return currentPlayer; }
-    public void setCurrentPlayer(Player cp){ this.currentPlayer= cp;}
+    public void setCurrentPlayer(Player cp){ this.currentPlayer= cp; }
 
+    public List<String> getChatBuffer() { return chatBuffer; }
+    public List<Whisper> getPersonalChatBuffer(){ return personalChatBuffer;}
 
     public Player getWinner() {
         return winner;

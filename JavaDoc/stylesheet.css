@@ -2,7 +2,7 @@
  * Javadoc style sheet
  */
 
-@import url('resources/fonts/dejavu.css');
+
 
 /*
  * Styles for individual HTML elements.
@@ -1201,4 +1201,10 @@ pre.snippet .bold {
 pre.snippet .highlighted {
     background-color: #f7c590;
     border-radius: 10%;
+}
+.root {
+
+    -fx-background-image: url('images/Publisher material/Display_3.jpg');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
 }

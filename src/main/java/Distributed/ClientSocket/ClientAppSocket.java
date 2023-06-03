@@ -4,6 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
+//import View.GUIApp;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -31,8 +32,17 @@ public class ClientAppSocket implements AbstractClient {
     private String tmpNickname;
     private String nickname;
 
+
+    /**
+     * Client App constructor for socket connection
+     *
+     * @param address    ip address of the server
+     * @param port       port of the server
+     * @param typeOfView type of interface: GUI or TUI
+     * @throws IOException
+     */
     public ClientAppSocket(String address, int port, String typeOfView) throws IOException {
-        if(address==null) this.address = "127.0.0.1";
+        if (address == null) this.address = "127.0.0.1";
         else this.address = address;
         this.port = port;
         this.tmpNickname = null;
@@ -42,6 +52,14 @@ public class ClientAppSocket implements AbstractClient {
         state = States.INIT;
     }
 
+    /**
+     * Starts the client
+     *
+     * @param address ip address of the server
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws ClassNotFoundException
+     */
     public static void execute(String address) throws IOException, InterruptedException, ClassNotFoundException {
         System.out.println(">>insert \"TUI\" or \"GUI\"");
         Scanner scanner = new Scanner(System.in);
@@ -49,33 +67,36 @@ public class ClientAppSocket implements AbstractClient {
         client.connect();
     }
 
-    public void connect() throws IOException, ClassNotFoundException {
+    private void connect() throws IOException, ClassNotFoundException {
         socket = new Socket(address, port);
         objIn = new ObjectInputStream(socket.getInputStream());
         in = new Scanner(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         String input = (String) objIn.readObject();
-        if (input.equals("ready")) System.out.println("Client starting");
+        if (input.equals("ready")) {
+            System.out.println("Client starting");
 
 
-        if (typeOfView.equals("TUI")) {
-            System.out.println("creating TUI");
-            this.view = new TextualUI(this);
-        } //else this.view = new GUIclass();
+            if (typeOfView.equals("TUI")) {
+                System.out.println("creating TUI");
+                this.view = new TextualUI(this);
+            }
 
-        while (state != States.CLOSE) {
-            inputHandler();
+
+            while (state != States.CLOSE) {
+                inputHandler();
+            }
         }
         in.close();
         socket.close();
 
     }
 
-    public void inputHandler() throws IOException, ClassNotFoundException {
+    private void inputHandler() throws IOException, ClassNotFoundException {
         System.out.println("waiting for input");
 
-        String input  = (String) objIn.readObject();
-        if(input != null) {
+        String input = (String) objIn.readObject();
+        if (input != null) {
 
             System.out.println("RECEIVED: " + input);
 
@@ -86,10 +107,6 @@ public class ClientAppSocket implements AbstractClient {
                     this.owner = true;
                 }
                 input = tmpInput[0];
-            }
-            if (input.startsWith("/message")) {
-                String tmp = input.substring(8);
-                view.addChatMessage(tmp);
             }
 
             if (input.equals("/nickname")) {
@@ -114,6 +131,7 @@ public class ClientAppSocket implements AbstractClient {
                             break;
                         case "/play":
                             playCommand();
+                            view.setState(State.PLAY);
                             break;
                         case "/end":
                             state = States.END;
@@ -139,12 +157,13 @@ public class ClientAppSocket implements AbstractClient {
                     }
                 }
             }
+        }
 
-            if (input.charAt(0) != '/' && state != States.INIT) {
-                System.out.println("unclePear");
-                out.println(input);
-                out.flush();
-            }
+        assert input != null;
+        if (input.charAt(0) != '/' && state != States.INIT) {
+            System.out.println("unclePear");
+            out.println(input);
+            out.flush();
         }
     }
 
@@ -156,9 +175,33 @@ public class ClientAppSocket implements AbstractClient {
     }
 
 
+    /**
+     * takes the parameter arg and sends it to the server, in case of a message or "/whisper" it reformats the string correctly
+     *
+     * @param arg string to send to the server
+     */
     @Override
     public void println(String arg) {
+
+        if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
+
         if (state.equals(States.INIT)) this.tmpNickname = arg;
+        if(arg.startsWith("/whisper")) {
+            String[] tmp =  arg.split(" ");
+            String last = tmp[tmp.length-1];
+            String[] tmp2 = new String[tmp.length];
+            tmp2[0] = tmp[0];
+            tmp2[1] = tmp[1];
+            for(int i= 1 ; i < tmp.length - 1; i++ ){
+                tmp2[i+1] = tmp[i];
+            }
+            tmp2[1] = this.nickname;
+            arg = tmp2[0];
+            for(int i = 1; i< tmp.length; i++){
+                arg = arg + " " + tmp2[i];
+            }
+            arg = arg + " " + last;
+        }
         System.out.println("SENDING: " + arg);
         out.println(arg);
         out.flush();
@@ -178,7 +221,8 @@ public class ClientAppSocket implements AbstractClient {
     public boolean isOwner() {
         return owner;
     }
-    public RemotePlayer getPlayer(){
+
+    public RemotePlayer getPlayer() {
         return null;
     }
 

@@ -2,24 +2,17 @@ package Distributed;
 
 
 import Distributed.ClientRMI.Client;
-import Distributed.ServerRMI.Server;
-//import Distributed.ServerRMI.ServerImpl;
+import Distributed.ServerRMI.ServerImpl;
 import Distributed.ServerSocket.ClientHandlerSocket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static Distributed.States.*;
 
 public class ServerApp {
     private int port;
@@ -45,6 +38,7 @@ public class ServerApp {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        ServerImpl.execute();
     }
 
     public void startServer() throws IOException, InterruptedException {

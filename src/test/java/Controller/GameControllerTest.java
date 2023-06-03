@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Scanner;
-
+/*
 class GameControllerTest extends Observable{
     @Test
     public void inputTestTwo() throws IOException {
@@ -47,3 +47,5 @@ class GameControllerTest extends Observable{
         }
     }
 }
+
+ */

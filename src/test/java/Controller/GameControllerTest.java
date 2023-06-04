@@ -22,7 +22,7 @@ class GameControllerTest extends Observable{
         playerList.add(new Player("player2", true));
         GameController testController = new GameController(playerList, false, new LobbyTest(null));
         Board gameBoard = testController.getBoard();
-        File commands = new File("src/test/java/Controller/controllerTestConf2");
+        File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
@@ -43,7 +43,7 @@ class GameControllerTest extends Observable{
         playerList.add(new Player("player3", false));
         GameController testController = new GameController(playerList, false, new LobbyTest(null));
         Board gameBoard = testController.getBoard();
-        File commands = new File("src/test/java/Controller/controllerTestConf2");
+        File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
@@ -66,7 +66,7 @@ class GameControllerTest extends Observable{
         playerList.add(new Player("player4", false));
         GameController testController = new GameController(playerList, false, new LobbyTest(null));
         Board gameBoard = testController.getBoard();
-        File commands = new File("src/test/java/Controller/controllerTestConf2");
+        File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();

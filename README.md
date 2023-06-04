@@ -1,8 +1,8 @@
 # Prova Finale di Ingegneria del Software - AA 2021-2022
 
-![MyShelfie](src/main/resources/Publisher material/Title 2000x618px.png)
+![MyShelfie](src/main/resources/images/Publisher%20material/Title%202000x618px.png)
 
-Implementazione del gioco da tavolo [MyShelfie](https://www.craniocreations.it/prodotto/myshelfie/).
+Implementazione del gioco da tavolo [MyShelfie](https://www.craniocreations.it/prodotto/my-shelfie).
 
 ---
 

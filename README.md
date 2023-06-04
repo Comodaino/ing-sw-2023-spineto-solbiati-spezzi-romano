@@ -78,7 +78,7 @@ java -jar myshelfie.jar 192.168.1.1
 
 ## Docker
 
-To test portability and compatibility of the app, we created a docker container to run the app (the app was also tested on two fresh linux installation (Arch and Garuda)
+To test portability and compatibility of the app, we created a docker container to run the app (the app was also tested on two fresh linux installation (Arch and Garuda Linux)
 
 To build the container: 
 ```

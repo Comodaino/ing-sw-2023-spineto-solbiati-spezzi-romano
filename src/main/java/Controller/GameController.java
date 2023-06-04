@@ -92,9 +92,11 @@ public class GameController implements Serializable {
         }
     }
 
-    private void playswitch(String[] input){
+    private void playSwitch(String[] input){
+        if(gameBoard.getTileBuffer().size() < 2) return;
         int first = input[1].charAt(0) - 48;
         int second = input[2].charAt(0) - 48;
+        System.out.println("LENGTH: " + gameBoard.getTileBuffer().size());
         Collections.swap(gameBoard.getTileBuffer(), first, second);
         System.out.println("swapped");
     }
@@ -133,8 +135,7 @@ public class GameController implements Serializable {
                     }
                 }
             }
-        }
-
+        } else System.err.println("NOT FREE");
     }
 
     /**
@@ -158,7 +159,7 @@ public class GameController implements Serializable {
                             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getEndGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                         }
                         if (currentPlayer.getShelf().isFull()) {
-                            while (gameBoard.getTileBuffer().size() != 0) gameBoard.getTileBuffer().remove(0);
+                            gameBoard.getTileBuffer().removeAll(gameBoard.getTileBuffer());
                             playEndGame();
                             checkEnd();
                         }
@@ -267,7 +268,7 @@ public class GameController implements Serializable {
                     serverUpdater();
                     break;
                 case "/switch":
-                    playswitch(input);
+                    playSwitch(input);
                     serverUpdater();
                     break;
                 case "/end":
@@ -285,7 +286,7 @@ public class GameController implements Serializable {
                 default:
                     break;
             }
-        }
+        }else System.err.println("NOT A COMMAND");
     }
 
 

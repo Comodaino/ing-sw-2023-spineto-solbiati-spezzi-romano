@@ -6,54 +6,66 @@ Implementazione del gioco da tavolo [MyShelfie](https://www.craniocreations.it/p
 
 ---
 
-## Librerie e plugins
+## Tools used
 
-| Libreria/Plugin | Descrizione                                                                                                    |
-|-----------------|----------------------------------------------------------------------------------------------------------------|
-| Maven           | Strumento di gestione di progetti software basati su Java e build automation                                   |
-| JUnit           | Framework di unit testing per il linguaggio di programmazione Java                                             |
-| JavaFx          | Famiglia di software applicativi, basati sulla piattaforma Java, per la creazione di rich Internet application |
+| Tool  | Description                                                                                                                                                                             |
+|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| IntelliJ IDEA   | Integrated development environment (IDE) written in Java for developing computer software written in Java, Kotlin, Groovy, and other JVM-based languages.                     |
+| Docker          | Set of platform as a service (PaaS) products that use OS-level virtualization to deliver software in packages called containers.                                              |
+
+
+## Libreries and Plugins
+
+| Library/Plugin  | Description                                                                |
+|-----------------|----------------------------------------------------------------------------|
+| Maven           | Build automation tool used primarily for Java projects                     |
+| JUnit           | Unit testing framework for the Java programming language                   |
+| JavaFx          | Software platform for creating and delivering desktop applications         |
 
 ---
 
-## Funzionalità
+## Functionalities
 
-| Funzionalità        | Stato               |
+| Functionality       | Implemented         |
 |---------------------|---------------------|
-| Regole semplificate | :heavy_check_mark:  |
-| Regole complete     | :heavy_check_mark:  |
+| Simplified rules    | :heavy_check_mark:  |
+| Complete rules      | :heavy_check_mark:  |
 | Socket              | :heavy_check_mark:  |
 | RMI                 | :heavy_check_mark:  |
-| Cli                 | :heavy_check_mark:  |
+| Tui                 | :heavy_check_mark:  |
 | Gui                 | :x:                 |
 
-| Funzionalità avanzate          | Stato              |
+| Advanced Functionalities       | Implemented        |
 |--------------------------------|--------------------|
-| Partite multiple               | :heavy_check_mark: |
+| Multiple matches               | :heavy_check_mark: |
 | Chat                           | :heavy_check_mark: |
-| Persistenza                    | :x:                |
-| Resilienza alle disconnessioni | :x:                |
+| Persistence                    | :x:                |
+| Resilience to disconnections   | :x:                |
 
 ---
 
 ## Tests
 
-Verranno aggiunti screenshot dello strumento Intellij per dimostrare il corretto funzionamento del programma (spero)
+These are screenshot directly from intellij showing coverage fo our tests, since the common goals are so many and each match doesn't use more than two of them, we decided to test them separately 
+
+Percentage coverages for classes, methods and lines of code:
+![imageNotFound](testScreenshots/controllerAndModelCoverage.jpg)
+![imageNotFound](testScreenshots/commonGoalsCoverage.jpg)
 
 ---
 
 
-## Esecuzione
+## Execution
 
-Questo progetto richiede una versione di Java 20.
+Java 20 is required by the project
 
-### Per eseguire il programma basta eseguire il jar con il seguente comando (sia server che client): 
+### To execute the both client and server just execute the jar with (127.0.0.1 will be the default ip on which the client tries to connect): 
 
 ```
 java -jar myshelfie.jar
 ```
 
-### Aggiungere un indirizzo ip come parametro eseguirá automaticamente il client e si connetterá a quell indirizzo (127.0.0.1 é l'indirizzo default):
+### It's possible to add an IP address at the end of the command to connect to a different IP:
 
 ```
 java -jar myshelfie.jar 192.168.1.1
@@ -61,11 +73,26 @@ java -jar myshelfie.jar 192.168.1.1
 
 ---
 
-## Jar
+## JAR
+- [Latest release](https://github.com/Comodaino/ing-sw-2023-spineto-solbiati-spezzi-romano/releases/latest)
 
-Al seguente link sono disponibili gli eseguibili (fra un po'):
+## Docker
 
-## Componenti del gruppo
+To test portability and compatibility of the app, we created a docker container to run the app (the app was also tested on two fresh linux installation (Arch and Garuda)
+
+To build the container: 
+```
+sudo docker build -t nameOfTheImage .
+```
+To run the container: 
+```
+sudo docker run -p -i -t nameOfTheImage
+```
+Docker is required to create and run the image, to create the image copy in a new folder both Dockerfile and the jar executable
+
+---
+
+## Group members:
 
 - [_**Spineto Alessio**_](https://github.com/Comodaino)
 - [_**Solbiati Nicoló**_](https://github.com/NicoSolbia)

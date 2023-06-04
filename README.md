@@ -63,13 +63,11 @@ java -jar myshelfie.jar 192.168.1.1
 
 ## Jar
 
-Al seguente link sono disponibili gli eseguibili:
-
-- [Latest release](https://github.com/irinel-sarbu/ing-sw-2022-Rigamonti-Rogora-Sarbu/releases/latest)
+Al seguente link sono disponibili gli eseguibili (fra un po'):
 
 ## Componenti del gruppo
 
 - [_**Spineto Alessio**_](https://github.com/Comodaino)
-- [_**Solbiati Nicoló**_](https://github.com/Comodaino)
-- [_**Spezzi Clara**_](https://github.com/Comodaino)
-- [_**Romano Alessandra**_](https://github.com/Comodaino)
+- [_**Solbiati Nicoló**_](https://github.com/NicoSolbia)
+- [_**Spezzi Clara**_](https://github.com/claraspezzi)
+- [_**Romano Alessandra**_](https://github.com/Aleromano01)

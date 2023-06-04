@@ -2,7 +2,7 @@
 
 ![MyShelfie](src/main/resources/images/Publisher%20material/Title%202000x618px.png)
 
-Implementazione del gioco da tavolo [MyShelfie](https://www.craniocreations.it/prodotto/my-shelfie).
+Implementation of the tabletop game: [MyShelfie](https://www.craniocreations.it/prodotto/my-shelfie).
 
 ---
 

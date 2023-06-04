@@ -61,8 +61,8 @@ public class Lobby {
 
 
     public void startGame() throws RemoteException {
+        this.open=false;
         List<Player> modelPlayerList = new ArrayList<Player>();
-        this.open=closeLobby();
         for(RemotePlayer p : lp) {
             Player tmpPlayer = new Player(p.getNickname(), p.isOwner());
             modelPlayerList.add(tmpPlayer);

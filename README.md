@@ -55,17 +55,17 @@ Percentage coverages for classes, methods and lines of code:
 ---
 
 
-## Esecuzione
+## Execution
 
-Questo progetto richiede una versione di Java 20.
+Java 20 is required by the project
 
-### Per eseguire il programma basta eseguire il jar con il seguente comando (sia server che client): 
+### To execute the both client and server just execute the jar with (127.0.0.1 will be the default ip on which the client tries to connect): 
 
 ```
 java -jar myshelfie.jar
 ```
 
-### Aggiungere un indirizzo ip come parametro eseguirá automaticamente il client e si connetterá a quell indirizzo (127.0.0.1 é l'indirizzo default):
+### It's possible to add an IP address at the end of the command to connect to a different IP:
 
 ```
 java -jar myshelfie.jar 192.168.1.1
@@ -77,7 +77,7 @@ java -jar myshelfie.jar 192.168.1.1
 
 Al seguente link sono disponibili gli eseguibili (fra un po'):
 
-## Componenti del gruppo
+## Group members:
 
 - [_**Spineto Alessio**_](https://github.com/Comodaino)
 - [_**Solbiati Nicoló**_](https://github.com/NicoSolbia)

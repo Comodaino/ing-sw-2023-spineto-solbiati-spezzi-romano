@@ -73,9 +73,8 @@ java -jar myshelfie.jar 192.168.1.1
 
 ---
 
-## Jar
-
-Al seguente link sono disponibili gli eseguibili (fra un po'):
+## JAR
+- [Latest release](https://github.com/Comodaino/ing-sw-2023-spineto-solbiati-spezzi-romano/releases/latest)
 
 ## Docker
 

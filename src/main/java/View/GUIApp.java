@@ -24,6 +24,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -103,30 +104,43 @@ public class GUIApp extends Application implements ViewInterface{
         Pane boardPane = new Pane();
 
         Image imageBoard = new Image("images/boards/livingroom.png");
-        ImageView imageView = new ImageView(imageBoard);
+        ImageView imageViewBoard = new ImageView(imageBoard);
 
-        imageView.setPreserveRatio(true);
-        imageView.setFitHeight(650);
-        imageView.setFitWidth(650);
+        imageViewBoard.setPreserveRatio(true);
+        imageViewBoard.setFitHeight(650);
+        imageViewBoard.setFitWidth(650);
 
-        boardPane.getChildren().addAll(imageView);
-        boardPane.getChildren().add(fillBoard(client));
+        boardPane.getChildren().addAll(imageViewBoard);
+        GridPane fillBoardGridPane = fillBoard(CellType.TWO);
+        fillBoardGridPane.setPrefSize(650, 650);
+        fillBoardGridPane.setAlignment(Pos.CENTER);
+
+        boardPane.getChildren().add(fillBoardGridPane);
         return boardPane;
     }
-     public GridPane fillBoard(AbstractClient client){
-
+//    public GridPane fillBoard(AbstractClient client){
+      public GridPane fillBoard(CellType cellType){
         GridPane fillBoardPane = new GridPane();
         Pane emptyComponent = new Pane();
 
+        emptyComponent.setMinSize(50, 50);
        for (int i = 0; i < 9; i++) {
            for (int j = 0; j < 9; j++) {
-               switch (client.getBoardView().getCell(i, j).getType()){
+              // switch (client.getBoardView().getCell(i, j).getType()){
+               switch (cellType){
                    case ONE:
                        emptyComponent.setPrefSize(50, 50);
                        fillBoardPane.add(emptyComponent, i, j);
                        break;
                    case TWO:
-                       fillBoardPane.add(getTile(i,j),i,j);
+                       if((i==2 || j==3) || (i==5 && j==8)){
+                           Pane emptyComponent2 = new Pane();
+                           emptyComponent2.setPrefSize(52, 52);
+                           fillBoardPane.add(emptyComponent2, i, j);
+
+                       }else {
+                           fillBoardPane.add(getTile(i, j), i, j);
+                       }
                        break;
                    case THREE:
                        if (client.getBoardView().getListOfPlayer().size()>2){
@@ -146,20 +160,50 @@ public class GUIApp extends Application implements ViewInterface{
                        break;
                }
 
-                     Image imageBoard = new Image("images/item tiles/Gatti1.2.png");
+                 /*    Image imageBoard = new Image("images/item tiles/Gatti1.2.png");
                      ImageView imageView = new ImageView(imageBoard);
                      imageView.setPreserveRatio(true);
                      imageView.setFitHeight(50);
                      imageView.setFitWidth(50);
                      fillBoardPane.add(imageView, i, j);
+
+                  */
                }
            }
 
         return fillBoardPane;
     }
 
+    public Button getTile(int r, int c){
+        Button tileButton = new Button();
+        tileButton.setMinSize(52, 52);
+        if(r==5 || c==3){
+            tileButton.setPrefSize(52, 52);
+            Image imageTile = new Image("images/item tiles/Gatti1.3.png");
+            ImageView imageView = new ImageView(imageTile);
+            imageView.setPreserveRatio(true);
+            imageView.setFitHeight(52);
+            imageView.setFitWidth(52);
+            tileButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+            tileButton.setGraphic(imageView);
+        }else {
+            Image imageTile = new Image("images/item tiles/Gatti1.2.png");
+            ImageView imageView = new ImageView(imageTile);
+            imageView.setPreserveRatio(true);
+            imageView.setFitHeight(52);
+            imageView.setFitWidth(52);
+            tileButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+            tileButton.setGraphic(imageView);
+        }
 
-    public Button getTile(int row, int column){
+        tileButton.setOnAction(e -> {
+            tileButton.setStyle("-fx-background-color: gold; -fx-border-color: gold;");
+            tileButton.setGraphic(null);
+        });
+
+        return tileButton;
+    }
+  /*  public Button getTile(int row, int column){
         Button tileButton = new Button();
         String imageTilePath = null;
         Constant tile = null;
@@ -253,6 +297,12 @@ public class GUIApp extends Application implements ViewInterface{
         tileButton.setGraphic(imageView);
         return tileButton;
     }
+*/
+    /**
+     * This method is used to create the common goal
+     * @param client is the client
+     * @return the common goal
+        */
 
     public GridPane getCommonGoal(AbstractClient client){
         GridPane commonGoalPane = new GridPane();
@@ -336,18 +386,26 @@ public class GUIApp extends Application implements ViewInterface{
         return commonGoalPane;
     }
     public GridPane createShelf(AbstractClient client, GridPane mainPane) throws RemoteException {
-
-
         GridPane shelfPane = new GridPane();
-
+        GridPane shelfGridPane = new GridPane();
         Image imageShelf = new Image("images/boards/bookshelf.png");
         ImageView shelfImageView = new ImageView(imageShelf);
         shelfImageView.setFitWidth(300);
         shelfImageView.setFitHeight(300);
         shelfPane.add(shelfImageView, 0, 0);
+        shelfPane.add(shelfGridPane, 0, 0);
+
         shelfImageView.setPreserveRatio(true);
 
+        Image iamgeTile45 = new Image("images/item tiles/Giochi1.2.png");
+        ImageView imageView45 = new ImageView(iamgeTile45);
+        imageView45.setFitWidth(35);
+        imageView45.setFitHeight(35);
+        imageView45.setPreserveRatio(true);
 
+        shelfGridPane.add(imageView45, 4, 0);
+        shelfGridPane.setAlignment(Pos.CENTER);
+       // shelfGridPane.add(imageView45, 0, 1);
        // if (client.isOwner()==true) {
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
@@ -356,7 +414,7 @@ public class GUIApp extends Application implements ViewInterface{
             chairImageView.setPreserveRatio(true);
         //    shelfPane.add(chairImageView, 0, 1);
        //  }
-HBox hbox = new HBox(3);
+        HBox hbox = new HBox(3);
         hbox.setPadding(new Insets(15, 12, 15, 12));
         hbox.setSpacing(10);
 
@@ -369,6 +427,8 @@ HBox hbox = new HBox(3);
         hbox.getChildren().addAll(chairImageView,personalGoalImageView);
         hbox.setAlignment(Pos.CENTER);
         shelfPane.add(hbox,0,1);
+
+
         return shelfPane;
     }
 

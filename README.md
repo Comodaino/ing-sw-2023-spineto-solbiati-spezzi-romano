@@ -77,6 +77,22 @@ java -jar myshelfie.jar 192.168.1.1
 
 Al seguente link sono disponibili gli eseguibili (fra un po'):
 
+## Docker
+
+To test portability and compatibility of the app, we created a docker container to run the app (the app was also tested on two fresh linux installation (Arch and Garuda)
+
+To build the container: 
+```
+sudo docker build -t nameOfTheImage .
+```
+To run the container: 
+```
+sudo docker run -p -i -t nameOfTheImage
+```
+Docker is required to create and run the image, to create the image copy in a new folder both Dockerfile and the jar executable
+
+---
+
 ## Group members:
 
 - [_**Spineto Alessio**_](https://github.com/Comodaino)

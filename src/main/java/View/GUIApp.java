@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class GUIApp extends Application implements ViewInterface{
     private AbstractClient client;
@@ -34,7 +35,7 @@ public class GUIApp extends Application implements ViewInterface{
         launch(args);
     }
 
-    public GUIApp(AbstractClient client) throws RemoteException {
+   /* public GUIApp(AbstractClient client) throws RemoteException {
         this.client = client;
         this.state = State.HOME;
         Thread thread = new Thread() {
@@ -50,6 +51,8 @@ public class GUIApp extends Application implements ViewInterface{
         }
         thread.start();
     }
+
+    */
     public void start(Stage primaryStage) throws RemoteException {
       /*  try {
             ClientAppSocket clientSocket = new ClientAppSocket(25565, "GUI");
@@ -124,10 +127,11 @@ public class GUIApp extends Application implements ViewInterface{
         boardPane.getChildren().add(fillBoard(client));
         return boardPane;
     }
-    public GridPane fillBoard(AbstractClient client){
+     public GridPane fillBoard(AbstractClient client){
 
         GridPane fillBoardPane = new GridPane();
         Pane emptyComponent = new Pane();
+
        for (int i = 0; i < 9; i++) {
            for (int j = 0; j < 9; j++) {
                switch (client.getBoardView().getCell(i, j).getType()){
@@ -167,6 +171,8 @@ public class GUIApp extends Application implements ViewInterface{
 
         return fillBoardPane;
     }
+
+
     public Button getTile(int row, int column){
         Button tileButton = new Button();
         String imageTilePath = null;

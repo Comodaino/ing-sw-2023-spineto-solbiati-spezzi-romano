@@ -1,11 +1,9 @@
 package Controller;
 
 import Distributed.Lobby;
-import Model.Board;
-import Model.BoardView;
+import Distributed.RemotePlayer;
+import Model.*;
 import Model.CommonGoals.CommonGoal;
-import Model.Player;
-import Model.Whisper;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -13,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Game controller controls the flow of the match, taking command using the update() method of the observable-observer pattern,
@@ -51,6 +50,32 @@ public class GameController implements Serializable {
             }
         }
         this.gameBoard.setCurrentPlayer(this.currentPlayer);
+
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    connectionChecker();
+                } catch (InterruptedException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        th.start();
+
+    }
+
+    private void connectionChecker() throws InterruptedException, IOException {
+        while (true){
+            TimeUnit.MILLISECONDS.sleep(500);
+            for(RemotePlayer p: lobby.getListOfPlayers()){
+                if(p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()){
+                    System.out.println("checking");
+                    spinHandler();
+                    serverUpdater();
+                }
+            }
+        }
     }
 
     /**
@@ -60,11 +85,22 @@ public class GameController implements Serializable {
      */
     private void spinHandler() {
         int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
+
+        for(int j=gameBoard.getTileBuffer().size() -1 ; j>=0; j--){
+            gameBoard.getTileBuffer().remove(j);
+        }
+
+        boolean flag = false;
         do {
             i += 1;
             if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
             else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
-        } while (donePlayers.contains(currentPlayer));
+
+            for(RemotePlayer p: lobby.getListOfPlayers()){
+                if(p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) flag= true;
+            }
+
+        } while (donePlayers.contains(currentPlayer) || flag);
         gameBoard.setCurrentPlayer(currentPlayer);
     }
 

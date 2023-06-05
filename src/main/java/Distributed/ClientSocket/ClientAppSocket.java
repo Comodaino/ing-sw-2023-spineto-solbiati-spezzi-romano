@@ -104,24 +104,23 @@ public class ClientAppSocket implements AbstractClient {
 
             if (input.startsWith("/wait")) {
                 String[] tmpInput = input.split(" ");
-                if (tmpInput.length > 1 &&  (tmpInput[1].equals("owner") ||  ( tmpInput.length > 2 && tmpInput[2].equals("owner")))) {
+                if (tmpInput.length > 1 &&  (tmpInput[1].equals("owner"))) {
                     this.owner = true;
-                    if(tmpInput.length > 2 ) this.nickname = tmpInput[1];
-                } else if (tmpInput.length > 1)  this.nickname = tmpInput[1];
-
+                }
                 input = tmpInput[0];
             }
-
-            if(input.startsWith("/play")){
+            if(input.startsWith("/setnickname")){
                 String[] tmpInput = input.split(" ");
-                if (tmpInput.length > 1)  this.nickname = tmpInput[1];
+                this.nickname = tmpInput[1];
             }
-
             if (input.equals("/nickname")) {
                 view.update("/nickname");
             } else {
                 if (input.charAt(0) == '/') {
                     switch (input) {
+                        case "/setnickname":
+
+                            break;
                         case "/init":
                             state = States.INIT;
                             view.setState(State.HOME);
@@ -152,10 +151,6 @@ public class ClientAppSocket implements AbstractClient {
                             System.out.println("updating...");
                             break;
                         default:
-                            if (input.startsWith("/message")) {
-                                System.out.println(input);
-                                //TODO update(input);
-                            }
                             view.update();
                             break;
                     }

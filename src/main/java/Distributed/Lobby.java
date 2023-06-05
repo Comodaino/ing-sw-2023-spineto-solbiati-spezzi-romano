@@ -101,7 +101,7 @@ public class Lobby {
 
     public void updateAll() throws IOException, InterruptedException {
         for (RemotePlayer p : lp) {
-            p.update(boardView);
+            if(p.isConnected()) p.update(boardView);
         }
     }
 

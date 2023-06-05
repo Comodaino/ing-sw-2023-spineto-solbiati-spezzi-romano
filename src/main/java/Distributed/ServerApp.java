@@ -83,20 +83,18 @@ public class ServerApp {
     }
 
     public String checkNickname(String input) {
-        boolean found = true;
         synchronized (lobbies) {
             for (Lobby l : lobbies) {
                 for (RemotePlayer p : l.getListOfPlayers()) {
-                    if (p.getNickname().equals(input)) {
-                        found = false;
-                        break;
+                    if (p.getNickname()!= null && p.getNickname().equals(input)) {
+                        if(p.isConnected()) return "false";
+                        p.setConnected(true);
+                        return "reconnected";
                     }
                 }
-                if (!found) break;
             }
         }
-        if (found) return input;
-        return null;
+        return "true";
     }
 
     public List<Lobby> getLobbies() {
@@ -121,5 +119,16 @@ public class ServerApp {
             System.out.println(rp.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
             System.out.println("owner: " + rp.isOwner());
         }
+    }
+
+    public Lobby getLobby(String input) {
+        synchronized (lobbies){
+            for(Lobby l: lobbies){
+                for(RemotePlayer p: l.getListOfPlayers()){
+                    if(p.getNickname().equals(input)) return l;
+                }
+            }
+        }
+        return null;
     }
 }

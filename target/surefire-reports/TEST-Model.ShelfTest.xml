@@ -65,8 +65,8 @@
     <property name="sun.stdout.encoding" value="UTF-8"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetNonExistingTile" time="0.002"/>
-  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInEmptyColumn" time="0"/>
+  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInFullColumn" time="0.002"/>
+  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetNonExistingTile" time="0"/>
   <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetExistingTile" time="0"/>
-  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInFullColumn" time="0.001"/>
+  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInEmptyColumn" time="0.001"/>
 </testsuite>

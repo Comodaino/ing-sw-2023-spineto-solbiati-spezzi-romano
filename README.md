@@ -40,7 +40,7 @@ Implementation of the tabletop game: [MyShelfie](https://www.craniocreations.it/
 | Multiple matches               | :heavy_check_mark: |
 | Chat                           | :heavy_check_mark: |
 | Persistence                    | :x:                |
-| Resilience to disconnections   | :heavy_check_mark  |
+| Resilience to disconnections   | :heavy_check_mark: |
 
 ---
 

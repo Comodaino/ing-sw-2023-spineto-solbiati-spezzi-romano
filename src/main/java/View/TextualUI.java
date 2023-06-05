@@ -1,6 +1,8 @@
 package View;
 
 import Distributed.AbstractClient;
+import Model.Board;
+import Model.CommonGoals.CommonGoal;
 import Model.Player;
 import Model.Tile;
 import Model.Whisper;
@@ -14,8 +16,9 @@ public class TextualUI implements ViewInterface {
     private State state;
     private final Scanner input;
     private AbstractClient client;
-    public static final String RESET = "\033[0m";
-    public static final int maxMsgLength = 50;
+    private static final String RESET = "\033[0m";
+    private static final int maxMsgLength = 50;
+    private int removeSize;
 
     public String[] msgBuffer;
 
@@ -44,8 +47,14 @@ public class TextualUI implements ViewInterface {
         while(state!=State.CLOSE) {
             String in = input.nextLine();
             if(state!=State.HOME){
-                if (in.length() <= maxMsgLength) client.println(in);
-                else System.out.println("Input too long, maximum character: " + maxMsgLength);
+
+                if (in.length() > maxMsgLength) System.out.println("Input too long, maximum character: " + maxMsgLength);
+                else if( state == State.PLAY && !correctInput(in)) System.out.println("Command is invalid, please try again");
+                else if( state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
+                    else client.println(in);
+
+
+
             } else {
                 String nick = in;
                 if(nick!= null && nick.length()>10) {
@@ -56,6 +65,7 @@ public class TextualUI implements ViewInterface {
             }
         }
     }
+
 
     @Override
     public void update(String arg) throws IOException {
@@ -408,10 +418,6 @@ public class TextualUI implements ViewInterface {
         this.client = client;
     }
 
-    @Override
-    public void addChatMessage(String tmp) {
-
-    }
 
     public void tileBuffer(){
         System.out.print(ConsoleColors.BLUE_UNDERLINED + "TILE BUFFER:" + RESET + "\t\t");
@@ -510,4 +516,77 @@ public class TextualUI implements ViewInterface {
 
     }
 
+    //Input checker in state == PLAY
+
+    private boolean adjacentFree(int r, int c) {
+
+        if (client.getBoardView().getCell(r, c).isEmpty()) return false;
+        if (r == 0 || c == 0) return true;
+        if (r == 8 || c == 8) return true;
+        return ((client.getBoardView().getCell(r + 1, c).isEmpty() || client.getBoardView().getCell(r, c + 1).isEmpty()) || (client.getBoardView().getCell(r - 1, c).isEmpty() || client.getBoardView().getCell(r, c - 1).isEmpty()));
+    }
+
+    private boolean inLine(String[] input) {
+        if(removeSize == 1) return true;
+
+
+        if (removeSize > 1  && (input[1].charAt(0) - 48 == input[3].charAt(0) - 48)){
+            if(removeSize > 2){
+                if((input[1].charAt(0) - 48 == input[5].charAt(0) - 48)) return true;
+            }else return true;
+
+        }
+
+        if (removeSize > 1  && (input[2].charAt(0) - 48 == input[4].charAt(0) - 48)){
+            if(removeSize > 2){
+                if((input[2].charAt(0) - 48 == input[6].charAt(0) - 48)) return true;
+            }else return true;
+        }
+
+        return false;
+    }
+
+    private boolean columnAvailable(int c, int size) {
+        for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
+            if (client.getBoardView().getListOfPlayer().get(i).equals(client.getBoardView().getCurrentPlayer())) {
+                return client.getBoardView().getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
+            }
+        }
+        return false;
+    }
+
+
+    private boolean correctInput(String in) {
+
+        String[] tmpInput = in.split(" ");
+        if (in.startsWith("/remove")) {
+            switch (tmpInput.length) {
+                case 3:
+                    removeSize = 1;
+                    break;
+                case 5:
+                    removeSize = 2;
+                    break;
+                case 7:
+                    removeSize = 3;
+                    break;
+            }
+
+            //A triple AND condition was not used to improve readability
+            if (adjacentFree(tmpInput[1].charAt(0) - 48, tmpInput[2].charAt(0) - 48)) {
+                if (removeSize < 2 || adjacentFree(tmpInput[3].charAt(0) - 48, tmpInput[4].charAt(0) - 48)) {
+                    if (removeSize < 3 || adjacentFree(tmpInput[5].charAt(0) - 48, tmpInput[6].charAt(0) - 48)) {
+                        return inLine(tmpInput);
+                    }
+                }
+            }
+            return false;
+        }
+        if(in.startsWith("/add")){
+            return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+        }
+        if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
+        if(in.startsWith("/end")) return true;
+        return false;
+    }
 }

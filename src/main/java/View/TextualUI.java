@@ -418,10 +418,6 @@ public class TextualUI implements ViewInterface {
         this.client = client;
     }
 
-    @Override
-    public void addChatMessage(String tmp) {
-
-    }
 
     public void tileBuffer(){
         System.out.print(ConsoleColors.BLUE_UNDERLINED + "TILE BUFFER:" + RESET + "\t\t");

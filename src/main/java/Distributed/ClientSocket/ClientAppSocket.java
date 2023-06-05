@@ -29,7 +29,6 @@ public class ClientAppSocket implements AbstractClient {
     private States state;
     private ObjectInputStream objIn;
     private ViewInterface view;
-    private String tmpNickname;
     private String nickname;
 
 
@@ -45,7 +44,6 @@ public class ClientAppSocket implements AbstractClient {
         if (address == null) this.address = "127.0.0.1";
         else this.address = address;
         this.port = port;
-        this.tmpNickname = null;
         this.nickname = null;
         this.owner = false;
         this.typeOfView = typeOfView;
@@ -81,6 +79,9 @@ public class ClientAppSocket implements AbstractClient {
                 System.out.println("creating TUI");
                 this.view = new TextualUI(this);
             }
+            if (typeOfView.equals("GUI")){
+                //this.view = new GUIApp(this);
+            }
 
 
             while (state != States.CLOSE) {
@@ -103,10 +104,17 @@ public class ClientAppSocket implements AbstractClient {
 
             if (input.startsWith("/wait")) {
                 String[] tmpInput = input.split(" ");
-                if (tmpInput.length > 1 && tmpInput[1].equals("owner")) {
+                if (tmpInput.length > 1 &&  (tmpInput[1].equals("owner") ||  ( tmpInput.length > 2 && tmpInput[2].equals("owner")))) {
                     this.owner = true;
-                }
+                    if(tmpInput.length > 2 ) this.nickname = tmpInput[1];
+                } else if (tmpInput.length > 1)  this.nickname = tmpInput[1];
+
                 input = tmpInput[0];
+            }
+
+            if(input.startsWith("/play")){
+                String[] tmpInput = input.split(" ");
+                if (tmpInput.length > 1)  this.nickname = tmpInput[1];
             }
 
             if (input.equals("/nickname")) {
@@ -120,10 +128,6 @@ public class ClientAppSocket implements AbstractClient {
                             view.update();
                             break;
                         case "/wait":
-                            if (this.nickname == null) {
-                                this.nickname = tmpNickname;
-                                System.out.println("Set nickname: " + nickname);
-                            }
                             state = States.WAIT;
                             view.setClient(this);
                             view.setState(State.LOBBY);
@@ -171,7 +175,6 @@ public class ClientAppSocket implements AbstractClient {
         state = States.PLAY;
         view.setState(State.PLAY);
         view.update();
-
     }
 
 
@@ -185,7 +188,6 @@ public class ClientAppSocket implements AbstractClient {
 
         if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
 
-        if (state.equals(States.INIT)) this.tmpNickname = arg;
         if(arg.startsWith("/whisper")) {
             String[] tmp =  arg.split(" ");
             String last = tmp[tmp.length-1];

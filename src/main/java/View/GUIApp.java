@@ -1,4 +1,6 @@
-/*package View;
+/*
+
+package View;
 
 
 import Distributed.AbstractClient;
@@ -51,22 +53,7 @@ public class GUIApp extends Application implements ViewInterface{
         thread.start();
     }
     public void start(Stage primaryStage) throws RemoteException {
-      /*  try {
-            ClientAppSocket clientSocket = new ClientAppSocket(25565, "GUI");
-            clientSocket.connect();
-          //  setState(State.HOME);
-           // update(clientSocket.getNickname());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-
-
-
-
-       // home(primaryStage);
+        home(primaryStage);
         play(client,primaryStage);
         primaryStage.show();
     }
@@ -77,7 +64,7 @@ public class GUIApp extends Application implements ViewInterface{
         Scene scene = new Scene(mainPane);
         primaryStage.setScene(scene);
 
-     /*   ColumnConstraints column1 = new ColumnConstraints();
+        ColumnConstraints column1 = new ColumnConstraints();
         column1.setHgrow(Priority.ALWAYS);
         RowConstraints row1 = new RowConstraints();
         row1.setVgrow(Priority.ALWAYS);
@@ -520,18 +507,6 @@ Player p = new Player("Ale",true);
 
     }
 
-    @Override
-    public void addChatMessage(String tmp) {
-
-    }public GUIApp(AbstractClient client, RemotePlayer player, State state) {
-        this.player = player;
-        this.client = client;
-        this.state = state;
-        }
-
-
-
-
 }
 
-        */
+*/

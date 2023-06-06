@@ -55,10 +55,12 @@ Percentage coverages for classes, methods and lines of code:
 ---
 
 
-## Execution
+##Running the app
 
-Java 20 is required by the project
-
+## JAR
+It's possible to just run the jar:
+- [Latest release](https://github.com/Comodaino/ing-sw-2023-spineto-solbiati-spezzi-romano/releases/latest)
+ 
 ### To execute the both client and server just execute the jar with (127.0.0.1 will be the default ip on which the client tries to connect): 
 
 ```
@@ -71,14 +73,10 @@ java -jar myshelfie.jar
 java -jar myshelfie.jar 192.168.1.1
 ```
 
----
-
-## JAR
-- [Latest release](https://github.com/Comodaino/ing-sw-2023-spineto-solbiati-spezzi-romano/releases/latest)
 
 ## Docker
-
-To test portability and compatibility of the app, we created a docker container to run the app (the app was also tested on two fresh linux installation (Arch and Garuda Linux)
+It's also possible to run the app on a docker container, this was done to find any compatibility issues and that the jar was built correctly,
+the jar was also tested on two different fresh installation of linux with a different distro (arch and garuda)
 
 To build the container: 
 ```

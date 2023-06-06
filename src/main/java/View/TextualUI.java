@@ -90,6 +90,8 @@ public class TextualUI implements ViewInterface {
                             + "\n" + "        ░█████░                                                    "
                             + "\n" + "         ░░░░                                                      ");
 
+
+
                     homePrint(arg);
                     break;
                 case LOBBY:

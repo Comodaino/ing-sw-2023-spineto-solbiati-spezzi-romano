@@ -55,7 +55,7 @@ Percentage coverages for classes, methods and lines of code:
 ---
 
 
-##Running the app
+# Running the app
 
 ## JAR
 It's possible to just run the jar:

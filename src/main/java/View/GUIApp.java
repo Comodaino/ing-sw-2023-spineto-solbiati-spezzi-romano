@@ -2,19 +2,20 @@ package View;
 
 
 import Distributed.AbstractClient;
-import Distributed.ClientSocket.ClientAppSocket;
-import Distributed.RemotePlayer;
-import Model.*;
+import Model.CellType;
+import Model.Player;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -22,9 +23,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GUIApp extends Application implements ViewInterface{
     private AbstractClient client;
@@ -69,9 +69,10 @@ public class GUIApp extends Application implements ViewInterface{
 
        */
 
+        this.primaryStage = primaryStage;
 
-       // home(primaryStage);
-        play(client,primaryStage);
+        //  home(primaryStage);
+         play(client,primaryStage);
         primaryStage.show();
     }
 
@@ -81,15 +82,6 @@ public class GUIApp extends Application implements ViewInterface{
         Scene scene = new Scene(mainPane);
         primaryStage.setScene(scene);
 
-     /*   ColumnConstraints column1 = new ColumnConstraints();
-        column1.setHgrow(Priority.ALWAYS);
-        RowConstraints row1 = new RowConstraints();
-        row1.setVgrow(Priority.ALWAYS);
-        mainPane.getColumnConstraints().add(column1);
-        mainPane.getRowConstraints().add(row1);
-
-
-      */
         Image imageBackgroungShelf = new Image("images/misc/sfondoparquet.jpg");
         ImageView imageViewShelf = new ImageView(imageBackgroungShelf);
         BoxBlur blur = new BoxBlur(3, 3, 3);
@@ -103,14 +95,18 @@ public class GUIApp extends Application implements ViewInterface{
         GridPane commonGoal = getCommonGoal(client);
         mainPane.add(commonGoal, 0, 1);
 
-
-       mainPane.add(createShelf(client,mainPane), 1, 0);
-       mainPane.add(createBoard(client), 0, 0);
+        mainPane.add(createShelf(client,mainPane), 1, 0);
+        mainPane.add(createBoard(client), 0, 0);
 
         primaryStage.setTitle("Play");
         primaryStage.setOnCloseRequest(e -> {
             // Gestire l'evento di chiusura
         });
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
 
         primaryStage.show();
     }
@@ -128,7 +124,7 @@ public class GUIApp extends Application implements ViewInterface{
         GridPane fillBoardGridPane = fillBoard(CellType.TWO);
         fillBoardGridPane.setPrefSize(650, 650);
         fillBoardGridPane.setAlignment(Pos.CENTER);
-
+        fillBoard(CellType.TWO);
         boardPane.getChildren().add(fillBoardGridPane);
         return boardPane;
     }
@@ -137,19 +133,19 @@ public class GUIApp extends Application implements ViewInterface{
         GridPane fillBoardPane = new GridPane();
         Pane emptyComponent = new Pane();
 
-        emptyComponent.setMinSize(50, 50);
+        emptyComponent.setMinSize(65, 65);
        for (int i = 0; i < 9; i++) {
            for (int j = 0; j < 9; j++) {
               // switch (client.getBoardView().getCell(i, j).getType()){
                switch (cellType){
                    case ONE:
-                       emptyComponent.setPrefSize(50, 50);
+                       emptyComponent.setPrefSize(65, 65);
                        fillBoardPane.add(emptyComponent, i, j);
                        break;
                    case TWO:
-                       if((i==2 || j==3) || (i==5 && j==8)){
+                       if((i==8 || j==3) || (i==5 && j==8)){
                            Pane emptyComponent2 = new Pane();
-                           emptyComponent2.setPrefSize(52, 52);
+                           emptyComponent2.setPrefSize(65, 65);
                            fillBoardPane.add(emptyComponent2, i, j);
 
                        }else {
@@ -160,7 +156,7 @@ public class GUIApp extends Application implements ViewInterface{
                        if (client.getBoardView().getListOfPlayer().size()>2){
                            fillBoardPane.add(getTile(i,j),i,j);
                        }else {
-                           emptyComponent.setPrefSize(50, 50);
+                           emptyComponent.setPrefSize(65, 65);
                            fillBoardPane.add(emptyComponent, i, j);
                        }
                        break;
@@ -168,7 +164,7 @@ public class GUIApp extends Application implements ViewInterface{
                        if (client.getBoardView().getListOfPlayer().size()==4) {
                            fillBoardPane.add(getTile(i, j), i, j);
                        }else {
-                           emptyComponent.setPrefSize(50, 50);
+                           emptyComponent.setPrefSize(65, 65);
                            fillBoardPane.add(emptyComponent, i, j);
                        }
                        break;
@@ -190,29 +186,47 @@ public class GUIApp extends Application implements ViewInterface{
 
     public Button getTile(int r, int c){
         Button tileButton = new Button();
-        tileButton.setMinSize(52, 52);
+        tileButton.setMinSize(55, 55);
         if(r==5 || c==3){
-            tileButton.setPrefSize(52, 52);
+            tileButton.setPrefSize(65, 65);
             Image imageTile = new Image("images/item tiles/Gatti1.3.png");
             ImageView imageView = new ImageView(imageTile);
             imageView.setPreserveRatio(true);
-            imageView.setFitHeight(52);
-            imageView.setFitWidth(52);
-            tileButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+            imageView.setFitHeight(65);
+            imageView.setFitWidth(65);
+            tileButton.setStyle("-fx-border-width: 0;");
             tileButton.setGraphic(imageView);
         }else {
+            tileButton.setPrefSize(65, 65);
             Image imageTile = new Image("images/item tiles/Gatti1.2.png");
             ImageView imageView = new ImageView(imageTile);
             imageView.setPreserveRatio(true);
-            imageView.setFitHeight(52);
-            imageView.setFitWidth(52);
-            tileButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+            imageView.setFitHeight(65);
+            imageView.setFitWidth(65);
+            tileButton.setStyle(" -fx-border-width: 0;");
             tileButton.setGraphic(imageView);
         }
 
+        GaussianBlur blur = new GaussianBlur(2);
+        BooleanProperty isSelected = new SimpleBooleanProperty(false);
         tileButton.setOnAction(e -> {
-            tileButton.setStyle("-fx-background-color: gold; -fx-border-color: gold;");
-            tileButton.setGraphic(null);
+            if(isSelected.get()){
+                isSelected.set(false);
+                tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 4;");
+
+            //    tileButton.setStyle(" -fx-border-width: 0;");
+                tileButton.setEffect(blur);
+                tileButton.setDisable(true);
+                tileButton.setOpacity(0.8);
+            }else {
+
+                isSelected.set(true);
+                tileButton.setStyle("");
+                tileButton.setEffect(null);
+                tileButton.setDisable(false);
+                tileButton.setOpacity(1);
+
+            }
         });
 
         return tileButton;
@@ -410,16 +424,48 @@ public class GUIApp extends Application implements ViewInterface{
         shelfPane.add(shelfGridPane, 0, 0);
 
         shelfImageView.setPreserveRatio(true);
+        Button colButton = new Button();
+        for(int col=0; col<5; col++){
+            for(int row=0; row<6; row++){
+                Button emptyButton = new Button();
+                emptyButton.setPrefSize(40, 40);
+                emptyButton.setDisable(true);
+                emptyButton.setStyle("-fx-background-color: red;");
+                shelfGridPane.add(emptyButton, col, row);
+            }
+        }
+        for(int i=0; i<5; i++){
 
+                colButton.setPrefSize(45, 20);
+                colButton.setDisable(true);
+                colButton.setStyle("-fx-background-color: Green;");
+                shelfGridPane.add(colButton, i, 6);
+
+
+
+            }
+        AtomicInteger index = new AtomicInteger();
+        colButton.setOnAction(e -> {
+
+                index.set(shelfGridPane.getChildren().indexOf(colButton));
+            colButton.setText( ""+index);
+            //  client.selectColumn(shelfGridPane.getChildren().indexOf(colButton));
+        });
+
+        shelfGridPane.setAlignment(Pos.CENTER);
+
+/*
         Image iamgeTile45 = new Image("images/item tiles/Giochi1.2.png");
         ImageView imageView45 = new ImageView(iamgeTile45);
         imageView45.setFitWidth(35);
         imageView45.setFitHeight(35);
         imageView45.setPreserveRatio(true);
 
+
+
         shelfGridPane.add(imageView45, 4, 0);
         shelfGridPane.setAlignment(Pos.CENTER);
-       // shelfGridPane.add(imageView45, 0, 1);
+ */       // shelfGridPane.add(imageView45, 0, 1);
        // if (client.isOwner()==true) {
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
@@ -522,9 +568,15 @@ Player p = new Player("Ale",true);
             inp= inp.replace(" ", "");
             if (inp.length() <= 10 && inp.length() > 0 && inp.matches(regex)){
                 nicknameString[0] = inp;
-                nickname.setText("Your nickname is: "+nicknameString[0]);
+            //    nickname.setText("Your nickname is: "+nicknameString[0]);
                 primaryStage.close();
-                setState(State.PLAY);
+                try {
+                    setState(State.PLAY);
+                    update(nicknameString[0]);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
                 try {
                     update(nicknameString[0]);
                 } catch (IOException ex) {
@@ -533,7 +585,7 @@ Player p = new Player("Ale",true);
             } else {
                 nicknameField.clear();
                 nickname.setText("Error, retype your nickname");
-                nicknameField.setPromptText("Nickname too long or empty");
+            //    nicknameField.setPromptText("Nickname too long or empty");
             }
         });
 
@@ -563,7 +615,7 @@ Player p = new Player("Ale",true);
                 home(primaryStage);
                 break;
             case PLAY:
-                play(client,primaryStage );
+                play(client,primaryStage);
                 break;
            // case END:
              //   end();
@@ -602,4 +654,3 @@ Player p = new Player("Ale",true);
 
 
 }
-

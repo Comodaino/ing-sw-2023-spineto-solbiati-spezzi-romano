@@ -9,6 +9,7 @@ C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\jav
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\CommonGoals\GoalEight.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Distributed\ServerRMI\ServerImpl.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\Bag.java
+C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\View\Constant.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Distributed\AbstractClient.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\CommonGoals\GoalAngles.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\CommonGoals\GoalDiffColumns.java
@@ -17,7 +18,6 @@ C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\jav
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\Cell.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Distributed\ClientRMI\Client.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\EndGoal.java
-C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\View\SheldPanel.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Distributed\ServerSocket\SocketPlayer.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\CommonGoals\GoalDiagonal.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\View\ViewInterface.java
@@ -30,16 +30,18 @@ C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\jav
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Distributed\Lobby.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\org\example\App.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\View\ConsoleColors.java
+C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\Whisper.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\CommonGoals\GoalDiffRows.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\CommonGoals\GoalStair.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\CommonGoals\GoalCross.java
+C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\View\GUIApp.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Distributed\ServerRMI\RMIPlayer.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\View\GUIclass.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\Shelf.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\Pgtype.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\View\TextualUI.java
+C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\AppMain\Main.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\Color.java
-C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\View\BoardPanel.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Distributed\RemotePlayer.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Controller\GameController.java
 C:\Users\alesp\Documents\ing-sw-2023-spineto-solbiati-spezzi-romano\src\main\java\Model\NearGoal.java

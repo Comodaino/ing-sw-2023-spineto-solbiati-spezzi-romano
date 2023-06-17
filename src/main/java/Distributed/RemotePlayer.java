@@ -17,12 +17,12 @@ public abstract class RemotePlayer implements Serializable {
     private States state;
     private GameController controller;
     private boolean owner;
+    private boolean connected;
 
     public RemotePlayer(ConnectionType type){
         this.type = type;
         this.owner = false;
-        modelPlayer = new Player("Nico", true);
-        this.nickname = "Ale";
+        this.connected = true;
         this.state = INIT;
     }
 
@@ -48,9 +48,7 @@ public abstract class RemotePlayer implements Serializable {
     public ConnectionType getType() {
         return type;
     }
-    public void setOwner() {
-        owner = true;
-    }
+    public void setOwner() { owner = true;  }
     public boolean isOwner() {
         return owner;
     }
@@ -67,4 +65,6 @@ public abstract class RemotePlayer implements Serializable {
         return controller;
     }
     public Client getClient() { return null; }
+    public void setConnected(boolean status) {this.connected = status;}
+    public boolean isConnected() { return connected; }
 }

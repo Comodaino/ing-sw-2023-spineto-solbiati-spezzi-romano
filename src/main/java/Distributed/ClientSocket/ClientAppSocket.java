@@ -4,7 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.GUIApp;
+//import View.GUIApp;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -29,7 +29,6 @@ public class ClientAppSocket implements AbstractClient {
     private States state;
     private ObjectInputStream objIn;
     private ViewInterface view;
-    private String tmpNickname;
     private String nickname;
 
 
@@ -45,7 +44,6 @@ public class ClientAppSocket implements AbstractClient {
         if (address == null) this.address = "127.0.0.1";
         else this.address = address;
         this.port = port;
-        this.tmpNickname = null;
         this.nickname = null;
         this.owner = false;
         this.typeOfView = typeOfView;
@@ -80,13 +78,15 @@ public class ClientAppSocket implements AbstractClient {
             if (typeOfView.equals("TUI")) {
                 System.out.println("creating TUI");
                 this.view = new TextualUI(this);
-            } //else
-              //  this.view = new GUIApp(this);
+            }
+            if (typeOfView.equals("GUI")){
+                //this.view = new GUIApp(this);
+            }
 
 
-        while (state != States.CLOSE) {
-            inputHandler();
-        }
+            while (state != States.CLOSE) {
+                inputHandler();
+            }
         }
         in.close();
         socket.close();
@@ -104,32 +104,29 @@ public class ClientAppSocket implements AbstractClient {
 
             if (input.startsWith("/wait")) {
                 String[] tmpInput = input.split(" ");
-                if (tmpInput.length > 1 && tmpInput[1].equals("owner")) {
+                if (tmpInput.length > 1 &&  (tmpInput[1].equals("owner"))) {
                     this.owner = true;
                 }
                 input = tmpInput[0];
             }
-            if (input.startsWith("/message")) {
-                String tmp = input.substring(8);
-                view.addChatMessage(tmp);
+            if(input.startsWith("/setnickname")){
+                String[] tmpInput = input.split(" ");
+                this.nickname = tmpInput[1];
             }
-
             if (input.equals("/nickname")) {
                 view.update("/nickname");
-            }
-            if (!input.startsWith("/message") && !input.startsWith("/nickname"))
+            } else {
                 if (input.charAt(0) == '/') {
                     switch (input) {
+                        case "/setnickname":
+
+                            break;
                         case "/init":
                             state = States.INIT;
                             view.setState(State.HOME);
                             view.update();
                             break;
                         case "/wait":
-                            if (this.nickname == null) {
-                                this.nickname = tmpNickname;
-                                System.out.println("Set nickname: " + nickname);
-                            }
                             state = States.WAIT;
                             view.setClient(this);
                             view.setState(State.LOBBY);
@@ -137,6 +134,7 @@ public class ClientAppSocket implements AbstractClient {
                             break;
                         case "/play":
                             playCommand();
+                            view.setState(State.PLAY);
                             break;
                         case "/end":
                             state = States.END;
@@ -153,14 +151,11 @@ public class ClientAppSocket implements AbstractClient {
                             System.out.println("updating...");
                             break;
                         default:
-                            if (input.startsWith("/message")) {
-                                System.out.println(input);
-                                //TODO update(input);
-                            }
                             view.update();
                             break;
                     }
                 }
+            }
         }
 
         assert input != null;
@@ -175,21 +170,35 @@ public class ClientAppSocket implements AbstractClient {
         state = States.PLAY;
         view.setState(State.PLAY);
         view.update();
-
     }
 
 
     /**
-     * takes the parameter arg and sends it to the server
+     * takes the parameter arg and sends it to the server, in case of a message or "/whisper" it reformats the string correctly
      *
      * @param arg string to send to the server
      */
     @Override
     public void println(String arg) {
 
-        if(!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
+        if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
 
-        if (state.equals(States.INIT)) this.tmpNickname = arg;
+        if(arg.startsWith("/whisper")) {
+            String[] tmp =  arg.split(" ");
+            String last = tmp[tmp.length-1];
+            String[] tmp2 = new String[tmp.length];
+            tmp2[0] = tmp[0];
+            tmp2[1] = tmp[1];
+            for(int i= 1 ; i < tmp.length - 1; i++ ){
+                tmp2[i+1] = tmp[i];
+            }
+            tmp2[1] = this.nickname;
+            arg = tmp2[0];
+            for(int i = 1; i< tmp.length; i++){
+                arg = arg + " " + tmp2[i];
+            }
+            arg = arg + " " + last;
+        }
         System.out.println("SENDING: " + arg);
         out.println(arg);
         out.flush();

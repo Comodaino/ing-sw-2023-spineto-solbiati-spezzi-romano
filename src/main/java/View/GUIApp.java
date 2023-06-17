@@ -26,57 +26,35 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.sql.SQLOutput;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GUIApp extends Application implements ViewInterface{
+    private boolean firstLaunch;
     private AbstractClient client;
     private State state;
     private Stage primaryStage;
     private Boolean firstRemove ;
 
     private String command;
-    public static void main(String[] args){
-        launch(args);
+
+    public GUIApp(){
+        this.firstLaunch = true;
+        this.client = PassParameters.getClient();
+        this.state = PassParameters.getState();
     }
 
-   /* public GUIApp(AbstractClient client) throws RemoteException {
-        this.client = client;
-        this.state = State.HOME;
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                start();
-            }
-        };
-        try {
-            update();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        thread.start();
-    }
-
-    */
     public void start(Stage primaryStage) throws RemoteException {
-      /*  try {
-            ClientAppSocket clientSocket = new ClientAppSocket(25565, "GUI");
-            clientSocket.connect();
-          //  setState(State.HOME);
-           // update(clientSocket.getNickname());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
-
-       */
 
         this.primaryStage = primaryStage;
+        try {
+            update(null);
+        } catch (IOException e) {
+        }
 
-        //  home(primaryStage);
-         play(client,primaryStage);
         primaryStage.show();
+
     }
 
 
@@ -503,29 +481,15 @@ Player p = new Player("Ale",true);
         String regex = "^[a-zA-Z0-9 ]+$";
 
 
+
         button.setOnAction(e -> {
             String inp = nicknameField.getText();
             inp= inp.replace(" ", "");
-            if (inp.length() <= 10 && inp.length() > 0 && inp.matches(regex) && nicknameString[0].length()<=10 && nicknameString[0].matches(regex)){
-                nicknameString[0] = inp;
-            //    nickname.setText("Your nickname is: "+nicknameString[0]);
-                primaryStage.close();
-                try {
-                    setState(State.PLAY);
-                    update(nicknameString[0]);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-                try {
-                    update(nicknameString[0]);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+            if (inp.length() <= 10 && inp.length() > 0 && inp.matches(regex) || nickname.length()<=10 || nickname.matches(regex)){
+                    client.println(inp);
             } else {
                 nicknameField.clear();
                 nickname1.setText("Error, retype your nickname");
-            //    nicknameField.setPromptText("Nickname too long or empty");
             }
         });
 
@@ -551,8 +515,12 @@ Player p = new Player("Ale",true);
 
         public void update(String arg) throws IOException {
         switch (this.state){
+
             case HOME:
                 home(primaryStage,arg);
+                break;
+            case LOBBY:
+                lobby(primaryStage,arg);
                 break;
             case PLAY:
                 play(client,primaryStage);
@@ -562,6 +530,73 @@ Player p = new Player("Ale",true);
                // break;
         }
         }
+
+    private void lobby(Stage primaryStage, String arg) {
+        Image imageLobby = new Image("images/Publisher material/Display_5.jpg");
+        ImageView imageViewLobby = new ImageView(imageLobby);
+        BoxBlur blur = new BoxBlur(3, 4, 3);
+        imageViewLobby.setEffect(blur);
+        imageViewLobby.fitWidthProperty().bind(primaryStage.widthProperty());
+        imageViewLobby.fitHeightProperty().bind(primaryStage.heightProperty());
+        try {
+            if(client.isOwner()){
+                Button start = new Button("Start");
+                start.setPrefSize(100, 50);
+                start.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
+                start.setOnAction(e -> {
+                        client.println("/start");
+                });
+
+                Button firstMatch = new Button("First match");
+                firstMatch.setPrefSize(100, 50);
+                firstMatch.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
+                firstMatch.setOnAction(e -> {
+                    client.println("/firstMatch");
+                });
+
+                Button notFirstMatch = new Button("Not first match");
+                notFirstMatch.setPrefSize(100, 50);
+                notFirstMatch.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
+                notFirstMatch.setOnAction(e -> {
+                    client.println("/notFirstMatch");
+                });
+
+                HBox hBox = new HBox(5);
+                hBox.getChildren().addAll(start, firstMatch, notFirstMatch);
+                hBox.setAlignment(Pos.CENTER);
+
+
+                Pane root = new Pane(new Region());
+                Scene scene = new Scene(root);
+                root.getChildren().addAll(imageViewLobby, hBox);
+                primaryStage.setScene(scene);
+                Screen screen = Screen.getPrimary();
+                Rectangle2D bounds = screen.getVisualBounds();
+                root.setPrefHeight(bounds.getHeight());
+                root.setPrefWidth(bounds.getWidth());
+            }else {
+                Label label = new Label("Waiting for the owner...");
+                label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
+                TextField wait = new TextField();
+                wait.setPromptText("Enter your nickname");
+                wait.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
+
+                Pane root = new Pane(new Region());
+                Scene scene = new Scene(root);
+                root.getChildren().addAll(imageViewLobby, label);
+                primaryStage.setScene(scene);
+                Screen screen = Screen.getPrimary();
+                Rectangle2D bounds = screen.getVisualBounds();
+                root.setPrefHeight(bounds.getHeight());
+                root.setPrefWidth(bounds.getWidth());
+
+            }
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        primaryStage.show();
+    }
 
     @Override
     public void update() throws IOException {
@@ -577,6 +612,11 @@ Player p = new Player("Ale",true);
     @Override
     public void setClient(AbstractClient client) {
         this.client = client;
+        System.out.println("pappapero: " + this.client);
+        if(firstLaunch){
+            firstLaunch = false;
+            launch();
+        }
     }
 
     public void setCommand(String command){

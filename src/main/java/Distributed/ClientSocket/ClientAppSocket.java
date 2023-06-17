@@ -4,10 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.GUIApp;
-import View.State;
-import View.TextualUI;
-import View.ViewInterface;
+import View.*;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -54,7 +51,6 @@ public class ClientAppSocket implements AbstractClient {
      * Starts the client
      *
      * @param address ip address of the server
-     * @throws IOExceptionGUIApp
      * @throws InterruptedException
      * @throws ClassNotFoundException
      */
@@ -87,8 +83,10 @@ public class ClientAppSocket implements AbstractClient {
                 this.view = new TextualUI(this);
             }
             if (typeOfView.equals("GUI")){
+                PassParameters.setClient(this);
+                PassParameters.setState(State.HOME);
                 this.view = new GUIApp();
-                view.setClient(this);
+                this.view.setClient(this);
             }
 
 

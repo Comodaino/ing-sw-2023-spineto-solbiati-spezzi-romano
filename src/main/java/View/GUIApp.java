@@ -24,51 +24,20 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GUIApp extends Application implements ViewInterface{
     private AbstractClient client;
     private State state;
     private Stage primaryStage;
-    private Boolean firstRemove ;
-
+    private boolean firstRemove ;
+    private boolean firstLaunch;
     private String command;
-    public static void main(String[] args){
-        launch(args);
+
+    public GUIApp(){
+        this.firstLaunch = true;
     }
 
-   /* public GUIApp(AbstractClient client) throws RemoteException {
-        this.client = client;
-        this.state = State.HOME;
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                start();
-            }
-        };
-        try {
-            update();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        thread.start();
-    }
-
-    */
     public void start(Stage primaryStage) throws RemoteException {
-      /*  try {
-            ClientAppSocket clientSocket = new ClientAppSocket(25565, "GUI");
-            clientSocket.connect();
-          //  setState(State.HOME);
-           // update(clientSocket.getNickname());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-
-       */
 
         this.primaryStage = primaryStage;
 
@@ -657,21 +626,9 @@ Player p = new Player("Ale",true);
 
     @Override
     public void setClient(AbstractClient client) {
-
-    }
-
-    @Override
-    public void addChatMessage(String tmp) {
-
-    }
-      /*  public GUIApp(AbstractClient client, RemotePlayer player, State state) {
-        this.player = player;
         this.client = client;
-        this.state = state;
-        }
-
-       */
-
+        if(firstLaunch) launch();
+    }
 
 
 }

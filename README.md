@@ -65,10 +65,18 @@ Java 20 is required by the project
 java -jar myshelfie.jar
 ```
 
-### It's possible to add an IP address at the end of the command to connect to a different IP:
+### It's possible to add  various parameters to the command in any order
 
 ```
-java -jar myshelfie.jar 192.168.1.1
+-t to select "client" or "server"
+-v to select type of view: "TUI" or "GUI"
+-i to insert a ip address
+-c to select type of connection: "socket" or "RMI"
+```
+
+### example:
+```
+java -jar myshelfie.jar -t client -c socket -v TUI -i localhost
 ```
 
 ---

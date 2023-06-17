@@ -59,7 +59,7 @@ public class ClientAppSocket implements AbstractClient {
      * @throws ClassNotFoundException
      */
     public static void execute(String address, String typeOfView) throws IOException, InterruptedException, ClassNotFoundException {
-
+        System.out.println("exec");
         if(typeOfView == null){
             System.out.println(">>insert \"TUI\" or \"GUI\"");
             Scanner scanner = new Scanner(System.in);

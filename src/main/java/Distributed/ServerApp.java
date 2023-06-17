@@ -68,10 +68,10 @@ public class ServerApp {
                 if (!openLobby.isOpen()) {
                     openLobby = new Lobby(this);
                     lobbies.add(openLobby);
-                    System.out.println("Created new lobby");
+                    System.out.println("#OF LOBBIES: " + lobbies.size());
                 }
                 executor.submit(new ClientHandlerSocket(socket, openLobby, this));
-                System.out.println("Passed socket to handler");
+                openLobby.checkOpen();
             }
         }
     }
@@ -116,8 +116,6 @@ public class ServerApp {
             //Sets lobbyID in Client and if it is owner of the lobby or not
             client.setOwner(rp.isOwner());
             client.setLobbyID(lobbies.get(lobbies.size() - 1).getID());
-            System.out.println(rp.getNickname() + " has joined the " + (lobbies.size()) + " lobby");
-            System.out.println("owner: " + rp.isOwner());
         }
     }
 

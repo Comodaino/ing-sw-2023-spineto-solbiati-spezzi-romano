@@ -58,11 +58,18 @@ public class ClientAppSocket implements AbstractClient {
      * @throws InterruptedException
      * @throws ClassNotFoundException
      */
-    public static void execute(String address) throws IOException, InterruptedException, ClassNotFoundException {
-        System.out.println(">>insert \"TUI\" or \"GUI\"");
-        Scanner scanner = new Scanner(System.in);
-        ClientAppSocket client = new ClientAppSocket(address, 25565, scanner.nextLine());
-        client.connect();
+    public static void execute(String address, String typeOfView) throws IOException, InterruptedException, ClassNotFoundException {
+
+        if(typeOfView == null){
+            System.out.println(">>insert \"TUI\" or \"GUI\"");
+            Scanner scanner = new Scanner(System.in);
+            ClientAppSocket client = new ClientAppSocket(address, 25565, scanner.nextLine());
+            client.connect();
+        }else{
+            ClientAppSocket client = new ClientAppSocket(address, 25565, typeOfView);
+            client.connect();
+        }
+
     }
 
     private void connect() throws IOException, ClassNotFoundException {

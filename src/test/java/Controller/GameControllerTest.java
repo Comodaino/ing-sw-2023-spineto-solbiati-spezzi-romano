@@ -1,5 +1,7 @@
 package Controller;
 
+import Distributed.Lobby;
+import Distributed.ServerApp;
 import Model.Board;
 import Model.Player;
 import org.junit.jupiter.api.Test;
@@ -11,21 +13,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Scanner;
-/*
+
 class GameControllerTest extends Observable{
     @Test
     public void inputTestTwo() throws IOException {
         List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        GameController testController = new GameController(playerList, false, null);
+        playerList.add(new Player("player1", false));
+        playerList.add(new Player("player2", true));
+        GameController testController = new GameController(playerList, false, new LobbyTest(null));
         Board gameBoard = testController.getBoard();
-        File commands = new File("src/test/java/Controller/controllerTestConf2");
+        File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
             System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
-            notifyObservers(commandScanner.nextLine());
+            try {
+                testController.update(commandScanner.nextLine());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             System.out.println();
         }
     }
@@ -35,17 +41,42 @@ class GameControllerTest extends Observable{
         playerList.add(new Player("player1", false));
         playerList.add(new Player("player2", true));
         playerList.add(new Player("player3", false));
-        GameController testController = new GameController(playerList, false, null);
+        GameController testController = new GameController(playerList, false, new LobbyTest(null));
         Board gameBoard = testController.getBoard();
-        File commands = new File("src/test/java/Controller/controllerTestConf2");
+        File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
             System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
-            notifyObservers(commandScanner.nextLine());
+            try {
+                testController.update(commandScanner.nextLine());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void inputTestFour() throws IOException {
+        List<Player> playerList=new ArrayList<Player>();
+        playerList.add(new Player("player1", true));
+        playerList.add(new Player("player2", false));
+        playerList.add(new Player("player3", false));
+        playerList.add(new Player("player4", false));
+        GameController testController = new GameController(playerList, false, new LobbyTest(null));
+        Board gameBoard = testController.getBoard();
+        File commands = new File("src/test/java/Controller/controllerTestConf");
+        Scanner commandScanner = new Scanner(commands);
+        while(commandScanner.hasNextLine()){
+            setChanged();
+            System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
+            try {
+                testController.update(commandScanner.nextLine());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             System.out.println();
         }
     }
 }
-
- */

@@ -9,17 +9,23 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
-        System.out.println(">>insert \"server\" or \"client\"");
-        Scanner scanner = new Scanner(System.in);
 
 
-        switch(scanner.nextLine()){
-            case "server": ServerApp.execute();
-            break;
-            case "client":
-                if(args.length == 0) clientInput(null);
-                else clientInput(args[0]);
-            break;
+        if(args.length==1){
+            clientInput(args[0]);
+        }else {
+            System.out.println(">>insert \"server\" or \"client\"");
+            Scanner scanner = new Scanner(System.in);
+
+
+            switch (scanner.nextLine()) {
+                case "server":
+                    ServerApp.execute();
+                    break;
+                case "client":
+                    clientInput(null);
+                    break;
+            }
         }
     }
 

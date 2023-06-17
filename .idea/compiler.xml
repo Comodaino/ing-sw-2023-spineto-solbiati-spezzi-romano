@@ -8,9 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ProjectSoftEng" />
-        <module name="ing-sw-2023-spineto-solbiati-spezzi-romano" />
+        <module name="MyShelfie" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ing-sw-2023-spineto-solbiati-spezzi-romano" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

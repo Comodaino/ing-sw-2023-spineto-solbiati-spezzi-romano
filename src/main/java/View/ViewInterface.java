@@ -10,5 +10,4 @@ public abstract interface ViewInterface  {
     public void update()throws IOException ;
     public void setState(State state);
     public void setClient(AbstractClient client);
-    public void addChatMessage(String tmp);
 }

@@ -30,8 +30,9 @@ public class GUIApp extends Application implements ViewInterface{
     private AbstractClient client;
     private State state;
     private Stage primaryStage;
+    private Boolean firstRemove ;
 
-
+    private String command;
     public static void main(String[] args){
         launch(args);
     }
@@ -108,6 +109,11 @@ public class GUIApp extends Application implements ViewInterface{
         primaryStage.setWidth(bounds.getWidth());
         primaryStage.setHeight(bounds.getHeight());
 
+
+        HBox hBox = new HBox();
+        mainPane.add(hBox, 0, 2);
+
+
         primaryStage.show();
     }
     public Pane createBoard(AbstractClient client){
@@ -126,7 +132,19 @@ public class GUIApp extends Application implements ViewInterface{
         fillBoardGridPane.setAlignment(Pos.CENTER);
         fillBoard(CellType.TWO);
         boardPane.getChildren().add(fillBoardGridPane);
+
         return boardPane;
+    }
+    public Button resetCommand(){
+
+        Button reset = new Button("Reset");
+        reset.setPrefSize(100, 60);
+        reset.setStyle("");
+        reset.setText("Save move");
+        reset.setOnAction(e -> {
+
+        });
+        return reset;
     }
 //    public GridPane fillBoard(AbstractClient client){
       public GridPane fillBoard(CellType cellType){
@@ -207,17 +225,28 @@ public class GUIApp extends Application implements ViewInterface{
             tileButton.setGraphic(imageView);
         }
 
+        Pane empty = new Pane();
         GaussianBlur blur = new GaussianBlur(2);
         BooleanProperty isSelected = new SimpleBooleanProperty(false);
+        firstRemove=true;
         tileButton.setOnAction(e -> {
+            if(firstRemove){
+                firstRemove = false;
+                command = "/remove ";
+            }
             if(isSelected.get()){
                 isSelected.set(false);
                 tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 4;");
-
-            //    tileButton.setStyle(" -fx-border-width: 0;");
                 tileButton.setEffect(blur);
                 tileButton.setDisable(true);
                 tileButton.setOpacity(0.8);
+                firstRemove=false;
+                command = command + c + " " + r + " ";
+
+                System.out.println(command);
+                Image image = new Image(String.valueOf(tileButton.getGraphic()));
+                ImageView imageView = new ImageView(image);
+
             }else {
 
                 isSelected.set(true);
@@ -410,6 +439,7 @@ public class GUIApp extends Application implements ViewInterface{
                 commonGoalPane.add(imageView2, 1, 0);
             }
         }
+        commonGoalPane.add(resetCommand(), 2, 0);
 
         return commonGoalPane;
     }
@@ -424,7 +454,8 @@ public class GUIApp extends Application implements ViewInterface{
         shelfPane.add(shelfGridPane, 0, 0);
 
         shelfImageView.setPreserveRatio(true);
-        Button colButton = new Button();
+
+
         for(int col=0; col<5; col++){
             for(int row=0; row<6; row++){
                 Button emptyButton = new Button();
@@ -434,24 +465,14 @@ public class GUIApp extends Application implements ViewInterface{
                 shelfGridPane.add(emptyButton, col, row);
             }
         }
-        for(int i=0; i<5; i++){
 
+        for(int i=0; i<5; i++){
+                Button colButton = new Button();
                 colButton.setPrefSize(45, 20);
                 colButton.setDisable(true);
                 colButton.setStyle("-fx-background-color: Green;");
                 shelfGridPane.add(colButton, i, 6);
-
-
-
             }
-        AtomicInteger index = new AtomicInteger();
-        colButton.setOnAction(e -> {
-
-                index.set(shelfGridPane.getChildren().indexOf(colButton));
-            colButton.setText( ""+index);
-            //  client.selectColumn(shelfGridPane.getChildren().indexOf(colButton));
-        });
-
         shelfGridPane.setAlignment(Pos.CENTER);
 
 /*

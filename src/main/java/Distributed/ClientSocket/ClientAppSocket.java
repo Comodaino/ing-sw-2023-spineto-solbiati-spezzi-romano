@@ -86,7 +86,15 @@ public class ClientAppSocket implements AbstractClient {
                 PassParameters.setClient(this);
                 PassParameters.setState(State.HOME);
                 this.view = new GUIApp();
-                this.view.setClient(this);
+
+                Thread th = new Thread() {
+                    @Override
+                    public void run() {
+                        view.setClient(null);
+                    }
+                };
+                th.start();
+
             }
 
 

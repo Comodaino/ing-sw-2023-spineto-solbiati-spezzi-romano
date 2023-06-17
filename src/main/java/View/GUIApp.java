@@ -204,30 +204,55 @@ public class GUIApp extends Application implements ViewInterface{
         return fillBoardPane;
     }
 
-    public Button getTile(int r, int c){
+    public Button getTile(int row, int column){
         Button tileButton = new Button();
-        tileButton.setMinSize(55, 55);
-        if(r==5 || c==3){
-            tileButton.setPrefSize(65, 65);
-            Image imageTile = new Image("images/item tiles/Gatti1.3.png");
-            ImageView imageView = new ImageView(imageTile);
-            imageView.setPreserveRatio(true);
-            imageView.setFitHeight(65);
-            imageView.setFitWidth(65);
-            tileButton.setStyle("-fx-border-width: 0;");
-            tileButton.setGraphic(imageView);
-        }else {
-            tileButton.setPrefSize(65, 65);
-            Image imageTile = new Image("images/item tiles/Gatti1.2.png");
-            ImageView imageView = new ImageView(imageTile);
-            imageView.setPreserveRatio(true);
-            imageView.setFitHeight(65);
-            imageView.setFitWidth(65);
-            tileButton.setStyle(" -fx-border-width: 0;");
-            tileButton.setGraphic(imageView);
-        }
+        String imageTilePath = null;
+        Constant tile = null;
+        int i = 0;
+        String imageTileName = null;
+        switch (client.getBoardView().getTile(row, column).getColor()){
+            case BLUE:
+                imageTileName = "Cornici1.";
+                break;
+            case GREEN:
+                imageTileName = "Gatti1.";
+                break;
+            case YELLOW:
+                imageTileName = "Giochi1.";
+            break;
+            case WHITE:
+                imageTileName = "Libri1.";
+                break;
+            case PINK:
+                imageTileName = "Piante1.";
+                break;
+            case LIGHTBLUE:
+            imageTileName = "Trofei1.";
+                break;
 
-        Pane empty = new Pane();
+        }
+        switch (client.getBoardView().getTile(row, column).getType()) {
+            case ONE:
+                i = 1;
+                break;
+            case TWO:
+                i = 2;
+                break;
+            case THREE:
+                i = 3;
+                break;
+        }
+        imageTilePath = tile.getConstantTile() + imageTileName + i + ".png";
+
+        tileButton.setPrefSize(55, 55);
+        Image imageTile = new Image(imageTilePath);
+        ImageView imageView = new ImageView(imageTile);
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(55);
+        imageView.setFitWidth(55);
+        tileButton.setGraphic(imageView);
+
+
         GaussianBlur blur = new GaussianBlur(2);
         BooleanProperty isSelected = new SimpleBooleanProperty(false);
         firstRemove=true;
@@ -243,120 +268,20 @@ public class GUIApp extends Application implements ViewInterface{
                 tileButton.setDisable(true);
                 tileButton.setOpacity(0.8);
                 firstRemove=false;
-                command = command + c + " " + r + " ";
-
+                command = command + column + " " + row + " ";
                 System.out.println(command);
-                Image image = new Image(String.valueOf(tileButton.getGraphic()));
-                ImageView imageView = new ImageView(image);
-
             }else {
-
                 isSelected.set(true);
                 tileButton.setStyle("");
                 tileButton.setEffect(null);
                 tileButton.setDisable(false);
                 tileButton.setOpacity(1);
-
             }
         });
 
         return tileButton;
     }
-  /*  public Button getTile(int row, int column){
-        Button tileButton = new Button();
-        String imageTilePath = null;
-        Constant tile = null;
-        switch (client.getBoardView().getTile(row, column).getColor()){
-            case BLUE:
-            {switch (client.getBoardView().getTile(row, column).getType()) {
-                case ONE:
-                    imageTilePath = tile.getConstantTile() + "Cornici.1.png";
-                    break;
-                case TWO:
-                    imageTilePath = tile.getConstantTile() + "Cornici.2.png";
-                    break;
-                case THREE:
-                    imageTilePath = tile.getConstantTile() + "Cornici.3.png";
-                    break;
-            }
-            break;}
-            case GREEN:
-            {switch (client.getBoardView().getTile(row, column).getType()) {
-                case ONE:
-                    imageTilePath = tile.getConstantTile() + "Gatti1.1.png";
-                    break;
-                case TWO:
-                    imageTilePath = tile.getConstantTile() + "Gatti1.2.png";
-                    break;
-                case THREE:
-                    imageTilePath = tile.getConstantTile() + "Gatti1.3.png";
-                    break;
-            }
-            break;}
-            case YELLOW:
-            {switch (client.getBoardView().getTile(row, column).getType()) {
-                case ONE:
-                    imageTilePath = tile.getConstantTile() + "Giochi1.1.png";
-                    break;
-                case TWO:
-                    imageTilePath = tile.getConstantTile() + "Giochi1.2.png";
-                    break;
-                case THREE:
-                    imageTilePath = tile.getConstantTile() + "Giochi1.3.png";
-                    break;
-            }
-            break;}
-            case WHITE:
-            {switch (client.getBoardView().getTile(row, column).getType()) {
-                case ONE:
-                    imageTilePath = tile.getConstantTile() + "Libri1.1.png";
-                    break;
-                case TWO:
-                    imageTilePath = tile.getConstantTile() + "Libri1.2.png";
-                    break;
-                case THREE:
-                    imageTilePath = tile.getConstantTile() + "Libri1.3.png";
-                    break;
-            }
-            break;}
-            case PINK:
-            {switch (client.getBoardView().getTile(row, column).getType()) {
-                case ONE:
-                    imageTilePath = tile.getConstantTile() + "Piante1.1.png";
-                    break;
-                case TWO:
-                    imageTilePath = tile.getConstantTile() + "Piante1.2.png";
-                    break;
-                case THREE:
-                    imageTilePath = tile.getConstantTile() + "Piante1.3.png";
-                    break;
-            }
-            break;}
-            case LIGHTBLUE:
-            {switch (client.getBoardView().getTile(row, column).getType()) {
-                case ONE:
-                    imageTilePath = tile.getConstantTile() + "Trofei1.1.png";
-                    break;
-                case TWO:
-                    imageTilePath = tile.getConstantTile() + "Trofei1.2.png";
-                    break;
-                case THREE:
-                    imageTilePath = tile.getConstantTile() + "Trofei1.3.png";
-                    break;
-            }
-            break;}
 
-        }
-        tileButton.setPrefSize(50, 50);
-        Image imageTile = new Image(imageTilePath);
-        ImageView imageView = new ImageView(imageTile);
-        imageView.setPreserveRatio(true);
-        imageView.setFitHeight(50);
-        imageView.setFitWidth(50);
-        tileButton.setGraphic(imageView);
-        return tileButton;
-    }
-*/
     /**
      * This method is used to create the common goal
      * @param client is the client

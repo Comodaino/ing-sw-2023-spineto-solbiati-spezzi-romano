@@ -7,6 +7,8 @@ import Model.Player;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -466,27 +468,17 @@ public class GUIApp extends Application implements ViewInterface{
             }
         }
 
-        for(int i=0; i<5; i++){
-                Button colButton = new Button();
-                colButton.setPrefSize(45, 20);
-                colButton.setDisable(true);
-                colButton.setStyle("-fx-background-color: Green;");
-                shelfGridPane.add(colButton, i, 6);
-            }
+
+        for(int i=0; i<5; i++) {
+            ColButton colButton = new ColButton(this, i);
+            shelfGridPane.add(colButton.getButton(), i, 6);
+
+        }
+
         shelfGridPane.setAlignment(Pos.CENTER);
 
-/*
-        Image iamgeTile45 = new Image("images/item tiles/Giochi1.2.png");
-        ImageView imageView45 = new ImageView(iamgeTile45);
-        imageView45.setFitWidth(35);
-        imageView45.setFitHeight(35);
-        imageView45.setPreserveRatio(true);
 
-
-
-        shelfGridPane.add(imageView45, 4, 0);
-        shelfGridPane.setAlignment(Pos.CENTER);
- */       // shelfGridPane.add(imageView45, 0, 1);
+       // shelfGridPane.add(imageView45, 0, 1);
        // if (client.isOwner()==true) {
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
@@ -512,6 +504,8 @@ public class GUIApp extends Application implements ViewInterface{
 
         return shelfPane;
     }
+
+
 
     public Image createPersonalGoal(AbstractClient client) {
 Player p = new Player("Ale",true);
@@ -570,15 +564,15 @@ Player p = new Player("Ale",true);
         imageView.fitWidthProperty().bind(stage.widthProperty());
         imageView.fitHeightProperty().bind(stage.heightProperty());
 
-        Label nickname = new Label("Enter your nickname");
-        nickname.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
+        Label nickname1 = new Label("Enter your nickname");
+        nickname1.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
         TextField nicknameField = new TextField();
         nicknameField.setPromptText("Enter your nickname");
         nicknameField.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
 
         Button button = new Button("Play");
         VBox contentBox = new VBox(10);
-        contentBox.getChildren().addAll(nickname, nicknameField, button);
+        contentBox.getChildren().addAll(nickname1, nicknameField, button);
         contentBox.setStyle("-fx-alignment: center; -fx-padding: 100px; -fx-background-color: white; -fx-opacity: 0.5;");
         final String[] nicknameString = new String[1];
         String regex = "^[a-zA-Z0-9 ]+$";
@@ -605,7 +599,7 @@ Player p = new Player("Ale",true);
                 }
             } else {
                 nicknameField.clear();
-                nickname.setText("Error, retype your nickname");
+                nickname1.setText("Error, retype your nickname");
             //    nicknameField.setPromptText("Nickname too long or empty");
             }
         });
@@ -658,6 +652,11 @@ Player p = new Player("Ale",true);
     @Override
     public void setClient(AbstractClient client) {
         this.client = client;
+    }
+
+    public void setCommand(String command){
+        this.command = command;
+        System.out.println(command);
     }
 
 

@@ -561,7 +561,7 @@ Player p = new Player("Ale",true);
         return new Image(imagePath);
     }
 
-    public void home(Stage stage){
+    public void home(Stage stage, String nickname){
         Image imageHome = new Image("images/Publisher material/Display_3.jpg");
         ImageView imageView = new ImageView(imageHome);
         BoxBlur blur = new BoxBlur(3, 4, 3);
@@ -587,7 +587,7 @@ Player p = new Player("Ale",true);
         button.setOnAction(e -> {
             String inp = nicknameField.getText();
             inp= inp.replace(" ", "");
-            if (inp.length() <= 10 && inp.length() > 0 && inp.matches(regex)){
+            if (inp.length() <= 10 && inp.length() > 0 && inp.matches(regex) && nicknameString[0].length()<=10 && nicknameString[0].matches(regex)){
                 nicknameString[0] = inp;
             //    nickname.setText("Your nickname is: "+nicknameString[0]);
                 primaryStage.close();
@@ -633,7 +633,7 @@ Player p = new Player("Ale",true);
         public void update(String arg) throws IOException {
         switch (this.state){
             case HOME:
-                home(primaryStage);
+                home(primaryStage,arg);
                 break;
             case PLAY:
                 play(client,primaryStage);
@@ -657,21 +657,8 @@ Player p = new Player("Ale",true);
 
     @Override
     public void setClient(AbstractClient client) {
-
-    }
-
-    @Override
-    public void addChatMessage(String tmp) {
-
-    }
-      /*  public GUIApp(AbstractClient client, RemotePlayer player, State state) {
-        this.player = player;
         this.client = client;
-        this.state = state;
-        }
-
-       */
-
+    }
 
 
 }

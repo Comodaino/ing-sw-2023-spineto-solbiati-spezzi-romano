@@ -23,16 +23,16 @@ public class Main {
                 if (args[i].startsWith("-")) {
                     switch (args[i]) {
                         case "-t":
-                            type = args[i+1];
+                            if(args[i+1].equals("client") || args[i+1].equals("server")) type = args[i+1];
                             break;
                         case "-i":
                             ip = args[i+1];
                             break;
                         case "-v":
-                            view = args[i+1];
+                            if(args[i+1].equals("TUI") || args[i+1].equals("GUI")) view = args[i+1];
                             break;
                         case "-c":
-                            connection = args[i+1];
+                            if(args[i+1].equals("socket") || args[i+1].equals("RMI")) connection = args[i+1];
                             break;
                     }
                 }
@@ -56,6 +56,7 @@ public class Main {
                     ServerApp.execute();
                     break;
                 case "client":
+                    System.out.println("client");
                     clientInput(ip, connection, view);
                     break;
             }
@@ -87,6 +88,7 @@ public class Main {
             switch (connection) {
                 case "socket":
                     try {
+                        System.out.println("socket");
                         ClientAppSocket.execute(ip, view);
                     } catch (IOException | ClassNotFoundException | InterruptedException e) {
                         throw new RuntimeException(e);

@@ -135,4 +135,10 @@ public class Lobby {
         return controller;
     }
 
+    /**
+     * Checks and eventually updates if the lobby should be open
+     */
+    public void checkOpen() {
+        if(this.lp.size() == 4) this.open= false;
+    }
 }

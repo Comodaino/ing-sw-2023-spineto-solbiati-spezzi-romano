@@ -31,8 +31,8 @@ Implementation of the tabletop game: [MyShelfie](https://www.craniocreations.it/
 | Simplified rules    | :green_square:      |
 | Complete rules      | :green_square:      |
 | Socket              | :green_square:      |
-| RMI                 | :green_square:      |
-| Tui                 | :orange_square:     |
+| RMI                 | :orange_square:     |
+| Tui                 | :green_square:      |
 | Gui                 | :orange_square:     |
 
 | Advanced Functionalities       | Implemented        |

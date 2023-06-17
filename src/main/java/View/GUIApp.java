@@ -185,7 +185,7 @@ public class GUIApp extends Application implements ViewInterface{
     public Button getTile(int row, int column){
         Button tileButton = new Button();
         String imageTilePath = null;
-        Constant tile = null;
+        Constant tile = new Constant();
         int i = 0;
         String imageTileName = null;
         switch (client.getBoardView().getTile(row, column).getColor()){
@@ -355,8 +355,8 @@ public class GUIApp extends Application implements ViewInterface{
         ImageView shelfImageView = new ImageView(imageShelf);
         shelfImageView.setFitWidth(300);
         shelfImageView.setFitHeight(300);
-        shelfPane.add(shelfImageView, 0, 0);
-        shelfPane.add(shelfGridPane, 0, 0);
+        shelfPane.add(shelfImageView, 0, 1);
+        shelfPane.add(shelfGridPane, 0, 1);
 
         shelfImageView.setPreserveRatio(true);
 
@@ -379,20 +379,22 @@ public class GUIApp extends Application implements ViewInterface{
         }
 
         shelfGridPane.setAlignment(Pos.CENTER);
-
-
-       // shelfGridPane.add(imageView45, 0, 1);
-       // if (client.isOwner()==true) {
+        GridPane persGoal = new GridPane();
+        if (client.isOwner()) {
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
             chairImageView.setFitWidth(100);
             chairImageView.setFitHeight(100);
             chairImageView.setPreserveRatio(true);
+            persGoal.add(chairImageView, 0, 0);
         //    shelfPane.add(chairImageView, 0, 1);
-       //  }
-        HBox hbox = new HBox(3);
-        hbox.setPadding(new Insets(15, 12, 15, 12));
-        hbox.setSpacing(10);
+         }else {
+            Label label = new Label();
+            label.setPrefSize(100, 100);
+            label.setStyle("-fx-background-color: transparent;");
+            persGoal.add(label, 0, 0);
+        }
+
 
         Image personalGoalImage = createPersonalGoal(client);
         ImageView personalGoalImageView = new ImageView(personalGoalImage);
@@ -400,16 +402,86 @@ public class GUIApp extends Application implements ViewInterface{
         personalGoalImageView.setFitHeight(150);
         personalGoalImageView.setPreserveRatio(true);
    //    shelfPane.add(personalGoalImageView, 1, 1);
-        hbox.getChildren().addAll(chairImageView,personalGoalImageView);
-        hbox.setAlignment(Pos.CENTER);
-        shelfPane.add(hbox,0,1);
+        persGoal.add(personalGoalImageView,1,0);
 
+        persGoal.setAlignment(Pos.CENTER);
+
+        shelfPane.add(persGoal,0,2);
+        shelfGridPane.add(bufferTile(),0,0);
 
         return shelfPane;
     }
 
 
+public GridPane bufferTile(){
+        GridPane bufferTile = new GridPane();
+        if(client.getBoardView().getTileBuffer().size()>=1){
+            Button button1 = new Button();
+            button1.setPrefSize(40, 40);
+            button1.setDisable(true);
+            Image image = new Image(createTile(0));
+            button1.setGraphic(new ImageView(image));
+            bufferTile.add(button1, 0, 0);
+        }
+        if(client.getBoardView().getTileBuffer().size()>=2){
+            Button button2 = new Button();
+            button2.setPrefSize(40, 40);
+            button2.setDisable(true);
+            Image image = new Image(createTile(1));
+            button2.setGraphic(new ImageView(image));
+            bufferTile.add(button2, 0, 1);
+        }
+        if(client.getBoardView().getTileBuffer().size()>=3){
+            Button button3 = new Button();
+            button3.setPrefSize(40, 40);
+            button3.setDisable(true);
+            Image image = new Image(createTile(2));
+            button3.setGraphic(new ImageView(image));
+            bufferTile.add(button3, 0, 2);
+        }
 
+
+        return bufferTile;
+}
+public String createTile(int index) {
+      String imageTileName = null;
+        Constant tile = new Constant();
+    switch (client.getBoardView().getTileBuffer().get(index).getColor()){
+        case BLUE:
+            imageTileName = "Cornici1.";
+            break;
+        case GREEN:
+            imageTileName = "Gatti1.";
+            break;
+        case YELLOW:
+            imageTileName = "Giochi1.";
+            break;
+        case WHITE:
+            imageTileName = "Libri1.";
+            break;
+        case PINK:
+            imageTileName = "Piante1.";
+            break;
+        case LIGHTBLUE:
+            imageTileName = "Trofei1.";
+            break;
+
+    }
+    int i = 0;
+    switch (client.getBoardView().getTileBuffer().get(index).getType()) {
+        case ONE:
+            i = 1;
+            break;
+        case TWO:
+            i = 2;
+            break;
+        case THREE:
+            i = 3;
+            break;
+    }
+    return tile.getConstantTile() + imageTileName + i + ".png";
+
+}
     public Image createPersonalGoal(AbstractClient client) {
 Player p = new Player("Ale",true);
      //   Player p= client.getBoardView().getListOfPlayer().get(0);
@@ -471,6 +543,9 @@ Player p = new Player("Ale",true);
         nickname1.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
         TextField nicknameField = new TextField();
         nicknameField.setPromptText("Enter your nickname");
+        if(nickname!=null){
+            nickname1.setText("Nickname already taken, choose another one");
+        }
         nicknameField.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
 
         Button button = new Button("Play");
@@ -485,7 +560,7 @@ Player p = new Player("Ale",true);
         button.setOnAction(e -> {
             String inp = nicknameField.getText();
             inp= inp.replace(" ", "");
-            if (inp.length() <= 10 && inp.length() > 0 && inp.matches(regex) || nickname.length()<=10 || nickname.matches(regex)){
+            if (inp.length() <= 10 && inp.length() > 0 && inp.matches(regex)){
                     client.println(inp);
             } else {
                 nicknameField.clear();

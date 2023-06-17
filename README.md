@@ -28,19 +28,19 @@ Implementation of the tabletop game: [MyShelfie](https://www.craniocreations.it/
 
 | Functionality       | Implemented         |
 |---------------------|---------------------|
-| Simplified rules    | :heavy_check_mark:  |
-| Complete rules      | :heavy_check_mark:  |
-| Socket              | :heavy_check_mark:  |
-| RMI                 | :heavy_check_mark:  |
-| Tui                 | :heavy_check_mark:  |
-| Gui                 | :x:                 |
+| Simplified rules    | :green_square:      |
+| Complete rules      | :green_square:      |
+| Socket              | :green_square:      |
+| RMI                 | :green_square:      |
+| Tui                 | :orange_square:     |
+| Gui                 | :orange_square:     |
 
 | Advanced Functionalities       | Implemented        |
 |--------------------------------|--------------------|
-| Multiple matches               | :heavy_check_mark: |
-| Chat                           | :heavy_check_mark: |
-| Persistence                    | :x:                |
-| Resilience to disconnections   | :heavy_check_mark: |
+| Multiple matches               | :green_square:     |
+| Chat                           | :green_square:     |
+| Persistence                    | :red_square:       |
+| Resilience to disconnections   | :orange_square:    |
 
 ---
 

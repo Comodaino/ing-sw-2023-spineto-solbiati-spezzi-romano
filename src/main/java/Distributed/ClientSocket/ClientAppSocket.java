@@ -4,7 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-//import View.GUIApp;
+import View.GUIApp;
 import View.State;
 import View.TextualUI;
 import View.ViewInterface;
@@ -54,7 +54,7 @@ public class ClientAppSocket implements AbstractClient {
      * Starts the client
      *
      * @param address ip address of the server
-     * @throws IOException
+     * @throws IOExceptionGUIApp
      * @throws InterruptedException
      * @throws ClassNotFoundException
      */
@@ -87,7 +87,8 @@ public class ClientAppSocket implements AbstractClient {
                 this.view = new TextualUI(this);
             }
             if (typeOfView.equals("GUI")){
-                //this.view = new GUIApp(this);
+                this.view = new GUIApp();
+                view.setClient(this);
             }
 
 

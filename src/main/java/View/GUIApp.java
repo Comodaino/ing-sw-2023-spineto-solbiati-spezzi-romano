@@ -422,6 +422,7 @@ public GridPane bufferTile(){
             Image image = new Image(createTile(0));
             button1.setGraphic(new ImageView(image));
             bufferTile.add(button1, 0, 0);
+
         }
         if(client.getBoardView().getTileBuffer().size()>=2){
             Button button2 = new Button();

@@ -133,6 +133,7 @@ public class GameController implements Serializable {
         int first = input[1].charAt(0) - 48;
         int second = input[2].charAt(0) - 48;
         System.out.println("LENGTH: " + gameBoard.getTileBuffer().size());
+        if(gameBoard.getTileBuffer().size() > first || gameBoard.getTileBuffer().size() > second) return;
         Collections.swap(gameBoard.getTileBuffer(), first, second);
         System.out.println("swapped");
     }

@@ -104,10 +104,9 @@ public class GUIApp extends Application implements ViewInterface {
         imageViewBoard.setFitWidth(650);
 
         boardPane.getChildren().addAll(imageViewBoard);
-        GridPane fillBoardGridPane = fillBoard(CellType.TWO);
+        GridPane fillBoardGridPane = fillBoard(client);
         fillBoardGridPane.setPrefSize(650, 650);
         fillBoardGridPane.setAlignment(Pos.CENTER);
-        fillBoard(CellType.TWO);
         boardPane.getChildren().add(fillBoardGridPane);
 
         return boardPane;
@@ -124,17 +123,13 @@ public class GUIApp extends Application implements ViewInterface {
         });
         return reset;
     }
-
-    //    public GridPane fillBoard(AbstractClient client){
-    public GridPane fillBoard(CellType cellType) {
+    public GridPane fillBoard(AbstractClient client){
         GridPane fillBoardPane = new GridPane();
         Pane emptyComponent = new Pane();
-
         emptyComponent.setMinSize(65, 65);
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                // switch (client.getBoardView().getCell(i, j).getType()){
-                switch (cellType) {
+                 switch (client.getBoardView().getCell(i, j).getType()){
                     case ONE:
                         emptyComponent.setPrefSize(65, 65);
                         fillBoardPane.add(emptyComponent, i, j);
@@ -167,14 +162,6 @@ public class GUIApp extends Application implements ViewInterface {
                         break;
                 }
 
-                 /*    Image imageBoard = new Image("images/item tiles/Gatti1.2.png");
-                     ImageView imageView = new ImageView(imageBoard);
-                     imageView.setPreserveRatio(true);
-                     imageView.setFitHeight(50);
-                     imageView.setFitWidth(50);
-                     fillBoardPane.add(imageView, i, j);
-
-                  */
             }
         }
 
@@ -656,7 +643,6 @@ public class GUIApp extends Application implements ViewInterface {
                 hBox.getChildren().addAll(start, firstMatch, notFirstMatch);
                 hBox.setAlignment(Pos.CENTER);
 
-
                 Pane root = new Pane(new Region());
                 Scene scene = new Scene(root);
                 root.getChildren().addAll(imageViewLobby, hBox);
@@ -672,9 +658,10 @@ public class GUIApp extends Application implements ViewInterface {
                 wait.setPromptText("Enter your nickname");
                 wait.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
 
-                Pane root = new Pane(new Region());
+                BorderPane root = new BorderPane();
                 Scene scene = new Scene(root);
                 root.getChildren().addAll(imageViewLobby, label);
+                root.setCenter(label);
                 primaryStage.setScene(scene);
                 Screen screen = Screen.getPrimary();
                 Rectangle2D bounds = screen.getVisualBounds();

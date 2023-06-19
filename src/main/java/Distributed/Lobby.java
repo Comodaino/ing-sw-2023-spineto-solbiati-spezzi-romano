@@ -73,12 +73,8 @@ public class Lobby {
     public void startGame() throws RemoteException {
         this.open=false;
         controller.startGame();
-        for(RemotePlayer p : lp) {
-
-            p.setState(States.PLAY);
-            if(p.getConnectionType().equals(ConnectionType.RMI)){
-                p.getClient().setState(States.PLAY);
-            }
+        for(RemotePlayer rp : lp) {
+            rp.setState(States.PLAY);
         }
         this.open = false;
         this.playing = true;

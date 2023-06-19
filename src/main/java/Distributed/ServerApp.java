@@ -129,13 +129,17 @@ public class ServerApp {
         Lobby lobby = null;
         States clientState = null;
 
-        if (checkNickname(nickname) != null ) {
+        String check = checkNickname(nickname);
+
+        if (check.equals("true") ) {
             RMIPlayer rp = new RMIPlayer(client);
             rp.setNickname(nickname);
             client.setNickname(nickname);
             addPlayer(client, rp);
             rp.setState(States.WAIT);
 
+        } else if(check.equals("reconnected")) {
+            client.setNickname(nickname);
         } else client.update(null, "/nickname");
     }
 
@@ -194,6 +198,29 @@ public class ServerApp {
         }
     }
 
+    /**
+     * Checks for disconnections for all the RMI Players
+     * @author Nicolò
+     */
+    public void heartBeatService() {
+        synchronized (lobbies) {
+            for(Lobby l: lobbies){
+                for(RemotePlayer rp: l.getListOfPlayers()){
+                    if(rp.getConnectionType()==ConnectionType.RMI && rp.isConnected()){
+                        boolean allOk;
+                        try {
+                            allOk = rp.getClient().beat();
+                        } catch (RemoteException e) {
+                            allOk = false;
+                        }
+                        if(!allOk) rp.setConnected(false);
+                    }
+                }
+            }
+        }
+    }
+
+
     //LOCAL FUNCTIONS
 
     /**
@@ -210,7 +237,10 @@ public class ServerApp {
             for (Lobby l : lobbies) {
                 for (RemotePlayer rp : l.getListOfPlayers()) {
                     if (rp.getNickname().equals(nickname)) {
-                        if(!rp.isConnected()) return "reconnected";
+                        if(!rp.isConnected()){
+                            rp.setConnected(true);
+                            return "reconnected";
+                        }
                         notFound = false;
                         break;
                     }
@@ -240,7 +270,6 @@ public class ServerApp {
                 System.out.println("Created new lobby");
 
             }
-
 
             if (client != null && rp!=null) {
                 try {

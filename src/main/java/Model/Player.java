@@ -75,4 +75,5 @@ public class Player implements Serializable {
     public void removeChair(){
         this.chair = false;
     }
+
 }

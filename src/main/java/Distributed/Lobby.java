@@ -35,26 +35,13 @@ public class Lobby {
             throw new RuntimeException(e);
         }
 
-        this.open = true;
-    }
-
-    public Lobby(Server server) { //TODO delete after unification of ServerImpl and ServerApp
-        this.lp = new ArrayList<RemotePlayer>();
-        this.firstMatch = false;
-        this.ID = null;
-        this.server = server;
-
-
-        try {
-            controller = new GameController(false, this);
-            System.out.println("Created lobby's controller");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         this.boardView = controller.getBoardView();
+        System.out.println("BOARD: " + this.boardView);
+
 
         this.open = true;
     }
+
 
     /**
      * Adds a player to the lobby

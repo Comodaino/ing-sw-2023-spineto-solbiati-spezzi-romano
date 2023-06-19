@@ -243,7 +243,11 @@ public class ServerApp {
 
 
             if (client != null && rp!=null) {
-                lobbies.get(lobbies.size() - 1).addPlayer(rp);
+                try {
+                    lobbies.get(lobbies.size() - 1).addPlayer(rp);
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 client.setOwner(rp.isOwner());
                 client.setLobbyID(lobbies.get(lobbies.size() - 1).getID());
                 System.out.println(rp.getNickname() + " has joined the " + (lobbies.size()) + " lobby");

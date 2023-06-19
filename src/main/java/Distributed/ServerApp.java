@@ -14,17 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class ServerApp {
     private int port;
-    private final List<Lobby> lobbies;
+    private static List<Lobby> lobbies;
     private Lobby openLobby;
     private static ServerImpl serverRMI;
 
     public ServerApp(int port) throws RemoteException {
         super();
         this.port = port;
-        this.lobbies = new ArrayList<Lobby>();
+        lobbies = new ArrayList<Lobby>();
         serverRMI = new ServerImpl(this);
         openLobby = new Lobby(this);
         openLobby.setID(1);
@@ -41,6 +42,25 @@ public class ServerApp {
 
 
         serverRMI.start();
+
+        Thread rmiHB = new Thread(){
+            @Override
+            public void run() {
+                while(true){
+                    heartBeatService();
+
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            }
+        };
+
+        rmiHB.start();
+
         try {
             server.startServer();
         } catch (IOException | InterruptedException e) {
@@ -140,6 +160,13 @@ public class ServerApp {
 
         } else if(check.equals("reconnected")) {
             client.setNickname(nickname);
+            synchronized (lobbies){
+                for(Lobby l: lobbies){
+                    for(RemotePlayer rp: l.getListOfPlayers()){
+                        if(rp.getNickname().equals(nickname)) client.setLobbyID(l.getID());
+                    }
+                }
+            }
         } else client.update(null, "/nickname");
     }
 
@@ -202,7 +229,7 @@ public class ServerApp {
      * Checks for disconnections for all the RMI Players
      * @author Nicolò
      */
-    public void heartBeatService() {
+    public static void heartBeatService() {
         synchronized (lobbies) {
             for(Lobby l: lobbies){
                 for(RemotePlayer rp: l.getListOfPlayers()){

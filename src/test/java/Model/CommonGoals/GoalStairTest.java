@@ -39,7 +39,7 @@ class GoalStairTest {
     @Test
     void emptyShelf(){
         GoalStair goal = new GoalStair(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico");
 
         assertEquals(0, goal.getScore(p));
         System.out.println("TEST PASSED");
@@ -48,7 +48,7 @@ class GoalStairTest {
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
         GoalStair goal = new GoalStair(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico");
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair_conf");
         Scanner reader = new Scanner(shelfConf);
@@ -61,7 +61,7 @@ class GoalStairTest {
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
         GoalStair goal = new GoalStair(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico");
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair_conf");
         Scanner reader = new Scanner(shelfConf);
@@ -75,8 +75,8 @@ class GoalStairTest {
     @Test
     void goalCompletedByTwoPlayers() throws FileNotFoundException {
         GoalStair goal = new GoalStair(2);
-        Player p1 = new Player("Nico", true);
-        Player p2 = new Player("Alessio", false);
+        Player p1 = new Player("Nico");
+        Player p2 = new Player("Alessio");
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair_conf");
         Scanner reader1 = new Scanner(shelfConf);
@@ -93,10 +93,10 @@ class GoalStairTest {
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
         GoalStair goal = new GoalStair(4);
-        Player p1 = new Player("Nico", true);
-        Player p2 = new Player("Alessio", false);
-        Player p3 = new Player("Clara", false);
-        Player p4 = new Player("Alessandra", false);
+        Player p1 = new Player("Nico");
+        Player p2 = new Player("Alessio");
+        Player p3 = new Player("Clara");
+        Player p4 = new Player("Alessandra");
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/stair_conf");
         Scanner reader1 = new Scanner(shelfConf);

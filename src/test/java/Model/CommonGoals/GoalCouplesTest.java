@@ -39,7 +39,7 @@ class GoalCouplesTest {
     @Test
     void emptyShelf(){
         GoalCouples goal = new GoalCouples(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico");
 
         assertEquals(0, goal.getScore(p));
         System.out.println("TEST PASSED");
@@ -48,7 +48,7 @@ class GoalCouplesTest {
     @Test
     void goalCompletedByOnePlayer() throws FileNotFoundException {
         GoalCouples goal = new GoalCouples(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico");
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/couples_conf");
         Scanner reader = new Scanner(shelfConf);
@@ -61,7 +61,7 @@ class GoalCouplesTest {
     @Test
     void theSamePlayerCannotCompleteTheSameGoalTwoTimes() throws FileNotFoundException {
         GoalCouples goal = new GoalCouples(2);
-        Player p = new Player("Nico", true);
+        Player p = new Player("Nico");
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/couples_conf");
         Scanner reader = new Scanner(shelfConf);
@@ -75,8 +75,8 @@ class GoalCouplesTest {
     @Test
     void goalCompletedByTwoPlayers() throws FileNotFoundException {
         GoalCouples goal = new GoalCouples(2);
-        Player p1 = new Player("Nico", true);
-        Player p2 = new Player("Alessio", false);
+        Player p1 = new Player("Nico");
+        Player p2 = new Player("Alessio");
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/couples_conf");
         Scanner reader1 = new Scanner(shelfConf);
@@ -93,10 +93,10 @@ class GoalCouplesTest {
     @Test
     void goalCompletedByFourPlayers() throws FileNotFoundException {
         GoalCouples goal = new GoalCouples(4);
-        Player p1 = new Player("Nico", true);
-        Player p2 = new Player("Alessio", false);
-        Player p3 = new Player("Clara", false);
-        Player p4 = new Player("Alessandra", false);
+        Player p1 = new Player("Nico");
+        Player p2 = new Player("Alessio");
+        Player p3 = new Player("Clara");
+        Player p4 = new Player("Alessandra");
 
         File shelfConf = new File("src/test/java/Model/CommonGoals/ShelfConfigs/couples_conf");
         Scanner reader1 = new Scanner(shelfConf);

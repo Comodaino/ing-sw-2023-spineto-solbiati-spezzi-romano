@@ -1,10 +1,11 @@
 package Controller;
 
 import Distributed.Lobby;
+import Distributed.ServerApp;
 import Distributed.ServerRMI.Server;
 
 public class LobbyTest extends Lobby {
-    public LobbyTest(Server server) {
+    public LobbyTest(ServerApp server) {
         super(server);
         if(server == null){
             return;

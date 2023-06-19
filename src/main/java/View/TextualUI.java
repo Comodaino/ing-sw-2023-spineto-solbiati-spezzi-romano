@@ -49,8 +49,19 @@ public class TextualUI implements ViewInterface {
             if(state!=State.HOME){
                 if(in.equals("/cg") || in.equals("/pg")) printGoal(in);
                 if(in.equals("/h") || in.equals("/help")) help();
-                if (in.length() > maxMsgLength) System.out.println("Input too long, maximum character: " + maxMsgLength);
-                else if( state == State.PLAY && !correctInput(in)) System.out.println("Command is invalid, try /help or /h");
+                if (in.startsWith("/whisper")){
+                    String[] msg = in.split(" ");
+                    if(msg.length<3) System.out.println("whisper failed, addressee or message is missing");
+                    else {
+                        for(int i=2; i<msg.length; i++) msg[2] += msg[i];
+                        if (msg[2].length() > maxMsgLength)
+                            System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
+                    }
+                }
+                if((((state == State.LOBBY) && (!in.equals("/start") || !in.equals("/firstMatch")
+                        || !in.equals("/notFirstMatch") || !in.equals("/help") || !in.equals("/h")))
+                        || !in.startsWith("/whisper"))
+                        || ((state == State.PLAY) && !correctInput(in))) System.out.println("Command is invalid, try /help or /h");
                 else if( state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
                     else client.println(in);
 
@@ -190,12 +201,12 @@ public class TextualUI implements ViewInterface {
         switch (this.state) {
             case HOME:
                 System.out.println(ConsoleColors.YELLOW_BOLD + "\n" +
-                        "\t\t _    _ _____ _     _____ ________  ________   _____ _____   ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
-                        "\t\t| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  |  |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
-                        "\t\t| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | |  | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
-                        "\t\t| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | |  | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
-                        "\t\t\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ /  | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
-                        "\t\t \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/   \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n" + RESET);
+                        " _    _ _____ _     _____ ________  ________   _____ _____   ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
+                        "| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  |  |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
+                        "| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | |  | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
+                        "| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | |  | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
+                        "\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ /  | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
+                        " \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/   \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n" + RESET);
                 System.out.print("Insert your nickname:\t");
                 break;
             case LOBBY:
@@ -525,18 +536,23 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    public void help() {
+    public void help() throws RemoteException {
         System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
-        if (!removed) {
-            System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  ---> to remove the tile[row][column] from the board");
-            System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1 [row2 column2] [row3 column3]" + RESET + "  ---> to remove 2 or 3 tiles from the board\n");
-        } else{
-            if (!added) {
-                System.out.println(ConsoleColors.GREEN_UNDERLINED + "/switch t1 t2" + RESET + "  ---> to switch tile t1 and t2 in the tile buffer (the first tile from left is tile number 0)");
-                System.out.println(ConsoleColors.GREEN_UNDERLINED + "/add C" + RESET + "  ---> to add tiles from the buffer to the column C of your shelf");
+        if(this.state.equals(State.PLAY)) {
+            if (!removed) {
+                System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  ---> to remove the tile[row][column] from the board");
+                System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1 [row2 column2] [row3 column3]" + RESET + "  ---> to remove 2 or 3 tiles from the board\n");
+            } else {
+                if (!added) {
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/switch t1 t2" + RESET + "  ---> to switch tile t1 and t2 in the tile buffer (the first tile from left is tile number 0)");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/add C" + RESET + "  ---> to add tiles from the buffer to the column C of your shelf");
+                }
             }
+            System.out.println(ConsoleColors.GREEN_UNDERLINED + "/cg of /pg" + RESET + "  ---> to see common goals or private goals");
         }
-        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/cg of /pg" + RESET + "  ---> to see common goals or private goals");
+        if(this.state.equals(State.LOBBY) && client.isOwner()) System.out.println(ConsoleColors.GREEN_UNDERLINED + "/start" + RESET + "  ---> to start the game");
+        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/chat message" + RESET + "  ---> to send a message to everyone");
+        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/whisper addressee message" + RESET + "  ---> to send a private message to another player");
     }
 
     private void nb(){
@@ -654,7 +670,7 @@ public class TextualUI implements ViewInterface {
                     }
                 }
             }
-            System.out.println("command /remove already used");
+            else System.out.println("command /remove already used");
             return false;
         }
         if(in.startsWith("/add")){
@@ -663,10 +679,11 @@ public class TextualUI implements ViewInterface {
                 if (added) removed = false;
                 return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
             }
-            System.out.println("command /add already used");
+            else System.out.println("command /add already used");
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;
+        if(in.startsWith("/whisper")) return true;
         return false;
     }
 }

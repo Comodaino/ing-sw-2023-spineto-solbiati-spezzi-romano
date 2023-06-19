@@ -90,8 +90,7 @@ public class ServerApp {
 
     public void handler(Client client, String arg) throws RemoteException {
         Lobby lobby = null;
-        States clientState = null;
-
+        System.out.println("state: " + client.getState());
 
         if(client.getState()==States.INIT){
                 initCommand(client, arg);
@@ -102,13 +101,8 @@ public class ServerApp {
             lobby = lobbies.get(client.getLobbyID() - 1);
         }
 
-        for (RemotePlayer rp : lobby.getListOfPlayers()) {
-            if (rp.getNickname().equals(client.getNickname())) {
-                clientState = rp.getState();
-            }
-        }
 
-        switch (clientState) {
+        switch (client.getState()) {
             case INIT:
                 break;
             case WAIT:
@@ -211,20 +205,21 @@ public class ServerApp {
      * @author Nicolò
      */
     public String checkNickname(String nickname) {
-        boolean found = true;
+        boolean notFound = true;
         synchronized (lobbies) {
             for (Lobby l : lobbies) {
                 for (RemotePlayer rp : l.getListOfPlayers()) {
                     if (rp.getNickname().equals(nickname)) {
-                        found = false;
+                        if(!rp.isConnected()) return "reconnected";
+                        notFound = false;
                         break;
                     }
                 }
-                if (!found) break;
+                if (!notFound) break;
             }
         }
-        if (found) return nickname;
-        return null;
+        if (notFound) return "true";
+        return "false";
     }
 
     /**

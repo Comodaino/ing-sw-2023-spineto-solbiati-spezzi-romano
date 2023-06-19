@@ -14,57 +14,71 @@ import static Model.CellType.*;
  * @author Alessio
  */
 public class Board implements Serializable {
-    private final Cell[][] matrix;
+    private Cell[][] matrix;
     private final List<Player> listOfPlayer;
-    private final List<Player> donePlayers;
+    private List<Player> donePlayers;
     private Player winner;
-    private final Set<CommonGoal> setOfCommonGoal;
-    private final EndGoal endGoal;
-    private final List<Tile> tileBuffer;
-    private final Bag bag;
+    private Set<CommonGoal> setOfCommonGoal;
+    private EndGoal endGoal;
+    private List<Tile> tileBuffer;
+    private Bag bag;
     private Player currentPlayer;
+    private boolean fm;
     private final BoardView boardView;
-    private List<String> chatBuffer;
-    private List<Whisper> personalChatBuffer;
+    private final List<String> chatBuffer;
+    private final List<Whisper> personalChatBuffer;
     /**
      * Constructor of the board
      * @param fm represents if it's the first match for the players
-     * @param pl list of the players
+     *
      */
-    public Board(boolean fm, List<Player> pl) {
+    public Board(boolean fm) {
         chatBuffer = new ArrayList<>();
         personalChatBuffer = new ArrayList<>();
+        this.listOfPlayer = new ArrayList<>();
+        this.boardView = new BoardView(this);
+        this.fm = fm;
+    }
+
+    /**
+     * initializes the board itself, gives goals and shelf to the player, selects common goals
+     */
+    public void init(){
         matrix = new Cell[9][9];
         bag = new Bag();
 
-            InputStream is = getClass().getClassLoader().getResourceAsStream("board_conf");
-           // File boardConf = new File("src/main/java/Model/Conf/board_conf");
-            assert is != null;
-            Scanner reader = new Scanner(is);
 
-            for(int i = 0; i<9 && reader.hasNextLine(); i++) {
-                String data = reader.nextLine();
-                CellType type = null;
-                for (int j = 0; j<9; j++){
-                    switch((int)data.charAt(j) - 48){
-                        case 1: type = ONE;
-                            break;
-                        case 2: type = TWO;
-                            break;
-                        case 3: type = THREE;
-                            break;
-                        case 4: type = FOUR;
-                            break;
+        Random rand = new Random();
+        listOfPlayer.get(rand.nextInt(listOfPlayer.size())).setAsChair();
 
-                    }
-                    this.matrix[i][j] = new Cell(type);
+
+        InputStream is = getClass().getClassLoader().getResourceAsStream("board_conf");
+        // File boardConf = new File("src/main/java/Model/Conf/board_conf");
+        assert is != null;
+        Scanner reader = new Scanner(is);
+
+        for(int i = 0; i<9 && reader.hasNextLine(); i++) {
+            String data = reader.nextLine();
+            CellType type = null;
+            for (int j = 0; j<9; j++){
+                switch((int)data.charAt(j) - 48){
+                    case 1: type = ONE;
+                        break;
+                    case 2: type = TWO;
+                        break;
+                    case 3: type = THREE;
+                        break;
+                    case 4: type = FOUR;
+                        break;
+
                 }
+                this.matrix[i][j] = new Cell(type);
             }
+        }
 
-            reader.close();
+        reader.close();
 
         this.donePlayers = new ArrayList<Player>();
-        this.listOfPlayer = pl;
         for(Player p: listOfPlayer){
             System.out.println(":: " + p.getNickname());
         }
@@ -74,7 +88,6 @@ public class Board implements Serializable {
         recharge();
 
         setOfCommonGoal = new HashSet<CommonGoal>();
-        Random rand = new Random();
         setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
         if(fm) {
             CommonGoal tmpGoal;
@@ -83,8 +96,19 @@ public class Board implements Serializable {
             }while(!setOfCommonGoal.contains(tmpGoal));
             setOfCommonGoal.add(tmpGoal);
         }
-        this.boardView = new BoardView(this);
     }
+
+    /**
+     * Adds a player to the model
+     * @param player
+     */
+    public void addPlayer(Player player){
+        synchronized (listOfPlayer){
+            listOfPlayer.add(player);
+        }
+
+    }
+
 
     /**
      * removes a single tile from the specified coordinates of the board, it does nothing is the cell is empty

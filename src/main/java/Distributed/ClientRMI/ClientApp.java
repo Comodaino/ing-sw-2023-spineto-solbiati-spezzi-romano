@@ -61,6 +61,34 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     @Override
     public void println(String arg) {
         try {
+
+            if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
+
+            if(arg.startsWith("/whisper")) {
+                String[] tmp =  arg.split(" ");
+                String last = tmp[tmp.length-1];
+                String[] tmp2 = new String[tmp.length];
+                tmp2[0] = tmp[0];
+                tmp2[1] = tmp[1];
+                for(int i= 1 ; i < tmp.length - 1; i++ ){
+                    tmp2[i+1] = tmp[i];
+                }
+                tmp2[1] = this.nickname;
+                arg = tmp2[0];
+                for(int i = 1; i< tmp.length; i++){
+                    arg = arg + " " + tmp2[i];
+                }
+                arg = arg + " " + last;
+            }else{
+                if((arg.startsWith("/remove") || arg.startsWith("/switch")) || arg.startsWith("/add")){
+                    String[] tmp =  arg.split(" ");
+                    String newMsg = tmp[0] + " " + nickname + " ";
+                    for(int i = 1; i<tmp.length; i++){
+                        newMsg += tmp[i] + " ";
+                    }
+                    arg =newMsg;
+                }
+            }
             server.handler(this, arg);
         } catch (IOException e) {
             throw new RuntimeException(e);

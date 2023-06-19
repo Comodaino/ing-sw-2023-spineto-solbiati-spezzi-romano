@@ -50,7 +50,7 @@ public class ServerApp {
                     heartBeatService();
 
                     try {
-                        TimeUnit.SECONDS.sleep(1);
+                        TimeUnit.SECONDS.sleep(5);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -114,16 +114,13 @@ public class ServerApp {
                 initCommand(client, arg);
         }
 
-        System.out.println("ok1");
         synchronized (lobbies) {
             System.out.println(client.getLobbyID());
             lobby = lobbies.get(client.getLobbyID() - 1);
         }
-        System.out.println("ok2");
 
         switch (client.getState()) {
             case INIT:
-                System.out.println("ok3");
                 break;
             case WAIT:
                 if (client.isOwner()) {
@@ -139,9 +136,7 @@ public class ServerApp {
         }
 
         try {
-            System.out.println("ok4");
             lobby.updateAll();
-            System.out.println("ok5");
 
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -153,13 +148,14 @@ public class ServerApp {
         States clientState = null;
 
         String check = checkNickname(nickname);
-
+        System.out.println("returned: " + check);
         if (check.equals("true") ) {
             RMIPlayer rp = new RMIPlayer(client);
             rp.setNickname(nickname);
             client.setNickname(nickname);
             addPlayer(client, rp);
-            rp.setState(States.WAIT);
+
+
 
         } else if(check.equals("reconnected")) {
             client.setNickname(nickname);
@@ -167,8 +163,8 @@ public class ServerApp {
                 for(Lobby l: lobbies) {
                     for(RemotePlayer rp: l.getListOfPlayers()) {
                         if(rp.getNickname().equals(nickname)) {
-                            client.setLobbyID(l.getID());
-                            client.setState(rp.getState());
+                            rp.reconnect(client, l.getID());
+                            break;
                         }
                     }
                 }
@@ -239,6 +235,7 @@ public class ServerApp {
         synchronized (lobbies) {
             for(Lobby l: lobbies){
                 for(RemotePlayer rp: l.getListOfPlayers()){
+                    System.out.println("disconnected state: " + rp.getState() + " " + rp.getNickname());
                     if(rp.getConnectionType()==ConnectionType.RMI && rp.isConnected()){
                         boolean allOk;
                         try {
@@ -246,7 +243,9 @@ public class ServerApp {
                         } catch (RemoteException e) {
                             allOk = false;
                         }
-                        if(!allOk) rp.setConnected(false);
+                        if(!allOk) {
+                            rp.setConnected(false);
+                        }
                     }
                 }
             }

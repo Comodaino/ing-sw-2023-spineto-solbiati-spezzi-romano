@@ -18,9 +18,9 @@ class GameControllerTest extends Observable{
     @Test
     public void inputTestTwo() throws IOException {
         List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", false));
-        playerList.add(new Player("player2", true));
-        GameController testController = new GameController(playerList, false, new LobbyTest(null));
+        GameController testController = new GameController(false, new LobbyTest(null));
+        testController.addPlayer(new Player("player1"));
+        testController.addPlayer(new Player("player2"));
         Board gameBoard = testController.getBoard();
         File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
@@ -38,10 +38,11 @@ class GameControllerTest extends Observable{
     @Test
     public void inputTestThree() throws IOException {
         List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", false));
-        playerList.add(new Player("player2", true));
-        playerList.add(new Player("player3", false));
-        GameController testController = new GameController(playerList, false, new LobbyTest(null));
+        GameController testController = new GameController(false, new LobbyTest(null));
+        testController.addPlayer(new Player("player1"));
+        testController.addPlayer(new Player("player2"));
+        testController.addPlayer(new Player("player3"));
+
         Board gameBoard = testController.getBoard();
         File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
@@ -60,11 +61,12 @@ class GameControllerTest extends Observable{
     @Test
     public void inputTestFour() throws IOException {
         List<Player> playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        playerList.add(new Player("player3", false));
-        playerList.add(new Player("player4", false));
-        GameController testController = new GameController(playerList, false, new LobbyTest(null));
+        GameController testController = new GameController(false, new LobbyTest(null));
+        testController.addPlayer(new Player("player1"));
+        testController.addPlayer(new Player("player2"));
+        testController.addPlayer(new Player("player3"));
+        testController.addPlayer(new Player("player4"));
+
         Board gameBoard = testController.getBoard();
         File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);

@@ -128,6 +128,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 if (player.isOwner()) outSocket("/wait owner ");
                 else outSocket("/wait");
 
+                lobby.updateAll();
+
                 break;
             case "false":
                 System.out.println("Nickname not available");
@@ -147,11 +149,12 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                     outputEnabled = false;
                     if (player.isOwner()) outSocket("/wait owner ");
                     else outSocket("/wait");
-                }else update(lobby.getBoardView());
+                }else lobby.updateAll();
 
 
                 break;
         }
+        outputEnabled = true;
     }
 
     /**

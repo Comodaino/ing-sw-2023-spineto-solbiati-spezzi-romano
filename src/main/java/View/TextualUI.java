@@ -58,24 +58,27 @@ public class TextualUI implements ViewInterface {
                             System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
                     }
                 }
-                if((((state == State.LOBBY) && (!in.equals("/start") || !in.equals("/firstMatch")
-                        || !in.equals("/notFirstMatch") || !in.equals("/help") || !in.equals("/h")))
-                        || !in.startsWith("/whisper"))
-                        || ((state == State.PLAY) && !correctInput(in))) System.out.println("Command is invalid, try /help or /h");
+                if((state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
+                    System.out.println("Command is invalid, try /help or /h");
                 else if( state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
                     else client.println(in);
 
 
 
             } else {
-                String nick = in;
-                if(nick!= null && nick.length()>10) {
+                if(in!= null && in.length()>10) {
                     System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
                 }
-                else if (nick!= null)
-                    client.println(nick);
+                else if (in!= null)
+                    client.println(in);
             }
         }
+    }
+
+    private boolean correctLobbyInput(String in) {
+        if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.startsWith("/whisper") || in.startsWith("/chat"))
+            return true;
+        else return false;
     }
 
     private void printGoal(String in) {
@@ -216,6 +219,7 @@ public class TextualUI implements ViewInterface {
                     System.out.println(ConsoleColors.GREEN_UNDERLINED + "/firstMatch"+ RESET + " if this is your first match\t\tOR\t\t" + ConsoleColors.GREEN_UNDERLINED +"/notFirstMatch" + RESET + " if you have already played");
                 } else
                     System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
+                chat();
                 break;
             case PLAY:
                 if (client.getBoardView().getListOfPlayer().size() == 1) {
@@ -237,7 +241,7 @@ public class TextualUI implements ViewInterface {
                     tileBuffer();
                     showGoals();
                     //showYourScore();
-                    chat();
+                    if (client.getBoardView().getChatBuffer()!=null && client.getBoardView().getChatBuffer().size()!= 0)chat();
                 }
                 else{
                     System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
@@ -683,7 +687,9 @@ public class TextualUI implements ViewInterface {
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;
+        if(in.equals("/help") || in.equals("/h")) return true;
         if(in.startsWith("/whisper")) return true;
+        if(in.startsWith("/chat")) return true;
         return false;
     }
 }

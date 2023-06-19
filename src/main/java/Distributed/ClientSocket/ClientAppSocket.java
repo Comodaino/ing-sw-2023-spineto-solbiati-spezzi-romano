@@ -216,7 +216,17 @@ public class ClientAppSocket implements AbstractClient {
                 arg = arg + " " + tmp2[i];
             }
             arg = arg + " " + last;
+        }else{
+            if((arg.startsWith("/remove") || arg.startsWith("/switch")) || arg.startsWith("/add")){
+                String[] tmp =  arg.split(" ");
+                String newMsg = tmp[0] + " " + nickname + " ";
+                for(int i = 1; i<tmp.length; i++){
+                    newMsg += tmp[i] + " ";
+                }
+                arg =newMsg;
+            }
         }
+
         System.out.println("SENDING: " + arg);
         out.println(arg);
         out.flush();

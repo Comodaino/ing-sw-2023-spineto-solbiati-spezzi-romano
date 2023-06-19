@@ -119,6 +119,8 @@ public class ServerApp {
             lobby = lobbies.get(client.getLobbyID() - 1);
         }
 
+
+        try {
         switch (client.getState()) {
             case INIT:
                 break;
@@ -126,21 +128,22 @@ public class ServerApp {
                 if (client.isOwner()) {
                     waitCommand(client, arg);
                 }
+                lobby.updateAll();
                 break;
             case PLAY:
                 playCommand(client, arg);
+                lobby.updateAll();
                 break;
             case END:
                 endCommand(client);
+                lobby.updateAll();
                 break;
         }
-
-        try {
-            lobby.updateAll();
-
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+
     }
 
     public void initCommand(Client client, String nickname) throws RemoteException {
@@ -154,8 +157,6 @@ public class ServerApp {
             rp.setNickname(nickname);
             client.setNickname(nickname);
             addPlayer(client, rp);
-
-
 
         } else if(check.equals("reconnected")) {
             client.setNickname(nickname);

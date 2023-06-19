@@ -36,7 +36,7 @@ public class RMIPlayer extends RemotePlayer {
 
     @Override
     public void update(BoardView boardView) throws IOException, InterruptedException {
-        client.update(boardView, "");
+        client.update(boardView, null);
     }
 
     @Override

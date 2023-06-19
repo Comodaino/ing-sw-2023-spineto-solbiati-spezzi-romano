@@ -29,15 +29,15 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     private Server server;
     private boolean owner;
 
-    public ClientApp(String typeOfView, String ip) throws RemoteException {
+    public ClientApp(String typeOfView, String arg) throws RemoteException {
         nickname = null;
         lobbyID = null;
         server = null;
         boardView = null;
         owner = false;
         state = States.INIT;
-        if(ip == null) this.ip = "localhost";
-        else this.ip = ip;
+        if(ip == null) ip = "localhost";
+        else ip = arg;
 
         if (typeOfView.equals("TUI")) {
             try {
@@ -106,19 +106,30 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
     //Asks the client which type of view it wants
     //Then creates an instance of ClientApp and "connects" it to the server through the method run()
-    public static void execute(String arg) {
-        System.out.println("Choose type of view:");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+    public static void execute(String typeOfView, String arg) {
 
         ClientApp client = null;
-        try {
-            client = new ClientApp(input, arg);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
+        if(typeOfView == null){
+            System.out.println(">>insert \"TUI\" or \"GUI\"");
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
+
+            try {
+                client = new ClientApp(input, arg);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            try {
+                client = new ClientApp(typeOfView, arg);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
 
+
         try {
+            System.out.println("IP ADD: " + ip);
             client.run(ip);
         } catch (Exception e) {
             throw new RuntimeException(e);

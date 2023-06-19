@@ -13,6 +13,7 @@ import static Distributed.States.INIT;
 public abstract class RemotePlayer implements Serializable {
     private Player modelPlayer;
     private ConnectionType type;
+
     private String nickname;
     private States state;
     private GameController controller;

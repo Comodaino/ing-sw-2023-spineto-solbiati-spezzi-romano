@@ -114,7 +114,6 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     }
     public void run(String serverHost) throws Exception {
         this.server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerRMI"); // take a reference of the server from the registry
-        System.out.println("Connecting to the server...");
     }
 
 

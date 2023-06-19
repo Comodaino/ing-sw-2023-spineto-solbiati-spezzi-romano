@@ -20,15 +20,16 @@ public class ServerApp {
     private int port;
     private final List<Lobby> lobbies;
     private Lobby openLobby;
-    private ServerImpl serverRMI;
+    private static ServerImpl serverRMI;
 
     public ServerApp(int port) throws RemoteException {
         super();
         this.port = port;
         this.lobbies = new ArrayList<Lobby>();
+        serverRMI = new ServerImpl(this);
     }
 
-    public void execute() {
+    public static void execute() {
         ServerApp server = null;
         try {
             server = new ServerApp(25565);
@@ -41,7 +42,8 @@ public class ServerApp {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        serverRMI.execute(this);
+
+        serverRMI.start();
     }
 
     public void startServer() throws IOException, InterruptedException {

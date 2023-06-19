@@ -163,6 +163,7 @@ public class ClientAppSocket implements AbstractClient {
                         case "/update":
                             this.boardView = (BoardView) objIn.readObject();
                             System.out.println("updating...");
+                            System.out.println(boardView);
                             break;
                         default:
                             view.update();

@@ -87,11 +87,20 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     @Override
     public void update(BoardView boardView, String arg) throws RemoteException {
         this.boardView = boardView;
-        try {
-            view.update(arg);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(arg==null || arg.length() == 0){
+            try {
+                view.update();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            try {
+                view.update(arg);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
     }
 
 

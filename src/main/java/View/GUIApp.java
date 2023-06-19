@@ -487,7 +487,7 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     public Image createPersonalGoal(AbstractClient client) {
-        Player p = new Player("Ale", true);
+        Player p = new Player("Ale");
         //   Player p= client.getBoardView().getListOfPlayer().get(0);
         Constant c = new Constant();
         int persGoal = p.getGoal().CreatePersonalGoal();

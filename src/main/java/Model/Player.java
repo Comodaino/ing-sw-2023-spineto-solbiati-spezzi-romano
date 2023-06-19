@@ -17,9 +17,9 @@ public class Player implements Serializable {
     private NearGoal nearGoal;
     private boolean ended;
 
-    public Player(String n, boolean c){
+    public Player(String n){
         this.score=0;
-        this.chair = c;
+        this.chair = false;
         this.nickname = n;
         this.myShelf = new Shelf();
         this.myGoal = new PersonalGoal(this.myShelf);
@@ -66,5 +66,13 @@ public class Player implements Serializable {
 
     public void setAsEnded() {
         this.ended = true;
+    }
+
+    public void setAsChair() {
+        this.chair=true;
+    }
+
+    public void removeChair(){
+        this.chair = false;
     }
 }

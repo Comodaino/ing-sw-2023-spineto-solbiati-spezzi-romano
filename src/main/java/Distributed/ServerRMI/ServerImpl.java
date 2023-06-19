@@ -75,7 +75,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
         switch(clientState){
             case INIT:
-                initCommand(client, arg);
+                try {
+                    initCommand(client, arg);
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case WAIT:
                 if(client.isOwner()) {
@@ -109,7 +113,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      * @param nickname the nickname chosen by the client
      * @author Nicolò
      */
-    public void initCommand(Client client, String nickname) throws RemoteException {
+    public void initCommand(Client client, String nickname) throws IOException, InterruptedException {
         if(checkNickname(nickname)!=null) {
             RMIPlayer rp = new RMIPlayer(client);
             rp.setNickname(nickname);
@@ -213,7 +217,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      * @param rp the RemotePlayer associated to the client
      * @author Nicolò
      */
-    public void addPlayer(Client client, RemotePlayer rp) throws RemoteException {
+    public void addPlayer(Client client, RemotePlayer rp) throws IOException, InterruptedException {
         synchronized (lobbies) {
             //If the lobby is closed, creates a new lobby and sets its ID
             if (!lobbies.get(lobbies.size() - 1).isOpen()) {

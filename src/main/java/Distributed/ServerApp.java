@@ -103,7 +103,7 @@ public class ServerApp {
         }
     }
 
-    public void addPlayer(Client client, RemotePlayer rp) throws RemoteException {
+    public void addPlayer(Client client, RemotePlayer rp) throws IOException, InterruptedException {
         synchronized (lobbies) {
             //If the lobby is closed, creates a new lobby and sets its ID
             if (!lobbies.get(lobbies.size() - 1).isOpen()) {

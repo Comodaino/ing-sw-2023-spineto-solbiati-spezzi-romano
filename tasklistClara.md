@@ -8,3 +8,4 @@
 - [] add list of player in the lobby
 - [] make chat possible during wait (both no command and /whisper)
 - [] add a check for whisper: input.split.size()>3
+- [] fix number of removes and adds

@@ -107,7 +107,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         }
 
         try {
-            client.run("localhost");
+            client.run("127.0.0.1:1099");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

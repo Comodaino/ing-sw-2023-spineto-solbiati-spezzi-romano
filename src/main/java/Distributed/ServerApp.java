@@ -257,4 +257,13 @@ public class ServerApp {
         }
     }
 
+    public Lobby getLobby(String nickname){
+        for(Lobby l: lobbies){
+            for(RemotePlayer p: l.getListOfPlayers()){
+                if(p.getNickname().equals(nickname)) return l;
+            }
+        }
+        return null;
+    }
+
 }

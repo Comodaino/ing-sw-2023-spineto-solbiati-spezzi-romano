@@ -2,6 +2,7 @@ package Distributed.ServerSocket;
 
 import Distributed.*;
 import Model.BoardView;
+import Model.Player;
 
 import java.io.*;
 import java.net.Socket;
@@ -132,12 +133,25 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 break;
             case "reconnected":
                 this.lobby = serverApp.getLobby(input);
+                for(RemotePlayer rp: lobby.getListOfPlayers()){
+                   if(input.equals(rp.getNickname())) player.setState(rp.getState());
+                }
+
                 player.setNickname(input);
-                player.setState(PLAY);
                 player.setConnected(true);
                 outSocket("/setnickname " + input);
                 update(lobby.getBoardView());
-                outSocket("/play " + input);
+
+                switch (player.getState()){
+                    case PLAY: outSocket("/play");
+                    break;
+                    case WAIT: outSocket("/wait");
+                        break;
+                    case END: outSocket("/end");
+                        break;
+                }
+
+
                 break;
         }
     }

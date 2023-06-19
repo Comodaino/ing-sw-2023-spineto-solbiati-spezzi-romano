@@ -29,6 +29,8 @@ public class GameController implements Serializable {
     private Lobby lobby;
     private int removeSize;
 
+    public List<Player> getDonePlayers() { return this.donePlayers; }
+
     public Board getBoard() {
         return gameBoard;
     }

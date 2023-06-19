@@ -20,6 +20,7 @@ import java.util.Scanner;
  * @author Nicolò
  */
 public class ClientApp extends UnicastRemoteObject implements Client, AbstractClient {
+    private static String ip;
     private String nickname;
     private Integer lobbyID;
     private States state;
@@ -28,13 +29,15 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     private Server server;
     private boolean owner;
 
-    public ClientApp(String typeOfView) throws RemoteException {
+    public ClientApp(String typeOfView, String ip) throws RemoteException {
         nickname = null;
         lobbyID = null;
         server = null;
         boardView = null;
         owner = false;
         state = States.INIT;
+        if(ip == null) this.ip = "localhost";
+        else this.ip = ip;
 
         if (typeOfView.equals("TUI")) {
             try {
@@ -94,20 +97,20 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
     //Asks the client which type of view it wants
     //Then creates an instance of ClientApp and "connects" it to the server through the method run()
-    public static void execute() {
+    public static void execute(String arg) {
         System.out.println("Choose type of view:");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
 
         ClientApp client = null;
         try {
-            client = new ClientApp(input);
+            client = new ClientApp(input, arg);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            client.run("127.0.0.1:1099");
+            client.run(ip);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

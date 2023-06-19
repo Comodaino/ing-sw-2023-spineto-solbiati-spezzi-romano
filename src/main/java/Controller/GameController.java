@@ -31,15 +31,14 @@ public class GameController implements Serializable {
 
     /**
      *
-     * @param pl list of players
      * @param firstMatch setting that changes how the board is built
      * @param lobby reference to the lobby of the game
      * @throws IOException
      * @author Alessio
      */
-    public GameController(List<Player> pl, boolean firstMatch, Lobby lobby) throws IOException {
-        this.gameBoard = new Board(firstMatch, pl);
-        this.pl = pl;
+    public GameController(boolean firstMatch, Lobby lobby) throws IOException {
+        this.gameBoard = new Board(firstMatch);
+        pl = gameBoard.getListOfPlayer();
         this.lobby = lobby;
         this.donePlayers = new ArrayList<Player>();
         this.boardView = new BoardView(gameBoard);
@@ -65,14 +64,24 @@ public class GameController implements Serializable {
 
     }
 
+    /**
+     * Adds a player to the model
+     * @param player
+     */
+    public void addPlayer(Player player){
+        gameBoard.addPlayer(player);
+    }
+
     private void connectionChecker() throws InterruptedException, IOException {
         while (true){
             TimeUnit.MILLISECONDS.sleep(500);
             for(RemotePlayer p: lobby.getListOfPlayers()){
-                if(p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()){
-                    System.out.println("checking");
-                    spinHandler();
-                    serverUpdater();
+                if(lobby.getPlay() && currentPlayer!=null) {
+                    if (p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) {
+                        System.out.println("checking");
+                        spinHandler();
+                        serverUpdater();
+                    }
                 }
             }
         }
@@ -84,24 +93,29 @@ public class GameController implements Serializable {
      * @author Alessio
      */
     private void spinHandler() {
-        int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
 
-        for(int j=gameBoard.getTileBuffer().size() -1 ; j>=0; j--){
-            gameBoard.getTileBuffer().remove(j);
-        }
+        if(lobby.getPlay()) {
 
-        boolean flag = false;
-        do {
-            i += 1;
-            if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
-            else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
 
-            for(RemotePlayer p: lobby.getListOfPlayers()){
-                if(p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) flag= true;
+            int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
+
+            for (int j = gameBoard.getTileBuffer().size() - 1; j >= 0; j--) {
+                gameBoard.getTileBuffer().remove(j);
             }
 
-        } while (donePlayers.contains(currentPlayer) || flag);
-        gameBoard.setCurrentPlayer(currentPlayer);
+            boolean flag = false;
+            do {
+                i += 1;
+                if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
+                else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
+
+                for (RemotePlayer p : lobby.getListOfPlayers()) {
+                    if (p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) flag = true;
+                }
+
+            } while (donePlayers.contains(currentPlayer) || flag);
+            gameBoard.setCurrentPlayer(currentPlayer);
+        }
     }
 
     private void serverUpdater() throws IOException, InterruptedException {
@@ -121,7 +135,14 @@ public class GameController implements Serializable {
                 donePlayers.add(currentPlayer);
                 gameBoard.addToDone(currentPlayer);
                 currentPlayer.setAsEnded();
-                if(gameBoard.getDonePlayers().size() == gameBoard.getListOfPlayer().size()){
+
+                int disconnectedNumber = 0;
+                for(RemotePlayer rp: lobby.getListOfPlayers()){
+                    if(!rp.isConnected()) disconnectedNumber++;
+                }
+
+                if(gameBoard.getDonePlayers().size() >= gameBoard.getListOfPlayer().size() + disconnectedNumber){
+                    for(Player p: gameBoard.getListOfPlayer()) p.removeChair();
                     lobby.endMatch();
                 }
             }
@@ -132,7 +153,8 @@ public class GameController implements Serializable {
         if(gameBoard.getTileBuffer().size() < 2) return;
         int first = input[1].charAt(0) - 48;
         int second = input[2].charAt(0) - 48;
-        System.out.println("LENGTH: " + gameBoard.getTileBuffer().size());
+        System.out.println("LENGTH: " + gameBoard.getTileBuffer().size() + " " + first + second);
+        if(gameBoard.getTileBuffer().size() < first || gameBoard.getTileBuffer().size() < second) return;
         Collections.swap(gameBoard.getTileBuffer(), first, second);
         System.out.println("swapped");
     }
@@ -296,20 +318,28 @@ public class GameController implements Serializable {
         if (input[0].charAt(0) == '/') {
             switch (input[0]) {
                 case "/remove":
-                    playRemove(input);
-                    serverUpdater();
+                    if(lobby.getPlay()){
+                        playRemove(input);
+                        serverUpdater();
+                    }
                     break;
                 case "/add":
-                    playAdd(input);
-                    serverUpdater();
+                    if(lobby.getPlay()) {
+                        playAdd(input);
+                        serverUpdater();
+                    }
                     break;
                 case "/switch":
-                    playSwitch(input);
-                    serverUpdater();
+                    if(lobby.getPlay()) {
+                        playSwitch(input);
+                        serverUpdater();
+                    }
                     break;
                 case "/end":
-                    playEndGame();
-                    serverUpdater();
+                    if(lobby.getPlay()) {
+                        playEndGame();
+                        serverUpdater();
+                    }
                     break;
                 case "/message":
                     newMessage(input);
@@ -346,5 +376,15 @@ public class GameController implements Serializable {
         this.currentPlayer = p;
     }
 
+    public void startGame() {
+        gameBoard.init();
+        for(Player p: gameBoard.getListOfPlayer()){
+            if(p.getChair()){
+                this.currentPlayer =p;
+                gameBoard.setCurrentPlayer(p);
+                break;
+            }
+        }
+    }
 }
 

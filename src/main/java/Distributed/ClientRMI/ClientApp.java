@@ -1,6 +1,7 @@
 package Distributed.ClientRMI;
 
 import Distributed.AbstractClient;
+import Distributed.RemotePlayer;
 import Distributed.ServerRMI.Server;
 import Distributed.States;
 import Model.BoardView;
@@ -20,6 +21,7 @@ import java.util.Scanner;
  * @author Nicolò
  */
 public class ClientApp extends UnicastRemoteObject implements Client, AbstractClient {
+    private static String ip;
     private String nickname;
     private Integer lobbyID;
     private States state;
@@ -28,13 +30,15 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     private Server server;
     private boolean owner;
 
-    public ClientApp(String typeOfView) throws RemoteException {
+    public ClientApp(String typeOfView, String arg) throws RemoteException {
         nickname = null;
         lobbyID = null;
         server = null;
         boardView = null;
         owner = false;
         state = States.INIT;
+        if(ip == null) ip = "localhost";
+        else ip = arg;
 
         if (typeOfView.equals("TUI")) {
             try {
@@ -84,39 +88,60 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     @Override
     public void update(BoardView boardView, String arg) throws RemoteException {
         this.boardView = boardView;
-        try {
-            view.update(arg);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(arg==null || arg.length() == 0){
+            try {
+                view.update();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            try {
+                view.update(arg);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
     }
 
 
     //Asks the client which type of view it wants
     //Then creates an instance of ClientApp and "connects" it to the server through the method run()
-    public static void execute() {
-        System.out.println("Choose type of view:");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+    public static void execute(String typeOfView, String arg) {
 
         ClientApp client = null;
-        try {
-            client = new ClientApp(input);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
+        if(typeOfView == null){
+            System.out.println(">>insert \"TUI\" or \"GUI\"");
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
+
+            try {
+                client = new ClientApp(input, arg);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            try {
+                client = new ClientApp(typeOfView, arg);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
 
+
         try {
-            client.run("localhost");
+            System.out.println("IP ADD: " + ip);
+            client.run(ip);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     public void run(String serverHost) throws Exception {
         this.server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerRMI"); // take a reference of the server from the registry
-        System.out.println("Connecting to the server...");
     }
 
+    @Override
+    public boolean beat() throws RemoteException { return true; }
 
     //SETTER AND GETTER METHODS
     @Override

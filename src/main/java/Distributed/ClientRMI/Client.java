@@ -1,4 +1,6 @@
 package Distributed.ClientRMI;
+import Distributed.RemoteClient;
+import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
 
@@ -20,4 +22,5 @@ public interface Client extends Remote {
     public States getState() throws RemoteException;
     public void setOwner(boolean owner) throws RemoteException;
     public boolean isOwner() throws RemoteException;
+    public boolean beat() throws RemoteException;
 }

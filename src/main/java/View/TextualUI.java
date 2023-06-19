@@ -1,15 +1,13 @@
 package View;
 
 import Distributed.AbstractClient;
-import Model.Board;
-import Model.CommonGoals.CommonGoal;
 import Model.Player;
 import Model.Tile;
 import Model.Whisper;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.Scanner;
 
 public class TextualUI implements ViewInterface {
 
@@ -19,7 +17,7 @@ public class TextualUI implements ViewInterface {
     private static final String RESET = "\033[0m";
     private static final int maxMsgLength = 50;
     private int removeSize;
-
+    private boolean added, removed;
     public String[] msgBuffer;
 
     public TextualUI(AbstractClient client) throws IOException {
@@ -28,6 +26,8 @@ public class TextualUI implements ViewInterface {
         this.input = new Scanner(System.in);
         this.client = client;
         this.msgBuffer = new String[4];
+        this.added = false;
+        this.removed = false;
         Thread th = new Thread() {
             @Override
             public void run() {
@@ -47,9 +47,10 @@ public class TextualUI implements ViewInterface {
         while(state!=State.CLOSE) {
             String in = input.nextLine();
             if(state!=State.HOME){
-
+                if(in.equals("/cg") || in.equals("/pg")) printGoal(in);
+                if(in.equals("/h") || in.equals("/help")) help();
                 if (in.length() > maxMsgLength) System.out.println("Input too long, maximum character: " + maxMsgLength);
-                else if( state == State.PLAY && !correctInput(in)) System.out.println("Command is invalid, please try again");
+                else if( state == State.PLAY && !correctInput(in)) System.out.println("Command is invalid, try /help or /h");
                 else if( state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
                     else client.println(in);
 
@@ -66,19 +67,82 @@ public class TextualUI implements ViewInterface {
         }
     }
 
+    private void printGoal(String in) {
+        switch (in){
+            case ("/cg"):
+                client.getBoardView().getSetOfCommonGoal().forEach((goal) ->{
+                    System.out.println(goal.getName());
+                    switch (goal.getName()){
+                        case ("GoalAngles"):
+                            System.out.println("Four tiles of the same color in the four corners of the bookshelf");
+                            break;
+                        case ("GoalColumns"):
+                            System.out.println("Three columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column");
+                            break;
+                        case ("GoalCouples"):
+                            System.out.println("six groups each containing at least 2 tiles of the same type the tiles of one group can be different from those of another group");
+                            break;
+                        case ("GoalCross"):
+                            System.out.println("five tiles of the same type forming an X");
+                            break;
+                        case ("GoalDiagonals"):
+                            System.out.println("five tiles of the same type forming a diagonal");
+                            break;
+                        case ("GoalFullShelf"):
+                            System.out.println("two columns each formed by 6 different types of tiles");
+                            break;
+                        case ("GoalDiffRows"):
+                            System.out.println("two lines each formed by 5 different types of tiles. One line can show the same or a different combination of the other line");
+                            break;
+                        case ("GoalEight"):
+                            System.out.println("eight tiles of the same type");
+                            break;
+                        case ("GoalQuartets"):
+                            System.out.println("four groups each containing at least 3 tiles of the same type. The tiles of one group can be different from those of another group");
+                            break;
+                        case ("GoalRows"):
+                            System.out.println("four lines each formed by 5 tiles of maximum three different types");
+                            break;
+                        case ("GoalSquares"):
+                            System.out.println("two groups each containing 4 tiles of the same type in a 2x2 square");
+                            break;
+                        case("GoalStairs"):
+                            System.out.println("five columns of increasing or decreasing height: starting from the first column on the left or on the right, each next column must be made of exactly one more tile.");
+                            break;
+                    }
+                });
+                break;
+            case ("/pg"):
+
+
+        }
+    }
 
     @Override
     public void update(String arg) throws IOException {
         //System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
-                    System.out.println(ConsoleColors.RED_BOLD + "\n" +
-                            "\t\t _    _ _____ _     _____ ________  ________   _____ _____  ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
-                            "\t\t| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  | |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
-                            "\t\t| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | | | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
-                            "\t\t| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | | | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
-                            "\t\t\\  /|  / |___| |___| \\__ |/ \\_/ / |  | | |___   | | \\ \\_/ / | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
-                            "\t\t \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/  \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n"+ RESET );
+                    System.out.println(ConsoleColors.RED_BOLD + "\n"
+                            + "\n" + "       █  █                                                        "
+                            + "\n" + "       █  ██     █████   █                 █                       "
+                            + "\n" + "      ██ ███     █░░░█   █                ██  ████                 "
+                            + "\n" + "     ███ ███    ██ █░█  ██                █  ██░░░ █                "
+                            + "\n" + "     ███████    █░ ███  █░                █  █░    █                "
+                            + "\n" + "     ███████    ██     ██░               ██  █    █░                "
+                            + "\n" + "     ██░█░███ ██░███   ██████    █████  ██ █████  ░    ██████       "
+                            + "\n" + "     ██░░██████░ ░░██ ███░░██  ███░░░█  █  ██░░░  █   ██░░░░█       "
+                            + "\n" + "    ███░ ██░░█ ██  ░█ █░░ ██░ ███████░ ██  █░    █░  ███████░       "
+                            + "\n" + "   ███░  ██░█░██   ██ █   █░ ██░░░░░░  █  ██    ██  ██░░░░░░        "
+                            + "\n" + "    ░░  ██░██░██████ ██  ██░ ░██████  ██ ██░   ██░  ░██████         "
+                            + "\n" + "        ██░█ █░░░░░░ ░░  ░░   ░░░░░░  ░░ ░░    ░░    ░░░░░░         "
+                            + "\n" + "█ █████ █░   ██░ █████████████████████████████████████████████ ██ █"
+                            + "\n" + "░ ░░░░░ ██   ██░ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ░░ ░"
+                            + "\n" + "        ░█████░                                                    "
+                            + "\n" + "         ░░░░                                                      ");
+
+
+
                     homePrint(arg);
                     break;
                 case LOBBY:
@@ -163,11 +227,7 @@ public class TextualUI implements ViewInterface {
                     showOthersShelf();
                     tileBuffer();
                     showGoals();
-                    showYourScore();
-                    System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
-                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/add C" + RESET + "  ---> to add a tile in the column C of your shelf");
-                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  ---> to remove the tile[row][column] from the board");
-                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1 [row2 column2] [row3 column3]" + RESET + "  ---> to remove 2 or 3 tiles from the board\n");
+                    //showYourScore();
                     chat();
                 }
                 else{
@@ -175,8 +235,8 @@ public class TextualUI implements ViewInterface {
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
-                    showGoals();
-                    showYourScore();
+                    //showGoals();
+                    //showYourScore();
                     chat();
                 }
               break;
@@ -209,17 +269,17 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    private void showYourScore() throws RemoteException {
+    /*private void showYourScore() throws RemoteException {
         for(Player p: client.getBoardView().getListOfPlayer()) {
             if (p.getNickname().equals(client.getNickname()))
                 System.out.println(ConsoleColors.PURPLE_UNDERLINED + "YOUR SCORE:\t" + p.getScore() + RESET);
         }
-    }
+    }*/
 
     private void showGoals() throws RemoteException {
         System.out.print("COMMON GOALS:\t\t");
         client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));
-        System.out.print("PRIVATE GOALS:\t\t");
+        System.out.print("PERSONAL GOALS:\t\t");
         for (Player p: client.getBoardView().getListOfPlayer()
              ) {
             if (client.getNickname().equals(p.getNickname()))
@@ -467,6 +527,20 @@ public class TextualUI implements ViewInterface {
         }
     }
 
+    public void help() {
+        System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
+        if (!removed) {
+            System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  ---> to remove the tile[row][column] from the board");
+            System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row1 column1 [row2 column2] [row3 column3]" + RESET + "  ---> to remove 2 or 3 tiles from the board\n");
+        } else{
+            if (!added) {
+                System.out.println(ConsoleColors.GREEN_UNDERLINED + "/switch t1 t2" + RESET + "  ---> to switch tile t1 and t2 in the tile buffer (the first tile from left is tile number 0)");
+                System.out.println(ConsoleColors.GREEN_UNDERLINED + "/add C" + RESET + "  ---> to add tiles from the buffer to the column C of your shelf");
+            }
+        }
+        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/cg of /pg" + RESET + "  ---> to see common goals or private goals");
+    }
+
     private void nb(){
         System.out.println(ConsoleColors.RED_BOLD
 
@@ -516,8 +590,6 @@ public class TextualUI implements ViewInterface {
 
     }
 
-    //Input checker in state == PLAY
-
     private boolean adjacentFree(int r, int c) {
 
         if (client.getBoardView().getCell(r, c).isEmpty()) return false;
@@ -560,30 +632,40 @@ public class TextualUI implements ViewInterface {
 
         String[] tmpInput = in.split(" ");
         if (in.startsWith("/remove")) {
-            switch (tmpInput.length) {
-                case 3:
-                    removeSize = 1;
-                    break;
-                case 5:
-                    removeSize = 2;
-                    break;
-                case 7:
-                    removeSize = 3;
-                    break;
-            }
+            if (!removed) {
+                switch (tmpInput.length) {
+                    case 3:
+                        removeSize = 1;
+                        break;
+                    case 5:
+                        removeSize = 2;
+                        break;
+                    case 7:
+                        removeSize = 3;
+                        break;
+                }
 
-            //A triple AND condition was not used to improve readability
-            if (adjacentFree(tmpInput[1].charAt(0) - 48, tmpInput[2].charAt(0) - 48)) {
-                if (removeSize < 2 || adjacentFree(tmpInput[3].charAt(0) - 48, tmpInput[4].charAt(0) - 48)) {
-                    if (removeSize < 3 || adjacentFree(tmpInput[5].charAt(0) - 48, tmpInput[6].charAt(0) - 48)) {
-                        return inLine(tmpInput);
+                //A triple AND condition was not used to improve readability
+                if (adjacentFree(tmpInput[1].charAt(0) - 48, tmpInput[2].charAt(0) - 48)) {
+                    if (removeSize < 2 || adjacentFree(tmpInput[3].charAt(0) - 48, tmpInput[4].charAt(0) - 48)) {
+                        if (removeSize < 3 || adjacentFree(tmpInput[5].charAt(0) - 48, tmpInput[6].charAt(0) - 48)) {
+                            removed = inLine(tmpInput);
+                            if (removed) added = false;
+                            return inLine(tmpInput);
+                        }
                     }
                 }
             }
+            System.out.println("command /remove already used");
             return false;
         }
         if(in.startsWith("/add")){
-            return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+            if(!added){
+                added = columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+                if (added) removed = false;
+                return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+            }
+            System.out.println("command /add already used");
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;

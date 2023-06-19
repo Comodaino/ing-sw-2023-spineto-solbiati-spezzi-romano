@@ -114,7 +114,7 @@ public class ClientAppSocket implements AbstractClient {
         if (input != null) {
 
             System.out.println("RECEIVED: " + input);
-
+            boolean flag=true;
 
             if (input.startsWith("/wait")) {
                 String[] tmpInput = input.split(" ");
@@ -126,10 +126,13 @@ public class ClientAppSocket implements AbstractClient {
             if(input.startsWith("/setnickname")){
                 String[] tmpInput = input.split(" ");
                 this.nickname = tmpInput[1];
+                flag=false;
             }
             if (input.equals("/nickname")) {
                 view.update("/nickname");
-            } else {
+                flag=false;
+            }
+            if(flag){
                 if (input.charAt(0) == '/') {
                     switch (input) {
                         case "/setnickname":

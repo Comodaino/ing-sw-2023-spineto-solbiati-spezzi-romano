@@ -20,33 +20,43 @@ public class Lobby {
     private GameController controller;
     private ServerApp serverApp;
     private Server server; //TODO delete after unification of ServerImpl and ServerApp
+    private boolean playing;
 
     public Lobby(ServerApp serverApp) {
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.ID = null;
         this.serverApp = serverApp;
+
+        try {
+            controller = new GameController(false, this);
+            System.out.println("Created lobby's controller");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.boardView = controller.getBoardView();
+        System.out.println("BOARD: " + this.boardView);
+
+
         this.open = true;
     }
 
-    public Lobby(Server server) { //TODO delete after unification of ServerImpl and ServerApp
-        this.lp = new ArrayList<RemotePlayer>();
-        this.firstMatch = false;
-        this.ID = null;
-        this.server = server;
-        this.open = true;
-    }
 
     /**
      * Adds a player to the lobby
      * @param p tha player that needs to be added
      */
-    public void addPlayer(RemotePlayer p) {
+    public void addPlayer(RemotePlayer p) throws IOException, InterruptedException {
         if (open) {
             if (lp.isEmpty()) {
                 p.setOwner(); //the first player to join the lobby become the owner
             }
             lp.add(p);
+            p.setState(States.WAIT);
+            p.setController(controller);
+            p.update(boardView);
+            controller.addPlayer(new Player(p.getNickname()));
             if (lp.size() == 4) this.open = false;
         }
     }
@@ -62,30 +72,16 @@ public class Lobby {
 
     public void startGame() throws RemoteException {
         this.open=false;
-        List<Player> modelPlayerList = new ArrayList<Player>();
-        for(RemotePlayer p : lp) {
-            Player tmpPlayer = new Player(p.getNickname(), p.isOwner());
-            modelPlayerList.add(tmpPlayer);
-            p.setModelPlayer(tmpPlayer);
-            p.setState(States.PLAY);
+        controller.startGame();
+        for(RemotePlayer rp : lp) {
+            rp.setState(States.PLAY);
         }
-        try {
-            controller = new GameController(modelPlayerList, firstMatch, this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        for(RemotePlayer p : lp) {
-            p.setController(controller);
-            p.setState(States.PLAY);
-            if(p.getConnectionType().equals(ConnectionType.RMI)){
-                p.getClient().setState(States.PLAY);
-            }
-        }
-        boardView = controller.getBoardView();
         this.open = false;
+        this.playing = true;
     }
 
     public void endMatch() {
+        this.playing = false;
         for (RemotePlayer p : lp) {
             p.setState(States.END);
             p.endMatch();
@@ -135,4 +131,14 @@ public class Lobby {
         return controller;
     }
 
+    /**
+     * Checks and eventually updates if the lobby should be open
+     */
+    public void checkOpen() {
+        if(this.lp.size() == 4) this.open= false;
+    }
+
+    public boolean getPlay() {
+        return playing;
+    }
 }

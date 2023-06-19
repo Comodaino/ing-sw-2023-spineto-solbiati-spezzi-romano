@@ -4,10 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-//import View.GUIApp;
-import View.State;
-import View.TextualUI;
-import View.ViewInterface;
+import View.*;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -54,15 +51,21 @@ public class ClientAppSocket implements AbstractClient {
      * Starts the client
      *
      * @param address ip address of the server
-     * @throws IOException
      * @throws InterruptedException
      * @throws ClassNotFoundException
      */
-    public static void execute(String address) throws IOException, InterruptedException, ClassNotFoundException {
-        System.out.println(">>insert \"TUI\" or \"GUI\"");
-        Scanner scanner = new Scanner(System.in);
-        ClientAppSocket client = new ClientAppSocket(address, 25565, scanner.nextLine());
-        client.connect();
+    public static void execute(String address, String typeOfView) throws IOException, InterruptedException, ClassNotFoundException {
+        System.out.println("exec");
+        if(typeOfView == null){
+            System.out.println(">>insert \"TUI\" or \"GUI\"");
+            Scanner scanner = new Scanner(System.in);
+            ClientAppSocket client = new ClientAppSocket(address, 25565, scanner.nextLine());
+            client.connect();
+        }else{
+            ClientAppSocket client = new ClientAppSocket(address, 25565, typeOfView);
+            client.connect();
+        }
+
     }
 
     private void connect() throws IOException, ClassNotFoundException {
@@ -80,7 +83,18 @@ public class ClientAppSocket implements AbstractClient {
                 this.view = new TextualUI(this);
             }
             if (typeOfView.equals("GUI")){
-                //this.view = new GUIApp(this);
+                PassParameters.setClient(this);
+                PassParameters.setState(State.HOME);
+                this.view = new GUIApp();
+
+                Thread th = new Thread() {
+                    @Override
+                    public void run() {
+                        view.setClient(null);
+                    }
+                };
+                th.start();
+
             }
 
 
@@ -100,7 +114,7 @@ public class ClientAppSocket implements AbstractClient {
         if (input != null) {
 
             System.out.println("RECEIVED: " + input);
-
+            boolean flag=true;
 
             if (input.startsWith("/wait")) {
                 String[] tmpInput = input.split(" ");
@@ -112,10 +126,13 @@ public class ClientAppSocket implements AbstractClient {
             if(input.startsWith("/setnickname")){
                 String[] tmpInput = input.split(" ");
                 this.nickname = tmpInput[1];
+                flag=false;
             }
             if (input.equals("/nickname")) {
                 view.update("/nickname");
-            } else {
+                flag=false;
+            }
+            if(flag){
                 if (input.charAt(0) == '/') {
                     switch (input) {
                         case "/setnickname":
@@ -149,6 +166,7 @@ public class ClientAppSocket implements AbstractClient {
                         case "/update":
                             this.boardView = (BoardView) objIn.readObject();
                             System.out.println("updating...");
+                            System.out.println(boardView);
                             break;
                         default:
                             view.update();

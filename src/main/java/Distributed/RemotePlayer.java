@@ -13,6 +13,7 @@ import static Distributed.States.INIT;
 public abstract class RemotePlayer implements Serializable {
     private Player modelPlayer;
     private ConnectionType type;
+
     private String nickname;
     private States state;
     private GameController controller;
@@ -55,9 +56,7 @@ public abstract class RemotePlayer implements Serializable {
     public void setState(States state) {
         this.state = state;
     }
-    public States getState() {
-        return state;
-    }
+    public abstract States getState();
     public void setController(GameController controller) {
         this.controller = controller;
     }
@@ -67,4 +66,5 @@ public abstract class RemotePlayer implements Serializable {
     public Client getClient() { return null; }
     public void setConnected(boolean status) {this.connected = status;}
     public boolean isConnected() { return connected; }
+    public abstract void reconnect(Client client, int id);
 }

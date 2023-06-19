@@ -76,10 +76,12 @@ public class GameController implements Serializable {
         while (true){
             TimeUnit.MILLISECONDS.sleep(500);
             for(RemotePlayer p: lobby.getListOfPlayers()){
-                if(p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()){
-                    System.out.println("checking");
-                    spinHandler();
-                    serverUpdater();
+                if(lobby.getPlay() && currentPlayer!=null) {
+                    if (p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) {
+                        System.out.println("checking");
+                        spinHandler();
+                        serverUpdater();
+                    }
                 }
             }
         }
@@ -91,24 +93,29 @@ public class GameController implements Serializable {
      * @author Alessio
      */
     private void spinHandler() {
-        int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
 
-        for(int j=gameBoard.getTileBuffer().size() -1 ; j>=0; j--){
-            gameBoard.getTileBuffer().remove(j);
-        }
+        if(lobby.getPlay()) {
 
-        boolean flag = false;
-        do {
-            i += 1;
-            if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
-            else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
 
-            for(RemotePlayer p: lobby.getListOfPlayers()){
-                if(p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) flag= true;
+            int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
+
+            for (int j = gameBoard.getTileBuffer().size() - 1; j >= 0; j--) {
+                gameBoard.getTileBuffer().remove(j);
             }
 
-        } while (donePlayers.contains(currentPlayer) || flag);
-        gameBoard.setCurrentPlayer(currentPlayer);
+            boolean flag = false;
+            do {
+                i += 1;
+                if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
+                else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
+
+                for (RemotePlayer p : lobby.getListOfPlayers()) {
+                    if (p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) flag = true;
+                }
+
+            } while (donePlayers.contains(currentPlayer) || flag);
+            gameBoard.setCurrentPlayer(currentPlayer);
+        }
     }
 
     private void serverUpdater() throws IOException, InterruptedException {
@@ -365,6 +372,13 @@ public class GameController implements Serializable {
 
     public void startGame() {
         gameBoard.init();
+        for(Player p: gameBoard.getListOfPlayer()){
+            if(p.getChair()){
+                this.currentPlayer =p;
+                gameBoard.setCurrentPlayer(p);
+                break;
+            }
+        }
     }
 }
 

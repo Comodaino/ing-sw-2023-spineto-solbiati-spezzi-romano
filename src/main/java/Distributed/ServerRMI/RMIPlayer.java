@@ -2,6 +2,7 @@ package Distributed.ServerRMI;
 
 import Distributed.ClientRMI.Client;
 import Distributed.ConnectionType;
+import Distributed.RemoteClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
@@ -26,7 +27,11 @@ public class RMIPlayer extends RemotePlayer {
 
     @Override
     public void endMatch() {
-        //TODO implements
+        try {
+            client.setState(States.END);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

@@ -114,14 +114,16 @@ public class ServerApp {
                 initCommand(client, arg);
         }
 
+        System.out.println("ok1");
         synchronized (lobbies) {
             System.out.println(client.getLobbyID());
             lobby = lobbies.get(client.getLobbyID() - 1);
         }
-
+        System.out.println("ok2");
 
         switch (client.getState()) {
             case INIT:
+                System.out.println("ok3");
                 break;
             case WAIT:
                 if (client.isOwner()) {
@@ -137,7 +139,10 @@ public class ServerApp {
         }
 
         try {
+            System.out.println("ok4");
             lobby.updateAll();
+            System.out.println("ok5");
+
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }

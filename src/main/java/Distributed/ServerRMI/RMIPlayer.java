@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 
 /**
  * RMIPlayer is a class which extends RemotePlayer.
- * It represent the RMI remote player.
+ * It represents the RMI remote player.
  * @author Nicolò
  */
 public class RMIPlayer extends RemotePlayer {
@@ -43,14 +43,30 @@ public class RMIPlayer extends RemotePlayer {
     public Client getClient() { return this.client; }
 
     @Override
-    public void setState(States state) {
-
-
+    public void reconnect(Client client, int id) {
+        this.client=client;
         try {
-            this.state = state;
-            this.getClient().setState(state);
+            this.client.setState(this.state);
+            this.client.setLobbyID(id);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+
+    }
+
+    @Override
+    public void setState(States state) {
+        try {
+            this.state = state;
+            this.client.setState(state);
+            System.out.println("STATE CHANGED TO: " + state + this.state + getClient().getState());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public States getState() {
+        return this.state;
     }
 }

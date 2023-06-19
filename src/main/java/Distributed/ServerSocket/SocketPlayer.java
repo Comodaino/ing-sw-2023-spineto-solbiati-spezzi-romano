@@ -3,6 +3,7 @@ package Distributed.ServerSocket;
 import Distributed.ClientRMI.Client;
 import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
+import Distributed.States;
 import Model.BoardView;
 import Model.Player;
 
@@ -14,6 +15,7 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     private final ConnectionType type;
     private Player modelPlayer;
     private String nickname;
+    private States state;
     private ClientHandlerSocket handler;
     private final Socket socket;
     public SocketPlayer(Socket socket, ClientHandlerSocket remoteHandler,ConnectionType type){
@@ -36,5 +38,15 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     @Override
     public void endMatch() {
         handler.endMatch();
+    }
+
+    @Override
+    public States getState() {
+        return this.state;
+    }
+
+    @Override
+    public void reconnect(Client client, int id) {
+        return;
     }
 }

@@ -127,6 +127,9 @@ public class GameController implements Serializable {
      * Ends the game for a single player and makes him wait for the other players to finish
      */
     private void playEndGame() {
+
+
+
         System.out.println("ENDING THE GAME");
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
@@ -150,6 +153,14 @@ public class GameController implements Serializable {
     }
 
     private void playSwitch(String[] input){
+
+        if(!input[1].equals(currentPlayer.getNickname())) return;
+        String[] tmp = new String[input.length -1];
+        for(int i = 1; i< input.length -1; i++){
+            tmp[i] = input[i+1];
+        }
+        input = tmp;
+
         if(gameBoard.getTileBuffer().size() < 2) return;
         int first = input[1].charAt(0) - 48;
         int second = input[2].charAt(0) - 48;
@@ -166,6 +177,15 @@ public class GameController implements Serializable {
      * @author Alessio
      */
     private void playRemove(String[] input) {
+
+        if(!input[1].equals(currentPlayer.getNickname())) return;
+        String[] tmp = new String[input.length -1];
+        for(int i = 1; i< input.length -1; i++){
+            tmp[i] = input[i+1];
+        }
+        input = tmp;
+
+
         switch (input.length) {
             case 3:
                 removeSize = 1;
@@ -203,6 +223,14 @@ public class GameController implements Serializable {
      * @author Alessio
      */
     private void playAdd(String[] input) {
+
+        if(!input[1].equals(currentPlayer.getNickname())) return;
+        String[] tmp = new String[input.length -1];
+        for(int i = 1; i< input.length -1; i++){
+            tmp[i] = input[i+1];
+        }
+        input = tmp;
+
         System.out.println("add");
         if (columnAvailable(gameBoard.getTileBuffer().size(), input[1].charAt(0) - 48)) {
             for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {

@@ -135,7 +135,13 @@ public class GameController implements Serializable {
                 donePlayers.add(currentPlayer);
                 gameBoard.addToDone(currentPlayer);
                 currentPlayer.setAsEnded();
-                if(gameBoard.getDonePlayers().size() == gameBoard.getListOfPlayer().size()){
+
+                int disconnectedNumber = 0;
+                for(RemotePlayer rp: lobby.getListOfPlayers()){
+                    if(!rp.isConnected()) disconnectedNumber++;
+                }
+
+                if(gameBoard.getDonePlayers().size() >= gameBoard.getListOfPlayer().size() + disconnectedNumber){
                     for(Player p: gameBoard.getListOfPlayer()) p.removeChair();
                     lobby.endMatch();
                 }

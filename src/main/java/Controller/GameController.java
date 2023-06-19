@@ -31,15 +31,14 @@ public class GameController implements Serializable {
 
     /**
      *
-     * @param pl list of players
      * @param firstMatch setting that changes how the board is built
      * @param lobby reference to the lobby of the game
      * @throws IOException
      * @author Alessio
      */
-    public GameController(List<Player> pl, boolean firstMatch, Lobby lobby) throws IOException {
-        this.gameBoard = new Board(firstMatch, pl);
-        this.pl = pl;
+    public GameController(boolean firstMatch, Lobby lobby) throws IOException {
+        this.gameBoard = new Board(firstMatch);
+        pl = gameBoard.getListOfPlayer();
         this.lobby = lobby;
         this.donePlayers = new ArrayList<Player>();
         this.boardView = new BoardView(gameBoard);
@@ -63,6 +62,14 @@ public class GameController implements Serializable {
         };
         th.start();
 
+    }
+
+    /**
+     * Adds a player to the model
+     * @param player
+     */
+    public void addPlayer(Player player){
+        gameBoard.addPlayer(player);
     }
 
     private void connectionChecker() throws InterruptedException, IOException {
@@ -122,6 +129,7 @@ public class GameController implements Serializable {
                 gameBoard.addToDone(currentPlayer);
                 currentPlayer.setAsEnded();
                 if(gameBoard.getDonePlayers().size() == gameBoard.getListOfPlayer().size()){
+                    for(Player p: gameBoard.getListOfPlayer()) p.removeChair();
                     lobby.endMatch();
                 }
             }
@@ -297,20 +305,28 @@ public class GameController implements Serializable {
         if (input[0].charAt(0) == '/') {
             switch (input[0]) {
                 case "/remove":
-                    playRemove(input);
-                    serverUpdater();
+                    if(lobby.getPlay()){
+                        playRemove(input);
+                        serverUpdater();
+                    }
                     break;
                 case "/add":
-                    playAdd(input);
-                    serverUpdater();
+                    if(lobby.getPlay()) {
+                        playAdd(input);
+                        serverUpdater();
+                    }
                     break;
                 case "/switch":
-                    playSwitch(input);
-                    serverUpdater();
+                    if(lobby.getPlay()) {
+                        playSwitch(input);
+                        serverUpdater();
+                    }
                     break;
                 case "/end":
-                    playEndGame();
-                    serverUpdater();
+                    if(lobby.getPlay()) {
+                        playEndGame();
+                        serverUpdater();
+                    }
                     break;
                 case "/message":
                     newMessage(input);
@@ -347,5 +363,8 @@ public class GameController implements Serializable {
         this.currentPlayer = p;
     }
 
+    public void startGame() {
+        gameBoard.init();
+    }
 }
 

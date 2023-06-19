@@ -66,8 +66,6 @@ public class ServerApp {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public void startServer() throws IOException, InterruptedException {
@@ -160,10 +158,13 @@ public class ServerApp {
 
         } else if(check.equals("reconnected")) {
             client.setNickname(nickname);
-            synchronized (lobbies){
-                for(Lobby l: lobbies){
-                    for(RemotePlayer rp: l.getListOfPlayers()){
-                        if(rp.getNickname().equals(nickname)) client.setLobbyID(l.getID());
+            synchronized (lobbies) {
+                for(Lobby l: lobbies) {
+                    for(RemotePlayer rp: l.getListOfPlayers()) {
+                        if(rp.getNickname().equals(nickname)) {
+                            client.setLobbyID(l.getID());
+                            client.setState(rp.getState());
+                        }
                     }
                 }
             }

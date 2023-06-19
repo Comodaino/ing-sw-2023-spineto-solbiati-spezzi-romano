@@ -128,6 +128,8 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         this.server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerRMI"); // take a reference of the server from the registry
     }
 
+    @Override
+    public boolean beat() throws RemoteException { return true; }
 
     //SETTER AND GETTER METHODS
     @Override

@@ -2,7 +2,8 @@ package View;
 
 
 import Distributed.AbstractClient;
-import Model.CellType;
+
+import Model.CommonGoals.*;
 import Model.Player;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -59,15 +60,15 @@ public class GUIApp extends Application implements ViewInterface {
         Scene scene = new Scene(mainPane);
         primaryStage.setScene(scene);
 
-        Image imageBackgroungShelf = new Image("images/misc/sfondoparquet.jpg");
-        ImageView imageViewShelf = new ImageView(imageBackgroungShelf);
+        Image imageBackgroundShelf = new Image("images/misc/sfondoparquet.jpg");
+        ImageView imageViewShelf = new ImageView(imageBackgroundShelf);
         BoxBlur blur = new BoxBlur(3, 3, 3);
         imageViewShelf.setEffect(blur);
 
         imageViewShelf.setPreserveRatio(true);
         imageViewShelf.fitWidthProperty().bind(mainPane.widthProperty());
         imageViewShelf.fitHeightProperty().bind(mainPane.heightProperty());
-        mainPane.setBackground(new Background(new BackgroundImage(imageBackgroungShelf, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        mainPane.setBackground(new Background(new BackgroundImage(imageBackgroundShelf, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
         GridPane commonGoal = getCommonGoal(client);
         mainPane.add(commonGoal, 0, 1);
@@ -90,7 +91,7 @@ public class GUIApp extends Application implements ViewInterface {
         mainPane.add(hBox, 0, 2);
 
 
-        primaryStage.setFullScreen(true);
+        primaryStage.sizeToScene();
         primaryStage.show();
     }
 
@@ -171,7 +172,7 @@ public class GUIApp extends Application implements ViewInterface {
 
     public Button getTile(int row, int column) {
         Button tileButton = new Button();
-        String imageTilePath = null;
+        String imageTilePath;
         Constant tile = new Constant();
         int i = 0;
         String imageTileName = null;
@@ -258,61 +259,56 @@ public class GUIApp extends Application implements ViewInterface {
         GridPane commonGoalPane = new GridPane();
         Constant commonGoal = new Constant();
         String imageGoalPath = null;
-        // come prendo il numero dei giocatori?
-        // come viene creato i
-        //client.getPlayer
+        int size = client.getBoardView().getListOfPlayer().size();
+// TODO controllare lo switch case
+        for (int j = 0; j < client.getBoardView().getSetOfCommonGoal().size(); j++) {
 
-        // int size = 2;
-        int i = 0;
-
-        for (int j = 0; j < 2; j++) {
-            i = 2 + j;
-            switch (i) {
-                case 0:
-                    // new GoalAngles(size);
+            switch (client.getBoardView().getCurrentPlayer().getNearGoal().toString()) {
+                case "GoalAngles" :
+                    new GoalAngles(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "8.jpg";
                     break;
-                case 1:
-                    //new GoalColumn(size);
-                    imageGoalPath = commonGoal.getConstantGoal() + "2.jpg";
-                case 2:
-                    // new GoalCouples(size);
+                case "GoalColumn":
+                    new GoalColumn(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "5.jpg";
+                case "GoalCouples":
+                    new GoalCouples(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "4.jpg";
                     break;
-                case 3:
-                    //new GoalCross(size);
+                case "GoalCross":
+                    new GoalCross(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "10.jpg";
                     break;
-                case 4:
-                    //new GoalDiagonal(size);
+                case "GoalDiagonal":
+                    new GoalDiagonal(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "11.jpg";
                     break;
-                case 5:
-                    //new GoalDiffColumns(size);
-                    imageGoalPath = commonGoal.getConstantGoal() + "5.jpg";
+                case "GoalDiffColumns":
+                    new GoalDiffColumns(size);
+                    imageGoalPath = commonGoal.getConstantGoal() + "2.jpg";
                     break;
-                case 6:
-                    // new GoalDiffRows(size);
+                case "GoalDiffRows":
+                     new GoalDiffRows(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "6.jpg";
                     break;
-                case 7:
-                    //new GoalEight(size);
+                case "GoalEight":
+                    new GoalEight(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "9.jpg";
                     break;
-                case 8:
-                    //new GoalQuartets(size);
+                case "GoalQuartets":
+                    new GoalQuartets(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "3.jpg";
                     break;
-                case 9:
-                    //new GoalRow(size);
+                case "GoalRow":
+                    new GoalRow(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "7.jpg";
                     break;
-                case 10:
-                    //new GoalSquares(size);
+                case "GoalSquares":
+                    new GoalSquares(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "1.jpg";
                     break;
-                case 11:
-                    //new GoalStair(size);
+                case "GoalStair":
+                    new GoalStair(size);
                     imageGoalPath = commonGoal.getConstantGoal() + "12.jpg";
                     break;
             }
@@ -545,7 +541,7 @@ public class GUIApp extends Application implements ViewInterface {
         VBox contentBox = new VBox(10);
         contentBox.getChildren().addAll(nickname1, nicknameField, button);
         contentBox.setStyle("-fx-alignment: center; -fx-padding: 100px; -fx-background-color: white; -fx-opacity: 0.5;");
-        final String[] nicknameString = new String[1];
+
         String regex = "^[a-zA-Z0-9 ]+$";
 
 
@@ -567,17 +563,20 @@ public class GUIApp extends Application implements ViewInterface {
         contentBox.prefWidth(stage.getWidth());
 
         Pane root = new Pane(new Region());
-        Scene scene = new Scene(root);
+
         root.getChildren().addAll(imageView, contentBox);
         stage.setTitle("Welcome to the game");
-
+        Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setFullScreen(true);
+
+        stage.sizeToScene();
+      //  stage.setFullScreen(true);
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         root.setPrefHeight(bounds.getHeight());
         root.setPrefWidth(bounds.getWidth());
         stage.show();
+
 
 
     }
@@ -613,6 +612,8 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     private void lobby(Stage primaryStage, String arg) {
+        Pane root = new Pane(new Region());
+        Scene scene1 = new Scene(root);
         Image imageLobby = new Image("images/Publisher material/Display_5.jpg");
         ImageView imageViewLobby = new ImageView(imageLobby);
         BoxBlur blur = new BoxBlur(3, 4, 3);
@@ -626,6 +627,7 @@ public class GUIApp extends Application implements ViewInterface {
                 start.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
                 start.setOnAction(e -> {
                     client.println("/start");
+
                 });
 
                 Button firstMatch = new Button("First match");
@@ -646,10 +648,8 @@ public class GUIApp extends Application implements ViewInterface {
                 hBox.getChildren().addAll(start, firstMatch, notFirstMatch);
                 hBox.setAlignment(Pos.CENTER);
 
-                Pane root = new Pane(new Region());
-                Scene scene = new Scene(root);
                 root.getChildren().addAll(imageViewLobby, hBox);
-                primaryStage.setScene(scene);
+
                 Screen screen = Screen.getPrimary();
                 Rectangle2D bounds = screen.getVisualBounds();
                 root.setPrefHeight(bounds.getHeight());
@@ -661,10 +661,8 @@ public class GUIApp extends Application implements ViewInterface {
                 wait.setPromptText("Enter your nickname");
                 wait.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
 
-                Pane root = new Pane(new Region());
-                Scene scene = new Scene(root);
                 root.getChildren().addAll(imageViewLobby,label);
-                primaryStage.setScene(scene);
+
                 Screen screen = Screen.getPrimary();
                 Rectangle2D bounds = screen.getVisualBounds();
                 root.setPrefHeight(bounds.getHeight());
@@ -674,8 +672,10 @@ public class GUIApp extends Application implements ViewInterface {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        primaryStage.setFullScreen(true);
+  //      primaryStage.setFullScreen(true);
+        primaryStage.setScene(scene1);
         primaryStage.show();
+
     }
 
     @Override

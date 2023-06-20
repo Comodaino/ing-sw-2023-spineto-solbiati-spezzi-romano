@@ -6,6 +6,7 @@ public class Constant {
     private String tile;
 
     public Constant(){
+
         this.persGoal = persGoal;
         this.goal = goal;
         this.tile = tile;

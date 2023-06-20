@@ -2,6 +2,7 @@ package Distributed.ServerSocket;
 
 import Distributed.*;
 import Model.BoardView;
+import Model.Player;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,10 +16,11 @@ import static Distributed.States.*;
 
 public class ClientHandlerSocket extends RemoteHandler implements Runnable, Serializable {
     private final Socket socket;
-    private final SocketPlayer player;
+    private SocketPlayer player;
     private final ObjectOutputStream out;
     private Lobby lobby;
     private Scanner in;
+    private boolean outputEnabled;
 
     /**
      * Constructor for the Client Handler
@@ -37,6 +39,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         this.player = new SocketPlayer(socket, this, ConnectionType.SOCKET);
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new Scanner(socket.getInputStream());
+        this.outputEnabled = true;
     }
 
     /**
@@ -114,29 +117,44 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
 
         switch (serverApp.checkNickname(input)) {
             case "true":
-                lobby.addPlayer(player);
+                outputEnabled = false;
                 System.out.println("Nickname is available");
                 player.setNickname(input);
                 player.setState(WAIT);
                 player.setConnected(true);
+                lobby.addPlayer(player);
+
                 outSocket("/setnickname " + input);
                 if (player.isOwner()) outSocket("/wait owner ");
                 else outSocket("/wait");
+
+                lobby.updateAll();
+
                 break;
             case "false":
                 System.out.println("Nickname not available");
                 outSocket("/nickname");
                 break;
             case "reconnected":
+
                 this.lobby = serverApp.getLobby(input);
-                player.setNickname(input);
-                player.setState(PLAY);
+                for (RemotePlayer rp : lobby.getListOfPlayers()) {
+                    if (input.equals(rp.getNickname())) this.player = (SocketPlayer) rp;
+                }
+                player.setSocket(socket);
                 player.setConnected(true);
                 outSocket("/setnickname " + input);
-                update(lobby.getBoardView());
-                outSocket("/play " + input);
+
+                if(player.getState()==WAIT){
+                    outputEnabled = false;
+                    if (player.isOwner()) outSocket("/wait owner ");
+                    else outSocket("/wait");
+                }else lobby.updateAll();
+
+
                 break;
         }
+        outputEnabled = true;
     }
 
     /**
@@ -197,24 +215,24 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
             try {
                 String input = in.nextLine();
                 System.out.println("RECEIVED " + input);
-                if (input.charAt(0) == '/') {
-                    switch (player.getState()) {
-                        case WAIT:
-                            waitCommand(input);
-                            break;
-                        case PLAY:
-                            playCommand(input);
-                            break;
-                        case END:
-                            endCommand();
-                            break;
-                    }
+                if (player.getState().equals(INIT)) {
+                    initCommand(input);
                 } else {
-                    if (player.getState().equals(INIT)) {
-                        initCommand(input);
+                    if (input.charAt(0) == '/') {
+                        switch (player.getState()) {
+                            case WAIT:
+                                waitCommand(input);
+                                break;
+                            case PLAY:
+                                playCommand(input);
+                                break;
+                            case END:
+                                endCommand();
+                                break;
+                        }
                     }
                 }
-            } catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 player.setConnected(false);
                 socket.close();
                 break;
@@ -224,22 +242,25 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
 
     private void outputHandler() throws IOException {
         System.out.println("REFRESH");
-        switch (player.getState()) {
-            case INIT:
-                outSocket("/init");
-                break;
-            case WAIT:
-                System.out.println("WAIT");
-                outSocket("/wait");
-                break;
-            case PLAY:
-                System.out.println("PLAY");
-                outSocket("/play");
-                break;
-            case END:
-                outSocket("/end");
-                break;
+        if(outputEnabled) {
+            switch (player.getState()) {
+                case INIT:
+                    outSocket("/init");
+                    break;
+                case WAIT:
+                    System.out.println("WAIT");
+                    outSocket("/wait");
+                    break;
+                case PLAY:
+                    System.out.println("PLAY");
+                    outSocket("/play");
+                    break;
+                case END:
+                    outSocket("/end");
+                    break;
+            }
         }
+        outputEnabled = true;
     }
 
     /**

@@ -18,9 +18,10 @@ class BoardTest {
     @Test
     public void testTwoPlayers() {
         playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        Board testBoard = new Board(false, playerList);
+        Board testBoard = new Board(false);
+        testBoard.addPlayer(new Player("player1"));
+        testBoard.addPlayer(new Player("player2"));
+        testBoard.init();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 System.out.print(testBoard.getCell(i,j).getType() + " ");
@@ -56,10 +57,11 @@ class BoardTest {
     @Test
     public void testThreePlayers() {
         playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        playerList.add(new Player("player3", false));
-        Board testBoard = new Board(false, playerList);
+        Board testBoard = new Board(false);
+        testBoard.addPlayer(new Player("player1"));
+        testBoard.addPlayer(new Player("player2"));
+        testBoard.addPlayer(new Player("player3"));
+        testBoard.init();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 System.out.print(testBoard.getCell(i,j).getType() + " ");
@@ -95,11 +97,12 @@ class BoardTest {
     @Test
     public void testFourPlayers() {
         playerList=new ArrayList<Player>();
-        playerList.add(new Player("player1", true));
-        playerList.add(new Player("player2", false));
-        playerList.add(new Player("player3", false));
-        playerList.add(new Player("player4", false));
-        Board testBoard = new Board(false, playerList);
+        Board testBoard = new Board(false);
+        testBoard.addPlayer(new Player("player1"));
+        testBoard.addPlayer(new Player("player2"));
+        testBoard.addPlayer(new Player("player3"));
+        testBoard.addPlayer(new Player("player4"));
+        testBoard.init();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 System.out.print(testBoard.getCell(i,j).getType() + " ");

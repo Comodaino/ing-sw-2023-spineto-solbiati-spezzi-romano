@@ -81,7 +81,7 @@ public class Main {
                     }
                     break;
                 case "RMI":
-                    ClientApp.execute();
+                    ClientApp.execute(view, ip);
                     break;
             }
         }else{
@@ -95,7 +95,7 @@ public class Main {
                     }
                     break;
                 case "RMI":
-                    ClientApp.execute();
+                    ClientApp.execute(view, ip);
                     break;
             }
         }

@@ -1,6 +1,7 @@
 package View;
 
 import Distributed.AbstractClient;
+import Distributed.RemotePlayer;
 import Model.Player;
 import Model.Tile;
 import Model.Whisper;
@@ -155,6 +156,8 @@ public class TextualUI implements ViewInterface {
                             + "\n" + "        ░█████░                                                    "
                             + "\n" + "         ░░░░                                                      ");
 
+
+
                     homePrint(arg);
                     break;
                 case LOBBY:
@@ -219,6 +222,10 @@ public class TextualUI implements ViewInterface {
                     System.out.println(ConsoleColors.GREEN_UNDERLINED + "/firstMatch"+ RESET + " if this is your first match\t\tOR\t\t" + ConsoleColors.GREEN_UNDERLINED +"/notFirstMatch" + RESET + " if you have already played");
                 } else
                     System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
+
+                for(Player p: client.getBoardView().getListOfPlayer()){
+                    System.out.println("///" + p.getNickname());
+                }
                 chat();
                 break;
             case PLAY:

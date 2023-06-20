@@ -4,10 +4,7 @@ import Distributed.AbstractClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.GUIApp;
-import View.State;
-import View.TextualUI;
-import View.ViewInterface;
+import View.*;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,6 +27,7 @@ public class ClientAppSocket implements AbstractClient {
     private ObjectInputStream objIn;
     private ViewInterface view;
     private String nickname;
+    private boolean firstWait;
 
 
     /**
@@ -47,6 +45,7 @@ public class ClientAppSocket implements AbstractClient {
         this.nickname = null;
         this.owner = false;
         this.typeOfView = typeOfView;
+        this.firstWait = true;
         state = States.INIT;
     }
 
@@ -54,7 +53,6 @@ public class ClientAppSocket implements AbstractClient {
      * Starts the client
      *
      * @param address ip address of the server
-     * @throws IOExceptionGUIApp
      * @throws InterruptedException
      * @throws ClassNotFoundException
      */
@@ -87,8 +85,18 @@ public class ClientAppSocket implements AbstractClient {
                 this.view = new TextualUI(this);
             }
             if (typeOfView.equals("GUI")){
+                PassParameters.setClient(this);
+                PassParameters.setState(State.HOME);
                 this.view = new GUIApp();
-                view.setClient(this);
+
+                Thread th = new Thread() {
+                    @Override
+                    public void run() {
+                        view.setClient(null);
+                    }
+                };
+                th.start();
+
             }
 
 
@@ -108,7 +116,7 @@ public class ClientAppSocket implements AbstractClient {
         if (input != null) {
 
             System.out.println("RECEIVED: " + input);
-
+            boolean flag=true;
 
             if (input.startsWith("/wait")) {
                 String[] tmpInput = input.split(" ");
@@ -120,10 +128,13 @@ public class ClientAppSocket implements AbstractClient {
             if(input.startsWith("/setnickname")){
                 String[] tmpInput = input.split(" ");
                 this.nickname = tmpInput[1];
+                flag=false;
             }
             if (input.equals("/nickname")) {
                 view.update("/nickname");
-            } else {
+                flag=false;
+            }
+            if(flag){
                 if (input.charAt(0) == '/') {
                     switch (input) {
                         case "/setnickname":
@@ -138,7 +149,8 @@ public class ClientAppSocket implements AbstractClient {
                             state = States.WAIT;
                             view.setClient(this);
                             view.setState(State.LOBBY);
-                            view.update();
+                            if(firstWait) firstWait = false;
+                                else view.update();
                             break;
                         case "/play":
                             playCommand();
@@ -157,6 +169,7 @@ public class ClientAppSocket implements AbstractClient {
                         case "/update":
                             this.boardView = (BoardView) objIn.readObject();
                             System.out.println("updating...");
+                            System.out.println(boardView);
                             break;
                         default:
                             view.update();
@@ -206,7 +219,17 @@ public class ClientAppSocket implements AbstractClient {
                 arg = arg + " " + tmp2[i];
             }
             arg = arg + " " + last;
+        }else{
+            if((arg.startsWith("/remove") || arg.startsWith("/switch")) || arg.startsWith("/add")){
+                String[] tmp =  arg.split(" ");
+                String newMsg = tmp[0] + " " + nickname + " ";
+                for(int i = 1; i<tmp.length; i++){
+                    newMsg += tmp[i] + " ";
+                }
+                arg =newMsg;
+            }
         }
+
         System.out.println("SENDING: " + arg);
         out.println(arg);
         out.flush();

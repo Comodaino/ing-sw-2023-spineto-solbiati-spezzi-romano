@@ -5,9 +5,7 @@ import Distributed.RemotePlayer;
 import Distributed.ServerRMI.Server;
 import Distributed.States;
 import Model.BoardView;
-import View.State;
-import View.TextualUI;
-import View.ViewInterface;
+import View.*;
 
 import java.io.IOException;
 import java.rmi.Naming;
@@ -48,7 +46,20 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } //else this.view = new GUIclass(); //TODO implement after GUI
+        }
+        if (typeOfView.equals("GUI")){
+            PassParameters.setClient(this);
+            PassParameters.setState(State.HOME);
+            this.view = new GUIApp();
+
+            Thread th = new Thread() {
+                @Override
+                public void run() {
+                    view.setClient(null);
+                }
+            };
+            th.start();
+        }
     }
 
 

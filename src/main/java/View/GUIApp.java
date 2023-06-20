@@ -90,6 +90,7 @@ public class GUIApp extends Application implements ViewInterface {
         mainPane.add(hBox, 0, 2);
 
 
+        primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
@@ -569,7 +570,9 @@ public class GUIApp extends Application implements ViewInterface {
         Scene scene = new Scene(root);
         root.getChildren().addAll(imageView, contentBox);
         stage.setTitle("Welcome to the game");
+
         stage.setScene(scene);
+        stage.setFullScreen(true);
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         root.setPrefHeight(bounds.getHeight());
@@ -619,21 +622,21 @@ public class GUIApp extends Application implements ViewInterface {
         try {
             if (client.isOwner()) {
                 Button start = new Button("Start");
-                start.setPrefSize(100, 50);
+                start.setPrefSize(150, 80);
                 start.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
                 start.setOnAction(e -> {
                     client.println("/start");
                 });
 
                 Button firstMatch = new Button("First match");
-                firstMatch.setPrefSize(100, 50);
+                firstMatch.setPrefSize(150, 80);
                 firstMatch.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
                 firstMatch.setOnAction(e -> {
                     client.println("/firstMatch");
                 });
 
                 Button notFirstMatch = new Button("Not first match");
-                notFirstMatch.setPrefSize(100, 50);
+                notFirstMatch.setPrefSize(150, 80);
                 notFirstMatch.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
                 notFirstMatch.setOnAction(e -> {
                     client.println("/notFirstMatch");
@@ -658,10 +661,9 @@ public class GUIApp extends Application implements ViewInterface {
                 wait.setPromptText("Enter your nickname");
                 wait.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
 
-                BorderPane root = new BorderPane();
+                Pane root = new Pane(new Region());
                 Scene scene = new Scene(root);
-                root.getChildren().addAll(imageViewLobby, label);
-                root.setCenter(label);
+                root.getChildren().addAll(imageViewLobby,label);
                 primaryStage.setScene(scene);
                 Screen screen = Screen.getPrimary();
                 Rectangle2D bounds = screen.getVisualBounds();
@@ -672,7 +674,7 @@ public class GUIApp extends Application implements ViewInterface {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-
+        primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 

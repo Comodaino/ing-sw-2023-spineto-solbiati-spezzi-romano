@@ -21,7 +21,7 @@ class BoardTest {
         Board testBoard = new Board(false);
         testBoard.addPlayer(new Player("player1"));
         testBoard.addPlayer(new Player("player2"));
-
+        testBoard.init();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 System.out.print(testBoard.getCell(i,j).getType() + " ");
@@ -61,7 +61,7 @@ class BoardTest {
         testBoard.addPlayer(new Player("player1"));
         testBoard.addPlayer(new Player("player2"));
         testBoard.addPlayer(new Player("player3"));
-
+        testBoard.init();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 System.out.print(testBoard.getCell(i,j).getType() + " ");
@@ -102,7 +102,7 @@ class BoardTest {
         testBoard.addPlayer(new Player("player2"));
         testBoard.addPlayer(new Player("player3"));
         testBoard.addPlayer(new Player("player4"));
-
+        testBoard.init();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 System.out.print(testBoard.getCell(i,j).getType() + " ");

@@ -1,4 +1,4 @@
-# Prova Finale di Ingegneria del Software - AA 2021-2022
+# Prova Finale di Ingegneria del Software - AA 2022-2023
 
 ![MyShelfie](src/main/resources/images/Publisher%20material/Title%202000x618px.png)
 

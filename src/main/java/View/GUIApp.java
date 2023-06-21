@@ -138,33 +138,12 @@ public class GUIApp extends Application implements ViewInterface {
             for (int j = 0; j < 9; j++) {
                 Pane emptyPane = new Pane();
                 fillBoardPane.add(emptyPane, i, j);
-            /*     if(client.getBoardView().getCell(i, j).isEmpty()){
-                    fillBoardPane.add(emptyButton, i, j);
-                }else{
-                    fillBoardPane.add(getTile(i, j), i, j);
-                }
-               if(client.getBoardView().getCell(i, j).getType()== CellType.TWO && client.getBoardView().getListOfPlayer().size()==2){
-                    fillBoardPane.add(getTile(i, j), i, j);
-                }
-                if(client.getBoardView().getCell(i, j).getType()== CellType.THREE && client.getBoardView().getListOfPlayer().size()==3) {
-                    fillBoardPane.add(getTile(i, j), i, j);
-                }else {
-                    fillBoardPane.add(emptyComponent, i, j);
-                }
-                if(client.getBoardView().getCell(i, j).getType()== CellType.FOUR && client.getBoardView().getListOfPlayer().size()==4) {
-                    fillBoardPane.add(getTile(i, j), i, j);
-                }else {
-                    fillBoardPane.add(emptyComponent, i, j);
-                }
-
-             */
             }
         }
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (!client.getBoardView().getCell(i, j).isEmpty()) {
                     fillBoardPane.add(getTile(i,j), j, i);
-
                 }
             }
         }
@@ -289,13 +268,18 @@ public class GUIApp extends Application implements ViewInterface {
 
     public GridPane getCommonGoal(AbstractClient client) {
         GridPane commonGoalPane = new GridPane();
-
+//TODO first match and not first match
 
         int size = client.getBoardView().getListOfPlayer().size();
 
         int photo =0;
-
-        for (int j = 0; j < 2; j++) {
+        int a=0;
+        if(command.equals("/firstMatch ")){
+            a=1;
+        }else{
+            a=2;
+        }
+        for (int j = 0; j < a; j++) {
             Constant commonGoal = new Constant();
             switch ((Arrays.toString(client.getBoardView().getSetOfCommonGoal().toArray()))) {
                 case "GoalAngles":
@@ -468,18 +452,55 @@ public class GUIApp extends Application implements ViewInterface {
         return bufferTile;
     }
 
-    public GridPane showOtherShelf(AbstractClient client){
-        // player num 2
+    public VBox showOtherShelf(AbstractClient client){
+
+        VBox otherShelf = new VBox();
         GridPane shelfPlayer2 = new GridPane();
         Image imageShelf2 = new Image("images/boards/bookshelf.png");
+
+
         ImageView shelfImageView2 = new ImageView(imageShelf2);
         shelfImageView2.setFitWidth(250);
         shelfImageView2.setFitHeight(250);
         shelfImageView2.setPreserveRatio(true);
         GridPane shelf2 = new GridPane();
+
         shelfPlayer2.add(shelfImageView2, 0, 0);
+        Label label = new Label("PLAYER 2"+client.getBoardView().getListOfPlayer().get(1).getNickname());
+        shelf2.add(label, 0, 0);
         shelfPlayer2.add(shelf2, 0, 0);
-    return shelfPlayer2;
+        otherShelf.getChildren().add(shelfPlayer2);
+
+        if(client.getBoardView().getListOfPlayer().size()>2){
+            Image imageShelf3 = new Image("images/boards/bookshelf.png");
+            ImageView shelfImageView3 = new ImageView(imageShelf3);
+            shelfImageView3.setFitWidth(250);
+            shelfImageView3.setFitHeight(250);
+            shelfImageView3.setPreserveRatio(true);
+            GridPane shelfPlayer3 = new GridPane();
+            GridPane shelf3 = new GridPane();
+            Label label3 = new Label("PLAYER 3"+client.getBoardView().getListOfPlayer().get(2).getNickname());
+            shelf2.add(label3, 0, 0);
+            shelfPlayer3.add(shelfImageView3, 0, 0);
+            shelfPlayer3.add(shelf3, 0, 0);
+            otherShelf.getChildren().add(shelfPlayer3);
+        }
+        if(client.getBoardView().getListOfPlayer().size()==4){
+            Image imageShelf4 = new Image("images/boards/bookshelf.png");
+            ImageView shelfImageView4 = new ImageView(imageShelf4);
+            shelfImageView4.setFitWidth(250);
+            shelfImageView4.setFitHeight(250);
+            shelfImageView4.setPreserveRatio(true);
+            GridPane shelfPlayer4 = new GridPane();
+            GridPane shelf4 = new GridPane();
+            Label label4 = new Label("PLAYER 4"+client.getBoardView().getListOfPlayer().get(3).getNickname());
+            shelf4.add(label4, 0, 0);
+            shelfPlayer4.add(shelfImageView4, 0, 0);
+            shelfPlayer4.add(shelf4, 0, 0);
+            otherShelf.getChildren().add(shelfPlayer4);
+        }
+
+    return otherShelf;
     }
     public String createTile(int index) {
         String imageTileName = null;

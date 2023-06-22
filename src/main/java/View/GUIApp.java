@@ -34,7 +34,7 @@ public class GUIApp extends Application implements ViewInterface {
     private static AbstractClient client;
     private static State state;
     private static Stage primaryStage;
-    private Boolean firstRemove;
+    private Boolean firstRemove=true;
 
     private String command;
     private boolean firstSwitch;
@@ -205,7 +205,7 @@ public class GUIApp extends Application implements ViewInterface {
         GaussianBlur blur = new GaussianBlur(2);
         BooleanProperty isSelected = new SimpleBooleanProperty(false);
         AtomicInteger count = new AtomicInteger(0);
-        if(count.get() < 3) {  //TODO count < 3
+        if(count.get() < 3) {
             tileButton.setOnMouseClicked(e -> {
                 count.incrementAndGet();
                 if (firstRemove) {
@@ -457,8 +457,11 @@ public class GUIApp extends Application implements ViewInterface {
         return chatPane;
     }
 
-    public GridPane bufferTile() {
+    public VBox bufferTile() {
         GridPane bufferTile = new GridPane();
+        Label label = new Label();
+        label.setText("Choose the order of the tiles");
+        label.setStyle("-fx-background-color: white;");
         for(int i=0; i< client.getBoardView().getTileBuffer().size();i++){
             if(client.getBoardView().getTileBuffer().get(i)==null)
                 break;
@@ -497,7 +500,10 @@ public class GUIApp extends Application implements ViewInterface {
 
 
                 }
-        return bufferTile;
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(label,bufferTile);
+
+        return vBox;
     }
 
     public VBox showOtherShelf(AbstractClient client){

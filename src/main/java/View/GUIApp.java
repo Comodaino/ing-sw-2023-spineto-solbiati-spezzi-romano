@@ -210,6 +210,12 @@ public class GUIApp extends Application implements ViewInterface {
         AtomicInteger count = new AtomicInteger(0);
         if(count.get() < 3) {  //TODO count < 3
             tileButton.setOnMouseClicked(e -> {
+                try {
+                    if(!client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) return;
+
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
                 count.incrementAndGet();
                 if (firstRemove) {
                     firstRemove = false;
@@ -717,7 +723,7 @@ public class GUIApp extends Application implements ViewInterface {
                     case PLAY:
                         try {
                             if(client.getBoardView().getListOfPlayer().size()<2){
-
+                                playAlone(client, primaryStage);
                             }else{
                                 play(client, primaryStage);
                             }

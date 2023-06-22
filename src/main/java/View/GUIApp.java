@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GUIApp extends Application implements ViewInterface {
@@ -72,8 +73,8 @@ public class GUIApp extends Application implements ViewInterface {
         imageViewShelf.fitHeightProperty().bind(mainPane.heightProperty());
         mainPane.setBackground(new Background(new BackgroundImage(imageBackgroundShelf, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
-   //     GridPane commonGoal = getCommonGoal(client);
-    //    mainPane.add(commonGoal, 0, 1);
+        GridPane commonGoal = getCommonGoal(client);
+        mainPane.add(commonGoal, 0, 1);
 
         mainPane.add(createShelf(client, mainPane), 1, 0);
         mainPane.add(createBoard(client), 0, 0);
@@ -272,20 +273,15 @@ public class GUIApp extends Application implements ViewInterface {
 
     public GridPane getCommonGoal(AbstractClient client) {
         GridPane commonGoalPane = new GridPane();
-//TODO first match and not first match
 
         int size = client.getBoardView().getListOfPlayer().size();
-
         int photo =0;
-        int a=0;
-        if(command.equals("/firstMatch ")){
-            a=1;
-        }else{
-            a=2;
-        }
-        for (int j = 0; j < a; j++) {
+        Iterator cmIterator = client.getBoardView().getSetOfCommonGoal().iterator();
+        for (int j = 0; j < client.getBoardView().getSetOfCommonGoal().size(); j++) {
             Constant commonGoal = new Constant();
-            switch ((Arrays.toString(client.getBoardView().getSetOfCommonGoal().toArray()))) {
+            CommonGoal cg = (CommonGoal) cmIterator.next();
+
+            switch (cg.getName()) {
                 case "GoalAngles":
                     new GoalAngles(size);
                     photo=8;

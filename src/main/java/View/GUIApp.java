@@ -37,6 +37,7 @@ public class GUIApp extends Application implements ViewInterface {
     private Boolean firstRemove;
 
     private String command;
+    private boolean firstSwitch;
 
     public GUIApp() {
         this.firstLaunch = true;
@@ -230,31 +231,6 @@ public class GUIApp extends Application implements ViewInterface {
                 }
         });
         }
-        /*
-        tileButton.setOnAction(e -> {
-            if (firstRemove) {
-                firstRemove = false;
-                command = "/remove ";
-            }
-            if (isSelected.get()) {
-                isSelected.set(false);
-                tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 2;");
-                tileButton.setEffect(blur);
-                tileButton.setDisable(true);
-                tileButton.setOpacity(0.8);
-                firstRemove = false;
-                command = command + column + " " + row + " ";
-                System.out.println(command);
-            } else {
-                isSelected.set(true);
-                tileButton.setStyle("");
-                tileButton.setEffect(null);
-                tileButton.setDisable(false);
-                tileButton.setOpacity(1);
-            }
-        });
-
-         */
 
         return tileButton;
     }
@@ -497,15 +473,31 @@ public class GUIApp extends Application implements ViewInterface {
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
             button.setGraphic(imageView);
-
-
+            if(firstSwitch){
+                firstSwitch=false;
+                command="/switch";
+            }
+            BooleanProperty isSelected = new SimpleBooleanProperty(false);
+            int finalI = i;
             button.setOnMouseClicked(e -> {
-                        button.setStyle("-fx-border-color: blue");
-            });
-            bufferTile.add(button, i, 0);
+                if(isSelected.get()) {
+                    isSelected.set(false);
+                    button.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");
+                    button.setEffect(null);
+                    button.setDisable(true);
+                    command= command + " " + finalI;
+                    System.out.println(command);
+
+                }else{
+                    isSelected.set(true);
+                    button.setDisable(false);
+
+            }
+        });
+                    bufferTile.add(button, i, 0);
 
 
-        }
+                }
         return bufferTile;
     }
 

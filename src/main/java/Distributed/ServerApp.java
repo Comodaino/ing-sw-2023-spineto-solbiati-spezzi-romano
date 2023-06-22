@@ -195,7 +195,9 @@ public class ServerApp {
                 lobby.close();
                 break;
             default:
-                client.update(null, "/command");
+                playCommand(client, command);
+                ;
+
                 break;
         }
     }

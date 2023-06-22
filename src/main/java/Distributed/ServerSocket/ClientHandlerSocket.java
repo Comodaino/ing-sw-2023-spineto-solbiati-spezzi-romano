@@ -179,6 +179,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 case "/closeLobby":
                     lobby.close();
                     break;
+                default : lobby.getController().update(input);
+                    break;
             }
             lobby.updateAll();
         }

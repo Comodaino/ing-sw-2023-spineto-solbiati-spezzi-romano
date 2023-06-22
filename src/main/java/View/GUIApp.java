@@ -732,14 +732,17 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     private void lobby(Stage primaryStage, String arg) {
-        Pane root = new Pane(new BorderPane());
+        GridPane root = new GridPane();
         Scene scene1 = new Scene(root);
         Image imageLobby = new Image("images/Publisher material/Display_5.jpg");
         ImageView imageViewLobby = new ImageView(imageLobby);
         BoxBlur blur = new BoxBlur(3, 4, 3);
+
         imageViewLobby.setEffect(blur);
         imageViewLobby.fitWidthProperty().bind(primaryStage.widthProperty());
         imageViewLobby.fitHeightProperty().bind(primaryStage.heightProperty());
+
+
         try {
             if (client.isOwner()) {
                 Button start = new Button("Start");
@@ -768,7 +771,9 @@ public class GUIApp extends Application implements ViewInterface {
                 hBox.getChildren().addAll(start, firstMatch, notFirstMatch);
                 hBox.setAlignment(Pos.CENTER);
 
-                root.getChildren().addAll(imageViewLobby, hBox);
+                root.add(hBox, 2, 0);
+
+
 
                 Screen screen = Screen.getPrimary();
                 Rectangle2D bounds = screen.getVisualBounds();
@@ -777,11 +782,8 @@ public class GUIApp extends Application implements ViewInterface {
             } else {
                 Label label = new Label("Waiting for the owner...");
                 label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
-                TextField wait = new TextField();
-                wait.setPromptText("Enter your nickname");
-                wait.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
 
-                root.getChildren().addAll(imageViewLobby,label);
+                root.add(label, 5, 5);
 
                 Screen screen = Screen.getPrimary();
                 Rectangle2D bounds = screen.getVisualBounds();
@@ -789,6 +791,12 @@ public class GUIApp extends Application implements ViewInterface {
                 root.setPrefWidth(bounds.getWidth());
 
             }
+            root.add(chat(), 10, 10);
+            root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_5.jpg'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
+            root.setAlignment(Pos.CENTER);
+
+
+
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

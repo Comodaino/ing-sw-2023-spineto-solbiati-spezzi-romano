@@ -7,12 +7,9 @@ public class Constant {
 
     public Constant(){
 
-        this.persGoal = persGoal;
-        this.goal = goal;
-        this.tile = tile;
-        persGoal="images/personal goal cards/Personal_Goals";
-        goal="images/common goal cards/";
-        tile="images/item tiles/";
+        this.persGoal = "images/personal goal cards/Personal_Goals";
+        this.goal = "images/common goal cards/";
+        this.tile = "images/item tiles/";
     }
     public String getCostantPersGoal(){
         return persGoal;
@@ -24,4 +21,3 @@ public class Constant {
         return tile;
     }
 }
-

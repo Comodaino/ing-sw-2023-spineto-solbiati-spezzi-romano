@@ -3,9 +3,7 @@ package View;
 
 import Distributed.AbstractClient;
 
-import Model.CellType;
 import Model.CommonGoals.*;
-import Model.Goal;
 import Model.Player;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -144,6 +142,7 @@ public class GUIApp extends Application implements ViewInterface {
             for (int j = 0; j < 9; j++) {
                 if (!client.getBoardView().getCell(i, j).isEmpty()) {
                     fillBoardPane.add(getTile(i,j), j, i);
+                    mouseClicked(getTile(i,j),fillBoardPane);
                 }
             }
         }
@@ -220,6 +219,7 @@ public class GUIApp extends Application implements ViewInterface {
                     tileButton.setOpacity(0.8);
                     firstRemove = false;
                     command = command + column + " " + row + " ";
+                    bufferTile(column, row);
                     System.out.println(command);
                 } else {
                     isSelected.set(true);
@@ -257,6 +257,10 @@ public class GUIApp extends Application implements ViewInterface {
          */
 
         return tileButton;
+    }
+
+    void mouseClicked (Button tile, GridPane fillBoardPane){
+
     }
 
     /**
@@ -412,21 +416,21 @@ public class GUIApp extends Application implements ViewInterface {
         persGoal.setAlignment(Pos.CENTER);
 
         shelfPane.add(persGoal, 0, 2);
-        shelfGridPane.add(bufferTile(), 0, 0);
+    //   shelfGridPane.add(bufferTile(), 0, 0);
 
         return shelfPane;
     }
 
 
-    public GridPane bufferTile() {
+    public GridPane bufferTile(int col,int row) {
         GridPane bufferTile = new GridPane();
         if (client.getBoardView().getTileBuffer().size() >= 1) {
             Button button1 = new Button();
             button1.setPrefSize(40, 40);
             button1.setDisable(true);
-            Image image = new Image(createTile(0));
-            button1.setGraphic(new ImageView(image));
-            bufferTile.add(button1, 0, 0);
+         //   Image image = new Image(createTile(0));
+          //  button1.setGraphic(new ImageView(image));
+            bufferTile.add(getTile(row,col), 0, 0);
 
         }
         if (client.getBoardView().getTileBuffer().size() >= 2) {
@@ -466,8 +470,7 @@ public class GUIApp extends Application implements ViewInterface {
         GridPane shelf2 = new GridPane();
 
         shelfPlayer2.add(shelfImageView2, 0, 0);
-        Label label = new Label("PLAYER 2"+client.getBoardView().getListOfPlayer().get(1).getNickname());
-        shelf2.add(label, 0, 0);
+
         shelfPlayer2.add(shelf2, 0, 0);
         otherShelf.getChildren().add(shelfPlayer2);
 
@@ -479,8 +482,6 @@ public class GUIApp extends Application implements ViewInterface {
             shelfImageView3.setPreserveRatio(true);
             GridPane shelfPlayer3 = new GridPane();
             GridPane shelf3 = new GridPane();
-            Label label3 = new Label("PLAYER 3"+client.getBoardView().getListOfPlayer().get(2).getNickname());
-            shelf2.add(label3, 0, 0);
             shelfPlayer3.add(shelfImageView3, 0, 0);
             shelfPlayer3.add(shelf3, 0, 0);
             otherShelf.getChildren().add(shelfPlayer3);
@@ -493,8 +494,6 @@ public class GUIApp extends Application implements ViewInterface {
             shelfImageView4.setPreserveRatio(true);
             GridPane shelfPlayer4 = new GridPane();
             GridPane shelf4 = new GridPane();
-            Label label4 = new Label("PLAYER 4"+client.getBoardView().getListOfPlayer().get(3).getNickname());
-            shelf4.add(label4, 0, 0);
             shelfPlayer4.add(shelfImageView4, 0, 0);
             shelfPlayer4.add(shelf4, 0, 0);
             otherShelf.getChildren().add(shelfPlayer4);

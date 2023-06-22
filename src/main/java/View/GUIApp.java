@@ -365,6 +365,7 @@ public class GUIApp extends Application implements ViewInterface {
         shelfImageView.setFitHeight(300);
         shelfPane.add(shelfImageView, 0, 0);
         shelfPane.add(shelfGridPane, 0, 0);
+        shelfPane.add(chat(), 1,1 );
 
         shelfPane.add(showOtherShelf(client), 1, 0);
         shelfImageView.setPreserveRatio(true);
@@ -421,6 +422,28 @@ public class GUIApp extends Application implements ViewInterface {
         return shelfPane;
     }
 
+    public Pane chat(){
+        Pane chatPane = new Pane();
+        VBox chatBox = new VBox();
+        chatBox.setPrefSize(200, 200);
+        TextField chatField = new TextField();
+        for(int i=0; i<client.getBoardView().getChatBuffer().size() ;i++) {
+            if( client.getBoardView().getChatBuffer().size()==0 || client.getBoardView().getChatBuffer().get(i)==null)
+                break;
+            Label chatLabel = new Label();
+            chatLabel.setText(client.getBoardView().getChatBuffer().get(i));
+            chatBox.getChildren().add(chatLabel);
+        }
+        chatField.setPromptText("Enter your message");
+
+        chatField.setOnAction(e -> {
+            client.println(chatField.getText());
+            chatField.clear();
+        });
+        chatBox.getChildren().addAll(chatField);
+        chatPane.getChildren().addAll(chatBox);
+        return chatPane;
+    }
 
     public GridPane bufferTile(int col,int row) {
         GridPane bufferTile = new GridPane();
@@ -683,7 +706,7 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     private void lobby(Stage primaryStage, String arg) {
-        Pane root = new Pane(new Region());
+        Pane root = new Pane(new BorderPane());
         Scene scene1 = new Scene(root);
         Image imageLobby = new Image("images/Publisher material/Display_5.jpg");
         ImageView imageViewLobby = new ImageView(imageLobby);
@@ -743,7 +766,25 @@ public class GUIApp extends Application implements ViewInterface {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-  //      primaryStage.setFullScreen(true);
+    /*    Label chat = new Label("Chat");
+        chat.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
+        TextField chatField = new TextField();
+        for(int i=0; i<6 ;i++) {
+            if((client.getBoardView().getChatBuffer().get(i))==null){
+                break;
+            }
+                chat.setText(client.getBoardView().getChatBuffer().get(i));
+        }
+        chatField.setPromptText("Enter your message");
+
+        chatField.setOnAction(e -> {
+            client.println(chatField.getText());
+            chatField.clear();
+        });
+        root.getChildren().addAll(chat, chatField);
+
+     */
+        //      primaryStage.setFullScreen(true);
         primaryStage.setScene(scene1);
         primaryStage.show();
 

@@ -34,7 +34,7 @@ public class GUIApp extends Application implements ViewInterface {
     private static AbstractClient client;
     private static State state;
     private static Stage primaryStage;
-    private Boolean firstRemove=true;
+    private Boolean firstRemove;
 
     private String command;
     private boolean firstSwitch;

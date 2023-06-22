@@ -385,7 +385,17 @@ public class GUIApp extends Application implements ViewInterface {
 
         shelfGridPane.setAlignment(Pos.CENTER);
         GridPane persGoal = new GridPane();
-        if (client.isOwner()) {
+
+
+        String chairNick = null;
+        for(Player p: client.getBoardView().getListOfPlayer()){
+            if(p.getChair()){
+                chairNick = p.getNickname();
+                break;
+            }
+        }
+
+        if (client.getNickname().equals(chairNick)){
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
             chairImageView.setFitWidth(100);
@@ -412,8 +422,9 @@ public class GUIApp extends Application implements ViewInterface {
         persGoal.setAlignment(Pos.CENTER);
 
         shelfPane.add(persGoal, 0, 2);
-     //   shelfGridPane.add(bufferTile(), 0, 3);
-
+        if(client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) {
+            shelfPane.add(bufferTile(), 0, 3);
+        }
 
         return shelfPane;
     }
@@ -481,11 +492,20 @@ public class GUIApp extends Application implements ViewInterface {
             button.setDisable(true);
             Image image = new Image(createTile(i));
             ImageView imageView = new ImageView(image);
+            imageView.setPreserveRatio(true);
+            imageView.setOpacity(1);
+            imageView.setFitHeight(40);
+            imageView.setFitWidth(40);
             button.setGraphic(imageView);
-            bufferTile.add(button, 0, i);
+
+
+            button.setOnMouseClicked(e -> {
+                        button.setStyle("-fx-border-color: blue");
+            });
+            bufferTile.add(button, i, 0);
+
+
         }
-
-
         return bufferTile;
     }
 

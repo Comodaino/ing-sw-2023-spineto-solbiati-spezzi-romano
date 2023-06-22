@@ -37,6 +37,7 @@ public class GUIApp extends Application implements ViewInterface {
     private Boolean firstRemove;
 
     private String command;
+    private boolean firstSwitch;
 
     public GUIApp() {
         this.firstLaunch = true;
@@ -123,8 +124,8 @@ public class GUIApp extends Application implements ViewInterface {
         reset.setPrefSize(100, 60);
         reset.setStyle("");
         reset.setText("Save move");
-        reset.setOnAction(e -> {
-
+        reset.setOnMouseClicked(e -> {
+            client.println(command);
         });
         return reset;
     }
@@ -218,8 +219,7 @@ public class GUIApp extends Application implements ViewInterface {
                     tileButton.setDisable(true);
                     tileButton.setOpacity(0.8);
                     firstRemove = false;
-                    command = command + column + " " + row + " ";
-                    bufferTile(column, row);
+                    command = command + row + " " + column + " ";
                     System.out.println(command);
                 } else {
                     isSelected.set(true);
@@ -230,31 +230,6 @@ public class GUIApp extends Application implements ViewInterface {
                 }
         });
         }
-        /*
-        tileButton.setOnAction(e -> {
-            if (firstRemove) {
-                firstRemove = false;
-                command = "/remove ";
-            }
-            if (isSelected.get()) {
-                isSelected.set(false);
-                tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 2;");
-                tileButton.setEffect(blur);
-                tileButton.setDisable(true);
-                tileButton.setOpacity(0.8);
-                firstRemove = false;
-                command = command + column + " " + row + " ";
-                System.out.println(command);
-            } else {
-                isSelected.set(true);
-                tileButton.setStyle("");
-                tileButton.setEffect(null);
-                tileButton.setDisable(false);
-                tileButton.setOpacity(1);
-            }
-        });
-
-         */
 
         return tileButton;
     }
@@ -385,7 +360,17 @@ public class GUIApp extends Application implements ViewInterface {
 
         shelfGridPane.setAlignment(Pos.CENTER);
         GridPane persGoal = new GridPane();
-        if (client.isOwner()) {
+
+
+        String chairNick = null;
+        for(Player p: client.getBoardView().getListOfPlayer()){
+            if(p.getChair()){
+                chairNick = p.getNickname();
+                break;
+            }
+        }
+
+        if (client.getNickname().equals(chairNick)){
             Image chairImage = new Image("images/misc/firstplayertoken.png");
             ImageView chairImageView = new ImageView(chairImage);
             chairImageView.setFitWidth(100);
@@ -412,7 +397,9 @@ public class GUIApp extends Application implements ViewInterface {
         persGoal.setAlignment(Pos.CENTER);
 
         shelfPane.add(persGoal, 0, 2);
-    //   shelfGridPane.add(bufferTile(), 0, 0);
+        if(client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) {
+            shelfPane.add(bufferTile(), 0, 3);
+        }
 
         return shelfPane;
     }
@@ -470,37 +457,46 @@ public class GUIApp extends Application implements ViewInterface {
         return chatPane;
     }
 
-    public GridPane bufferTile(int col,int row) {
+    public GridPane bufferTile() {
         GridPane bufferTile = new GridPane();
-        if (client.getBoardView().getTileBuffer().size() >= 1) {
-            Button button1 = new Button();
-            button1.setPrefSize(40, 40);
-            button1.setDisable(true);
-         //   Image image = new Image(createTile(0));
-          //  button1.setGraphic(new ImageView(image));
-            bufferTile.add(getTile(row,col), 0, 0);
+        for(int i=0; i< client.getBoardView().getTileBuffer().size();i++){
+            if(client.getBoardView().getTileBuffer().get(i)==null)
+                break;
+            Button button = new Button();
+            button.setPrefSize(40, 40);
+            button.setDisable(true);
+            Image image = new Image(createTile(i));
+            ImageView imageView = new ImageView(image);
+            imageView.setPreserveRatio(true);
+            imageView.setOpacity(1);
+            imageView.setFitHeight(40);
+            imageView.setFitWidth(40);
+            button.setGraphic(imageView);
+            if(firstSwitch){
+                firstSwitch=false;
+                command="/switch";
+            }
+            BooleanProperty isSelected = new SimpleBooleanProperty(false);
+            int finalI = i;
+            button.setOnMouseClicked(e -> {
+                if(isSelected.get()) {
+                    isSelected.set(false);
+                    button.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");
+                    button.setEffect(null);
+                    button.setDisable(true);
+                    command= command + " " + finalI;
+                    System.out.println(command);
 
-        }
-        if (client.getBoardView().getTileBuffer().size() >= 2) {
-            Button button2 = new Button();
-            button2.setPrefSize(40, 40);
-            button2.setDisable(true);
-            Image image = new Image(createTile(1));
-            button2.setGraphic(new ImageView(image));
-            bufferTile.add(button2, 0, 1);
-        }
-        if (client.getBoardView().getTileBuffer().size() >= 3) {
-            Constant constant = new Constant();
-            Button button3 = new Button();
-            button3.setPrefSize(40, 40);
-            button3.setDisable(true);
-            Image image = new Image(createTile(2));
-            Image im = new Image(constant.getConstantGoal() + "1.jpg");
-            button3.setGraphic(new ImageView(im));
-            bufferTile.add(button3, 0, 2);
-        }
+                }else{
+                    isSelected.set(true);
+                    button.setDisable(false);
+
+            }
+        });
+                    bufferTile.add(button, i, 0);
 
 
+                }
         return bufferTile;
     }
 

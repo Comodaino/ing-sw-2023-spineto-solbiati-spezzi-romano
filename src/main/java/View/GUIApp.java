@@ -424,15 +424,21 @@ public class GUIApp extends Application implements ViewInterface {
 
     public Pane chat(){
         Pane chatPane = new Pane();
+
         VBox chatBox = new VBox();
         chatBox.setPrefSize(200, 200);
         TextField chatField = new TextField();
+        VBox chatBox2 = new VBox();
         for(int i=0; i<client.getBoardView().getChatBuffer().size() ;i++) {
             if( client.getBoardView().getChatBuffer().size()==0 || client.getBoardView().getChatBuffer().get(i)==null)
                 break;
             Label chatLabel = new Label();
             chatLabel.setText(client.getBoardView().getChatBuffer().get(i));
-            chatBox.getChildren().add(chatLabel);
+          //  chatBox.getChildren().add(chatLabel);
+
+            chatBox2.getChildren().add(chatLabel);
+            chatLabel.setStyle("-fx-background-color: white;");
+            chatBox2.setStyle("-fx-background-color: white;");
         }
         chatField.setPromptText("Enter your message");
 
@@ -440,7 +446,31 @@ public class GUIApp extends Application implements ViewInterface {
             client.println(chatField.getText());
             chatField.clear();
         });
-        chatBox.getChildren().addAll(chatField);
+
+        VBox chatBox3 = new VBox();
+        Label chatLabel = null;
+        for(int i=0; i<client.getBoardView().getPersonalChatBuffer().size() ;i++) {
+            if (client.getBoardView().getPersonalChatBuffer().size() == 0 || client.getBoardView().getPersonalChatBuffer().get(i) == null)
+                break;
+
+            try {
+                if (client.getBoardView().getPersonalChatBuffer().get(i).getRecipient().equals(client.getNickname())) {
+                    chatLabel = new Label();
+                    chatLabel.setText(client.getBoardView().getPersonalChatBuffer().get(i).getContent());
+                }
+
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+            //  chatBox.getChildren().add(chatLabel);
+            if (chatLabel != null) {
+                chatBox2.getChildren().add(chatLabel);
+                chatLabel.setStyle("-fx-background-color: white;");
+                chatBox2.setStyle("-fx-background-color: white;");
+            }
+        }
+        chatBox.getChildren().addAll(chatField,chatBox2);
+        chatPane.getChildren().addAll(chatBox3);
         chatPane.getChildren().addAll(chatBox);
         return chatPane;
     }

@@ -203,7 +203,6 @@ public class GUIApp extends Application implements ViewInterface {
 
         GaussianBlur blur = new GaussianBlur(2);
         BooleanProperty isSelected = new SimpleBooleanProperty(false);
-        firstRemove = true;
         AtomicInteger count = new AtomicInteger(0);
         if(count.get() < 3) {  //TODO count < 3
             tileButton.setOnMouseClicked(e -> {

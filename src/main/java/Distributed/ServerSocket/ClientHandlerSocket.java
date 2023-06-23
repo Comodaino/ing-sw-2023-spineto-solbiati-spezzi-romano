@@ -167,8 +167,11 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         if (player.isOwner()) {
             switch (input) {
                 case "/start":
-                    lobby.startGame();
-                    player.setState(PLAY);
+
+                    if(lobby.getListOfPlayers().size()>1){
+                        lobby.startGame();
+                        player.setState(PLAY);
+                    }
                     break;
                 case "/firstMatch":
                     lobby.setFirstMatch(true);
@@ -182,6 +185,9 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 default : lobby.getController().update(input);
                     break;
             }
+            lobby.updateAll();
+        }else{
+            lobby.getController().update(input);
             lobby.updateAll();
         }
     }

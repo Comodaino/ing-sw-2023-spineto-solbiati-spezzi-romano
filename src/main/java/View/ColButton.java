@@ -39,7 +39,7 @@ public ColButton(GUIApp parent, int index){
     this.index = index;
     this.parent = parent;
     button = new Button();
-    button.setStyle("-fx-background-color: transparent;");
+    button.setStyle("-fx-background-color: green;");
 
     button.setPrefSize(45,20);
     button.setVisible(true);

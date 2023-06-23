@@ -39,16 +39,16 @@ public ColButton(GUIApp parent, int index){
     this.index = index;
     this.parent = parent;
     button = new Button();
-    button.setStyle("-fx-background-color: GREEN;");
+    button.setStyle("-fx-background-color: transparent;");
 
     button.setPrefSize(45,20);
     button.setVisible(true);
     BooleanProperty isSelected = new SimpleBooleanProperty(false);
 
-    this.button.setOnAction (e -> {
+    this.button.setOnMouseClicked (e -> {
         if(isSelected.get()){
             isSelected.set(false);
-            button.setStyle("-fx-background-color: Red;");
+        //    button.setStyle("-fx-background-color: Red;");
             this.parent.setCommand("/add " + index);
         }
         else{

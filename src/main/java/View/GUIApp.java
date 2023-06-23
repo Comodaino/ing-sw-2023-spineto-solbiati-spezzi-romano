@@ -39,10 +39,12 @@ public class GUIApp extends Application implements ViewInterface {
     private String command;
     private boolean firstSwitch;
 
+
     public GUIApp() {
         this.firstLaunch = true;
         this.client = PassParameters.getClient();
         this.state = PassParameters.getState();
+        firstRemove = true;
     }
 
     public void start(Stage primaryStage) throws RemoteException {
@@ -126,6 +128,7 @@ public class GUIApp extends Application implements ViewInterface {
         reset.setText("Save move");
         reset.setOnMouseClicked(e -> {
             client.println(command);
+            command= null;
         });
         return reset;
     }
@@ -207,6 +210,12 @@ public class GUIApp extends Application implements ViewInterface {
         AtomicInteger count = new AtomicInteger(0);
         if(count.get() < 3) {
             tileButton.setOnMouseClicked(e -> {
+                try {
+                    if(!client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) return;
+
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
                 count.incrementAndGet();
                 if (firstRemove) {
                     firstRemove = false;
@@ -719,7 +728,11 @@ public class GUIApp extends Application implements ViewInterface {
                         break;
                     case PLAY:
                         try {
-                            play(client, primaryStage);
+                            if(client.getBoardView().getListOfPlayer().size()<2){
+                                playAlone(client, primaryStage);
+                            }else{
+                                play(client, primaryStage);
+                            }
                         } catch (RemoteException e) {
                             throw new RuntimeException(e);
                         }
@@ -825,6 +838,8 @@ public class GUIApp extends Application implements ViewInterface {
 
     }
 
+
+
     @Override
     public void update() throws IOException {
         update(null);
@@ -839,7 +854,6 @@ public class GUIApp extends Application implements ViewInterface {
     @Override
     public void setClient(AbstractClient c) {
         if (c != null) this.client = c;
-        System.out.println("pappapero: " + this.client);
         if (firstLaunch) {
             firstLaunch = false;
             launch();
@@ -851,5 +865,34 @@ public class GUIApp extends Application implements ViewInterface {
         System.out.println(command);
     }
 
+    public void playAlone(AbstractClient client, Stage primaryStage) throws RemoteException {
+        GridPane mainPane = new GridPane();
+        Scene scene = new Scene(mainPane);
+        primaryStage.setScene(scene);
 
+        Image imageBackgroundShelf = new Image("images/misc/sfondoparquet.jpg");
+        ImageView imageViewShelf = new ImageView(imageBackgroundShelf);
+        BoxBlur blur = new BoxBlur(3, 3, 3);
+        imageViewShelf.setEffect(blur);
+
+        imageViewShelf.setPreserveRatio(true);
+        imageViewShelf.fitWidthProperty().bind(mainPane.widthProperty());
+        imageViewShelf.fitHeightProperty().bind(mainPane.heightProperty());
+        mainPane.setBackground(new Background(new BackgroundImage(imageBackgroundShelf, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+
+
+        primaryStage.setTitle("Play");
+        primaryStage.setOnCloseRequest(e -> {
+            // Gestire l'evento di chiusura
+        });
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
+
+
+        primaryStage.sizeToScene();
+        primaryStage.show();
+    }
 }

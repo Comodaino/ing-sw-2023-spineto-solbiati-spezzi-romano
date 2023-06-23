@@ -349,13 +349,13 @@ public class GUIApp extends Application implements ViewInterface {
         shelfPane.add(showOtherShelf(client), 1, 0);
         shelfImageView.setPreserveRatio(true);
 
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 5; col++) {
 
-        for (int col = 0; col < 5; col++) {
-            for (int row = 0; row < 6; row++) {
                 for (Player player: client.getBoardView().getListOfPlayer()) {
                 if(!player.getNickname().equals(client.getNickname()))
                     break;
-                shelfGridPane.add(printShelf(row,col), row, col);
+                shelfGridPane.add(printShelf(row,col), col, row);
                 }
             }
         }
@@ -418,10 +418,11 @@ public class GUIApp extends Application implements ViewInterface {
         return shelfPane;
     }
 
-    public Button printShelf(int row, int col){
+    public ImageView printShelf(int row, int col){
         Button shelfButton = new Button();
         String imageTilePath;
         Constant tile = new Constant();
+        ImageView imageView = new ImageView();
         int i = 0;
         String imageTileName = null;
         if(client.getBoardView().getCurrentPlayer().getShelf().getTile(row,col) != null) {
@@ -462,7 +463,7 @@ public class GUIApp extends Application implements ViewInterface {
             shelfButton.setPrefSize(40, 40);
             shelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
             Image imageTile = new Image(imageTilePath);
-            ImageView imageView = new ImageView(imageTile);
+            imageView.setImage(imageTile);
             imageView.setPreserveRatio(true);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
@@ -474,7 +475,7 @@ public class GUIApp extends Application implements ViewInterface {
             shelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
             shelfButton.setGraphic(null);
         }
-        return shelfButton;
+        return imageView;
     }
     public Pane chat(){
         Pane chatPane = new Pane();

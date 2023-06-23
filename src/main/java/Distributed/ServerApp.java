@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+
 public class ServerApp {
     private int port;
     private static List<Lobby> lobbies;
@@ -181,7 +182,9 @@ public class ServerApp {
 
         switch (command) {
             case "/start":
-                lobby.startGame();
+                if(lobby.getListOfPlayers().size()>1){
+                    lobby.startGame();
+                }
                 break;
             case "/firstMatch":
                 lobby.setFirstMatch(true);
@@ -196,8 +199,6 @@ public class ServerApp {
                 break;
             default:
                 playCommand(client, command);
-                ;
-
                 break;
         }
     }
@@ -238,7 +239,6 @@ public class ServerApp {
         synchronized (lobbies) {
             for(Lobby l: lobbies){
                 for(RemotePlayer rp: l.getListOfPlayers()){
-                    System.out.println("disconnected state: " + rp.getState() + " " + rp.getNickname());
                     if(rp.getConnectionType()==ConnectionType.RMI && rp.isConnected()){
                         boolean allOk;
                         try {

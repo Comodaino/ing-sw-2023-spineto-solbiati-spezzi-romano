@@ -76,7 +76,6 @@ public class Lobby {
         for(RemotePlayer rp : lp) {
             rp.setState(States.PLAY);
         }
-        this.open = false;
         this.playing = true;
     }
 

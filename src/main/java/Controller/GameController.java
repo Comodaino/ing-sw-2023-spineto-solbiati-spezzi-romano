@@ -370,6 +370,7 @@ public class GameController implements Serializable {
                     }
                     break;
                 case "/message":
+                    System.out.println("ziopera");
                     newMessage(input);
                     serverUpdater();
                     break;

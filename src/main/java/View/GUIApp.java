@@ -419,7 +419,6 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     public ImageView printShelf(int row, int col){
-        Button shelfButton = new Button();
         String imageTilePath;
         Constant tile = new Constant();
         ImageView imageView = new ImageView();
@@ -460,20 +459,16 @@ public class GUIApp extends Application implements ViewInterface {
             }
             imageTilePath = tile.getConstantTile() + imageTileName + i + ".png";
 
-            shelfButton.setPrefSize(40, 40);
-            shelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
             Image imageTile = new Image(imageTilePath);
             imageView.setImage(imageTile);
             imageView.setPreserveRatio(true);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
-            shelfButton.setGraphic(imageView);
+
         }else{
-            shelfButton.setPrefSize(40, 40);
-            shelfButton.setPrefWidth(40);
-            shelfButton.setPrefHeight(40);
-            shelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
-            shelfButton.setGraphic(null);
+            imageView.setImage(null);
+            imageView.setFitHeight(40);
+            imageView.setFitWidth(40);
         }
         return imageView;
     }
@@ -623,10 +618,10 @@ public class GUIApp extends Application implements ViewInterface {
 
     return otherShelf;
     }
-    public Button printOtherShelf(int row, int col, int playerNumber){
-        Button otherShelfButton = new Button();
+    public ImageView printOtherShelf(int row, int col, int playerNumber){
         String imageTilePath;
         Constant tile = new Constant();
+        ImageView imageView = new ImageView();
         int i = 0;
         String imageTileName = null;
         if(client.getBoardView().getListOfPlayer().get(playerNumber).getShelf().getTile(row,col) != null) {
@@ -651,7 +646,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
 
             }
-            switch (client.getBoardView().getCurrentPlayer().getShelf().getTile(col, row).getType()) {
+            switch (client.getBoardView().getListOfPlayer().get(playerNumber).getShelf().getTile(col, row).getType()) {
                 case ONE:
                     i = 1;
                     break;
@@ -664,23 +659,18 @@ public class GUIApp extends Application implements ViewInterface {
             }
             imageTilePath = tile.getConstantTile() + imageTileName + i + ".png";
 
-            otherShelfButton.setPrefSize(40, 40);
-
             Image imageTile = new Image(imageTilePath);
-            ImageView imageView = new ImageView(imageTile);
+            imageView.setImage(imageTile);
+
             imageView.setPreserveRatio(true);
-            otherShelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
-            otherShelfButton.setGraphic(imageView);
         }else{
-            otherShelfButton.setPrefSize(40, 40);
-            otherShelfButton.setPrefWidth(40);
-            otherShelfButton.setPrefHeight(40);
-            otherShelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
-            otherShelfButton.setGraphic(null);
+            imageView.setImage(null);
+            imageView.setFitHeight(40);
+            imageView.setFitWidth(40);
         }
-        return otherShelfButton;
+        return imageView;
     }
     public String createTile(int index) {
         String imageTileName = null;

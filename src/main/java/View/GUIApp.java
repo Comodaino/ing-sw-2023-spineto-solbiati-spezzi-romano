@@ -298,6 +298,7 @@ public class GUIApp extends Application implements ViewInterface {
                 case "GoalColumn":
                     new GoalColumn(size);
                     photo=5;
+                    break;
                 case "GoalCouples":
                     new GoalCouples(size);
                     photo=4;
@@ -342,6 +343,7 @@ public class GUIApp extends Application implements ViewInterface {
             if (j == 0) {
 
                 Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
+                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
                 ImageView imageView1 = new ImageView(imageGoal1);
                 imageView1.setPreserveRatio(true);
                 imageView1.setFitHeight(150);
@@ -608,7 +610,6 @@ public class GUIApp extends Application implements ViewInterface {
         GridPane shelfPlayer3 = new GridPane();
         GridPane shelfPlayer4 = new GridPane();
         Image imageShelf = new Image("images/boards/bookshelf.png");
-
         ImageView shelfImageView = new ImageView(imageShelf);
         shelfImageView.setFitWidth(250);
         shelfImageView.setFitHeight(250);
@@ -616,10 +617,13 @@ public class GUIApp extends Application implements ViewInterface {
         GridPane shelf2 = new GridPane();
         GridPane shelf3 = new GridPane();
         GridPane shelf4 = new GridPane();
+        shelf2.setAlignment(Pos.CENTER);
+        shelf3.setAlignment(Pos.CENTER);
+        shelf4.setAlignment(Pos.CENTER);
         int j=0;
         for(int i= 0; i < client.getBoardView().getListOfPlayer().size(); i++){
             if(!client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())){
-                for (int row=5; row>=0; row--){
+                for (int row=0; row<6; row++){
                     for(int col=0; col<5; col++){
                         switch(j){
                             case 0:
@@ -706,6 +710,7 @@ public class GUIApp extends Application implements ViewInterface {
             imageView.setFitHeight(30);
             imageView.setFitWidth(30);
         }else{
+            imageView.setStyle("-fx-border-color: black;");
             imageView.setImage(null);
             imageView.setFitHeight(30);
             imageView.setFitWidth(30);

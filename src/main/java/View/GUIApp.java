@@ -623,13 +623,13 @@ public class GUIApp extends Application implements ViewInterface {
                     for(int col=0; col<5; col++){
                         switch(j){
                             case 0:
-                                shelf2.add(printOtherShelf(row, col,i), col, row);
+                                shelf2.add(printOtherShelf(row, col,i), col, 5-row);
                                 break;
                             case 1:
-                                shelf3.add(printOtherShelf(row, col,i), col, row);
+                                shelf3.add(printOtherShelf(row, col,i), col, 5-row);
                                 break;
                             case 2:
-                                shelf4.add(printOtherShelf(row, col,i), col, row);
+                                shelf4.add(printOtherShelf(row, col,i), col, 5-row);
                                 break;
                         }
 
@@ -703,12 +703,12 @@ public class GUIApp extends Application implements ViewInterface {
             imageView.setImage(imageTile);
 
             imageView.setPreserveRatio(true);
-            imageView.setFitHeight(40);
-            imageView.setFitWidth(40);
+            imageView.setFitHeight(30);
+            imageView.setFitWidth(30);
         }else{
             imageView.setImage(null);
-            imageView.setFitHeight(40);
-            imageView.setFitWidth(40);
+            imageView.setFitHeight(30);
+            imageView.setFitWidth(30);
         }
         return imageView;
     }

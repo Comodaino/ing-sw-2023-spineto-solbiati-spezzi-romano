@@ -125,16 +125,38 @@ public class GUIApp extends Application implements ViewInterface {
         Button reset = new Button("Reset");
         reset.setPrefSize(100, 60);
         reset.setStyle("");
-        reset.setText("Save move");
+        reset.setText("Execute move");
         reset.setOnMouseClicked(e -> {
-            client.println(command);
+            if(command!=null) client.println(command);
             command= null;
         });
         return reset;
     }
+    public Button cancel(){
+        Button reset = new Button("cancel");
+        reset.setPrefSize(100, 60);
+        reset.setStyle("");
+        reset.setText("Cancel move");
+        reset.setOnMouseClicked(e -> {
+            command= null;
+        });
+        return reset;
+    }
+    public Button endGame(){
+        Button reset = new Button("end");
+        reset.setPrefSize(100, 60);
+        reset.setStyle("");
+        reset.setText("DEBUG END GAME");
+        reset.setOnMouseClicked(e -> {
+            client.println("/end");
+        });
+        return reset;
+
+    }
     public GridPane fillBoard(AbstractClient client){
         GridPane fillBoardPane = new GridPane();
 
+        //TODO add control
      //   Pane emptyComponent = new Pane();
   //      emptyComponent.setPrefSize(65, 65);
         for (int i = 0; i < 9; i++) {
@@ -218,25 +240,28 @@ public class GUIApp extends Application implements ViewInterface {
                     throw new RuntimeException(ex);
                 }
                 count.incrementAndGet();
+                System.out.println("Problem: " + firstRemove);
                 if (firstRemove) {
                     firstRemove = false;
                     command = "/remove ";
                 }
-                if (isSelected.get() && count.get() < 3) {
-                    isSelected.set(false);
-                    tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 2;");
-                    tileButton.setEffect(blur);
-                    tileButton.setDisable(true);
-                    tileButton.setOpacity(0.8);
-                    firstRemove = false;
-                    command = command + row + " " + column + " ";
-                    System.out.println(command);
-                } else {
-                    isSelected.set(true);
-                    tileButton.setStyle("-fx-border-width: 0; -fx-border-height: 0");
-                    tileButton.setEffect(null);
-                    tileButton.setDisable(false);
-                    tileButton.setOpacity(1);
+                if(command!=null && command.startsWith("/remove")) {
+                    if (isSelected.get() && count.get() < 3) {
+                        isSelected.set(false);
+                        tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 2;");
+                        tileButton.setEffect(blur);
+                        tileButton.setDisable(true);
+                        tileButton.setOpacity(0.8);
+                        firstRemove = false;
+                        command = command + row + " " + column + " ";
+                        System.out.println(command);
+                    } else {
+                        isSelected.set(true);
+                        tileButton.setStyle("-fx-border-width: 0; -fx-border-height: 0");
+                        tileButton.setEffect(null);
+                        tileButton.setDisable(false);
+                        tileButton.setOpacity(1);
+                    }
                 }
         });
         }
@@ -273,6 +298,7 @@ public class GUIApp extends Application implements ViewInterface {
                 case "GoalColumn":
                     new GoalColumn(size);
                     photo=5;
+                    break;
                 case "GoalCouples":
                     new GoalCouples(size);
                     photo=4;
@@ -317,6 +343,7 @@ public class GUIApp extends Application implements ViewInterface {
             if (j == 0) {
 
                 Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
+                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
                 ImageView imageView1 = new ImageView(imageGoal1);
                 imageView1.setPreserveRatio(true);
                 imageView1.setFitHeight(150);
@@ -332,7 +359,8 @@ public class GUIApp extends Application implements ViewInterface {
             }
         }
         commonGoalPane.add(resetCommand(), 2, 0);
-
+        commonGoalPane.add(cancel(),3,0);
+        commonGoalPane.add(endGame(), 4,0);
         return commonGoalPane;
     }
 
@@ -345,21 +373,34 @@ public class GUIApp extends Application implements ViewInterface {
         shelfImageView.setFitHeight(300);
         shelfPane.add(shelfImageView, 0, 0);
         shelfPane.add(shelfGridPane, 0, 0);
-        shelfPane.add(chat(), 1,1 );
+        shelfPane.add(chat(), 1,2 );
 
         shelfPane.add(showOtherShelf(client), 1, 0);
         shelfImageView.setPreserveRatio(true);
+        int nPlayer = 0;
+        for (Player p: client.getBoardView().getListOfPlayer()) {
 
-        for (int row = 0; row < 6; row++) {
-            for (int col = 0; col < 5; col++) {
-
-                for (Player player: client.getBoardView().getListOfPlayer()) {
-                if(!player.getNickname().equals(client.getNickname()))
-                    break;
-                shelfGridPane.add(printShelf(row,col), col, row);
-                }
+            if (p.getNickname().equals(client.getNickname())) {
+                break;
+            }else{
+                nPlayer ++;
             }
         }
+        for (int row = 0; row <6; row++) {
+            for (int col = 0; col <5 ; col++) {
+                if(client.getBoardView().getListOfPlayer().get(nPlayer).getShelf().getTile(row,col) != null) {
+                        shelfGridPane.add(printShelf(nPlayer, row, col), col, 5-row);
+                    } else {
+                    Label label = new Label();
+                    label.setStyle("-fx-background-color: transparent");
+                    label.setPrefSize(40,40);
+                    shelfGridPane.add(label, col, row);
+                }
+
+                }
+
+        }
+
         for (int i = 0; i < 5; i++) {
             ColButton colButton = new ColButton(this, i);
             shelfGridPane.add(colButton.getButton(), i, 6);
@@ -419,15 +460,13 @@ public class GUIApp extends Application implements ViewInterface {
         return shelfPane;
     }
 
-    public ImageView printShelf(int row, int col){
-        Button shelfButton = new Button();
+    public ImageView printShelf(int nPlayer, int row, int col){
         String imageTilePath;
         Constant tile = new Constant();
         ImageView imageView = new ImageView();
         int i = 0;
         String imageTileName = null;
-        if(client.getBoardView().getCurrentPlayer().getShelf().getTile(row,col) != null) {
-            switch (client.getBoardView().getCurrentPlayer().getShelf().getTile(row, col).getColor()) {
+            switch (client.getBoardView().getListOfPlayer().get(nPlayer).getShelf().getTile(row, col).getColor()) {
                 case BLUE:
                     imageTileName = "Cornici1.";
                     break;
@@ -448,7 +487,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
 
             }
-            switch (client.getBoardView().getCurrentPlayer().getShelf().getTile(col, row).getType()) {
+            switch (client.getBoardView().getListOfPlayer().get(nPlayer).getShelf().getTile(row, col).getType()) {
                 case ONE:
                     i = 1;
                     break;
@@ -461,21 +500,12 @@ public class GUIApp extends Application implements ViewInterface {
             }
             imageTilePath = tile.getConstantTile() + imageTileName + i + ".png";
 
-            shelfButton.setPrefSize(40, 40);
-            shelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
             Image imageTile = new Image(imageTilePath);
             imageView.setImage(imageTile);
             imageView.setPreserveRatio(true);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
-            shelfButton.setGraphic(imageView);
-        }else{
-            shelfButton.setPrefSize(40, 40);
-            shelfButton.setPrefWidth(40);
-            shelfButton.setPrefHeight(40);
-            shelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
-            shelfButton.setGraphic(null);
-        }
+
         return imageView;
     }
     public Pane chat(){
@@ -532,7 +562,7 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     public Button bufferTile(int i) {
-
+//TODO add control
         BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
             if(client.getBoardView().getTileBuffer().get(i)==null)
                 return null;
@@ -573,61 +603,69 @@ public class GUIApp extends Application implements ViewInterface {
         return button;
     }
 
-    public VBox showOtherShelf(AbstractClient client){
+    public VBox showOtherShelf(AbstractClient client) throws RemoteException {
 
         VBox otherShelf = new VBox();
         GridPane shelfPlayer2 = new GridPane();
-        Image imageShelf2 = new Image("images/boards/bookshelf.png");
-
-
-        ImageView shelfImageView2 = new ImageView(imageShelf2);
-        shelfImageView2.setFitWidth(250);
-        shelfImageView2.setFitHeight(250);
-        shelfImageView2.setPreserveRatio(true);
+        GridPane shelfPlayer3 = new GridPane();
+        GridPane shelfPlayer4 = new GridPane();
+        Image imageShelf = new Image("images/boards/bookshelf.png");
+        ImageView shelfImageView = new ImageView(imageShelf);
+        shelfImageView.setFitWidth(250);
+        shelfImageView.setFitHeight(250);
+        shelfImageView.setPreserveRatio(true);
         GridPane shelf2 = new GridPane();
+        GridPane shelf3 = new GridPane();
+        GridPane shelf4 = new GridPane();
+        shelf2.setAlignment(Pos.CENTER);
+        shelf3.setAlignment(Pos.CENTER);
+        shelf4.setAlignment(Pos.CENTER);
+        int j=0;
+        for(int i= 0; i < client.getBoardView().getListOfPlayer().size(); i++){
+            if(!client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())){
+                for (int row=0; row<6; row++){
+                    for(int col=0; col<5; col++){
+                        switch(j){
+                            case 0:
+                                shelf2.add(printOtherShelf(row, col,i), col, 5-row);
+                                break;
+                            case 1:
+                                shelf3.add(printOtherShelf(row, col,i), col, 5-row);
+                                break;
+                            case 2:
+                                shelf4.add(printOtherShelf(row, col,i), col, 5-row);
+                                break;
+                        }
 
-        for (int row=0; row<6; row++){
-            for(int col=0; col<5; col++){
-                shelf2.add(printOtherShelf(row, col,1), col, row);
+                    }
+                }
+                j++;
             }
         }
 
-        shelfPlayer2.add(shelfImageView2, 0, 0);
+
+
+
+        shelfPlayer2.add(shelfImageView, 0, 0);
 
         shelfPlayer2.add(shelf2, 0, 0);
-        otherShelf.getChildren().add(shelfPlayer2);
+        otherShelf.getChildren().addAll(shelfPlayer2, shelfPlayer3, shelfPlayer4);
 
-        if(client.getBoardView().getListOfPlayer().size()>2){
-            Image imageShelf3 = new Image("images/boards/bookshelf.png");
-            ImageView shelfImageView3 = new ImageView(imageShelf3);
-            shelfImageView3.setFitWidth(250);
-            shelfImageView3.setFitHeight(250);
-            shelfImageView3.setPreserveRatio(true);
-            GridPane shelfPlayer3 = new GridPane();
-            GridPane shelf3 = new GridPane();
-            shelfPlayer3.add(shelfImageView3, 0, 0);
+        if(client.getBoardView().getListOfPlayer().size()==3){
+            shelfPlayer3.add(shelfImageView, 0, 0);
             shelfPlayer3.add(shelf3, 0, 0);
-            otherShelf.getChildren().add(shelfPlayer3);
         }
         if(client.getBoardView().getListOfPlayer().size()==4){
-            Image imageShelf4 = new Image("images/boards/bookshelf.png");
-            ImageView shelfImageView4 = new ImageView(imageShelf4);
-            shelfImageView4.setFitWidth(250);
-            shelfImageView4.setFitHeight(250);
-            shelfImageView4.setPreserveRatio(true);
-            GridPane shelfPlayer4 = new GridPane();
-            GridPane shelf4 = new GridPane();
-            shelfPlayer4.add(shelfImageView4, 0, 0);
+            shelfPlayer4.add(shelfImageView, 0, 0);
             shelfPlayer4.add(shelf4, 0, 0);
-            otherShelf.getChildren().add(shelfPlayer4);
         }
 
     return otherShelf;
     }
-    public Button printOtherShelf(int row, int col, int playerNumber){
-        Button otherShelfButton = new Button();
+    public ImageView printOtherShelf(int row, int col, int playerNumber){
         String imageTilePath;
         Constant tile = new Constant();
+        ImageView imageView = new ImageView();
         int i = 0;
         String imageTileName = null;
         if(client.getBoardView().getListOfPlayer().get(playerNumber).getShelf().getTile(row,col) != null) {
@@ -652,7 +690,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
 
             }
-            switch (client.getBoardView().getCurrentPlayer().getShelf().getTile(col, row).getType()) {
+            switch (client.getBoardView().getListOfPlayer().get(playerNumber).getShelf().getTile(row, col).getType()) {
                 case ONE:
                     i = 1;
                     break;
@@ -665,23 +703,19 @@ public class GUIApp extends Application implements ViewInterface {
             }
             imageTilePath = tile.getConstantTile() + imageTileName + i + ".png";
 
-            otherShelfButton.setPrefSize(40, 40);
-
             Image imageTile = new Image(imageTilePath);
-            ImageView imageView = new ImageView(imageTile);
+            imageView.setImage(imageTile);
+
             imageView.setPreserveRatio(true);
-            otherShelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
-            imageView.setFitHeight(40);
-            imageView.setFitWidth(40);
-            otherShelfButton.setGraphic(imageView);
+            imageView.setFitHeight(30);
+            imageView.setFitWidth(30);
         }else{
-            otherShelfButton.setPrefSize(40, 40);
-            otherShelfButton.setPrefWidth(40);
-            otherShelfButton.setPrefHeight(40);
-            otherShelfButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
-            otherShelfButton.setGraphic(null);
+            imageView.setStyle("-fx-border-color: black;");
+            imageView.setImage(null);
+            imageView.setFitHeight(30);
+            imageView.setFitWidth(30);
         }
-        return otherShelfButton;
+        return imageView;
     }
     public String createTile(int index) {
         String imageTileName = null;
@@ -1017,5 +1051,9 @@ public class GUIApp extends Application implements ViewInterface {
 
         primaryStage.sizeToScene();
         primaryStage.show();
+    }
+
+    public void setRemove(Boolean firstRemove) {
+        this.firstRemove = firstRemove;
     }
 }

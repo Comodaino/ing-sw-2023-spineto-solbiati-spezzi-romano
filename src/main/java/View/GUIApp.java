@@ -127,7 +127,7 @@ public class GUIApp extends Application implements ViewInterface {
         reset.setStyle("");
         reset.setText("Save move");
         reset.setOnMouseClicked(e -> {
-            client.println(command);
+            if(command!=null) client.println(command);
             command= null;
         });
         return reset;
@@ -135,6 +135,7 @@ public class GUIApp extends Application implements ViewInterface {
     public GridPane fillBoard(AbstractClient client){
         GridPane fillBoardPane = new GridPane();
 
+        //TODO add control
      //   Pane emptyComponent = new Pane();
   //      emptyComponent.setPrefSize(65, 65);
         for (int i = 0; i < 9; i++) {
@@ -447,7 +448,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
 
             }
-            switch (client.getBoardView().getCurrentPlayer().getShelf().getTile(col, row).getType()) {
+            switch (client.getBoardView().getCurrentPlayer().getShelf().getTile(row, col).getType()) {
                 case ONE:
                     i = 1;
                     break;
@@ -527,7 +528,7 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     public Button bufferTile(int i) {
-
+//TODO add control
         BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
             if(client.getBoardView().getTileBuffer().get(i)==null)
                 return null;
@@ -647,7 +648,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
 
             }
-            switch (client.getBoardView().getListOfPlayer().get(playerNumber).getShelf().getTile(col, row).getType()) {
+            switch (client.getBoardView().getListOfPlayer().get(playerNumber).getShelf().getTile(row, col).getType()) {
                 case ONE:
                     i = 1;
                     break;
@@ -1007,5 +1008,9 @@ public class GUIApp extends Application implements ViewInterface {
 
         primaryStage.sizeToScene();
         primaryStage.show();
+    }
+
+    public void setRemove(Boolean firstRemove) {
+        this.firstRemove = firstRemove;
     }
 }

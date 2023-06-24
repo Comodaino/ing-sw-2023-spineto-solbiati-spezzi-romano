@@ -239,4 +239,9 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
     @Override
     public boolean isOwner() throws RemoteException { return this.owner; }
+
+    @Override
+    public void reset() {
+        this.firstWait = true;
+    }
 }

@@ -8,6 +8,7 @@ import Model.Whisper;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class TextualUI implements ViewInterface {
@@ -181,6 +182,18 @@ public class TextualUI implements ViewInterface {
                     break;
                 case END:
                     String winner = client.getBoardView().getWinner().getNickname();
+                    client.getBoardView().getListOfPlayer().sort(new Comparator<Player>() {
+                        @Override
+                        public int compare(Player o1, Player o2) {
+                            if (o1.getScore()== o2.getScore()){
+                                if(o1.getNickname().compareTo(o2.getNickname())>=0){
+                                    return 1;
+                                }
+                            }else return -1;
+                            if(o1.getScore()> o2.getScore()) return  1;
+                            return -1;
+                        }
+                    });
                     System.out.println("SCORES:");
                     for (Player p : client.getBoardView().getListOfPlayer()) {
                         System.out.println(p.getNickname() + "\t---->\t" + p.getScore());

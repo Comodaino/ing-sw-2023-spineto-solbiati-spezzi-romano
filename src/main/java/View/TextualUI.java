@@ -77,9 +77,12 @@ public class TextualUI implements ViewInterface {
     }
 
     private boolean correctLobbyInput(String in) {
-        if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.startsWith("/whisper") || in.startsWith("/chat"))
-            return true;
-        else return false;
+        if(in.startsWith("/")){
+            if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.startsWith("/whisper")) return true;
+            return false;
+        }
+        return true;
+
     }
 
     private void printGoal(String in) {

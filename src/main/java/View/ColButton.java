@@ -45,11 +45,13 @@ public ColButton(GUIApp parent, int index){
     button.setVisible(true);
     BooleanProperty isSelected = new SimpleBooleanProperty(false);
 
+    //TODO add botton
     this.button.setOnMouseClicked (e -> {
         if(isSelected.get()){
             isSelected.set(false);
         //    button.setStyle("-fx-background-color: Red;");
             this.parent.setCommand("/add " + index);
+            this.parent.setRemove(true);
         }
         else{
             isSelected.set(true);

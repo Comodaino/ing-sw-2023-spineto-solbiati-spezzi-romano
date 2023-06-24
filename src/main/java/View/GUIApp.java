@@ -212,6 +212,7 @@ public class GUIApp extends Application implements ViewInterface {
             tileButton.setOnMouseClicked(e -> {
                 try {
                     if(!client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) return;
+                    if(!client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) return;
 
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);

@@ -48,7 +48,7 @@ public class TextualUI implements ViewInterface {
         while(state!=State.CLOSE) {
             String in = input.nextLine();
             if(state!=State.HOME){
-                if(in.equals("/cg") || in.equals("/pg")) printGoal(in);
+                if(state==State.LOBBY && (in.equals("/cg") || in.equals("/pg"))) printGoal(in);
                 if(in.equals("/h") || in.equals("/help")) help();
                 if (in.startsWith("/whisper")){
                     String[] msg = in.split(" ");
@@ -141,25 +141,14 @@ public class TextualUI implements ViewInterface {
         //System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
-                    System.out.println(ConsoleColors.RED_BOLD + "\n"
-                            + "\n" + "       █  █                                                        "
-                            + "\n" + "       █  ██     █████   █                 █                       "
-                            + "\n" + "      ██ ███     █░░░█   █                ██  ████                 "
-                            + "\n" + "     ███ ███    ██ █░█  ██                █  ██░░░ █                "
-                            + "\n" + "     ███████    █░ ███  █░                █  █░    █                "
-                            + "\n" + "     ███████    ██     ██░               ██  █    █░                "
-                            + "\n" + "     ██░█░███ ██░███   ██████    █████  ██ █████  ░    ██████       "
-                            + "\n" + "     ██░░██████░ ░░██ ███░░██  ███░░░█  █  ██░░░  █   ██░░░░█       "
-                            + "\n" + "    ███░ ██░░█ ██  ░█ █░░ ██░ ███████░ ██  █░    █░  ███████░       "
-                            + "\n" + "   ███░  ██░█░██   ██ █   █░ ██░░░░░░  █  ██    ██  ██░░░░░░        "
-                            + "\n" + "    ░░  ██░██░██████ ██  ██░ ░██████  ██ ██░   ██░  ░██████         "
-                            + "\n" + "        ██░█ █░░░░░░ ░░  ░░   ░░░░░░  ░░ ░░    ░░    ░░░░░░         "
-                            + "\n" + "█ █████ █░   ██░ █████████████████████████████████████████████ ██ █"
-                            + "\n" + "░ ░░░░░ ██   ██░ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ░░ ░"
-                            + "\n" + "        ░█████░                                                    "
-                            + "\n" + "         ░░░░                                                      ");
-
-
+                    System.out.println(ConsoleColors.RED_BOLD + "\n" +
+                                    " _    _ _____ _     _____ ________  ________   _____ _____   ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
+                                    "| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  |  |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
+                                    "| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | |  | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
+                                    "| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | |  | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
+                                    "\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ /  | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
+                                    " \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/   \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n" + RESET);
+                    System.out.print(ConsoleColors.WHITE);
 
                     homePrint(arg);
                     break;
@@ -657,7 +646,7 @@ public class TextualUI implements ViewInterface {
 
 
     private boolean correctInput(String in) {
-
+        if (!in.startsWith("/")) return true;
         String[] tmpInput = in.split(" ");
         if (in.startsWith("/remove")) {
             if (!removed) {

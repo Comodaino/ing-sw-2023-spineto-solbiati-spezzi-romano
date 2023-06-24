@@ -126,9 +126,7 @@ public class ServerApp {
             case INIT:
                 break;
             case WAIT:
-                if (client.isOwner()) {
-                    waitCommand(client, arg);
-                }
+                waitCommand(client, arg);
                 lobby.updateAll();
                 break;
             case PLAY:
@@ -182,20 +180,28 @@ public class ServerApp {
 
         switch (command) {
             case "/start":
-                if(lobby.getListOfPlayers().size()>1){
-                    lobby.startGame();
+                if (client.isOwner()) {
+                    if(lobby.getListOfPlayers().size()>1){
+                        lobby.startGame();
+                    }
                 }
                 break;
             case "/firstMatch":
-                lobby.setFirstMatch(true);
-                System.out.println("First match: " + lobby.isFirstMatch());
+                if (client.isOwner()) {
+                    lobby.setFirstMatch(true);
+                    System.out.println("First match: " + lobby.isFirstMatch());
+                }
                 break;
             case "/notFirstMatch":
-                lobby.setFirstMatch(false);
-                System.out.println("First match: " + lobby.isFirstMatch());
+                if (client.isOwner()) {
+                    lobby.setFirstMatch(false);
+                    System.out.println("First match: " + lobby.isFirstMatch());
+                }
                 break;
             case "/closeLobby":
-                lobby.close();
+                if (client.isOwner()) {
+                    lobby.close();
+                }
                 break;
             default:
                 playCommand(client, command);

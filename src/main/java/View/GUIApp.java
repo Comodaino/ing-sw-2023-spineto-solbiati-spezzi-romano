@@ -346,21 +346,28 @@ public class GUIApp extends Application implements ViewInterface {
         shelfImageView.setFitHeight(300);
         shelfPane.add(shelfImageView, 0, 0);
         shelfPane.add(shelfGridPane, 0, 0);
-        shelfPane.add(chat(), 1,1 );
+        shelfPane.add(chat(), 1,2 );
 
         shelfPane.add(showOtherShelf(client), 1, 0);
         shelfImageView.setPreserveRatio(true);
+        int nPlayer = 0;
+        for (Player player: client.getBoardView().getListOfPlayer()) {
+            if (player.getNickname().equals(client.getNickname())) {
+                nPlayer ++;
+                break;
+            }
+        }
+
 
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 5; col++) {
 
-                for (Player player: client.getBoardView().getListOfPlayer()) {
-                if(!player.getNickname().equals(client.getNickname()))
-                    break;
-                shelfGridPane.add(printShelf(row,col), col, row);
+
+
+                shelfGridPane.add(printShelf(nPlayer, row,col), col, row);
                 }
             }
-        }
+
         for (int i = 0; i < 5; i++) {
             ColButton colButton = new ColButton(this, i);
             shelfGridPane.add(colButton.getButton(), i, 6);
@@ -420,13 +427,13 @@ public class GUIApp extends Application implements ViewInterface {
         return shelfPane;
     }
 
-    public ImageView printShelf(int row, int col){
+    public ImageView printShelf(int nPlayer, int row, int col){
         String imageTilePath;
         Constant tile = new Constant();
         ImageView imageView = new ImageView();
         int i = 0;
         String imageTileName = null;
-        if(client.getBoardView().getCurrentPlayer().getShelf().getTile(row,col) != null) {
+        if(client.getBoardView().getListOfPlayer().get(nPlayer).getShelf().getTile(row,col) != null) {
             switch (client.getBoardView().getCurrentPlayer().getShelf().getTile(row, col).getColor()) {
                 case BLUE:
                     imageTileName = "Cornici1.";
@@ -448,7 +455,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
 
             }
-            switch (client.getBoardView().getCurrentPlayer().getShelf().getTile(row, col).getType()) {
+            switch (client.getBoardView().getListOfPlayer().get(nPlayer).getShelf().getTile(row, col).getType()) {
                 case ONE:
                     i = 1;
                     break;

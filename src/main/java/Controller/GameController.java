@@ -128,9 +128,7 @@ public class GameController implements Serializable {
      */
     private void playEndGame() {
 
-
-
-        System.out.println("ENDING THE GAME");
+        System.out.println("ENDING THE GAME FOR " + currentPlayer.getNickname());
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));

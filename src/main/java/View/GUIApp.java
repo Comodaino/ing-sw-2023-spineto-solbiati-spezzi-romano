@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -341,9 +342,10 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
             }
             if (j == 0) {
-
-                Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
                 System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
+                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
+                Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
+
                 ImageView imageView1 = new ImageView(imageGoal1);
                 imageView1.setPreserveRatio(true);
                 imageView1.setFitHeight(150);
@@ -894,9 +896,9 @@ public class GUIApp extends Application implements ViewInterface {
                             throw new RuntimeException(e);
                         }
                         break;
-                    // case END:
-                    //   end();
-                    // break;
+                    case END:
+                         end(primaryStage, arg);
+                         break;
                 }
             }
         });
@@ -971,25 +973,7 @@ public class GUIApp extends Application implements ViewInterface {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-    /*    Label chat = new Label("Chat");
-        chat.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
-        TextField chatField = new TextField();
-        for(int i=0; i<6 ;i++) {
-            if((client.getBoardView().getChatBuffer().get(i))==null){
-                break;
-            }
-                chat.setText(client.getBoardView().getChatBuffer().get(i));
-        }
-        chatField.setPromptText("Enter your message");
 
-        chatField.setOnAction(e -> {
-            client.println(chatField.getText());
-            chatField.clear();
-        });
-        root.getChildren().addAll(chat, chatField);
-
-     */
-        //      primaryStage.setFullScreen(true);
         primaryStage.setScene(scene1);
         primaryStage.show();
 
@@ -1055,5 +1039,66 @@ public class GUIApp extends Application implements ViewInterface {
 
     public void setRemove(Boolean firstRemove) {
         this.firstRemove = firstRemove;
+    }
+    public void end(Stage primaryStage, String arg){
+        GridPane root = new GridPane();
+        Scene sceneEnd = new Scene(root);
+        Image imageEnd = new Image("images/Publisher material/Display_5.jpg");
+        ImageView imageViewEnd = new ImageView(imageEnd);
+        imageViewEnd.setPreserveRatio(true);
+        BoxBlur blur = new BoxBlur(3, 4, 3);
+        imageViewEnd.setEffect(blur);
+        imageViewEnd.fitWidthProperty().bind(primaryStage.widthProperty());
+        imageViewEnd.fitHeightProperty().bind(primaryStage.heightProperty());
+        root.setAlignment(Pos.CENTER);
+        root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_5.jpg'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
+        Image imageLogo = new Image("images/Publisher material/Title 2000x618px.png");
+        ImageView imageViewLogo = new ImageView(imageLogo);
+        imageViewLogo.setPreserveRatio(true);
+        imageViewLogo.setFitWidth(500);
+        imageViewLogo.setFitHeight(154);
+        root.add(imageViewLogo, 0, 0);
+        Label labelWinner = new Label();
+        if(client.getBoardView().getWinner() == null || client.getBoardView().getWinner().getNickname() == null){
+            labelWinner.setText("There's no winner");
+            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+        }else {
+            labelWinner.setText(client.getBoardView().getWinner().getNickname());
+            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+            labelWinner.setAlignment(Pos.CENTER);
+            root.add(labelWinner, 0, 1);
+        }
+
+
+        client.getBoardView().getListOfPlayer().sort(new Comparator<Player>() {
+            @Override
+            public int compare(Player o1, Player o2) {
+                if (o1.getScore()== o2.getScore()){
+                    if(o1.getNickname().compareTo(o2.getNickname())>=0){
+                        return 1;
+                    }
+                }else return -1;
+                if(o1.getScore()> o2.getScore()) return  1;
+                return -1;
+            }
+        });
+
+
+        for(Player p: client.getBoardView().getListOfPlayer()){
+            Label label = new Label();
+            label.setText(p.getNickname() + "  " + p.getScore());
+            label.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+            label.setAlignment(Pos.CENTER);
+            root.add(label, 0, 2);
+        }
+
+        Button button = new Button("Lobby");
+        button.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+        button.setOnMouseClicked(e -> {
+            client.println("lobbbb");
+        });
+
+        primaryStage.setScene(sceneEnd);
+        primaryStage.show();
     }
 }

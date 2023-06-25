@@ -342,7 +342,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
             }
             if (j == 0) {
-                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
+                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg" + cg.getName());
                 System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
                 Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
 
@@ -1061,10 +1061,12 @@ public class GUIApp extends Application implements ViewInterface {
         Label labelWinner = new Label();
         if(client.getBoardView().getWinner() == null || client.getBoardView().getWinner().getNickname() == null){
             labelWinner.setText("There's no winner");
-            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
+            labelWinner.setAlignment(Pos.CENTER);
+            root.add(labelWinner, 0, 1);
         }else {
             labelWinner.setText(client.getBoardView().getWinner().getNickname());
-            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             labelWinner.setAlignment(Pos.CENTER);
             root.add(labelWinner, 0, 1);
         }
@@ -1083,20 +1085,23 @@ public class GUIApp extends Application implements ViewInterface {
             }
         });
 
+        VBox vBox = new VBox();
 
         for(Player p: client.getBoardView().getListOfPlayer()){
             Label label = new Label();
             label.setText(p.getNickname() + "  " + p.getScore());
-            label.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+            label.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             label.setAlignment(Pos.CENTER);
-            root.add(label, 0, 2);
-        }
+            vBox.getChildren().add(label);
 
+        }
+        root.add(vBox, 0, 2);
         Button button = new Button("Lobby");
         button.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
         button.setOnMouseClicked(e -> {
             client.println("lobbbb");
         });
+        root.add(button, 0, 3);
 
         primaryStage.setScene(sceneEnd);
         primaryStage.show();

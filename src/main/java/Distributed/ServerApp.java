@@ -235,6 +235,7 @@ public class ServerApp {
                 rp.setState(States.WAIT);
             }
         }
+        client.reset();
     }
 
     /**

@@ -30,6 +30,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 public class GUIApp extends Application implements ViewInterface {
     private boolean firstLaunch;
     private static AbstractClient client;
@@ -46,17 +47,17 @@ public class GUIApp extends Application implements ViewInterface {
         this.client = PassParameters.getClient();
         this.state = PassParameters.getState();
         firstRemove = true;
+
     }
 
     public void start(Stage primaryStage) throws RemoteException {
-
 
         this.primaryStage = primaryStage;
         try {
             update(null);
         } catch (IOException e) {
         }
-
+        primaryStage.getIcons().add(new Image("images/Publisher material/Icon 50x50px.png"));
         primaryStage.show();
 
     }
@@ -585,6 +586,8 @@ public class GUIApp extends Application implements ViewInterface {
             }
 
        //     int finalI = i;
+
+
             button.setOnAction(e -> {
                 if(isSelected2.get()) {
                     isSelected2.set(false);

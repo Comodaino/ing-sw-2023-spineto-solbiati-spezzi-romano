@@ -48,7 +48,7 @@ public class TextualUI implements ViewInterface {
 
         while(state!=State.CLOSE) {
             String in = input.nextLine();
-            if(in==null || in.length()==0) {
+            if(in!=null && in.length()>0) {
                 if (state != State.HOME) {
                     if (state == State.LOBBY && (in.equals("/cg") || in.equals("/pg"))) printGoal(in);
                     if (in.equals("/h") || in.equals("/help")) help();

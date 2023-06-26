@@ -662,7 +662,7 @@ public class TextualUI implements ViewInterface {
     }
 
 
-    private boolean correctInput(String in) {
+    private boolean correctInput(String in) throws RemoteException {
         if (!in.startsWith("/")) return true;
         String[] tmpInput = in.split(" ");
         if (in.startsWith("/remove")) {

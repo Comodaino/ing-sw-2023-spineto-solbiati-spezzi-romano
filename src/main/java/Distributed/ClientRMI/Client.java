@@ -1,5 +1,4 @@
 package Distributed.ClientRMI;
-import Distributed.RemoteClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
@@ -13,6 +12,9 @@ import java.rmi.*;
  */
 public interface Client extends Remote {
     public void update(BoardView boardView, String arg) throws RemoteException;
+    public boolean beat() throws RemoteException;
+
+    //SETTER AND GETTER METHODS
     public void setNickname(String nickname) throws RemoteException;
     public String getNickname() throws RemoteException;
     public void setLobbyID(Integer lobbyID) throws RemoteException;
@@ -21,5 +23,4 @@ public interface Client extends Remote {
     public States getState() throws RemoteException;
     public void setOwner(boolean owner) throws RemoteException;
     public boolean isOwner() throws RemoteException;
-    public boolean beat() throws RemoteException;
 }

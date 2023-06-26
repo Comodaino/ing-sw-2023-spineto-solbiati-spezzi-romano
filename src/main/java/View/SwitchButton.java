@@ -11,11 +11,13 @@ public class SwitchButton {
     int index;
     GUIApp parent;
     String command;
+    String com;
     public SwitchButton(GUIApp parent, int index, String command ){
         this.index = index;
         this.parent = parent;
         this.firstSwitch = firstSwitch;
         this.command = command;
+        this.com = com;
         switchButton = new Button();
         BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
         switchButton.setPrefSize(40,40);
@@ -25,15 +27,16 @@ public class SwitchButton {
             if(isSelected2.get()) {
                 if(this.parent.getFirstSwitch()){
                     this.parent.setFirstSwitch(false);
-                    this.command = "/switch";
-                    System.out.println(this.command);
-                }
+
+                    com = "/switch";
+
+                }else com = parent.getCommand();
                 isSelected2.set(false);
                 switchButton.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");
                 switchButton.setDisable(true);
                 switchButton.setOpacity(0.8);
-                this.command =  " "+ index;
-                System.out.println(this.command);
+                this.command =  com + " " + index;
+                this.parent.setCommand(this.command);
 
             }else{
                 isSelected2.set(true);
@@ -54,4 +57,5 @@ public class SwitchButton {
     public void setGraphic(ImageView imageView) {
         switchButton.setGraphic(imageView);
     }
+
 }

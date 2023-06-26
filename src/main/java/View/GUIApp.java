@@ -40,7 +40,7 @@ public class GUIApp extends Application implements ViewInterface {
     private Boolean firstRemove;
 
     private String command;
-    private boolean firstSwitch;
+    private boolean firstSwitch=true;
 
 
     public GUIApp() {
@@ -465,6 +465,7 @@ public class GUIApp extends Application implements ViewInterface {
 
                switchButton.setGraphic(imageView);
                bufferPane.add(switchButton.getButton(), i, 5);
+
            }
             shelfPane.add(bufferPane, 0, 5);
         }
@@ -1141,5 +1142,8 @@ public class GUIApp extends Application implements ViewInterface {
 
         primaryStage.setScene(sceneEnd);
         primaryStage.show();
+    }
+    public String getCommand(){
+        return command;
     }
 }

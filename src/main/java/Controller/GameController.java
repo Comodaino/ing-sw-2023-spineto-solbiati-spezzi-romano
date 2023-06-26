@@ -230,7 +230,7 @@ public class GameController implements Serializable {
         input = tmp;
 
         System.out.println("add");
-        if (columnAvailable(gameBoard.getTileBuffer().size(), input[1].charAt(0) - 48)) {
+        if (columnAvailable(input[2].charAt(0) - 48, input[1])) {
             for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
                 if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                     while (gameBoard.getTileBuffer().size() > 0) {
@@ -282,10 +282,15 @@ public class GameController implements Serializable {
         return false;
     }
 
-    private boolean columnAvailable(int c, int size) {
+    private boolean columnAvailable(int c,String name) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
-            if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
-                return gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
+            if (gameBoard.getListOfPlayer().get(i).equals(name)) {
+                for(int j=0; j<gameBoard.getTileBuffer().size();j++){
+                    if(!gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - j, c)){
+                        return false;
+                    }
+                }
+                return true;
             }
         }
         return false;

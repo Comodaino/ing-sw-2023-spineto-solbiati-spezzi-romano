@@ -135,7 +135,6 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     public Button resetCommand() {
-
         Button reset = new Button("Reset");
         reset.setPrefSize(100, 60);
         reset.setStyle("");

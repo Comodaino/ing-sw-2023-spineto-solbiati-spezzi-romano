@@ -652,9 +652,9 @@ public class TextualUI implements ViewInterface {
         return false;
     }
 
-    private boolean columnAvailable(int c, int size) {
+    private boolean columnAvailable(int c, int size) throws RemoteException {
         for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
-            if (client.getBoardView().getListOfPlayer().get(i).equals(client.getBoardView().getCurrentPlayer())) {
+            if (client.getBoardView().getListOfPlayer().get(i).equals(client.getNickname()) {
                 return client.getBoardView().getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
             }
         }

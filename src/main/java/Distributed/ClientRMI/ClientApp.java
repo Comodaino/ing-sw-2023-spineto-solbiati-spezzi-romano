@@ -27,7 +27,6 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     private ViewInterface view;
     private Server server;
     private boolean owner;
-    private boolean firstWait;
 
     public ClientApp(String typeOfView, String arg) throws RemoteException {
         nickname = null;
@@ -36,7 +35,6 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         boardView = null;
         owner = false;
         state = States.INIT;
-        firstWait = true;
         if(ip == null) ip = "localhost";
         else ip = arg;
 
@@ -116,11 +114,6 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
      */
     @Override
     public void update(BoardView boardView, String arg) throws RemoteException {
-        firstWait = false;
-        if(state == States.WAIT && firstWait){
-            firstWait = false;
-            return;
-        }
 
         this.boardView = boardView;
         if(arg==null || arg.length() == 0){
@@ -221,9 +214,4 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
     @Override
     public boolean isOwner() throws RemoteException { return this.owner; }
-
-    @Override
-    public void reset() {
-        this.firstWait = true;
-    }
 }

@@ -19,7 +19,6 @@ public class Lobby {
     private BoardView boardView;
     private GameController controller;
     private ServerApp serverApp;
-    private Server server; //TODO delete after unification of ServerImpl and ServerApp
     private boolean playing;
 
     public Lobby(ServerApp serverApp) {

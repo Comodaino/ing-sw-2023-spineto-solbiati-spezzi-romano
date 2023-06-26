@@ -55,7 +55,7 @@ public class Lobby {
             lp.add(p);
             p.setState(States.WAIT);
             p.setController(controller);
-            p.update(boardView);
+            //p.update(boardView);
             controller.addPlayer(new Player(p.getNickname()));
             if (lp.size() == 4) this.open = false;
         }
@@ -95,8 +95,14 @@ public class Lobby {
     }
 
     public void updateAll() throws IOException, InterruptedException {
+        boolean found = false;
         for (RemotePlayer p : lp) {
-            if(p.isConnected()) p.update(boardView);
+            if(p.getConnectionType()==ConnectionType.SOCKET){
+                if(p.isConnected()) p.update(boardView);
+            }else if(!found){
+                if(p.isConnected()) p.update(boardView);
+                found = true;
+            }
         }
     }
 

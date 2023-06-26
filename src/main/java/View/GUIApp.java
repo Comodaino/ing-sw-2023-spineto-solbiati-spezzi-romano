@@ -143,7 +143,8 @@ public class GUIApp extends Application implements ViewInterface {
         reset.setOnMouseClicked(e -> {
             if(command!=null) client.println(command);
             command= null;
-
+            firstRemove = true;
+            firstSwitch = true;
         });
         return reset;
     }
@@ -154,6 +155,8 @@ public class GUIApp extends Application implements ViewInterface {
         reset.setText("Cancel move");
         reset.setOnMouseClicked(e -> {
             command= null;
+            firstRemove = true;
+            firstSwitch = true;
         });
         return reset;
     }
@@ -248,7 +251,6 @@ public class GUIApp extends Application implements ViewInterface {
             tileButton.setOnMouseClicked(e -> {
                 try {
                     if(!client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) return;
-                    if(!client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) return;
 
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
@@ -262,7 +264,7 @@ public class GUIApp extends Application implements ViewInterface {
                 if(command!=null && command.startsWith("/remove")) {
                     if (isSelected.get() && count.get() < 3) {
                         isSelected.set(false);
-                        tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 2;");
+                        tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 0;-fx-border-height: 0;");
                         tileButton.setEffect(blur);
                         tileButton.setDisable(true);
                         tileButton.setOpacity(0.8);
@@ -271,7 +273,7 @@ public class GUIApp extends Application implements ViewInterface {
                         System.out.println(command);
                     } else {
                         isSelected.set(true);
-                        tileButton.setStyle("-fx-border-width: 0; -fx-border-height: 0");
+                        tileButton.setStyle("-fx-border-width: 0; -fx-border-height: 0;");
                         tileButton.setEffect(null);
                         tileButton.setDisable(false);
                         tileButton.setOpacity(1);
@@ -651,6 +653,20 @@ public class GUIApp extends Application implements ViewInterface {
        shelf2.setAlignment(Pos.CENTER);
        shelf3.setAlignment(Pos.CENTER);
        shelf4.setAlignment(Pos.CENTER);
+
+
+       for (int i = 0; i < 5; i++) {
+           Button emptyButton = new Button();
+           emptyButton.setPrefSize(30, 1);
+           emptyButton.setPrefWidth(30);
+           emptyButton.setPrefHeight(1);
+           emptyButton.setDisable(true);
+           emptyButton.setStyle(" -fx-border-width: 0;-fx-border-height: 0;");
+           shelf2.add(emptyButton, i, 6);
+       }
+
+       shelf2.setTranslateY(10);
+
        int j = 0;
        for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
            if (!client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())) {
@@ -746,13 +762,13 @@ public class GUIApp extends Application implements ViewInterface {
             imageView.setImage(imageTile);
 
             imageView.setPreserveRatio(true);
-            imageView.setFitHeight(30);
-            imageView.setFitWidth(30);
+            imageView.setFitHeight(25);
+            imageView.setFitWidth(25);
         }else{
 
             imageView.setImage(null);
-            imageView.setFitHeight(30);
-            imageView.setFitWidth(30);
+            imageView.setFitHeight(25);
+            imageView.setFitWidth(25);
         }
         return imageView;
     }

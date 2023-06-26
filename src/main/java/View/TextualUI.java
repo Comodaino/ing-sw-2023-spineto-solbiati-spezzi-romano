@@ -1,9 +1,13 @@
 package View;
 
 import Distributed.AbstractClient;
-import Model.*;
+import Model.Player;
+import Model.Tile;
+import Model.Whisper;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -44,24 +48,33 @@ public class TextualUI implements ViewInterface {
         while(state!=State.CLOSE) {
             String in = input.nextLine();
             if(in!=null && in.length()>0) {
-                if (state != State.HOME) {
-                    if (state == State.LOBBY && (in.equals("/cg") || in.equals("/pg"))) printGoal(in);
-                    if (in.equals("/h") || in.equals("/help")) help();
+                if (state != State.HOME && (state == State.LOBBY || state == State.PLAY)) {
+                    if (in.equals("/cg") || in.equals("/pg")) {
+                        printGoal(in);
+                        break;
+                    }
+                    if (in.equals("/h") || in.equals("/help")) {
+                        help();
+                        break;
+                    }
                     if (in.startsWith("/whisper")) {
                         String[] msg = in.split(" ");
-                        if (msg.length < 3) System.out.println("whisper failed, addressee or message is missing");
+                        if (msg.length < 3)
+                            System.out.println("whisper failed, addressee or message is missing");
                         else {
-                            for (int i = 2; i < msg.length; i++) msg[2] += msg[i];
-                            if (msg[2].length() > maxMsgLength)
+                            for (int i = 2; i < msg.length; i++)
+                                msg[2] += msg[i];
+                            if (msg[2].length() > maxMsgLength) {
                                 System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
+                                break;
+                            }
+
                         }
                     }
                     if ((state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
                         System.out.println("Command is invalid, try /help or /h");
                     else if (state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
                     else client.println(in);
-
-
                 } else {
                     if (in != null && in.length() > 10) {
                         System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
@@ -81,7 +94,7 @@ public class TextualUI implements ViewInterface {
 
     }
 
-    private void printGoal(String in) {
+    private void printGoal(String in) throws RemoteException {
         switch (in){
             case ("/cg"):
                 client.getBoardView().getSetOfCommonGoal().forEach((goal) ->{
@@ -89,27 +102,9 @@ public class TextualUI implements ViewInterface {
                     switch (goal.getName()){
                         case ("GoalAngles"):
                             System.out.println("Four tiles of the same color in the four corners of the bookshelf");
-                            Shelf g = crateGoalShelf(goal.getName());
-                            printGoalShelf(g);
                             break;
                         case ("GoalColumns"):
                             System.out.println("Three columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column");
-                            for(int i=0; i<6; i++){
-                                System.out.print("|");
-                                for(int j=0; j<5; j++){
-                                    if(j==1 || j==3 || j==4) {
-                                        if (i == 2)
-                                            System.out.print(ConsoleColors.YELLOW_BACKGROUND_BRIGHT + " " + RESET + "|");
-                                        else if (i == 3)
-                                                System.out.print(ConsoleColors.GREEN_BACKGROUND + " " + RESET + "|");
-                                                else if (i == 5)
-                                                        System.out.print(ConsoleColors.BLUE_BACKGROUND + " " + RESET + "|");
-                                                else System.out.print(ConsoleColors.RED_BACKGROUND_BRIGHT + " " + RESET + "|");
-
-                                    }else System.out.print(" |");
-                                }
-                                System.out.print("\n");
-                            }
                             break;
                         case ("GoalCouples"):
                             System.out.println("six groups each containing at least 2 tiles of the same type the tiles of one group can be different from those of another group");
@@ -120,7 +115,7 @@ public class TextualUI implements ViewInterface {
                         case ("GoalDiagonals"):
                             System.out.println("five tiles of the same type forming a diagonal");
                             break;
-                        case ("GoalFullShelf"):
+                        case ("GoalDiffColumns_conf"):
                             System.out.println("two columns each formed by 6 different types of tiles");
                             break;
                         case ("GoalDiffRows"):
@@ -136,17 +131,25 @@ public class TextualUI implements ViewInterface {
                             System.out.println("four lines each formed by 5 tiles of maximum three different types");
                             break;
                         case ("GoalSquares"):
-                            System.out.println("two groups each containing 4 tiles of the same type in a 2x2 square");
+                            System.out.println("two groups each containing 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square.");
                             break;
                         case("GoalStairs"):
                             System.out.println("five columns of increasing or decreasing height: starting from the first column on the left or on the right, each next column must be made of exactly one more tile.");
                             break;
                     }
+                    printGoalShelf(goal.getName());
                 });
                 break;
             case ("/pg"):
+               /* ArrayList<Pgtype> pgoal = new ArrayList<Pgtype>();
+                Shelf pgShelf = new Shelf();
+                for(Player p : client.getBoardView().getListOfPlayer())
+                    if(p.getNickname().equals(client.getNickname()))
+                        pgoal = p.getGoal().getPGoal();
+                for(Pgtype pg : pgoal){
 
-
+                }*/
+                break;
         }
     }
 
@@ -323,7 +326,7 @@ public class TextualUI implements ViewInterface {
         for (Player p: client.getBoardView().getListOfPlayer()
              ) {
             if (client.getNickname().equals(p.getNickname()))
-                System.out.println(p.getGoal().toString() + "\n Adjacent tiles"); //todo find a way to show goals
+                System.out.println(p.getGoal().toString() + "\n Adjacent tiles");
 
         }
     }
@@ -716,31 +719,14 @@ public class TextualUI implements ViewInterface {
         if(in.startsWith("/cg") || in.startsWith("/pg")) return true;
         return false;
     }
-
-    void printGoalShelf(Shelf gShelf){
-        for (int i=0; i<6; i++){
-            System.out.println("----------");
-            System.out.print("|");
-            for(int j=0; j<5; j++){
-                if (gShelf.isEmpty(i, j)) System.out.print(" |");
-                else {
-                    if(gShelf.getTile(i,j).getColor().equals(Color.LIGHTBLUE))
-                        System.out.print(ConsoleColors.BLUE_BACKGROUND_BRIGHT + " " + RESET + "|");
-                    if(gShelf.getTile(i, j).getColor().equals(Color.GREEN))
-                        System.out.print(ConsoleColors.GREEN_BACKGROUND + " " + RESET + "|");
-                    if(gShelf.getTile(i, j).getColor().equals(Color.PINK))
-                        System.out.println(ConsoleColors.PURPLE_BACKGROUND_BRIGHT + " " + RESET + "|");
-                }
-
-            }
-        }
+   void printGoalShelf(String goal){
+        String conf = goal + "_conf"; //personalGoal_conf
+       InputStream is = getClass().getClassLoader().getResourceAsStream(conf);
+       File file = new File("src/main/resources/CommonGoalsTUI/conf");
+       assert is != null;
+       Scanner reader = new Scanner(is);
+         while(reader.hasNextLine()){
+              System.out.println(reader.nextLine());
+         }
     }
-   /* Shelf crateGoalShelf(String g){
-        Shelf gShelf = new Shelf();
-        switch (g){
-            case("")
-        }
-        return gShelf;
-
-    }*/
 }

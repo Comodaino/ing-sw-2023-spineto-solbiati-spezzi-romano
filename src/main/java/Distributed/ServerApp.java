@@ -44,10 +44,10 @@ public class ServerApp {
 
         serverRMI.start();
 
-        Thread rmiHB = new Thread(){
+        Thread rmiHB = new Thread() {
             @Override
             public void run() {
-                while(true){
+                while (true) {
                     heartBeatService();
 
                     try {
@@ -111,33 +111,35 @@ public class ServerApp {
         Lobby lobby = null;
         System.out.println("state: " + client.getState());
 
-        if(client.getState()==States.INIT){
-                initCommand(client, arg);
+        if (client.getState() == States.INIT) {
+            initCommand(client, arg);
         }
+        if (client.getState() != States.INIT) {
+            synchronized (lobbies) {
 
-        synchronized (lobbies) {
-            System.out.println(client.getLobbyID());
-            lobby = lobbies.get(client.getLobbyID() - 1);
+                System.out.println(client.getLobbyID());
+                lobby = lobbies.get(client.getLobbyID() - 1);
+            }
         }
 
 
         try {
-        switch (client.getState()) {
-            case INIT:
-                break;
-            case WAIT:
-                waitCommand(client, arg);
-                lobby.updateAll();
-                break;
-            case PLAY:
-                playCommand(client, arg);
-                lobby.updateAll();
-                break;
-            case END:
-                endCommand(client);
-                lobby.updateAll();
-                break;
-        }
+            switch (client.getState()) {
+                case INIT:
+                    break;
+                case WAIT:
+                    waitCommand(client, arg);
+                    lobby.updateAll();
+                    break;
+                case PLAY:
+                    playCommand(client, arg);
+                    lobby.updateAll();
+                    break;
+                case END:
+                    endCommand(client);
+                    lobby.updateAll();
+                    break;
+            }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -151,18 +153,18 @@ public class ServerApp {
 
         String check = checkNickname(nickname);
         System.out.println("returned: " + check);
-        if (check.equals("true") ) {
+        if (check.equals("true")) {
             RMIPlayer rp = new RMIPlayer(client);
             rp.setNickname(nickname);
             client.setNickname(nickname);
             addPlayer(client, rp);
 
-        } else if(check.equals("reconnected")) {
+        } else if (check.equals("reconnected")) {
             client.setNickname(nickname);
             synchronized (lobbies) {
-                for(Lobby l: lobbies) {
-                    for(RemotePlayer rp: l.getListOfPlayers()) {
-                        if(rp.getNickname().equals(nickname)) {
+                for (Lobby l : lobbies) {
+                    for (RemotePlayer rp : l.getListOfPlayers()) {
+                        if (rp.getNickname().equals(nickname)) {
                             rp.reconnect(client, l.getID());
                             break;
                         }
@@ -181,7 +183,7 @@ public class ServerApp {
         switch (command) {
             case "/start":
                 if (client.isOwner()) {
-                    if(lobby.getListOfPlayers().size()>1){
+                    if (lobby.getListOfPlayers().size() > 1) {
                         lobby.startGame();
                     }
                 }
@@ -240,20 +242,21 @@ public class ServerApp {
 
     /**
      * Checks for disconnections for all the RMI Players
+     *
      * @author Nicolò
      */
     public static void heartBeatService() {
         synchronized (lobbies) {
-            for(Lobby l: lobbies){
-                for(RemotePlayer rp: l.getListOfPlayers()){
-                    if(rp.getConnectionType()==ConnectionType.RMI && rp.isConnected()){
+            for (Lobby l : lobbies) {
+                for (RemotePlayer rp : l.getListOfPlayers()) {
+                    if (rp.getConnectionType() == ConnectionType.RMI && rp.isConnected()) {
                         boolean allOk;
                         try {
                             allOk = rp.getClient().beat();
                         } catch (RemoteException e) {
                             allOk = false;
                         }
-                        if(!allOk) {
+                        if (!allOk) {
                             rp.setConnected(false);
                         }
                     }
@@ -279,7 +282,7 @@ public class ServerApp {
             for (Lobby l : lobbies) {
                 for (RemotePlayer rp : l.getListOfPlayers()) {
                     if (rp.getNickname().equals(nickname)) {
-                        if(!rp.isConnected()){
+                        if (!rp.isConnected()) {
                             rp.setConnected(true);
                             return "reconnected";
                         }
@@ -313,7 +316,7 @@ public class ServerApp {
 
             }
 
-            if (client != null && rp!=null) {
+            if (client != null && rp != null) {
                 try {
                     lobbies.get(lobbies.size() - 1).addPlayer(rp);
                 } catch (IOException | InterruptedException e) {

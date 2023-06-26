@@ -264,7 +264,7 @@ public class GUIApp extends Application implements ViewInterface {
                 if(command!=null && command.startsWith("/remove")) {
                     if (isSelected.get() && count.get() < 3) {
                         isSelected.set(false);
-                        tileButton.setStyle("-fx-border-color: yellow; -fx-border-width: 0;-fx-border-height: 0;");
+                        tileButton.setStyle("-fx-border-width: 0;-fx-border-height: 0;");
                         tileButton.setEffect(blur);
                         tileButton.setDisable(true);
                         tileButton.setOpacity(0.8);
@@ -657,11 +657,11 @@ public class GUIApp extends Application implements ViewInterface {
 
        for (int i = 0; i < 5; i++) {
            Button emptyButton = new Button();
-           emptyButton.setPrefSize(30, 1);
-           emptyButton.setPrefWidth(30);
+           emptyButton.setPrefSize(31, 1);
+           emptyButton.setPrefWidth(31);
            emptyButton.setPrefHeight(1);
            emptyButton.setDisable(true);
-           emptyButton.setStyle(" -fx-border-width: 0;-fx-border-height: 0;");
+           emptyButton.setStyle(" -fx-border-width: 0;-fx-border-height: 0; -fx-background-color: transparent;");
            shelf2.add(emptyButton, i, 6);
        }
 

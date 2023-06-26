@@ -1,10 +1,7 @@
 package View;
 
 import Distributed.AbstractClient;
-import Distributed.RemotePlayer;
-import Model.Player;
-import Model.Tile;
-import Model.Whisper;
+import Model.*;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -19,14 +16,12 @@ public class TextualUI implements ViewInterface {
     private static final int maxMsgLength = 50;
     private int removeSize;
     private boolean added, removed;
-    public String[] msgBuffer;
 
     public TextualUI(AbstractClient client) throws IOException {
 
         this.state = State.HOME;
         this.input = new Scanner(System.in);
         this.client = client;
-        this.msgBuffer = new String[4];
         this.added = false;
         this.removed = false;
         Thread th = new Thread() {
@@ -90,9 +85,27 @@ public class TextualUI implements ViewInterface {
                     switch (goal.getName()){
                         case ("GoalAngles"):
                             System.out.println("Four tiles of the same color in the four corners of the bookshelf");
+                            Shelf g = crateGoalShelf(goal.getName());
+                            printGoalShelf(g);
                             break;
                         case ("GoalColumns"):
                             System.out.println("Three columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column");
+                            for(int i=0; i<6; i++){
+                                System.out.print("|");
+                                for(int j=0; j<5; j++){
+                                    if(j==1 || j==3 || j==4) {
+                                        if (i == 2)
+                                            System.out.print(ConsoleColors.YELLOW_BACKGROUND_BRIGHT + " " + RESET + "|");
+                                        else if (i == 3)
+                                                System.out.print(ConsoleColors.GREEN_BACKGROUND + " " + RESET + "|");
+                                                else if (i == 5)
+                                                        System.out.print(ConsoleColors.BLUE_BACKGROUND + " " + RESET + "|");
+                                                else System.out.print(ConsoleColors.RED_BACKGROUND_BRIGHT + " " + RESET + "|");
+
+                                    }else System.out.print(" |");
+                                }
+                                System.out.print("\n");
+                            }
                             break;
                         case ("GoalCouples"):
                             System.out.println("six groups each containing at least 2 tiles of the same type the tiles of one group can be different from those of another group");
@@ -248,15 +261,13 @@ public class TextualUI implements ViewInterface {
                     tileBuffer();
                     showGoals();
                     //showYourScore();
-                    if (client.getBoardView().getChatBuffer()!=null && client.getBoardView().getChatBuffer().size()!= 0)chat();
+                    chat();
                 }
                 else{
                     System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
-                    //showGoals();
-                    //showYourScore();
                     chat();
                 }
               break;
@@ -564,6 +575,7 @@ public class TextualUI implements ViewInterface {
         if(this.state.equals(State.LOBBY) && client.isOwner()) System.out.println(ConsoleColors.GREEN_UNDERLINED + "/start" + RESET + "  ---> to start the game");
         System.out.println(ConsoleColors.GREEN_UNDERLINED + "/chat message" + RESET + "  ---> to send a message to everyone");
         System.out.println(ConsoleColors.GREEN_UNDERLINED + "/whisper addressee message" + RESET + "  ---> to send a private message to another player");
+        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/exit" + RESET + "  ---> close the app, if a match is still going you can rejoin");
     }
 
     private void nb(){
@@ -697,6 +709,34 @@ public class TextualUI implements ViewInterface {
         if(in.equals("/help") || in.equals("/h")) return true;
         if(in.startsWith("/whisper")) return true;
         if(in.startsWith("/chat")) return true;
+        if(in.startsWith("/cg") || in.startsWith("/pg")) return true;
         return false;
     }
+
+    void printGoalShelf(Shelf gShelf){
+        for (int i=0; i<6; i++){
+            System.out.println("----------");
+            System.out.print("|");
+            for(int j=0; j<5; j++){
+                if (gShelf.isEmpty(i, j)) System.out.print(" |");
+                else {
+                    if(gShelf.getTile(i,j).getColor().equals(Color.LIGHTBLUE))
+                        System.out.print(ConsoleColors.BLUE_BACKGROUND_BRIGHT + " " + RESET + "|");
+                    if(gShelf.getTile(i, j).getColor().equals(Color.GREEN))
+                        System.out.print(ConsoleColors.GREEN_BACKGROUND + " " + RESET + "|");
+                    if(gShelf.getTile(i, j).getColor().equals(Color.PINK))
+                        System.out.println(ConsoleColors.PURPLE_BACKGROUND_BRIGHT + " " + RESET + "|");
+                }
+
+            }
+        }
+    }
+   /* Shelf crateGoalShelf(String g){
+        Shelf gShelf = new Shelf();
+        switch (g){
+            case("")
+        }
+        return gShelf;
+
+    }*/
 }

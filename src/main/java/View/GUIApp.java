@@ -662,7 +662,11 @@ public class GUIApp extends Application implements ViewInterface {
             shelfPlayer3.add(shelf3, 1, 1);
         }
         if (client.getBoardView().getListOfPlayer().size() == 4) {
-            shelfPlayer4.add(shelfImageView, 2, 2);
+            ImageView shelfImageView4 = new ImageView(imageShelf);
+            shelfImageView4.setFitWidth(200);
+            shelfImageView4.setFitHeight(200);
+            shelfImageView4.setPreserveRatio(true);
+            shelfPlayer4.add(shelfImageView4, 2, 2);
             shelfPlayer4.add(shelf4, 2, 2);
         }
 

@@ -2,7 +2,6 @@ package Distributed.ServerSocket;
 
 import Distributed.*;
 import Model.BoardView;
-import Model.Player;
 
 import java.io.*;
 import java.net.Socket;
@@ -12,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 
 import static Distributed.States.*;
 
-;
 
 public class ClientHandlerSocket extends RemoteHandler implements Runnable, Serializable {
     private final Socket socket;

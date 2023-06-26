@@ -45,6 +45,7 @@ public class Lobby {
 
     /**
      * Adds a player to the lobby
+     *
      * @param p tha player that needs to be added
      */
     public void addPlayer(RemotePlayer p) throws IOException, InterruptedException {
@@ -71,9 +72,9 @@ public class Lobby {
 
 
     public void startGame() throws RemoteException {
-        this.open=false;
+        this.open = false;
         controller.startGame();
-        for(RemotePlayer rp : lp) {
+        for (RemotePlayer rp : lp) {
             rp.setState(States.PLAY);
         }
         this.playing = true;
@@ -95,16 +96,11 @@ public class Lobby {
     }
 
     public void updateAll() throws IOException, InterruptedException {
-        boolean found = false;
         for (RemotePlayer p : lp) {
-            if(p.getConnectionType()==ConnectionType.SOCKET){
-                if(p.isConnected()) p.update(boardView);
-            }else if(!found){
-                if(p.isConnected()) p.update(boardView);
-                found = true;
-            }
+            if (p.isConnected()) p.update(boardView);
         }
     }
+
 
     public void setFirstMatch(boolean firstMatch) {
         this.firstMatch = firstMatch;
@@ -121,6 +117,7 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
+
     public BoardView getBoardView() {
         return boardView;
     }
@@ -132,6 +129,7 @@ public class Lobby {
     public Integer getID() {
         return this.ID;
     }
+
     public GameController getController() {
         return controller;
     }
@@ -140,7 +138,7 @@ public class Lobby {
      * Checks and eventually updates if the lobby should be open
      */
     public void checkOpen() {
-        if(this.lp.size() == 4) this.open= false;
+        if (this.lp.size() == 4) this.open = false;
     }
 
     public boolean getPlay() {

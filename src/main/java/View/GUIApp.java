@@ -14,6 +14,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.GaussianBlur;
@@ -65,9 +66,13 @@ public class GUIApp extends Application implements ViewInterface {
 
     public void play(AbstractClient client, Stage primaryStage) throws RemoteException {
         GridPane mainPane = new GridPane();
+        ScrollPane scrollPane = new ScrollPane();
         Scene scene = new Scene(mainPane);
         primaryStage.setScene(scene);
 
+        scrollPane.setContent(mainPane);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         Image imageBackgroundShelf = new Image("images/misc/sfondoparquet.jpg");
         ImageView imageViewShelf = new ImageView(imageBackgroundShelf);
         BoxBlur blur = new BoxBlur(3, 3, 3);
@@ -131,6 +136,7 @@ public class GUIApp extends Application implements ViewInterface {
         reset.setOnMouseClicked(e -> {
             if(command!=null) client.println(command);
             command= null;
+
         });
         return reset;
     }
@@ -159,11 +165,11 @@ public class GUIApp extends Application implements ViewInterface {
         GridPane fillBoardPane = new GridPane();
 
         //TODO add control
-     //   Pane emptyComponent = new Pane();
-  //      emptyComponent.setPrefSize(65, 65);
+
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Pane emptyPane = new Pane();
+                emptyPane.setPrefSize(54, 54);
                 fillBoardPane.add(emptyPane, i, j);
             }
         }
@@ -171,7 +177,6 @@ public class GUIApp extends Application implements ViewInterface {
             for (int j = 0; j < 9; j++) {
                 if (!client.getBoardView().getCell(i, j).isEmpty()) {
                     fillBoardPane.add(getTile(i,j), j, i);
-                    mouseClicked(getTile(i,j),fillBoardPane);
                 }
             }
         }
@@ -219,8 +224,8 @@ public class GUIApp extends Application implements ViewInterface {
         }
         imageTilePath = tile.getConstantTile() + imageTileName + i + ".png";
 
+        tileButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0; -fx-border-height: 0 ");
         tileButton.setPrefSize(54, 54);
-        tileButton.setStyle(" -fx-border-width: 0; -fx-border-height: 0 ");
         Image imageTile = new Image(imageTilePath);
         ImageView imageView = new ImageView(imageTile);
         imageView.setPreserveRatio(true);
@@ -271,9 +276,7 @@ public class GUIApp extends Application implements ViewInterface {
         return tileButton;
     }
 
-    void mouseClicked (Button tile, GridPane fillBoardPane){
 
-    }
 
     /**
      * This method is used to create the common goal
@@ -343,7 +346,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
             }
             if (j == 0) {
-                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
+                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg" + cg.getName());
                 System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
                 Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
 
@@ -376,7 +379,7 @@ public class GUIApp extends Application implements ViewInterface {
         shelfImageView.setFitHeight(300);
         shelfPane.add(shelfImageView, 0, 0);
         shelfPane.add(shelfGridPane, 0, 0);
-        shelfPane.add(chat(), 1,2 );
+        shelfPane.add(chat(), 0,3 );
 
         shelfPane.add(showOtherShelf(client), 1, 0);
         shelfImageView.setPreserveRatio(true);
@@ -452,12 +455,12 @@ public class GUIApp extends Application implements ViewInterface {
             Label label = new Label();
             label.setText("Choose the order of the tiles");
             label.setStyle("-fx-background-color: white;");
-            shelfPane.add(label, 0, 3);
+            shelfPane.add(label, 0, 4);
             GridPane bufferPane = new GridPane();
            for(int i =0; i<client.getBoardView().getTileBuffer().size();i++) {
-               bufferPane.add(bufferTile(i), i, 4);
+               bufferPane.add(bufferTile(i), i, 5);
            }
-            shelfPane.add(bufferPane, 0, 4);
+            shelfPane.add(bufferPane, 0, 5);
         }
 
         return shelfPane;
@@ -588,7 +591,7 @@ public class GUIApp extends Application implements ViewInterface {
        //     int finalI = i;
 
 
-            button.setOnAction(e -> {
+            button.setOnMouseClicked(e -> {
                 if(isSelected2.get()) {
                     isSelected2.set(false);
                     button.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");
@@ -616,8 +619,8 @@ public class GUIApp extends Application implements ViewInterface {
         GridPane shelfPlayer4 = new GridPane();
         Image imageShelf = new Image("images/boards/bookshelf.png");
         ImageView shelfImageView = new ImageView(imageShelf);
-        shelfImageView.setFitWidth(250);
-        shelfImageView.setFitHeight(250);
+        shelfImageView.setFitWidth(200);
+        shelfImageView.setFitHeight(200);
         shelfImageView.setPreserveRatio(true);
         GridPane shelf2 = new GridPane();
         GridPane shelf3 = new GridPane();
@@ -654,20 +657,23 @@ public class GUIApp extends Application implements ViewInterface {
         shelfPlayer2.add(shelfImageView, 0, 0);
 
         shelfPlayer2.add(shelf2, 0, 0);
-        otherShelf.getChildren().addAll(shelfPlayer2, shelfPlayer3, shelfPlayer4);
 
         if(client.getBoardView().getListOfPlayer().size()==3){
             shelfPlayer3.add(shelfImageView, 0, 0);
             shelfPlayer3.add(shelf3, 0, 0);
         }
         if(client.getBoardView().getListOfPlayer().size()==4){
+            shelfPlayer3.add(shelfImageView, 0, 0);
+            shelfPlayer3.add(shelf3, 0, 0);
             shelfPlayer4.add(shelfImageView, 0, 0);
             shelfPlayer4.add(shelf4, 0, 0);
         }
 
+        otherShelf.getChildren().addAll(shelfPlayer2, shelfPlayer3, shelfPlayer4);
+
     return otherShelf;
     }
-    public ImageView printOtherShelf(int row, int col, int playerNumber){
+    private ImageView printOtherShelf(int row, int col, int playerNumber){
         String imageTilePath;
         Constant tile = new Constant();
         ImageView imageView = new ImageView();
@@ -715,7 +721,7 @@ public class GUIApp extends Application implements ViewInterface {
             imageView.setFitHeight(30);
             imageView.setFitWidth(30);
         }else{
-            imageView.setStyle("-fx-border-color: black;");
+
             imageView.setImage(null);
             imageView.setFitHeight(30);
             imageView.setFitWidth(30);
@@ -814,6 +820,8 @@ public class GUIApp extends Application implements ViewInterface {
     public void home(Stage stage, String nickname) {
         Image imageHome = new Image("images/Publisher material/Display_3.jpg");
         ImageView imageView = new ImageView(imageHome);
+
+
         BoxBlur blur = new BoxBlur(3, 4, 3);
         imageView.setEffect(blur);
 
@@ -830,7 +838,7 @@ public class GUIApp extends Application implements ViewInterface {
         nicknameField.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
 
         Button button = new Button("Play");
-        VBox contentBox = new VBox(10);
+        VBox contentBox = new VBox();
         contentBox.getChildren().addAll(nickname1, nicknameField, button);
         contentBox.setStyle("-fx-alignment: center; -fx-padding: 100px; -fx-background-color: white; -fx-opacity: 0.5;");
 
@@ -848,15 +856,21 @@ public class GUIApp extends Application implements ViewInterface {
             }
         });
 
-        contentBox.setTranslateY(360);
-        contentBox.setTranslateX(500);
+
+    //    contentBox.setTranslateY(360);
+    //    contentBox.setTranslateX(500);
+
 
         contentBox.prefHeight(stage.getHeight());
         contentBox.prefWidth(stage.getWidth());
 
-        Pane root = new Pane(new Region());
+        GridPane root = new GridPane();
 
-        root.getChildren().addAll(imageView, contentBox);
+        root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_3.jpg'); -fx-background-size: cover; " + " -fx-background-repeat: no-repeat; ");
+
+        root.add(contentBox, 1, 1);
+
+        root.setAlignment(Pos.CENTER);
         stage.setTitle("Welcome to the game");
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -926,7 +940,6 @@ public class GUIApp extends Application implements ViewInterface {
                 start.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
                 start.setOnAction(e -> {
                     client.println("/start");
-
                 });
 
                 Button firstMatch = new Button("First match");
@@ -948,8 +961,6 @@ public class GUIApp extends Application implements ViewInterface {
                 hBox.setAlignment(Pos.CENTER);
 
                 root.add(hBox, 2, 0);
-
-
 
                 Screen screen = Screen.getPrimary();
                 Rectangle2D bounds = screen.getVisualBounds();
@@ -1064,10 +1075,12 @@ public class GUIApp extends Application implements ViewInterface {
         Label labelWinner = new Label();
         if(client.getBoardView().getWinner() == null || client.getBoardView().getWinner().getNickname() == null){
             labelWinner.setText("There's no winner");
-            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
+            labelWinner.setAlignment(Pos.CENTER);
+            root.add(labelWinner, 0, 1);
         }else {
             labelWinner.setText(client.getBoardView().getWinner().getNickname());
-            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+            labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             labelWinner.setAlignment(Pos.CENTER);
             root.add(labelWinner, 0, 1);
         }
@@ -1086,20 +1099,23 @@ public class GUIApp extends Application implements ViewInterface {
             }
         });
 
+        VBox vBox = new VBox();
 
         for(Player p: client.getBoardView().getListOfPlayer()){
             Label label = new Label();
             label.setText(p.getNickname() + "  " + p.getScore());
-            label.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+            label.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             label.setAlignment(Pos.CENTER);
-            root.add(label, 0, 2);
-        }
+            vBox.getChildren().add(label);
 
+        }
+        root.add(vBox, 0, 2);
         Button button = new Button("Lobby");
         button.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
         button.setOnMouseClicked(e -> {
             client.println("lobbbb");
         });
+        root.add(button, 0, 3);
 
         primaryStage.setScene(sceneEnd);
         primaryStage.show();

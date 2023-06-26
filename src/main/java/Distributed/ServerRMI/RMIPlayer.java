@@ -5,7 +5,6 @@ import Distributed.ConnectionType;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.State;
 
 import java.io.IOException;
 import java.rmi.RemoteException;

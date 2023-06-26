@@ -91,7 +91,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
             }else{
                 if((arg.startsWith("/remove") || arg.startsWith("/switch")) || arg.startsWith("/add")){
                     String[] tmp =  arg.split(" ");
-                    String newMsg = tmp[0] + " " + nickname + " ";
+                    String newMsg = tmp[0] + " " + this.nickname + " ";
                     for(int i = 1; i<tmp.length; i++){
                         newMsg += tmp[i] + " ";
                     }

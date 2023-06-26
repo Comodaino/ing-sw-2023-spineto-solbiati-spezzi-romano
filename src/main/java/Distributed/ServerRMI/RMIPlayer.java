@@ -2,11 +2,9 @@ package Distributed.ServerRMI;
 
 import Distributed.ClientRMI.Client;
 import Distributed.ConnectionType;
-import Distributed.RemoteClient;
 import Distributed.RemotePlayer;
 import Distributed.States;
 import Model.BoardView;
-import View.State;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -25,6 +23,10 @@ public class RMIPlayer extends RemotePlayer {
         this.client = client;
     }
 
+    /**
+     * This method sets the client state to END when the match is finished.
+     * @author Nicolò
+     */
     @Override
     public void endMatch() {
         try {
@@ -34,17 +36,28 @@ public class RMIPlayer extends RemotePlayer {
         }
     }
 
+    /**
+     * This method invokes the Client update() method which invokes the View update.
+     * It is used to update the Board through the serializable BoardView.
+     * @param boardView the serializable BoardView
+     * @author Nicolò
+     */
     @Override
     public void update(BoardView boardView) throws IOException, InterruptedException {
         client.update(boardView, null);
     }
 
-    @Override
-    public Client getClient() { return this.client; }
-
+    /**
+     * This method reconnects a Client to the game it was playing.
+     * It creates a link between the "new" Client and the old one through their common RMIPlayer: the new client is set as
+     * a parameter of the RMIPlayer and the state and the lobby id of the new client are setted taking the values from the RMIPlayer.
+     * @param client the "new" Client
+     * @param id the Lobby ID
+     * @author Nicolò
+     */
     @Override
     public void reconnect(Client client, int id) {
-        this.client=client;
+        this.client = client;
         try {
             this.client.setState(this.state);
             this.client.setLobbyID(id);
@@ -53,6 +66,10 @@ public class RMIPlayer extends RemotePlayer {
         }
 
     }
+
+    //SETTER AND GETTER METHODS
+    @Override
+    public Client getClient() { return this.client; }
 
     @Override
     public void setState(States state) {
@@ -66,7 +83,5 @@ public class RMIPlayer extends RemotePlayer {
     }
 
     @Override
-    public States getState() {
-        return this.state;
-    }
+    public States getState() { return this.state; }
 }

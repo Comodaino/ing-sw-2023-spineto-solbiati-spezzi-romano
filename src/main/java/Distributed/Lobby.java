@@ -1,7 +1,6 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ServerRMI.Server;
 import Model.BoardView;
 import Model.Player;
 
@@ -19,7 +18,6 @@ public class Lobby {
     private BoardView boardView;
     private GameController controller;
     private ServerApp serverApp;
-    private Server server; //TODO delete after unification of ServerImpl and ServerApp
     private boolean playing;
 
     public Lobby(ServerApp serverApp) {
@@ -45,6 +43,7 @@ public class Lobby {
 
     /**
      * Adds a player to the lobby
+     *
      * @param p tha player that needs to be added
      */
     public void addPlayer(RemotePlayer p) throws IOException, InterruptedException {
@@ -55,7 +54,7 @@ public class Lobby {
             lp.add(p);
             p.setState(States.WAIT);
             p.setController(controller);
-            p.update(boardView);
+            //p.update(boardView);
             controller.addPlayer(new Player(p.getNickname()));
             if (lp.size() == 4) this.open = false;
         }
@@ -71,12 +70,11 @@ public class Lobby {
 
 
     public void startGame() throws RemoteException {
-        this.open=false;
+        this.open = false;
         controller.startGame();
-        for(RemotePlayer rp : lp) {
+        for (RemotePlayer rp : lp) {
             rp.setState(States.PLAY);
         }
-        this.open = false;
         this.playing = true;
     }
 
@@ -97,9 +95,10 @@ public class Lobby {
 
     public void updateAll() throws IOException, InterruptedException {
         for (RemotePlayer p : lp) {
-            if(p.isConnected()) p.update(boardView);
+            if (p.isConnected()) p.update(boardView);
         }
     }
+
 
     public void setFirstMatch(boolean firstMatch) {
         this.firstMatch = firstMatch;
@@ -116,6 +115,7 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
+
     public BoardView getBoardView() {
         return boardView;
     }
@@ -127,6 +127,7 @@ public class Lobby {
     public Integer getID() {
         return this.ID;
     }
+
     public GameController getController() {
         return controller;
     }
@@ -135,7 +136,7 @@ public class Lobby {
      * Checks and eventually updates if the lobby should be open
      */
     public void checkOpen() {
-        if(this.lp.size() == 4) this.open= false;
+        if (this.lp.size() == 4) this.open = false;
     }
 
     public boolean getPlay() {

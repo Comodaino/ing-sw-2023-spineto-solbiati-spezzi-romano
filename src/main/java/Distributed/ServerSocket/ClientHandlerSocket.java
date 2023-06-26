@@ -2,7 +2,6 @@ package Distributed.ServerSocket;
 
 import Distributed.*;
 import Model.BoardView;
-import Model.Player;
 
 import java.io.*;
 import java.net.Socket;
@@ -12,12 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 import static Distributed.States.*;
 
-;
 
 public class ClientHandlerSocket extends RemoteHandler implements Runnable, Serializable {
     private final Socket socket;
     private SocketPlayer player;
-    private final ObjectOutputStream out;
+    private ObjectOutputStream out;
     private Lobby lobby;
     private Scanner in;
     private boolean outputEnabled;
@@ -125,10 +123,11 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 lobby.addPlayer(player);
 
                 outSocket("/setnickname " + input);
-                if (player.isOwner()) outSocket("/wait owner ");
-                else outSocket("/wait");
 
                 lobby.updateAll();
+
+                if (player.isOwner()) outSocket("/wait owner ");
+                else outSocket("/wait");
 
                 break;
             case "false":
@@ -143,12 +142,15 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 }
                 player.setSocket(socket);
                 player.setConnected(true);
+                player.setHandler(this);
                 outSocket("/setnickname " + input);
 
                 if(player.getState()==WAIT){
                     outputEnabled = false;
+                    lobby.updateAll();
                     if (player.isOwner()) outSocket("/wait owner ");
                     else outSocket("/wait");
+
                 }else lobby.updateAll();
 
 
@@ -167,8 +169,11 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         if (player.isOwner()) {
             switch (input) {
                 case "/start":
-                    lobby.startGame();
-                    player.setState(PLAY);
+
+                    if(lobby.getListOfPlayers().size()>1){
+                        lobby.startGame();
+                        player.setState(PLAY);
+                    }
                     break;
                 case "/firstMatch":
                     lobby.setFirstMatch(true);
@@ -179,7 +184,12 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 case "/closeLobby":
                     lobby.close();
                     break;
+                default : lobby.getController().update(input);
+                    break;
             }
+            lobby.updateAll();
+        }else{
+            lobby.getController().update(input);
             lobby.updateAll();
         }
     }

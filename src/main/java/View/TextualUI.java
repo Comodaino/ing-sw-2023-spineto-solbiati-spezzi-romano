@@ -5,6 +5,7 @@ import Model.*;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class TextualUI implements ViewInterface {
@@ -42,39 +43,42 @@ public class TextualUI implements ViewInterface {
 
         while(state!=State.CLOSE) {
             String in = input.nextLine();
-            if(state!=State.HOME){
-                if(in.equals("/cg") || in.equals("/pg")) printGoal(in);
-                if(in.equals("/h") || in.equals("/help")) help();
-                if (in.startsWith("/whisper")){
-                    String[] msg = in.split(" ");
-                    if(msg.length<3) System.out.println("whisper failed, addressee or message is missing");
-                    else {
-                        for(int i=2; i<msg.length; i++) msg[2] += msg[i];
-                        if (msg[2].length() > maxMsgLength)
-                            System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
+            if(in!=null && in.length()>0) {
+                if (state != State.HOME) {
+                    if (state == State.LOBBY && (in.equals("/cg") || in.equals("/pg"))) printGoal(in);
+                    if (in.equals("/h") || in.equals("/help")) help();
+                    if (in.startsWith("/whisper")) {
+                        String[] msg = in.split(" ");
+                        if (msg.length < 3) System.out.println("whisper failed, addressee or message is missing");
+                        else {
+                            for (int i = 2; i < msg.length; i++) msg[2] += msg[i];
+                            if (msg[2].length() > maxMsgLength)
+                                System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
+                        }
                     }
-                }
-                if((state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
-                    System.out.println("Command is invalid, try /help or /h");
-                else if( state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
+                    if ((state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
+                        System.out.println("Command is invalid, try /help or /h");
+                    else if (state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
                     else client.println(in);
 
 
-
-            } else {
-                if(in!= null && in.length()>10) {
-                    System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
+                } else {
+                    if (in != null && in.length() > 10) {
+                        System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
+                    } else if (in != null)
+                        client.println(in);
                 }
-                else if (in!= null)
-                    client.println(in);
             }
         }
     }
 
     private boolean correctLobbyInput(String in) {
-        if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.startsWith("/whisper") || in.startsWith("/chat"))
-            return true;
-        else return false;
+        if(in.startsWith("/")){
+            if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.startsWith("/whisper")) return true;
+            return false;
+        }
+        return true;
+
     }
 
     private void printGoal(String in) {
@@ -151,25 +155,14 @@ public class TextualUI implements ViewInterface {
         //System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
-                    System.out.println(ConsoleColors.RED_BOLD + "\n"
-                            + "\n" + "       █  █                                                        "
-                            + "\n" + "       █  ██     █████   █                 █                       "
-                            + "\n" + "      ██ ███     █░░░█   █                ██  ████                 "
-                            + "\n" + "     ███ ███    ██ █░█  ██                █  ██░░░ █                "
-                            + "\n" + "     ███████    █░ ███  █░                █  █░    █                "
-                            + "\n" + "     ███████    ██     ██░               ██  █    █░                "
-                            + "\n" + "     ██░█░███ ██░███   ██████    █████  ██ █████  ░    ██████       "
-                            + "\n" + "     ██░░██████░ ░░██ ███░░██  ███░░░█  █  ██░░░  █   ██░░░░█       "
-                            + "\n" + "    ███░ ██░░█ ██  ░█ █░░ ██░ ███████░ ██  █░    █░  ███████░       "
-                            + "\n" + "   ███░  ██░█░██   ██ █   █░ ██░░░░░░  █  ██    ██  ██░░░░░░        "
-                            + "\n" + "    ░░  ██░██░██████ ██  ██░ ░██████  ██ ██░   ██░  ░██████         "
-                            + "\n" + "        ██░█ █░░░░░░ ░░  ░░   ░░░░░░  ░░ ░░    ░░    ░░░░░░         "
-                            + "\n" + "█ █████ █░   ██░ █████████████████████████████████████████████ ██ █"
-                            + "\n" + "░ ░░░░░ ██   ██░ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ░░ ░"
-                            + "\n" + "        ░█████░                                                    "
-                            + "\n" + "         ░░░░                                                      ");
-
-
+                    System.out.println(ConsoleColors.RED_BOLD + "\n" +
+                                    " _    _ _____ _     _____ ________  ________   _____ _____   ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
+                                    "| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  |  |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
+                                    "| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | |  | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
+                                    "| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | |  | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
+                                    "\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ /  | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
+                                    " \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/   \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n" + RESET);
+                    System.out.print(ConsoleColors.WHITE);
 
                     homePrint(arg);
                     break;
@@ -202,12 +195,28 @@ public class TextualUI implements ViewInterface {
                     break;
                 case END:
                     String winner = client.getBoardView().getWinner().getNickname();
+                    client.getBoardView().getListOfPlayer().sort(new Comparator<Player>() {
+                        @Override
+                        public int compare(Player o1, Player o2) {
+                            if (o1.getScore()== o2.getScore()){
+                                if(o1.getNickname().compareTo(o2.getNickname())>=0){
+                                    return 1;
+                                }
+                            }else return -1;
+                            if(o1.getScore()> o2.getScore()) return  1;
+                            return -1;
+                        }
+                    });
                     System.out.println("SCORES:");
                     for (Player p : client.getBoardView().getListOfPlayer()) {
                         System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
                     }
-                    System.out.println("The winner is......");
-                    System.out.println("\t\t\t\t\t"+ ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET +"\t\t\t\t\t");
+                    if(winner==null) {
+                        System.out.println("\t\t\t\t\t" + ConsoleColors.RED_BOLD + "There is no winner" );
+                    }else{
+                        System.out.println("The winner is......");
+                        System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
+                    }
                     break;
                 case CLOSE:
                     System.out.println("The lobby has been closed, thank you for playing!");
@@ -282,7 +291,7 @@ public class TextualUI implements ViewInterface {
                     winner = client.getBoardView().getWinner().getNickname();
                     System.out.println("The winner is......");
                     System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
-                }else System.out.println("Error: winner is null");
+                }else System.out.println(ConsoleColors.RED_BOLD + "There is no winner" + ConsoleColors.WHITE);
                 break;
             case CLOSE:
                 System.out.println("The lobby has been closed, thank you for playing!");
@@ -655,9 +664,9 @@ public class TextualUI implements ViewInterface {
         return false;
     }
 
-    private boolean columnAvailable(int c, int size) {
+    private boolean columnAvailable(int c, int size) throws RemoteException {
         for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
-            if (client.getBoardView().getListOfPlayer().get(i).equals(client.getBoardView().getCurrentPlayer())) {
+            if (client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())) {
                 return client.getBoardView().getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
             }
         }
@@ -665,8 +674,8 @@ public class TextualUI implements ViewInterface {
     }
 
 
-    private boolean correctInput(String in) {
-
+    private boolean correctInput(String in) throws RemoteException {
+        if (!in.startsWith("/")) return true;
         String[] tmpInput = in.split(" ");
         if (in.startsWith("/remove")) {
             if (!removed) {
@@ -697,12 +706,7 @@ public class TextualUI implements ViewInterface {
             return false;
         }
         if(in.startsWith("/add")){
-            if(!added){
-                added = columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
-                if (added) removed = false;
                 return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
-            }
-            else System.out.println("command /add already used");
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;

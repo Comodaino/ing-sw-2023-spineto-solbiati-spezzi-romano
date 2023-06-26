@@ -27,7 +27,6 @@ public class ClientAppSocket implements AbstractClient {
     private ObjectInputStream objIn;
     private ViewInterface view;
     private String nickname;
-    private boolean firstWait;
 
 
     /**
@@ -45,7 +44,6 @@ public class ClientAppSocket implements AbstractClient {
         this.nickname = null;
         this.owner = false;
         this.typeOfView = typeOfView;
-        this.firstWait = true;
         state = States.INIT;
     }
 
@@ -149,8 +147,7 @@ public class ClientAppSocket implements AbstractClient {
                             state = States.WAIT;
                             view.setClient(this);
                             view.setState(State.LOBBY);
-                            if(firstWait) firstWait = false;
-                                else view.update();
+                            view.update();
                             break;
                         case "/play":
                             playCommand();
@@ -201,6 +198,8 @@ public class ClientAppSocket implements AbstractClient {
      */
     @Override
     public void println(String arg) {
+
+        if(arg.equals("/exit")) System.exit(0);
 
         if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
 

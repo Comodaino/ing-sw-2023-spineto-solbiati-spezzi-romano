@@ -128,9 +128,7 @@ public class GameController implements Serializable {
      */
     private void playEndGame() {
 
-
-
-        System.out.println("ENDING THE GAME");
+        System.out.println("ENDING THE GAME FOR " + currentPlayer.getNickname());
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
@@ -226,13 +224,14 @@ public class GameController implements Serializable {
 
         if(!input[1].equals(currentPlayer.getNickname())) return;
         String[] tmp = new String[input.length -1];
+        String tmpNick = input[1];
         for(int i = 1; i< input.length -1; i++){
             tmp[i] = input[i+1];
         }
         input = tmp;
 
         System.out.println("add");
-        if (columnAvailable(gameBoard.getTileBuffer().size(), input[1].charAt(0) - 48)) {
+        if (columnAvailable(input[1].charAt(0) - 48, tmpNick)) {
             for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
                 if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                     while (gameBoard.getTileBuffer().size() > 0) {
@@ -284,10 +283,15 @@ public class GameController implements Serializable {
         return false;
     }
 
-    private boolean columnAvailable(int c, int size) {
+    private boolean columnAvailable(int c,String name) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
-            if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
-                return gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
+            if (gameBoard.getListOfPlayer().get(i).getNickname().equals(name)) {
+                for(int j=0; j<gameBoard.getTileBuffer().size();j++){
+                    if(!gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - j, c)){
+                        return false;
+                    }
+                }
+                return true;
             }
         }
         return false;
@@ -370,6 +374,7 @@ public class GameController implements Serializable {
                     }
                     break;
                 case "/message":
+                    System.out.println("ziopera");
                     newMessage(input);
                     serverUpdater();
                     break;

@@ -666,6 +666,29 @@ public class GUIApp extends Application implements ViewInterface {
        }
 
        shelf2.setTranslateY(10);
+       for (int i = 0; i < 5; i++) {
+           Button emptyButton = new Button();
+           emptyButton.setPrefSize(31, 1);
+           emptyButton.setPrefWidth(31);
+           emptyButton.setPrefHeight(1);
+           emptyButton.setDisable(true);
+           emptyButton.setStyle(" -fx-border-width: 0;-fx-border-height: 0; -fx-background-color: transparent;");
+           shelf3.add(emptyButton, i, 6);
+       }
+
+       shelf3.setTranslateY(10);
+
+       for (int i = 0; i < 5; i++) {
+           Button emptyButton = new Button();
+           emptyButton.setPrefSize(31, 1);
+           emptyButton.setPrefWidth(31);
+           emptyButton.setPrefHeight(1);
+           emptyButton.setDisable(true);
+           emptyButton.setStyle(" -fx-border-width: 0;-fx-border-height: 0; -fx-background-color: transparent;");
+           shelf4.add(emptyButton, i, 6);
+       }
+
+       shelf4.setTranslateY(10);
 
        int j = 0;
        for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {

@@ -48,31 +48,31 @@ public class TextualUI implements ViewInterface {
 
         while(state!=State.CLOSE) {
             String in = input.nextLine();
-            if(state!=State.HOME){
-                if(state==State.LOBBY && (in.equals("/cg") || in.equals("/pg"))) printGoal(in);
-                if(in.equals("/h") || in.equals("/help")) help();
-                if (in.startsWith("/whisper")){
-                    String[] msg = in.split(" ");
-                    if(msg.length<3) System.out.println("whisper failed, addressee or message is missing");
-                    else {
-                        for(int i=2; i<msg.length; i++) msg[2] += msg[i];
-                        if (msg[2].length() > maxMsgLength)
-                            System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
+            if(in==null || in.length()==0) {
+                if (state != State.HOME) {
+                    if (state == State.LOBBY && (in.equals("/cg") || in.equals("/pg"))) printGoal(in);
+                    if (in.equals("/h") || in.equals("/help")) help();
+                    if (in.startsWith("/whisper")) {
+                        String[] msg = in.split(" ");
+                        if (msg.length < 3) System.out.println("whisper failed, addressee or message is missing");
+                        else {
+                            for (int i = 2; i < msg.length; i++) msg[2] += msg[i];
+                            if (msg[2].length() > maxMsgLength)
+                                System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
+                        }
                     }
-                }
-                if((state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
-                    System.out.println("Command is invalid, try /help or /h");
-                else if( state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
+                    if ((state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
+                        System.out.println("Command is invalid, try /help or /h");
+                    else if (state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
                     else client.println(in);
 
 
-
-            } else {
-                if(in!= null && in.length()>10) {
-                    System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
+                } else {
+                    if (in != null && in.length() > 10) {
+                        System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
+                    } else if (in != null)
+                        client.println(in);
                 }
-                else if (in!= null)
-                    client.println(in);
             }
         }
     }

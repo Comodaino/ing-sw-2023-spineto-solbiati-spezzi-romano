@@ -22,5 +22,4 @@ public interface Client extends Remote {
     public void setOwner(boolean owner) throws RemoteException;
     public boolean isOwner() throws RemoteException;
     public boolean beat() throws RemoteException;
-    public void reset() throws RemoteException;
 }

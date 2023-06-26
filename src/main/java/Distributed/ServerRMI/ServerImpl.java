@@ -1,18 +1,12 @@
 package Distributed.ServerRMI;
 
 import Distributed.ClientRMI.Client;
-import Distributed.Lobby;
-import Distributed.RemotePlayer;
 import Distributed.ServerApp;
-import Distributed.States;
 
-import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ServerImpl is a class which extends UnicastRemoteObject and implements Server

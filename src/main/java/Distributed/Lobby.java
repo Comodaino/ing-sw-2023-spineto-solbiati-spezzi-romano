@@ -1,7 +1,6 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ServerRMI.Server;
 import Model.BoardView;
 import Model.Player;
 

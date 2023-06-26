@@ -1,7 +1,6 @@
 package Distributed.ClientRMI;
 
 import Distributed.AbstractClient;
-import Distributed.RemotePlayer;
 import Distributed.ServerRMI.Server;
 import Distributed.States;
 import Model.BoardView;

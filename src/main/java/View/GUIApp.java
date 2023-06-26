@@ -59,6 +59,11 @@ public class GUIApp extends Application implements ViewInterface {
         } catch (IOException e) {
         }
         primaryStage.getIcons().add(new Image("images/Publisher material/Icon 50x50px.png"));
+
+        primaryStage.setMaximized(true);
+        primaryStage.setFullScreen(true);
+        primaryStage.sizeToScene();
+
         primaryStage.show();
 
     }
@@ -104,6 +109,8 @@ public class GUIApp extends Application implements ViewInterface {
         mainPane.add(hBox, 0, 2);
 
 
+     //   primaryStage.setMaximized(true);
+    //    primaryStage.setFullScreen(true);
         primaryStage.sizeToScene();
         primaryStage.show();
     }
@@ -581,6 +588,7 @@ public class GUIApp extends Application implements ViewInterface {
         ImageView imageView = new ImageView(image);
         switchButton.setGraphic(imageView);
 //TODO add control
+
        BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
             if(client.getBoardView().getTileBuffer().get(i)==null)
                 return null;
@@ -626,68 +634,73 @@ public class GUIApp extends Application implements ViewInterface {
         return SwitchButton;
     }
  */
-    public VBox showOtherShelf(AbstractClient client) throws RemoteException {
+   public VBox showOtherShelf(AbstractClient client) throws RemoteException {
 
-        VBox otherShelf = new VBox();
-        GridPane shelfPlayer2 = new GridPane();
-        GridPane shelfPlayer3 = new GridPane();
-        GridPane shelfPlayer4 = new GridPane();
-        Image imageShelf = new Image("images/boards/bookshelf.png");
-        ImageView shelfImageView = new ImageView(imageShelf);
-        shelfImageView.setFitWidth(200);
-        shelfImageView.setFitHeight(200);
-        shelfImageView.setPreserveRatio(true);
-        GridPane shelf2 = new GridPane();
-        GridPane shelf3 = new GridPane();
-        GridPane shelf4 = new GridPane();
-        shelf2.setAlignment(Pos.CENTER);
-        shelf3.setAlignment(Pos.CENTER);
-        shelf4.setAlignment(Pos.CENTER);
-        int j=0;
-        for(int i= 0; i < client.getBoardView().getListOfPlayer().size(); i++){
-            if(!client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())){
-                for (int row=0; row<6; row++){
-                    for(int col=0; col<5; col++){
-                        switch(j){
-                            case 0:
-                                shelf2.add(printOtherShelf(row, col,i), col, 5-row);
-                                break;
-                            case 1:
-                                shelf3.add(printOtherShelf(row, col,i), col, 5-row);
-                                break;
-                            case 2:
-                                shelf4.add(printOtherShelf(row, col,i), col, 5-row);
-                                break;
-                        }
+       VBox otherShelf = new VBox();
+       GridPane shelfPlayer2 = new GridPane();
+       GridPane shelfPlayer3 = new GridPane();
+       GridPane shelfPlayer4 = new GridPane();
+       Image imageShelf = new Image("images/boards/bookshelf.png");
+       ImageView shelfImageView = new ImageView(imageShelf);
+       shelfImageView.setFitWidth(200);
+       shelfImageView.setFitHeight(200);
+       shelfImageView.setPreserveRatio(true);
+       GridPane shelf2 = new GridPane();
+       GridPane shelf3 = new GridPane();
+       GridPane shelf4 = new GridPane();
+       shelf2.setAlignment(Pos.CENTER);
+       shelf3.setAlignment(Pos.CENTER);
+       shelf4.setAlignment(Pos.CENTER);
+       int j = 0;
+       for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
+           if (!client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())) {
+               for (int row = 0; row < 6; row++) {
+                   for (int col = 0; col < 5; col++) {
+                       switch (j) {
+                           case 0:
+                               shelf2.add(printOtherShelf(row, col, i), col, 5 - row);
+                               break;
+                           case 1:
+                               shelf3.add(printOtherShelf(row, col, i), col, 5 - row);
+                               break;
+                           case 2:
+                               shelf4.add(printOtherShelf(row, col, i), col, 5 - row);
+                               break;
+                       }
 
-                    }
-                }
-                j++;
-            }
-        }
-
-
+                   }
+               }
+               j++;
+           }
+       }
 
 
-        shelfPlayer2.add(shelfImageView, 0, 0);
+       shelfPlayer2.add(shelfImageView, 0, 0);
 
-        shelfPlayer2.add(shelf2, 0, 0);
+       shelfPlayer2.add(shelf2, 0, 0);
 
-        if(client.getBoardView().getListOfPlayer().size()==3){
-            shelfPlayer3.add(shelfImageView, 0, 0);
-            shelfPlayer3.add(shelf3, 0, 0);
-        }
-        if(client.getBoardView().getListOfPlayer().size()==4){
-            shelfPlayer3.add(shelfImageView, 0, 0);
-            shelfPlayer3.add(shelf3, 0, 0);
-            shelfPlayer4.add(shelfImageView, 0, 0);
-            shelfPlayer4.add(shelf4, 0, 0);
-        }
+       if (client.getBoardView().getListOfPlayer().size() >= 3) {
+           System.err.println("LMAO");
+           ImageView shelfImageView3 = new ImageView(imageShelf);
+           shelfImageView3.setFitWidth(200);
+           shelfImageView3.setFitHeight(200);
+           shelfImageView3.setPreserveRatio(true);
+           shelfPlayer3.add(shelfImageView3, 1, 1);
+           shelfPlayer3.add(shelf3, 1, 1);
+       }
+       if (client.getBoardView().getListOfPlayer().size() == 4) {
+           ImageView shelfImageView4 = new ImageView(imageShelf);
+           shelfImageView4.setFitWidth(200);
+           shelfImageView4.setFitHeight(200);
+           shelfImageView4.setPreserveRatio(true);
+           shelfPlayer4.add(shelfImageView4, 2, 2);
+           shelfPlayer4.add(shelf4, 2, 2);
+       }
 
-        otherShelf.getChildren().addAll(shelfPlayer2, shelfPlayer3, shelfPlayer4);
+       otherShelf.getChildren().addAll(shelfPlayer2, shelfPlayer3, shelfPlayer4);
 
-    return otherShelf;
-    }
+       return otherShelf;
+   }
     private ImageView printOtherShelf(int row, int col, int playerNumber){
         String imageTilePath;
         Constant tile = new Constant();
@@ -891,7 +904,8 @@ public class GUIApp extends Application implements ViewInterface {
         stage.setScene(scene);
 
         stage.sizeToScene();
-      //  stage.setFullScreen(true);
+     //   stage.setFullScreen(true);
+     //   stage.setMaximized(true);
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         root.setPrefHeight(bounds.getHeight());
@@ -942,6 +956,7 @@ public class GUIApp extends Application implements ViewInterface {
         Image imageLobby = new Image("images/Publisher material/Display_5.jpg");
         ImageView imageViewLobby = new ImageView(imageLobby);
         BoxBlur blur = new BoxBlur(3, 4, 3);
+
 
         imageViewLobby.setEffect(blur);
         imageViewLobby.fitWidthProperty().bind(primaryStage.widthProperty());
@@ -1003,6 +1018,8 @@ public class GUIApp extends Application implements ViewInterface {
             throw new RuntimeException(e);
         }
 
+      //  primaryStage.setMaximized(true);
+     //   primaryStage.setFullScreen(true);
         primaryStage.setScene(scene1);
         primaryStage.show();
 
@@ -1140,6 +1157,8 @@ public class GUIApp extends Application implements ViewInterface {
         });
         root.add(button, 0, 3);
 
+      //  primaryStage.setMaximized(true);
+     //   primaryStage.setFullScreen(true);
         primaryStage.setScene(sceneEnd);
         primaryStage.show();
     }

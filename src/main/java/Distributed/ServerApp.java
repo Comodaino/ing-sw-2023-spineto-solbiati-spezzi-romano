@@ -232,10 +232,11 @@ public class ServerApp {
 
         for (RemotePlayer rp : lobby.getListOfPlayers()) {
             if (rp.getNickname().equals(client.getNickname())) {
+                client.reset();
                 rp.setState(States.WAIT);
             }
         }
-        client.reset();
+
     }
 
     /**

@@ -22,11 +22,12 @@ class GameControllerTest extends Observable{
         testController.addPlayer(new Player("player1"));
         testController.addPlayer(new Player("player2"));
         Board gameBoard = testController.getBoard();
+        gameBoard.init();
         File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
-            System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
+            //System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
             try {
                 testController.update(commandScanner.nextLine());
             } catch (InterruptedException e) {
@@ -44,11 +45,12 @@ class GameControllerTest extends Observable{
         testController.addPlayer(new Player("player3"));
 
         Board gameBoard = testController.getBoard();
+        gameBoard.init();
         File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
-            System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
+            //System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
             try {
                 testController.update(commandScanner.nextLine());
             } catch (InterruptedException e) {
@@ -68,11 +70,12 @@ class GameControllerTest extends Observable{
         testController.addPlayer(new Player("player4"));
 
         Board gameBoard = testController.getBoard();
+        gameBoard.init();
         File commands = new File("src/test/java/Controller/controllerTestConf");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
-            System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
+            //System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
             try {
                 testController.update(commandScanner.nextLine());
             } catch (InterruptedException e) {

@@ -199,6 +199,8 @@ public class ClientAppSocket implements AbstractClient {
     @Override
     public void println(String arg) {
 
+        if(arg.equals("/exit")) System.exit(0);
+
         if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
 
         if(arg.startsWith("/whisper")) {

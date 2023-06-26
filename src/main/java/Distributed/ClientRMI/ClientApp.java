@@ -1,7 +1,6 @@
 package Distributed.ClientRMI;
 
 import Distributed.AbstractClient;
-import Distributed.RemotePlayer;
 import Distributed.ServerRMI.Server;
 import Distributed.States;
 import Model.BoardView;
@@ -19,7 +18,7 @@ import java.util.Scanner;
  * @author Nicolò
  */
 public class ClientApp extends UnicastRemoteObject implements Client, AbstractClient {
-    private static String ip;
+    private static String address;
     private String nickname;
     private Integer lobbyID;
     private States state;
@@ -35,8 +34,8 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         boardView = null;
         owner = false;
         state = States.INIT;
-        if(ip == null) ip = "localhost";
-        else ip = arg;
+        if(arg == null) address = "localhost";
+        else address = arg;
 
         if (typeOfView.equals("TUI")) {
             try {
@@ -70,6 +69,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     @Override
     public void println(String arg) {
         try {
+            if(arg.equals("/exit")) System.exit(0);
 
             if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
 
@@ -91,7 +91,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
             }else{
                 if((arg.startsWith("/remove") || arg.startsWith("/switch")) || arg.startsWith("/add")){
                     String[] tmp =  arg.split(" ");
-                    String newMsg = tmp[0] + " " + nickname + " ";
+                    String newMsg = tmp[0] + " " + this.nickname + " ";
                     for(int i = 1; i<tmp.length; i++){
                         newMsg += tmp[i] + " ";
                     }
@@ -132,10 +132,14 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
     }
 
-
-    //Asks the client which type of view it wants
-    //Then creates an instance of ClientApp and "connects" it to the server through the method run()
-    public static void execute(String typeOfView, String arg) {
+    /**
+     * This method asks the Client which type of View does it want;
+     * then creates an instance of ClientApp and connects it to the server through the method run().
+     * @param typeOfView the type of View can be TUI (textual user interface) or GUI (graphical user interface)
+     * @param ip the IP address the Client connects to
+     * @author Nicolò
+     */
+    public static void execute(String typeOfView, String ip) {
 
         ClientApp client = null;
         if(typeOfView == null){
@@ -144,13 +148,13 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
             String input = scanner.nextLine();
 
             try {
-                client = new ClientApp(input, arg);
+                client = new ClientApp(input, ip);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         }else{
             try {
-                client = new ClientApp(typeOfView, arg);
+                client = new ClientApp(typeOfView, ip);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -158,18 +162,31 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
 
         try {
-            System.out.println("IP ADD: " + ip);
-            client.run(ip);
+            System.out.println("IP ADD: " + address);
+            client.run(address);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * This method take a reference of the Server from the RMI Registry and "connects" the Client to it.
+     * @param serverHost the IP address or the name of the Server the Client connects to
+     * @author Nicolò
+     */
     public void run(String serverHost) throws Exception {
-        this.server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerRMI"); // take a reference of the server from the registry
+        this.server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerRMI");
     }
 
+    /**
+     * This method is invoked periodically by the Server to check if the Client is still connected.
+     * It is used to implement the disconnection resilience.
+     * @return true
+     * @author Nico
+     */
     @Override
     public boolean beat() throws RemoteException { return true; }
+
 
     //SETTER AND GETTER METHODS
     @Override

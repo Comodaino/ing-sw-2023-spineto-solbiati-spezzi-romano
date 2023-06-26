@@ -1,7 +1,6 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ServerRMI.Server;
 import Model.BoardView;
 import Model.Player;
 
@@ -19,7 +18,6 @@ public class Lobby {
     private BoardView boardView;
     private GameController controller;
     private ServerApp serverApp;
-    private Server server; //TODO delete after unification of ServerImpl and ServerApp
     private boolean playing;
 
     public Lobby(ServerApp serverApp) {

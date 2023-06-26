@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class PersonalGoal extends Goal implements Serializable {
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
+    private int numOfGoal;
 
     /**
      * Constructor of the PersonalGoal
@@ -84,8 +85,10 @@ public class PersonalGoal extends Goal implements Serializable {
                 j = 11;
                 break;
         }
+        this.numOfGoal = j;
         return j;
     }
+
 
     /**
      * this method calculate the score at the end of the game
@@ -194,5 +197,9 @@ public class PersonalGoal extends Goal implements Serializable {
 
         return score;
 
+    }
+
+    public int getNumOfGoal() {
+        return numOfGoal;
     }
 }

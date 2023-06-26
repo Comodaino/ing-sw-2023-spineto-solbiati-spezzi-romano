@@ -4,6 +4,7 @@ package View;
 import Distributed.AbstractClient;
 
 import Model.CommonGoals.*;
+import Model.PersonalGoal;
 import Model.Player;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -835,13 +836,23 @@ public class GUIApp extends Application implements ViewInterface {
     }
 
     public Image createPersonalGoal(AbstractClient client) {
-        Player p = new Player("Ale");
-        //   Player p= client.getBoardView().getListOfPlayer().get(0);
+
+        Player p= null;
+        for(int playerIndex=0; playerIndex<client.getBoardView().getListOfPlayer().size(); playerIndex++){
+            try {
+                if(client.getBoardView().getListOfPlayer().get(playerIndex).getNickname().equals(client.getNickname())){
+                    p = client.getBoardView().getListOfPlayer().get(playerIndex);
+                }
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         Constant c = new Constant();
-        int persGoal = p.getGoal().CreatePersonalGoal();
+        int index = p.getGoal().getNumOfGoal();
         String imagePath = null;
 
-        switch (persGoal) {
+        switch (index) {
             case 0:
                 imagePath = c.getCostantPersGoal() + "12.png";
                 break;

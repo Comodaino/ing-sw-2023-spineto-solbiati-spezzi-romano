@@ -654,7 +654,7 @@ public class TextualUI implements ViewInterface {
 
     private boolean columnAvailable(int c, int size) throws RemoteException {
         for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
-            if (client.getBoardView().getListOfPlayer().get(i).equals(client.getNickname())) {
+            if (client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())) {
                 return client.getBoardView().getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
             }
         }
@@ -694,12 +694,7 @@ public class TextualUI implements ViewInterface {
             return false;
         }
         if(in.startsWith("/add")){
-            if(!added){
-                added = columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
-                if (added) removed = false;
                 return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
-            }
-            else System.out.println("command /add already used");
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;

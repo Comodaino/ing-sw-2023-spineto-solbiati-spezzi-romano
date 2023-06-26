@@ -18,7 +18,7 @@ import java.util.Scanner;
  * @author Nicolò
  */
 public class ClientApp extends UnicastRemoteObject implements Client, AbstractClient {
-    private static String ip;
+    private static String address;
     private String nickname;
     private Integer lobbyID;
     private States state;
@@ -34,8 +34,8 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         boardView = null;
         owner = false;
         state = States.INIT;
-        if(ip == null) ip = "localhost";
-        else ip = arg;
+        if(arg == null) address = "localhost";
+        else address = arg;
 
         if (typeOfView.equals("TUI")) {
             try {
@@ -162,8 +162,8 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
 
         try {
-            System.out.println("IP ADD: " + ip);
-            client.run(ip);
+            System.out.println("IP ADD: " + address);
+            client.run(address);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

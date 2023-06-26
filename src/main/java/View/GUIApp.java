@@ -346,8 +346,6 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
             }
             if (j == 0) {
-                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg" + cg.getName());
-                System.out.println("PATH: " + commonGoal.getConstantGoal() + photo + ".jpg");
                 Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
 
                 ImageView imageView1 = new ImageView(imageGoal1);
@@ -458,7 +456,15 @@ public class GUIApp extends Application implements ViewInterface {
             shelfPane.add(label, 0, 4);
             GridPane bufferPane = new GridPane();
            for(int i =0; i<client.getBoardView().getTileBuffer().size();i++) {
-               bufferPane.add(bufferTile(i), i, 5);
+               SwitchButton switchButton = new SwitchButton(this, i,command);
+               Image image = new Image(createTile(i));
+               ImageView imageView = new ImageView(image);
+                imageView.setFitWidth(40);
+                imageView.setFitHeight(40);
+                imageView.setPreserveRatio(true);
+
+               switchButton.setGraphic(imageView);
+               bufferPane.add(switchButton.getButton(), i, 5);
            }
             shelfPane.add(bufferPane, 0, 5);
         }
@@ -567,9 +573,14 @@ public class GUIApp extends Application implements ViewInterface {
         return chatPane;
     }
 
-    public Button bufferTile(int i) {
+   /* public SwitchButton bufferTile(int i) {
+
+        SwitchButton switchButton = new SwitchButton(this, i);
+        Image image = new Image(createTile(i));
+        ImageView imageView = new ImageView(image);
+        switchButton.setGraphic(imageView);
 //TODO add control
-        BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
+       BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
             if(client.getBoardView().getTileBuffer().get(i)==null)
                 return null;
             Button button = new Button();
@@ -583,16 +594,18 @@ public class GUIApp extends Application implements ViewInterface {
             imageView.setFitWidth(40);
             button.setGraphic(imageView);
             button.setOpacity(1);
-            if(firstSwitch){
-                firstSwitch=false;
-                command="/switch";
-            }
+
 
        //     int finalI = i;
 
 
             button.setOnMouseClicked(e -> {
+                System.out.println("SWITCH CLICKED");
                 if(isSelected2.get()) {
+                    if(firstSwitch){
+                        firstSwitch=false;
+                        command="/switch";
+                    }
                     isSelected2.set(false);
                     button.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");
                     button.setDisable(true);
@@ -605,12 +618,13 @@ public class GUIApp extends Application implements ViewInterface {
                     button.setDisable(false);
                     button.setStyle("");
                     button.setOpacity(1);
-
             }
         });
-        return button;
-    }
 
+
+        return SwitchButton;
+    }
+ */
     public VBox showOtherShelf(AbstractClient client) throws RemoteException {
 
         VBox otherShelf = new VBox();
@@ -1053,6 +1067,14 @@ public class GUIApp extends Application implements ViewInterface {
 
     public void setRemove(Boolean firstRemove) {
         this.firstRemove = firstRemove;
+    }
+    public Boolean getFirstSwitch() {
+        this.firstSwitch = firstSwitch;
+        return firstSwitch;
+    }
+    public void setFirstSwitch(Boolean firstSwitch) {
+        this.firstSwitch = firstSwitch;
+        firstSwitch=false;
     }
     public void end(Stage primaryStage, String arg){
         GridPane root = new GridPane();

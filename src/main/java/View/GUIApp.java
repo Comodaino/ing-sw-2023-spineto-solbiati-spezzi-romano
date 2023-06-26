@@ -26,7 +26,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -380,7 +379,6 @@ public class GUIApp extends Application implements ViewInterface {
         shelfPane.add(shelfImageView, 0, 0);
         shelfPane.add(shelfGridPane, 0, 0);
         shelfPane.add(chat(), 0,3 );
-
         shelfPane.add(showOtherShelf(client), 1, 0);
         shelfImageView.setPreserveRatio(true);
         int nPlayer = 0;

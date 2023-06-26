@@ -70,6 +70,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     @Override
     public void println(String arg) {
         try {
+            if(arg.equals("/exit")) System.exit(0);
 
             if (!state.equals(States.INIT) && !arg.startsWith("/")) arg = "/message " + nickname + " " + arg;
 

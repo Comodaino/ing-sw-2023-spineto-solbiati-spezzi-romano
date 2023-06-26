@@ -107,24 +107,6 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     }
 
 
-    /**
-     * This method is invoked by the server every time that a move is made. It invokes the view update.
-     * @author Nicolò
-     */
-    @Override
-    public void update() throws RemoteException {
-
-        if(state == States.WAIT && firstWait){
-            firstWait = false;
-            return;
-        }
-
-        try {
-            view.update();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     /**
      * This method is invoked by the server every time that a move is made. It invokes the view update and sets the boardView to the client.
@@ -134,7 +116,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
      */
     @Override
     public void update(BoardView boardView, String arg) throws RemoteException {
-
+        firstWait = false;
         if(state == States.WAIT && firstWait){
             firstWait = false;
             return;

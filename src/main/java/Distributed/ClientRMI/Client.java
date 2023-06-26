@@ -12,7 +12,6 @@ import java.rmi.*;
  * @author Nicolò
  */
 public interface Client extends Remote {
-    public void update() throws RemoteException;
     public void update(BoardView boardView, String arg) throws RemoteException;
     public void setNickname(String nickname) throws RemoteException;
     public String getNickname() throws RemoteException;

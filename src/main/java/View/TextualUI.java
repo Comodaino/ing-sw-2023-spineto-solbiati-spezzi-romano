@@ -198,8 +198,12 @@ public class TextualUI implements ViewInterface {
                     for (Player p : client.getBoardView().getListOfPlayer()) {
                         System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
                     }
-                    System.out.println("The winner is......");
-                    System.out.println("\t\t\t\t\t"+ ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET +"\t\t\t\t\t");
+                    if(winner==null) {
+                        System.out.println("\t\t\t\t\t" + ConsoleColors.RED_BOLD + "There is no winner" );
+                    }else{
+                        System.out.println("The winner is......");
+                        System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
+                    }
                     break;
                 case CLOSE:
                     System.out.println("The lobby has been closed, thank you for playing!");
@@ -276,7 +280,7 @@ public class TextualUI implements ViewInterface {
                     winner = client.getBoardView().getWinner().getNickname();
                     System.out.println("The winner is......");
                     System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
-                }else System.out.println("Error: winner is null");
+                }else System.out.println(ConsoleColors.RED_BOLD + "There is no winner" + ConsoleColors.WHITE);
                 break;
             case CLOSE:
                 System.out.println("The lobby has been closed, thank you for playing!");

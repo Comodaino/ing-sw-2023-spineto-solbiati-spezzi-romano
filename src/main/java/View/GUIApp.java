@@ -458,9 +458,9 @@ public class GUIApp extends Application implements ViewInterface {
             shelfPane.add(label, 0, 4);
             GridPane bufferPane = new GridPane();
            for(int i =0; i<client.getBoardView().getTileBuffer().size();i++) {
-               bufferPane.add(bufferTile(i), i, 4);
+               bufferPane.add(bufferTile(i), i, 5);
            }
-            shelfPane.add(bufferPane, 0, 4);
+            shelfPane.add(bufferPane, 0, 5);
         }
 
         return shelfPane;
@@ -591,7 +591,7 @@ public class GUIApp extends Application implements ViewInterface {
        //     int finalI = i;
 
 
-            button.setOnAction(e -> {
+            button.setOnMouseClicked(e -> {
                 if(isSelected2.get()) {
                     isSelected2.set(false);
                     button.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");

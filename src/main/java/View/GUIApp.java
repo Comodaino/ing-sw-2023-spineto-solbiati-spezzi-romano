@@ -106,7 +106,7 @@ public class GUIApp extends Application implements ViewInterface {
         mainPane.add(hBox, 0, 2);
 
 
-     //   primaryStage.setMaximized(true);
+        primaryStage.setMaximized(true);
     //    primaryStage.setFullScreen(true);
         primaryStage.sizeToScene();
         primaryStage.show();
@@ -1163,13 +1163,7 @@ public class GUIApp extends Application implements ViewInterface {
     public void end(Stage primaryStage, String arg){
         GridPane root = new GridPane();
         Scene sceneEnd = new Scene(root);
-        Image imageEnd = new Image("images/Publisher material/Display_5.jpg");
-        ImageView imageViewEnd = new ImageView(imageEnd);
-        imageViewEnd.setPreserveRatio(true);
         BoxBlur blur = new BoxBlur(3, 4, 3);
-        imageViewEnd.setEffect(blur);
-        imageViewEnd.fitWidthProperty().bind(primaryStage.widthProperty());
-        imageViewEnd.fitHeightProperty().bind(primaryStage.heightProperty());
         root.setAlignment(Pos.CENTER);
         root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_5.jpg'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
         Image imageLogo = new Image("images/Publisher material/Title 2000x618px.png");
@@ -1185,7 +1179,7 @@ public class GUIApp extends Application implements ViewInterface {
             labelWinner.setAlignment(Pos.CENTER);
             root.add(labelWinner, 0, 1);
         }else {
-            labelWinner.setText(client.getBoardView().getWinner().getNickname());
+            labelWinner.setText(client.getBoardView().getWinner().getNickname() + " won the game!");
             labelWinner.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             labelWinner.setAlignment(Pos.CENTER);
             root.add(labelWinner, 0, 1);
@@ -1210,11 +1204,12 @@ public class GUIApp extends Application implements ViewInterface {
         for(Player p: client.getBoardView().getListOfPlayer()){
             Label label = new Label();
             label.setText(p.getNickname() + "  " + p.getScore());
-            label.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
+            label.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
             label.setAlignment(Pos.CENTER);
             vBox.getChildren().add(label);
 
         }
+        vBox.setStyle("-fx-background-color: white; -fx-border-color: lightblue; -fx-border-width: 2px; -fx-alignment: center; ");
         root.add(vBox, 0, 2);
         Button button = new Button("Lobby");
         button.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
@@ -1222,10 +1217,8 @@ public class GUIApp extends Application implements ViewInterface {
             client.println("lobbbb");
         });
         root.add(button, 0, 3);
-
-      //  primaryStage.setMaximized(true);
-     //   primaryStage.setFullScreen(true);
         primaryStage.setScene(sceneEnd);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
     public String getCommand(){

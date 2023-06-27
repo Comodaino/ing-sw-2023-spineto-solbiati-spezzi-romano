@@ -340,7 +340,7 @@ public class GUIApp extends Application implements ViewInterface {
                     new GoalQuartets(size);
                     photo=3;
                     break;
-                case "GoalRow":
+                case "GoalRows":
                     new GoalRow(size);
                     photo=7;
                     break;

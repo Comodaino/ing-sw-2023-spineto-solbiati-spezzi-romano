@@ -92,6 +92,7 @@ public class GUIApp extends Application implements ViewInterface {
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(createBoard(client),commonGoal);
         mainPane.add(createShelf(client, mainPane), 1, 0);
+        mainPane.add(showOtherShelf(client), 2, 0);
     //    mainPane.add(createBoard(client), 0, 0);
 
         mainPane.add(vBox, 0, 0);
@@ -377,17 +378,18 @@ public class GUIApp extends Application implements ViewInterface {
         return commonGoalPane;
     }
 
-    public GridPane createShelf(AbstractClient client, GridPane mainPane) throws RemoteException {
+    public VBox createShelf(AbstractClient client, GridPane mainPane) throws RemoteException {
         GridPane shelfPane = new GridPane();
         GridPane shelfGridPane = new GridPane();
+        GridPane gridPane = new GridPane();
         Image imageShelf = new Image("images/boards/bookshelf.png");
         ImageView shelfImageView = new ImageView(imageShelf);
         shelfImageView.setFitWidth(300);
         shelfImageView.setFitHeight(300);
         shelfPane.add(shelfImageView, 0, 0);
         shelfPane.add(shelfGridPane, 0, 0);
-        shelfPane.add(chat(), 0,3 );
-        shelfPane.add(showOtherShelf(client), 1, 0);
+       // shelfPane.add(chat(), 0,3 );
+        //shelfPane.add(showOtherShelf(client), 1, 0);
         shelfImageView.setPreserveRatio(true);
         int nPlayer = 0;
         for (Player p: client.getBoardView().getListOfPlayer()) {
@@ -438,7 +440,6 @@ public class GUIApp extends Application implements ViewInterface {
             chairImageView.setFitHeight(100);
             chairImageView.setPreserveRatio(true);
             persGoal.add(chairImageView, 0, 0);
-            //    shelfPane.add(chairImageView, 0, 1);
         } else {
             Label label = new Label();
             label.setPrefSize(100, 100);
@@ -452,17 +453,19 @@ public class GUIApp extends Application implements ViewInterface {
         personalGoalImageView.setFitWidth(150);
         personalGoalImageView.setFitHeight(150);
         personalGoalImageView.setPreserveRatio(true);
-        //    shelfPane.add(personalGoalImageView, 1, 1);
+
         persGoal.add(personalGoalImageView, 1, 0);
-
         persGoal.setAlignment(Pos.CENTER);
+        gridPane.add(persGoal, 0, 0);
 
-        shelfPane.add(persGoal, 0, 2);
+        gridPane.add(chat(),0,1);
+
         if(client.getBoardView().getCurrentPlayer().getNickname().equals(client.getNickname())) {
             Label label = new Label();
             label.setText("Choose the order of the tiles");
             label.setStyle("-fx-background-color: white;");
-            shelfPane.add(label, 0, 4);
+            gridPane.add(label, 0, 2);
+
             GridPane bufferPane = new GridPane();
            for(int i =0; i<client.getBoardView().getTileBuffer().size();i++) {
                SwitchButton switchButton = new SwitchButton(this, i,command);
@@ -476,10 +479,12 @@ public class GUIApp extends Application implements ViewInterface {
                bufferPane.add(switchButton.getButton(), i, 5);
 
            }
-            shelfPane.add(bufferPane, 0, 5);
+           gridPane.add(bufferPane, 0, 3);
         }
+        VBox createShelf = new VBox();
+        createShelf.getChildren().addAll(shelfPane,gridPane);
 
-        return shelfPane;
+        return createShelf;
     }
 
     public ImageView printShelf(int nPlayer, int row, int col){
@@ -663,6 +668,7 @@ public class GUIApp extends Application implements ViewInterface {
        }
 
        shelf2.setTranslateY(10);
+       shelf2.setTranslateX(2);
        for (int i = 0; i < 5; i++) {
            Button emptyButton = new Button();
            emptyButton.setPrefSize(31, 1);
@@ -674,6 +680,7 @@ public class GUIApp extends Application implements ViewInterface {
        }
 
        shelf3.setTranslateY(10);
+       shelf3.setTranslateX(2);
 
        for (int i = 0; i < 5; i++) {
            Button emptyButton = new Button();
@@ -686,7 +693,7 @@ public class GUIApp extends Application implements ViewInterface {
        }
 
        shelf4.setTranslateY(10);
-
+       shelf4.setTranslateX(2);
 
 
        int j = 0;

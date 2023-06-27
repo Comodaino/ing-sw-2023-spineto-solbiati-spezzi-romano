@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -117,7 +118,7 @@ public class GUIApp extends Application implements ViewInterface {
         primaryStage.show();
     }
 
-    public Pane createBoard(AbstractClient client) {
+    private Pane createBoard(AbstractClient client) {
         Pane boardPane = new Pane();
 
         Image imageBoard = new Image("images/boards/livingroom.png");
@@ -174,13 +175,17 @@ public class GUIApp extends Application implements ViewInterface {
     }
     public GridPane fillBoard(AbstractClient client){
         GridPane fillBoardPane = new GridPane();
+        fillBoardPane.setHgap(0);
+        fillBoardPane.setVgap(0);
+
 
         //TODO add control
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Pane emptyPane = new Pane();
-                emptyPane.setPrefSize(54, 54);
+                emptyPane.setPrefSize(65, 65);
+                emptyPane.setStyle("-fx-background-color: transparent;-fx-border-color: black;-fx-border-width: 0");
                 fillBoardPane.add(emptyPane, i, j);
             }
         }
@@ -197,6 +202,9 @@ public class GUIApp extends Application implements ViewInterface {
 
     public Button getTile(int row, int column) {
         Button tileButton = new Button();
+        tileButton.setPrefSize(65, 65);
+        GridPane.setMargin(tileButton, new Insets(0));
+        tileButton.setStyle("-fx-background-color: transparent;-fx-border-color: black;-fx-border-width: 0");
         String imageTilePath;
         Constant tile = new Constant();
         int i = 0;
@@ -235,15 +243,12 @@ public class GUIApp extends Application implements ViewInterface {
         }
         imageTilePath = tile.getConstantTile() + imageTileName + i + ".png";
 
-        tileButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0; -fx-border-height: 0 ");
-        tileButton.setPrefSize(54, 54);
         Image imageTile = new Image(imageTilePath);
         ImageView imageView = new ImageView(imageTile);
         imageView.setPreserveRatio(true);
-        imageView.setFitHeight(54);
-        imageView.setFitWidth(54);
+        imageView.setFitHeight(60);
+        imageView.setFitWidth(60);
         tileButton.setGraphic(imageView);
-
 
         GaussianBlur blur = new GaussianBlur(2);
         BooleanProperty isSelected = new SimpleBooleanProperty(false);
@@ -265,7 +270,7 @@ public class GUIApp extends Application implements ViewInterface {
                 if(command!=null && command.startsWith("/remove")) {
                     if (isSelected.get() && count.get() < 3) {
                         isSelected.set(false);
-                        tileButton.setStyle("-fx-border-width: 0;-fx-border-height: 0;");
+                        tileButton.setStyle("-fx-border-width: 0; -fx-border-color: transparent; -fx-background-color: transparent");
                         tileButton.setEffect(blur);
                         tileButton.setDisable(true);
                         tileButton.setOpacity(0.8);
@@ -356,6 +361,7 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
             }
             if (j == 0) {
+                System.out.println(client.getBoardView().getSetOfCommonGoal().size());
                 Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
 
                 ImageView imageView1 = new ImageView(imageGoal1);

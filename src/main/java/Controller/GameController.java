@@ -424,5 +424,9 @@ public class GameController implements Serializable {
             }
         }
     }
+
+    public void setFM(boolean fm) {
+        this.gameBoard.setFm(fm);
+    }
 }
 

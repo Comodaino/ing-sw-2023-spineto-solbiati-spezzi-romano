@@ -88,12 +88,17 @@ public class Board implements Serializable {
         recharge();
 
         setOfCommonGoal = new HashSet<CommonGoal>();
-        setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
-        if(fm) {
-            CommonGoal tmpGoal;
+        CommonGoal tmpGoal = goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size());
+        setOfCommonGoal.add(tmpGoal);
+
+        if(!fm) {
+            String tmpName = tmpGoal.getName();
+
+            boolean flag= false;
             do {
                 tmpGoal = goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size());
-            }while(!setOfCommonGoal.contains(tmpGoal));
+                if(tmpGoal.getName().equals(tmpName)) flag = true;
+            }while(flag);
             setOfCommonGoal.add(tmpGoal);
         }
     }
@@ -207,5 +212,9 @@ public class Board implements Serializable {
 
     public List<Player> getDonePlayers() {
         return donePlayers;
+    }
+
+    public void setFm(boolean fm) {
+        this.fm = fm;
     }
 }

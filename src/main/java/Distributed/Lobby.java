@@ -115,6 +115,7 @@ public class Lobby {
 
     public void setFirstMatch(boolean firstMatch) {
         this.firstMatch = firstMatch;
+        this.getController().setFM(firstMatch);
     }
 
     public boolean isFirstMatch() {

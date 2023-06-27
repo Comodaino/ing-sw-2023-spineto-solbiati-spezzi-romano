@@ -553,26 +553,25 @@ public class GUIApp extends Application implements ViewInterface {
         });
 
         VBox chatBox3 = new VBox();
-        Label chatLabel = null;
+
         for(int i=0; i<client.getBoardView().getPersonalChatBuffer().size() ;i++) {
             if (client.getBoardView().getPersonalChatBuffer().size() == 0 || client.getBoardView().getPersonalChatBuffer().get(i) == null)
                 break;
 
             try {
                 if (client.getBoardView().getPersonalChatBuffer().get(i).getRecipient().equals(client.getNickname())) {
-                    chatLabel = new Label();
+                    Label chatLabel = new Label();
+
                     chatLabel.setText(client.getBoardView().getPersonalChatBuffer().get(i).getContent());
+                    chatBox2.getChildren().add(chatLabel);
+                    chatLabel.setStyle("-fx-background-color: white;");
+                    chatBox2.setStyle("-fx-background-color: white;");
                 }
 
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
             //  chatBox.getChildren().add(chatLabel);
-            if (chatLabel != null) {
-                chatBox2.getChildren().add(chatLabel);
-                chatLabel.setStyle("-fx-background-color: white;");
-                chatBox2.setStyle("-fx-background-color: white;");
-            }
         }
         chatBox.getChildren().addAll(chatField,chatBox2);
         chatPane.getChildren().addAll(chatBox3);
@@ -1014,11 +1013,9 @@ public class GUIApp extends Application implements ViewInterface {
         ImageView imageViewLobby = new ImageView(imageLobby);
         BoxBlur blur = new BoxBlur(3, 4, 3);
 
-
         imageViewLobby.setEffect(blur);
         imageViewLobby.fitWidthProperty().bind(primaryStage.widthProperty());
         imageViewLobby.fitHeightProperty().bind(primaryStage.heightProperty());
-
 
         try {
             if (client.isOwner()) {
@@ -1046,7 +1043,6 @@ public class GUIApp extends Application implements ViewInterface {
                 HBox hBox = new HBox(5);
                 hBox.getChildren().addAll(start, firstMatch, notFirstMatch);
                 hBox.setAlignment(Pos.CENTER);
-
                 root.add(hBox, 2, 0);
 
                 Screen screen = Screen.getPrimary();
@@ -1055,9 +1051,8 @@ public class GUIApp extends Application implements ViewInterface {
                 root.setPrefWidth(bounds.getWidth());
             } else {
                 Label label = new Label("Waiting for the owner...");
-                label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Comic Sans MS';");
-
-                root.add(label, 5, 5);
+                label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+                root.add(label, 2, 0);
 
                 Screen screen = Screen.getPrimary();
                 Rectangle2D bounds = screen.getVisualBounds();
@@ -1065,7 +1060,26 @@ public class GUIApp extends Application implements ViewInterface {
                 root.setPrefWidth(bounds.getWidth());
 
             }
-            root.add(chat(), 10, 10);
+            Pane namePlayerLobby = new Pane();
+            VBox vBox = new VBox(5);
+            namePlayerLobby.setStyle("-fx-background-color: black; -fx-opacity: 1;");
+            boolean owner = true;
+            for(int i=0; i<client.getBoardView().getListOfPlayer().size(); i++){
+                Label myName = new Label();
+                if(owner) {
+                    owner = false;
+                    myName.setText(client.getBoardView().getListOfPlayer().get(i).getNickname() + " (owner)");
+                }else{
+                    myName.setText(client.getBoardView().getListOfPlayer().get(i).getNickname());
+                }
+                myName.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+                vBox.getChildren().add(myName);
+            }
+            vBox.setStyle("-fx-border-color: lightblue; -fx-border-width: 5px; -fx-background-color: white");
+            root.add(vBox, 2, 1);
+            Pane chat = new Pane(chat());
+            chat.setStyle("-fx-alignment: center;");
+            root.add(chat, 2, 2)  ;
             root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_5.jpg'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
             root.setAlignment(Pos.CENTER);
 

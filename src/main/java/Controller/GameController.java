@@ -315,7 +315,7 @@ public class GameController implements Serializable {
     }
 
     private void newWhisper(String[] input) {
-        String tmp = "[" + input[2] + "](to you)";
+        String tmp = "[" + input[1] + "](to you)";
         for(int i = 3; i< input.length; i++){
             tmp = tmp +  " " +  input[i];
         }

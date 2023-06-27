@@ -86,11 +86,15 @@ public class GUIApp extends Application implements ViewInterface {
         mainPane.setBackground(new Background(new BackgroundImage(imageBackgroundShelf, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
         GridPane commonGoal = getCommonGoal(client);
-        mainPane.add(commonGoal, 0, 1);
+      //  mainPane.add(commonGoal, 0, 1);
 
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(createBoard(client),commonGoal);
         mainPane.add(createShelf(client, mainPane), 1, 0);
-        mainPane.add(createBoard(client), 0, 0);
+    //    mainPane.add(createBoard(client), 0, 0);
 
+        mainPane.add(vBox, 0, 0);
         primaryStage.setTitle("Play");
         primaryStage.setOnCloseRequest(e -> {
             // Gestire l'evento di chiusura

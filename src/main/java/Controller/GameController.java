@@ -29,6 +29,8 @@ public class GameController implements Serializable {
     private Lobby lobby;
     private int removeSize;
 
+    private int endGameCounter;
+
     /**
      *
      * @param firstMatch setting that changes how the board is built
@@ -115,6 +117,7 @@ public class GameController implements Serializable {
 
             } while (donePlayers.contains(currentPlayer) || flag);
             gameBoard.setCurrentPlayer(currentPlayer);
+            if(endGameCounter!=0) this.endGameCounter++;
         }
     }
 
@@ -142,7 +145,7 @@ public class GameController implements Serializable {
                     if(!rp.isConnected()) disconnectedNumber++;
                 }
 
-                if(gameBoard.getDonePlayers().size() >= gameBoard.getListOfPlayer().size() + disconnectedNumber){
+                if(this.endGameCounter >= gameBoard.getListOfPlayer().size() + disconnectedNumber){
                     for(Player p: gameBoard.getListOfPlayer()) p.removeChair();
                     lobby.endMatch();
                 }
@@ -243,7 +246,8 @@ public class GameController implements Serializable {
                         if (gameBoard.getEndGoal().getStatus()) {
                             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getEndGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                         }
-                        if (currentPlayer.getShelf().isFull()) {
+                        if (currentPlayer.getShelf().isFull() || endGameCounter!=0) {
+                            this.endGameCounter++;
                             gameBoard.getTileBuffer().removeAll(gameBoard.getTileBuffer());
                             playEndGame();
                             checkEnd();
@@ -410,6 +414,7 @@ public class GameController implements Serializable {
     }
 
     public void startGame() {
+        this.endGameCounter = 0;
         gameBoard.init();
         for(Player p: gameBoard.getListOfPlayer()){
             if(p.getChair()){

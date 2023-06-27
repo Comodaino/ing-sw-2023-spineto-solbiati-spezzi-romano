@@ -418,6 +418,7 @@ public class GUIApp extends Application implements ViewInterface {
         }
 
 
+
         shelfGridPane.setAlignment(Pos.CENTER);
         GridPane persGoal = new GridPane();
 
@@ -688,20 +689,33 @@ public class GUIApp extends Application implements ViewInterface {
 
        shelf4.setTranslateY(10);
 
+
+
        int j = 0;
        for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
+
            if (!client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())) {
                for (int row = 0; row < 6; row++) {
                    for (int col = 0; col < 5; col++) {
                        switch (j) {
                            case 0:
+                               Label namePlayer2 = new Label();
                                shelf2.add(printOtherShelf(row, col, i), col, 5 - row);
+                               namePlayer2.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());
+                               shelfPlayer2.add(namePlayer2, 0, 1);
                                break;
+
                            case 1:
+                               Label namePlayer3 = new Label();
                                shelf3.add(printOtherShelf(row, col, i), col, 5 - row);
+                               namePlayer3.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());
+                               shelfPlayer3.add(namePlayer3, 1, 2);
                                break;
                            case 2:
+                               Label namePlayer4 = new Label();
                                shelf4.add(printOtherShelf(row, col, i), col, 5 - row);
+                               namePlayer4.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());
+                               shelfPlayer4.add(namePlayer4, 2, 3);
                                break;
                        }
 
@@ -713,11 +727,9 @@ public class GUIApp extends Application implements ViewInterface {
 
 
        shelfPlayer2.add(shelfImageView, 0, 0);
-
        shelfPlayer2.add(shelf2, 0, 0);
 
        if (client.getBoardView().getListOfPlayer().size() >= 3) {
-           System.err.println("LMAO");
            ImageView shelfImageView3 = new ImageView(imageShelf);
            shelfImageView3.setFitWidth(200);
            shelfImageView3.setFitHeight(200);

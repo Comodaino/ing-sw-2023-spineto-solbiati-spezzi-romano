@@ -139,16 +139,17 @@ public class TextualUI implements ViewInterface {
                     printGoalShelf(goal.getName());
                 });
                 break;
-            /*case ("/pg"):
-               ArrayList<Pgtype> pgoal = new ArrayList<Pgtype>();
+            case ("/pg"):
+               /*ArrayList<Pgtype> pgoal = new ArrayList<Pgtype>();
                 Shelf pgShelf = new Shelf();
                 for(Player p : client.getBoardView().getListOfPlayer())
                     if(p.getNickname().equals(client.getNickname()))
                         pgoal = p.getGoal().getPGoal();
                 for(Pgtype pg : pgoal){
 
-                }
-                break;*/
+                }*/
+                System.out.println("not implemented yet");
+                break;
         }
     }
 

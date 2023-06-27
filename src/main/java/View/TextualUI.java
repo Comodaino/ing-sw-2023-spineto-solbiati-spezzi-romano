@@ -49,46 +49,44 @@ public class TextualUI implements ViewInterface {
         while(state!=State.CLOSE) {
             String in = input.nextLine();
             if(in!=null && in.length()>0) {
-                if (state != State.HOME && (state == State.LOBBY || state == State.PLAY)) {
-                    if (in.equals("/cg") || in.equals("/pg")) {
-                        printGoal(in);
-                        break;
-                    }
-                    if (in.equals("/h") || in.equals("/help")) {
-                        help();
-                        break;
-                    }
-                    if (in.startsWith("/whisper")) {
-                        String[] msg = in.split(" ");
-                        if (msg.length < 3)
-                            System.out.println("whisper failed, addressee or message is missing");
-                        else {
-                            for (int i = 2; i < msg.length; i++)
-                                msg[2] += msg[i];
-                            if (msg[2].length() > maxMsgLength) {
-                                System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
-                                break;
-                            }
-
-                        }
-                    }
+                if (state == State.LOBBY || state == State.PLAY) {
                     if (in.startsWith("/") && (state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
                         System.out.println("Command is invalid, try /help or /h");
-                    else if (state == State.HOME && !client.isOwner()) System.out.println("Please wait for the owner");
-                    else client.println(in);
-                } else {
-                    if (in != null && in.length() > 10) {
+                    else{
+                        if(in.equals("/h") || in.equals("/help")) help();
+                        else {
+                            if(in.equals("/cg") || in.equals("/pg")) printGoal(in);
+                            else client.println(in);
+                        }
+                    }
+                }if (state == State.HOME){
+                    if (!client.isOwner()) System.out.println("wait for the owner");
+                    if (in.length() > 10) {
                         System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
-                    } else if (in != null)
+                    } else
                         client.println(in);
                 }
             }
         }
     }
 
+
     private boolean correctLobbyInput(String in) {
         if(in.startsWith("/")){
-            if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.startsWith("/whisper")) return true;
+            if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h")) return true;
+            if (in.startsWith("/whisper")) {
+                String[] msg = in.split(" ");
+                if (msg.length < 3)
+                    System.out.println("whisper failed, addressee or message is missing");
+                else {
+                    for (int i = 2; i < msg.length; i++)
+                        msg[2] += msg[i];
+                    if (msg[2].length() > maxMsgLength) {
+                        System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
+                    }
+
+                }
+            }
             return false;
         }
         return true;
@@ -116,7 +114,7 @@ public class TextualUI implements ViewInterface {
                         case ("GoalDiagonals"):
                             System.out.println("five tiles of the same type forming a diagonal");
                             break;
-                        case ("GoalDiffColumns_conf"):
+                        case ("GoalDiffColumns"):
                             System.out.println("two columns each formed by 6 different types of tiles");
                             break;
                         case ("GoalDiffRows"):
@@ -308,7 +306,7 @@ public class TextualUI implements ViewInterface {
         if (client.getBoardView().getChatBuffer().size()>0)
             System.out.println(ConsoleColors.PURPLE_UNDERLINED + "CHAT:" + RESET);
         for(String s: client.getBoardView().getChatBuffer()){
-            System.out.println("--" + s);
+            System.out.println("\uD83D\uDFE9" + s);
         }
         for(Whisper s: client.getBoardView().getPersonalChatBuffer()){
             if(s.getRecipient().equals(client.getNickname())) System.out.println("--" + s.getContent());
@@ -549,22 +547,22 @@ public class TextualUI implements ViewInterface {
                     }
                     switch (tile.getColor()) {
                         case WHITE:
-                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.WHITE_BACKGROUND + tType + RESET + "\t");
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.WHITE_BACKGROUND + tType + RESET + " ");
                             break;
                         case YELLOW:
-                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + "\t");
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + " ");
                             break;
                         case LIGHTBLUE:
-                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.CYAN_BACKGROUND +   tType + RESET + "\t");
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.CYAN_BACKGROUND +   tType + RESET + " ");
                             break;
                         case GREEN:
-                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + "\t");
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + " ");
                             break;
                         case BLUE:
-                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.BLUE_BACKGROUND + tType + RESET + "\t");
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.BLUE_BACKGROUND + tType + RESET + " ");
                             break;
                         case PINK:
-                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "\t");
+                            System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + " ");
                             break;
                     }
                 }
@@ -699,8 +697,6 @@ public class TextualUI implements ViewInterface {
                         }
                     }
                 }
-
-            else System.out.println("command /remove already used");
             return false;
         }
         if(in.startsWith("/add")){
@@ -709,13 +705,26 @@ public class TextualUI implements ViewInterface {
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;
         if(in.equals("/help") || in.equals("/h")) return true;
-        if(in.startsWith("/whisper")) return true;
-        if(in.startsWith("/chat")) return true;
-        if(in.startsWith("/cg") || in.startsWith("/pg")) return true;
-        return false;
+        if(in.equals("/cg") || in.equals("/pg")) return true;
+        if (in.startsWith("/whisper")) {
+            String[] msg = in.split(" ");
+            if (msg.length < 3){
+                System.out.println("whisper failed, addressee or message is missing");
+            return false;
+            }
+            else {
+                for (int i = 2; i < msg.length; i++)
+                    msg[2] += msg[i];
+                if (msg[2].length() > maxMsgLength) {
+                    System.out.println(ConsoleColors.RED_BOLD + "message too long, maximum character: " + maxMsgLength + RESET);
+                    return false;
+                }return true;
+
+            }
+        } return false;
     }
    void printGoalShelf(String goal){
-        String conf = goal + "_conf"; //personalGoal_conf
+        String conf = goal + "_conf";
        InputStream is = getClass().getClassLoader().getResourceAsStream("CommonGoalsTUI/"+ conf);
        assert is != null;
        Scanner reader = new Scanner(is);

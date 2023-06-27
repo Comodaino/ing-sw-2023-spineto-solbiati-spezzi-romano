@@ -79,7 +79,7 @@ public class TextualUI implements ViewInterface {
 
     private boolean correctLobbyInput(String in) {
         if(in.startsWith("/")){
-            if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.startsWith("/whisper")) return true;
+            if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.startsWith("/whisper") || in.startsWith("/set")) return true;
             return false;
         }
         return true;

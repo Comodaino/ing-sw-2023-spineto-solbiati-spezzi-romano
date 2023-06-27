@@ -195,7 +195,7 @@ public class ServerApp {
      * @param command the command chosen by the owner of the lobby
      * @author Nicolò
      */
-    public void waitCommand(Client client, String command) throws RemoteException {
+    public void waitCommand(Client client, String command) throws IOException, InterruptedException {
         Lobby lobby = null;
         synchronized (lobbies) {
             lobby = lobbies.get(client.getLobbyID() - 1);
@@ -227,7 +227,9 @@ public class ServerApp {
                 }
                 break;
             default:
-                playCommand(client, command);
+                if(command != null && command.startsWith("/set")) {
+                    if(command.length()==6) lobby.setMaxNumberOfPlayers(command.charAt(5) - 48);
+                }else lobby.getController().update(command);
                 break;
         }
     }

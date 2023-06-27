@@ -61,9 +61,6 @@ public class GUIApp extends Application implements ViewInterface {
         primaryStage.getIcons().add(new Image("images/Publisher material/Icon 50x50px.png"));
 
         primaryStage.setMaximized(true);
-        primaryStage.setFullScreen(true);
-        primaryStage.sizeToScene();
-
         primaryStage.show();
 
     }
@@ -959,9 +956,7 @@ public class GUIApp extends Application implements ViewInterface {
         Scene scene = new Scene(root);
         stage.setScene(scene);
 
-        stage.sizeToScene();
-     //   stage.setFullScreen(true);
-     //   stage.setMaximized(true);
+        stage.setMaximized(true);
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         root.setPrefHeight(bounds.getHeight());

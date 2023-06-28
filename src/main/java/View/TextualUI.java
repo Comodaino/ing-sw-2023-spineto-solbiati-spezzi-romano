@@ -747,7 +747,7 @@ public class TextualUI implements ViewInterface {
             return false;
         }
         if(in.startsWith("/add")){
-                return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+                return columnAvailable(tmpInput[1].charAt(0) - 48, client.getBoardView().getTileBuffer().size());
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;

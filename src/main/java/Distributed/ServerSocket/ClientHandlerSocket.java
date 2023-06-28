@@ -20,6 +20,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     private Scanner in;
     private boolean outputEnabled;
 
+
     /**
      * Constructor for the Client Handler
      *

@@ -1,0 +1,26 @@
+/remove 5 6
+/add 1
+/remove 1 3 1 4
+/switch 0 1
+add 4
+/message player1 hi everyone
+/message player1 hiiii
+/message player1 why nobody likes me :C
+/add 4
+/definitivelynotasupportedcommand
+/whisper player1 player2 hi how are you?
+/whisper player1 player2 hi how are you?
+/whisper player1 player2 hey???
+/whisper player1 player2 respond plz
+/remove 2 3 2 4 2 5
+/message player1 hey beautiful how are you?
+/add 1
+/remove 4 4
+/remove 4 1 3 2
+/remove 4 1 5 1
+/add 4
+/end
+/remove 7 4
+/add 2
+/remove 7 3
+/add 0

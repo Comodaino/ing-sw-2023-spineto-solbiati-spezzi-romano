@@ -22,14 +22,22 @@ class GameControllerTest extends Observable{
         testController.addPlayer(new Player("player1"));
         testController.addPlayer(new Player("player2"));
         Board gameBoard = testController.getBoard();
-        gameBoard.init();
-        File commands = new File("src/test/java/Controller/controllerTestConf");
+        testController.startGame();
+        File commands = new File("src/test/java/Controller/controllerTestConf2");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
             //System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
             try {
-                testController.update(commandScanner.nextLine());
+
+
+                String[] arrayS = commandScanner.nextLine().split(" ");
+                String tmp = arrayS[0] + " " + gameBoard.getCurrentPlayer().getNickname();
+                for(int i=1; i< arrayS.length; i++){
+                    tmp = tmp + " " + arrayS[i];
+                }
+
+                testController.update(tmp);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -45,14 +53,21 @@ class GameControllerTest extends Observable{
         testController.addPlayer(new Player("player3"));
 
         Board gameBoard = testController.getBoard();
-        gameBoard.init();
-        File commands = new File("src/test/java/Controller/controllerTestConf");
+        testController.startGame();
+        File commands = new File("src/test/java/Controller/controllerTestConf3");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
+            System.out.println("ziopera");
             setChanged();
             //System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
             try {
-                testController.update(commandScanner.nextLine());
+                String[] arrayS = commandScanner.nextLine().split(" ");
+                String tmp = arrayS[0] + " " + gameBoard.getCurrentPlayer().getNickname();
+                for(int i=1; i< arrayS.length; i++){
+                    tmp = tmp + " " + arrayS[i];
+                }
+
+                testController.update(tmp);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -70,14 +85,21 @@ class GameControllerTest extends Observable{
         testController.addPlayer(new Player("player4"));
 
         Board gameBoard = testController.getBoard();
-        gameBoard.init();
-        File commands = new File("src/test/java/Controller/controllerTestConf");
+        testController.startGame();
+        File commands = new File("src/test/java/Controller/controllerTestConf4");
         Scanner commandScanner = new Scanner(commands);
         while(commandScanner.hasNextLine()){
             setChanged();
+
             //System.out.println("current player: " + testController.getCurrentPlayer().getNickname());
             try {
-                testController.update(commandScanner.nextLine());
+                String[] arrayS = commandScanner.nextLine().split(" ");
+                String tmp = arrayS[0] + " " + gameBoard.getCurrentPlayer().getNickname();
+                for(int i=1; i< arrayS.length; i++){
+                    tmp = tmp + " " + arrayS[i];
+                }
+
+                testController.update(tmp);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

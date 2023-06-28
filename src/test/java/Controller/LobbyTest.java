@@ -11,4 +11,9 @@ public class LobbyTest extends Lobby {
             return;
         }
     }
+
+    @Override
+    public boolean getPlay() {
+        return true;
+    }
 }

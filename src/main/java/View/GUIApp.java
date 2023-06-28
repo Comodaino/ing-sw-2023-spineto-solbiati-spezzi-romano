@@ -393,27 +393,84 @@ public class GUIApp extends Application implements ViewInterface {
                     break;
             }
             if (j == 0) {
-
+                Pane pane = new Pane();
                 Image imageGoal1 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
-
                 ImageView imageView1 = new ImageView(imageGoal1);
                 imageView1.setPreserveRatio(true);
                 imageView1.setFitHeight(150);
                 imageView1.setFitWidth(150);
-                commonGoalPane.add(imageView1, 0, 0);
+
+                ImageView imageView2 = new ImageView();
+                pane.getChildren().add(imageView1);
+                if(cg.getCompleted().size() >= client.getBoardView().getListOfPlayer().size()){
+                    imageView2 = null;
+                }else {
+                    if (cg.getCompleted().size() == 0) {
+                        imageView2 = getImageOfScoreOfCommonGoal(8);
+                    }
+                    if (cg.getCompleted().size() == 1) {
+                        imageView2 = getImageOfScoreOfCommonGoal(6);
+                    }
+                    if (cg.getCompleted().size()==2 ){
+                        imageView2 = getImageOfScoreOfCommonGoal(4);
+                    }
+                    if (cg.getCompleted().size()==3 ){
+                        imageView2 = getImageOfScoreOfCommonGoal(2);
+                    }
+
+                }
+                pane.getChildren().add(imageView2);
+                commonGoalPane.add(pane, 0, 0);
+
+
+
+
             } else {
+                Pane pane2 = new Pane();
                 Image imageGoal2 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
-                ImageView imageView2 = new ImageView(imageGoal2);
-                imageView2.setPreserveRatio(true);
-                imageView2.setFitHeight(150);
-                imageView2.setFitWidth(150);
-                commonGoalPane.add(imageView2, 1, 0);
+                ImageView imageView3 = new ImageView(imageGoal2);
+                imageView3.setPreserveRatio(true);
+                imageView3.setFitHeight(150);
+                imageView3.setFitWidth(150);
+
+                ImageView imageView4 = new ImageView();
+                pane2.getChildren().add(imageView3);
+                if(cg.getCompleted().size() >= client.getBoardView().getListOfPlayer().size()){
+                    imageView4 = null;
+                }else {
+                    if (cg.getCompleted().size() == 0) {
+                        imageView4 = getImageOfScoreOfCommonGoal(8);
+                    }
+                    if (cg.getCompleted().size() == 1) {
+                        imageView4 = getImageOfScoreOfCommonGoal(6);
+                    }
+                    if (cg.getCompleted().size()==2 ){
+                        imageView4 = getImageOfScoreOfCommonGoal(4);
+                    }
+                    if (cg.getCompleted().size()==3 ){
+                        imageView4 = getImageOfScoreOfCommonGoal(2);
+                    }
+
+                }
+
+                pane2.getChildren().add(imageView4);
+                commonGoalPane.add(pane2, 1, 0);
             }
         }
         commonGoalPane.add(resetCommand(), 2, 0);
         commonGoalPane.add(cancel(),3,0);
         commonGoalPane.add(endGame(), 4,0);
         return commonGoalPane;
+    }
+    public ImageView getImageOfScoreOfCommonGoal(int score){
+        Image imageScore = new Image("images/scoring tokens/scoring_"+score+".jpg");
+        ImageView imageViewScore = new ImageView(imageScore);
+        imageViewScore.setPreserveRatio(true);
+        imageViewScore.setFitHeight(55);
+        imageViewScore.setFitWidth(55);
+        imageViewScore.setTranslateX(82);
+        imageViewScore.setTranslateY(20);
+        return imageViewScore;
     }
 
     public VBox createShelf(AbstractClient client, GridPane mainPane) throws RemoteException {

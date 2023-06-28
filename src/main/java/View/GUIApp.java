@@ -318,7 +318,7 @@ public class GUIApp extends Application implements ViewInterface {
         Iterator cmIterator = client.getBoardView().getSetOfCommonGoal().iterator();
         for (int j = 0; j < client.getBoardView().getSetOfCommonGoal().size(); j++) {
             Constant commonGoal = new Constant();
-            CommonGoal cg = (n) cmIterator.next();
+            CommonGoal cg = (CommonGoal) cmIterator.next();
 
             switch (cg.getName()) {
                 case "GoalAngles":

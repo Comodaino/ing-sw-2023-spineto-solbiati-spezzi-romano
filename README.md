@@ -74,6 +74,8 @@ java -jar myshelfie.jar
 -v to select type of view: "TUI" or "GUI"
 -i to insert a ip address
 -c to select type of connection: "socket" or "RMI"
+-Xmx to increase max RAM usage, suggested for GUI (example: -Xmx2G)
+
 ```
 
 ### example:

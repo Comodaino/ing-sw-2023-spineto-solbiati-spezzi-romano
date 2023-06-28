@@ -204,7 +204,6 @@ public class TextualUI implements ViewInterface {
 
     @Override
     public void update(String arg) throws IOException {
-        //System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
                     System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +
@@ -279,7 +278,7 @@ public class TextualUI implements ViewInterface {
         System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
-                System.out.println(ConsoleColors.YELLOW_BOLD + "\n" +
+                System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +
 
                         "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
                         "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+

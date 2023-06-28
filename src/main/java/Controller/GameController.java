@@ -296,19 +296,14 @@ public class GameController implements Serializable {
                 if ((input[2].charAt(0) - 48 == input[6].charAt(0) - 48)) return true;
             } else return true;
         }
-
         return false;
     }
 
     private boolean columnAvailable(int c, String name) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).getNickname().equals(name)) {
-                for (int j = 0; j < gameBoard.getTileBuffer().size(); j++) {
-                    if (!gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - j, c)) {
-                        return false;
-                    }
-                }
-                return true;
+                if(gameBoard.getTileBuffer().size() <= 0 ) return false;
+                return gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(6 - gameBoard.getTileBuffer().size(), c);
             }
         }
         return false;

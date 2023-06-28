@@ -719,6 +719,7 @@ public class TextualUI implements ViewInterface {
     private boolean columnAvailable(int c, int size) throws RemoteException {
         for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
             if (client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())) {
+                if(size <= 0 ) return false;
                 return client.getBoardView().getListOfPlayer().get(i).getShelf().isEmpty(6 - size, c);
             }
         }

@@ -304,11 +304,9 @@ public class GameController implements Serializable {
     private boolean columnAvailable(int c, String name) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).getNickname().equals(name)) {
-                for (int j = 0; j < gameBoard.getTileBuffer().size(); j++) {
-                    if (!gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(6 - j, c)) {
+                    if (!gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - gameBoard.getTileBuffer().size(), c)) {
                         return false;
                     }
-                }
                 return true;
             }
         }

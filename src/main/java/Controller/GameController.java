@@ -163,7 +163,8 @@ public class GameController implements Serializable {
             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
 
-        lobby.endMatch();
+            lobby.endMatch();
+        }
     }
 
     private void playSwitch(String[] input) {

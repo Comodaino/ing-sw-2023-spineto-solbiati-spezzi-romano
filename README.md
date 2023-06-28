@@ -1,4 +1,4 @@
-# Prova Finale di Ingegneria del Software - AA 2021-2022
+# Prova Finale di Ingegneria del Software - AA 2022-2023
 
 ![MyShelfie](src/main/resources/images/Publisher%20material/Title%202000x618px.png)
 
@@ -74,6 +74,8 @@ java -jar myshelfie.jar
 -v to select type of view: "TUI" or "GUI"
 -i to insert a ip address
 -c to select type of connection: "socket" or "RMI"
+-Xmx to increase max RAM usage, suggested for GUI (example: -Xmx2G)
+
 ```
 
 ### example:

@@ -160,9 +160,10 @@ public class Lobby {
     public void setMaxNumberOfPlayers(int maxNumberOfPlayers) throws IOException, InterruptedException {
         System.out.println(maxNumberOfPlayers);
         if(maxNumberOfPlayers > 1 && maxNumberOfPlayers <= 4 ){
-            if(maxNumberOfPlayers > this.getListOfPlayers().size()){
+            if(maxNumberOfPlayers >= this.getListOfPlayers().size()){
                 this.maxNumberOfPlayers = maxNumberOfPlayers;
                 if(maxNumberOfPlayers == this.getListOfPlayers().size()){
+                    System.out.println("UNCLEPEAR");
                     startGame();
                     updateAll();
                 }

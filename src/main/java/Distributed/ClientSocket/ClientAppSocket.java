@@ -55,7 +55,6 @@ public class ClientAppSocket implements AbstractClient {
      * @throws ClassNotFoundException
      */
     public static void execute(String address, String typeOfView) throws IOException, InterruptedException, ClassNotFoundException {
-        System.out.println("exec");
         if(typeOfView == null){
             System.out.println(">>insert \"TUI\" or \"GUI\"");
             Scanner scanner = new Scanner(System.in);
@@ -75,11 +74,9 @@ public class ClientAppSocket implements AbstractClient {
         out = new PrintWriter(socket.getOutputStream(), true);
         String input = (String) objIn.readObject();
         if (input.equals("ready")) {
-            System.out.println("Client starting");
 
 
             if (typeOfView.equals("TUI")) {
-                System.out.println("creating TUI");
                 this.view = new TextualUI(this);
             }
             if (typeOfView.equals("GUI")){
@@ -108,12 +105,10 @@ public class ClientAppSocket implements AbstractClient {
     }
 
     private void inputHandler() throws IOException, ClassNotFoundException {
-        System.out.println("waiting for input");
 
         String input = (String) objIn.readObject();
         if (input != null) {
 
-            System.out.println("RECEIVED: " + input);
             boolean flag=true;
 
             if (input.startsWith("/wait")) {
@@ -165,8 +160,6 @@ public class ClientAppSocket implements AbstractClient {
                             break;
                         case "/update":
                             this.boardView = (BoardView) objIn.readObject();
-                            System.out.println("updating...");
-                            System.out.println(boardView);
                             break;
                         default:
                             view.update();
@@ -178,7 +171,6 @@ public class ClientAppSocket implements AbstractClient {
 
         assert input != null;
         if (input.charAt(0) != '/' && state != States.INIT) {
-            System.out.println("unclePear");
             out.println(input);
             out.flush();
         }
@@ -229,7 +221,6 @@ public class ClientAppSocket implements AbstractClient {
             }
         }
 
-        System.out.println("SENDING: " + arg);
         out.println(arg);
         out.flush();
     }

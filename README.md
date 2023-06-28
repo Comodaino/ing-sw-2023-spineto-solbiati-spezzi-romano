@@ -33,7 +33,7 @@ Implementation of the tabletop game: [MyShelfie](https://www.craniocreations.it/
 | Socket              | :green_square:      |
 | RMI                 | :green_square:      |
 | Tui                 | :green_square:      |
-| Gui                 | :orange_square:     |
+| Gui                 | :green_square:      |
 
 | Advanced Functionalities       | Implemented        |
 |--------------------------------|--------------------|

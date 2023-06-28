@@ -1,9 +1,7 @@
 package View;
 
 import Distributed.AbstractClient;
-import Model.Player;
-import Model.Tile;
-import Model.Whisper;
+import Model.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,6 +72,14 @@ public class TextualUI implements ViewInterface {
     private boolean correctLobbyInput(String in) {
         if(in.startsWith("/")){
             if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h")) return true;
+            if(in.startsWith("/set")){
+             String[] set = in.split(" ");
+             if(set[1].equals("2") || set[1].equals("3") || set[1].equals("4")) return true;
+                else{
+                    System.out.println("from 2 to 4 players allowed");
+                    return false;
+                }
+            }
             if (in.startsWith("/whisper")) {
                 String[] msg = in.split(" ");
                 if (msg.length < 3)
@@ -140,17 +146,60 @@ public class TextualUI implements ViewInterface {
                 });
                 break;
             case ("/pg"):
-               /*ArrayList<Pgtype> pgoal = new ArrayList<Pgtype>();
-                Shelf pgShelf = new Shelf();
+                int index = 0;
+                String[][] pgShelf = new String[6][5];
+                int row=0;
+                int col=0;
                 for(Player p : client.getBoardView().getListOfPlayer())
-                    if(p.getNickname().equals(client.getNickname()))
-                        pgoal = p.getGoal().getPGoal();
-                for(Pgtype pg : pgoal){
-
-                }*/
-                System.out.println("not implemented yet");
+                    if(p.getNickname().equals(client.getNickname())) {
+                        index = p.getGoal().getNumOfGoal();
+                        index = index*6 + 1;
+                        for(int i=0; i<6; i++){
+                            row = p.getGoal().getPersGoal(index).get(i).getLine();
+                            col = p.getGoal().getPersGoal(index).get(i).getCol();
+                            pgShelf[row][col] = p.getGoal().getPersGoal(index).get(i).getColor().toString();
+                        }
+                        printPGShelf(pgShelf);
+                    }
                 break;
         }
+    }
+
+    private void printPGShelf(String[][] pg) {
+        for (int i = 5; i >=0; i--) {
+            for (int j = 0; j < 5; j++) {
+                if (j == 0)
+                    System.out.print(i + " ");
+                if (j == 0) {
+                    //System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
+                }
+                if (pg[i][j] == (null)) {
+                    System.out.print("[]");
+                } else {
+                    switch (pg[i][j]) {
+                        case "WHITE":
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + "[]" + RESET);
+                            break;
+                        case "YELLOW":
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND +"[]"+ RESET);
+                            break;
+                        case "LIGHTBLUE":
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND + "[]" + RESET);
+                            break;
+                        case "GREEN":
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND + "[]"+ RESET);
+                            break;
+                        case "BLUE":
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + "[]" + RESET);
+                            break;
+                        case "PINK":
+                            System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + "[]" + RESET);
+                            break;
+                    }
+                }
+            }System.out.print("\n");
+        }
+        System.out.println("  1 2 3 4 5");
     }
 
     @Override
@@ -158,15 +207,14 @@ public class TextualUI implements ViewInterface {
         //System.out.println("update: " + this.state);
             switch (this.state) {
                 case HOME:
-                    System.out.println(ConsoleColors.RED_BOLD + "\n" +
-                                    " _    _ _____ _     _____ ________  ________   _____ _____   ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
-                                    "| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  |  |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
-                                    "| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | |  | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
-                                    "| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | |  | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
-                                    "\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ /  | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
-                                    " \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/   \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n" + RESET);
-                    System.out.print(ConsoleColors.WHITE);
+                    System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +
 
+                            "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
+                            "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
+                            "██╔████╔██║░╚████╔╝░  ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
+                            "██║╚██╔╝██║░░╚██╔╝░░  ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
+                            "██║░╚═╝░██║░░░██║░░░  ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
+                            "╚═╝░░░░░╚═╝░░░╚═╝░░░  ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
                     homePrint(arg);
                     break;
                 case LOBBY:
@@ -191,7 +239,7 @@ public class TextualUI implements ViewInterface {
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
-                    showGoals();
+                    //showGoals();
                     System.out.println("Commands you can use:");
                     System.out.println("/add column  -- add tile in the column of your shelf");
                     System.out.println("/remove row column   -- remove tile[row][column] from the board");
@@ -232,12 +280,13 @@ public class TextualUI implements ViewInterface {
         switch (this.state) {
             case HOME:
                 System.out.println(ConsoleColors.YELLOW_BOLD + "\n" +
-                        " _    _ _____ _     _____ ________  ________   _____ _____   ___  ____   __  _____ _   _ _____ _    ______ _____ _____ _ \n" +
-                        "| |  | |  ___| |   /  __ \\  _  |  \\/  |  ___| |_   _|  _  |  |  \\/  \\ \\ / / /  ___| | | |  ___| |   |  ___|_   _|  ___| |\n" +
-                        "| |  | | |__ | |   | /  \\/ | | | .  . | |__     | | | | | |  | .  . |\\ V /  \\ `--.| |_| | |__ | |   | |_    | | | |__ | |\n" +
-                        "| |/\\| |  __|| |   | |   | | | | |\\/| |  __|    | | | | | |  | |\\/| | \\ /    `--. \\  _  |  __|| |   |  _|   | | |  __|| |\n" +
-                        "\\  /|  / |___| |___| \\__/| \\_/ / |  | | |___    | | \\ \\_/ /  | |  | | | |   /\\__/ / | | | |___| |___| |    _| |_| |___|_|\n" +
-                        " \\/  |/\\____/\\_____/\\____/\\___/\\_|  |_|____/    \\_/  \\___/   \\_|  |_/ \\_/   \\____/\\_| |_|____/\\_____|_|    \\___/\\____/(_)\n" + RESET);
+
+                        "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
+                        "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
+                        "██╔████╔██║░╚████╔╝░  ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
+                        "██║╚██╔╝██║░░╚██╔╝░░  ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
+                        "██║░╚═╝░██║░░░██║░░░  ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
+                        "╚═╝░░░░░╚═╝░░░╚═╝░░░  ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
                 System.out.print("Insert your nickname:\t");
                 break;
             case LOBBY:
@@ -245,6 +294,7 @@ public class TextualUI implements ViewInterface {
                         System.out.println("COMMANDS AVAILABLE:");
                         System.out.println(ConsoleColors.GREEN_UNDERLINED + "/start"+ RESET + " to start the game");
                         System.out.println(ConsoleColors.GREEN_UNDERLINED + "/firstMatch"+ RESET + " if this is your first match\t\tOR\t\t" + ConsoleColors.GREEN_UNDERLINED +"/notFirstMatch" + RESET + " if you have already played");
+                        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/set n"+ RESET + " to set number of players");
                     } else{
                         System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
                     }
@@ -266,8 +316,8 @@ public class TextualUI implements ViewInterface {
                         currentPlayer = p;
                     }
                 }
+                assert currentPlayer != null;
                 if (client.getNickname().equals(currentPlayer.getNickname())){
-                    System.out.println("Your turn!");
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
@@ -275,13 +325,14 @@ public class TextualUI implements ViewInterface {
                     showGoals();
                     //showYourScore();
                     chat();
+                    System.out.println("Your turn!");
                 }
                 else{
-                    System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
                     showBoard();
                     showYourShelf();
                     showOthersShelf();
                     chat();
+                    System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
                 }
               break;
             case END:
@@ -324,14 +375,12 @@ public class TextualUI implements ViewInterface {
     private void showGoals() throws RemoteException {
         System.out.print("COMMON GOALS:\t\t");
         client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));
-        System.out.print("PERSONAL GOALS:\t\t");
-        for (Player p: client.getBoardView().getListOfPlayer()
-             ) {
-            if (client.getNickname().equals(p.getNickname()))
-                System.out.println(p.getGoal().toString() + "\n Adjacent tiles");
+        System.out.println("PERSONAL GOALS:\t\t");
+        printGoal("/pg");
+        System.out.println("Adjacent tiles");
 
-        }
     }
+
 
     private void showOthersShelf() throws RemoteException {
         System.out.println("OTHERS' SHELVES:");

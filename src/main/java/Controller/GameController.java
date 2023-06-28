@@ -97,6 +97,14 @@ public class GameController implements Serializable {
 
         if(lobby.getPlay()) {
 
+            int disconnectedNumber = 0;
+            for(RemotePlayer rp: lobby.getListOfPlayers()){
+                if(!rp.isConnected()) disconnectedNumber++;
+            }
+
+            if(gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1){
+
+            }
 
             int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
 
@@ -117,6 +125,11 @@ public class GameController implements Serializable {
             } while (donePlayers.contains(currentPlayer) || flag);
             gameBoard.setCurrentPlayer(currentPlayer);
             if(endGameCounter!=0) this.endGameCounter++;
+
+
+
+
+
         }
     }
 
@@ -130,7 +143,7 @@ public class GameController implements Serializable {
      */
     private void playEndGame() {
 
-        System.out.println("ENDING THE GAME FOR " + currentPlayer.getNickname());
+        System.out.println(currentPlayer.getNickname() + "ENDED THE GAME");
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
                 gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));

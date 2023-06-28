@@ -56,8 +56,23 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 }
             }
         };
+        Thread th2 = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while(true){
+                        TimeUnit.SECONDS.sleep(2);
+                        outSocket("/ping");
+                    }
+
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
 
         th1.start();
+        th2.start();
         try {
             outSocket("ready");
         } catch (IOException e) {

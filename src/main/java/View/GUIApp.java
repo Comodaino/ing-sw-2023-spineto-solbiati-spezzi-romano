@@ -188,14 +188,14 @@ public class GUIApp extends Application implements ViewInterface {
             for (int j = 0; j < 9; j++) {
                Pane emptyPane = new Pane();
                 emptyPane.setPrefSize(65, 65);
-                emptyPane.setStyle("-fx-background-size: 0;-fx-border-width: 0; -fx-border-color: transparent;-fx-background-color: transparent;-fx-alignment: center;  ");
+                emptyPane.setStyle("-fx-background-size: 0;-fx-border-width: 1; -fx-border-color: black;-fx-background-color: transparent;-fx-alignment: center;  ");
                fillBoardPane.add(emptyPane, i, j);
             }
         }
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (!client.getBoardView().getCell(i, j).isEmpty()) {
-                    fillBoardPane.add(getTile(i,j), j, i);
+                 //   fillBoardPane.add(getTile(i,j), j, i);
                 }
             }
         }
@@ -211,7 +211,7 @@ public class GUIApp extends Application implements ViewInterface {
         tilePane.getChildren().add(tileButton);
         tileButton.setPrefSize(65, 65);
         tileButton.setMaxSize(65, 65);
-        tileButton.setStyle("-fx-background-size: 0;-fx-background-color: transparent; -fx-border-radius:  0; -fx-border-height: 0;");
+        tileButton.setStyle("-fx-background-color: white; -fx-border-radius:  0; -fx-border-height: 0;");
 
         String imageTilePath;
         Constant tile = new Constant();
@@ -318,7 +318,7 @@ public class GUIApp extends Application implements ViewInterface {
         Iterator cmIterator = client.getBoardView().getSetOfCommonGoal().iterator();
         for (int j = 0; j < client.getBoardView().getSetOfCommonGoal().size(); j++) {
             Constant commonGoal = new Constant();
-            CommonGoal cg = (CommonGoal) cmIterator.next();
+            CommonGoal cg = (n) cmIterator.next();
 
             switch (cg.getName()) {
                 case "GoalAngles":
@@ -1105,6 +1105,7 @@ public class GUIApp extends Application implements ViewInterface {
                 num2.setStyle("-fx-font-size: 20px;  -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
                 num2.setOnAction(e -> {
 
+                    client.println("/set 2");
                 });
 
                 Button num3 = new Button("3");
@@ -1112,6 +1113,7 @@ public class GUIApp extends Application implements ViewInterface {
                 num3.setStyle("-fx-font-size: 20px; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
                 num3.setOnAction(e -> {
 
+                    client.println("/set 3");
                 });
 
                 Button num4 = new Button("4");
@@ -1119,6 +1121,7 @@ public class GUIApp extends Application implements ViewInterface {
                 num4.setStyle("-fx-font-size: 20px; ; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
                 num4.setOnAction(e -> {
 
+                    client.println("/set 4");
                 });
 
                 HBox hBox = new HBox(5);

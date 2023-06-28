@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.Timestamp;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,8 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
     private ViewInterface view;
     private Server server;
     private boolean owner;
+    private double tmpStamp;
+    private Timestamp timeStamp;
 
     public ClientApp(String typeOfView, String arg) throws RemoteException {
         nickname = null;
@@ -35,6 +38,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         boardView = null;
         owner = false;
         state = States.INIT;
+        timeStamp = new Timestamp(System.currentTimeMillis());
         if(arg == null) address = "localhost";
         else address = arg;
 
@@ -182,10 +186,9 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
             @Override
             public void run() {
                 while(true){
+
                     if(heartBeatServiceClient()){
-                        System.out.println("STILLCONNECTED");
-                    }else{
-                        System.out.println("DISCONNECTED");
+                        timeStamp = new Timestamp(System.currentTimeMillis());
                     }
 
                     try {
@@ -198,6 +201,26 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
             }
         };
 
+        Thread rmiHBCheck = new Thread(){
+            @Override
+            public void run() {
+                while(true){
+
+                    tmpStamp = timeStamp.getTime();
+                    try {
+                        TimeUnit.SECONDS.sleep(10);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if(tmpStamp == timeStamp.getTime()){
+                        System.out.println("WORKING");
+                    }
+                }
+
+            }
+        };
+
+        rmiHBCheck.start();
         rmiHB.start();
 
     }

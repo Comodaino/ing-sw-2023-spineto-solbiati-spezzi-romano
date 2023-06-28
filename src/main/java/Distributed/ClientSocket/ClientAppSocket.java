@@ -123,7 +123,7 @@ public class ClientAppSocket implements AbstractClient {
                          tmpStamp = timeStamp.getTime();
                         TimeUnit.SECONDS.sleep(10);
                         if(tmpStamp == timeStamp.getTime()){
-                            System.out.println("FUNZIONADIOPORCO");
+                            System.out.println("WORKING");
                         }
 
                     } catch (InterruptedException e) {
@@ -142,6 +142,7 @@ public class ClientAppSocket implements AbstractClient {
                 in.close();
                 socket.close();
                 System.out.println("ADD DISCONNECTION");
+                break;
             }
         }
 

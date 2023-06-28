@@ -57,6 +57,12 @@ public class Board implements Serializable {
         assert is != null;
         Scanner reader = new Scanner(is);
 
+        for(Player p: listOfPlayer){
+            p.newPersonalGoal();
+        }
+
+
+
         for(int i = 0; i<9 && reader.hasNextLine(); i++) {
             String data = reader.nextLine();
             CellType type = null;
@@ -79,9 +85,6 @@ public class Board implements Serializable {
         reader.close();
 
         this.donePlayers = new ArrayList<Player>();
-        for(Player p: listOfPlayer){
-            System.out.println(":: " + p.getNickname());
-        }
         this.endGoal = new EndGoal();
         GoalFactory goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();

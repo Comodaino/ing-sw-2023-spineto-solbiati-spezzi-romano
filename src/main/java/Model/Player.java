@@ -76,4 +76,8 @@ public class Player implements Serializable {
         this.chair = false;
     }
 
+    public void newPersonalGoal() {
+        this.myGoal= new PersonalGoal(myShelf);
+        this.myGoal.CreatePersonalGoal();
+    }
 }

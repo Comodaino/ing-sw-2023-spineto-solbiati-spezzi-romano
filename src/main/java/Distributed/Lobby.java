@@ -163,7 +163,6 @@ public class Lobby {
             if(maxNumberOfPlayers >= this.getListOfPlayers().size()){
                 this.maxNumberOfPlayers = maxNumberOfPlayers;
                 if(maxNumberOfPlayers == this.getListOfPlayers().size()){
-                    System.out.println("UNCLEPEAR");
                     startGame();
                     updateAll();
                 }

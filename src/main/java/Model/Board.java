@@ -57,6 +57,12 @@ public class Board implements Serializable {
         assert is != null;
         Scanner reader = new Scanner(is);
 
+        for(Player p: listOfPlayer){
+            p.newPersonalGoal();
+        }
+
+
+
         for(int i = 0; i<9 && reader.hasNextLine(); i++) {
             String data = reader.nextLine();
             CellType type = null;
@@ -79,21 +85,23 @@ public class Board implements Serializable {
         reader.close();
 
         this.donePlayers = new ArrayList<Player>();
-        for(Player p: listOfPlayer){
-            System.out.println(":: " + p.getNickname());
-        }
         this.endGoal = new EndGoal();
         GoalFactory goalFactory = new GoalFactory();
         tileBuffer = new ArrayList<Tile>();
         recharge();
 
         setOfCommonGoal = new HashSet<CommonGoal>();
-        setOfCommonGoal.add(goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size()));
-        if(fm) {
-            CommonGoal tmpGoal;
+        CommonGoal tmpGoal = goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size());
+        setOfCommonGoal.add(tmpGoal);
+
+        if(!fm) {
+            String tmpName = tmpGoal.getName();
+
+            boolean flag= false;
             do {
                 tmpGoal = goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size());
-            }while(!setOfCommonGoal.contains(tmpGoal));
+                if(tmpGoal.getName().equals(tmpName)) flag = true;
+            }while(flag);
             setOfCommonGoal.add(tmpGoal);
         }
     }
@@ -207,5 +215,9 @@ public class Board implements Serializable {
 
     public List<Player> getDonePlayers() {
         return donePlayers;
+    }
+
+    public void setFm(boolean fm) {
+        this.fm = fm;
     }
 }

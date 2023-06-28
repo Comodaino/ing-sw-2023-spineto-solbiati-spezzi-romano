@@ -1,7 +1,6 @@
 package Distributed;
 
 import Controller.GameController;
-import Distributed.ServerRMI.Server;
 import Model.BoardView;
 import Model.Player;
 
@@ -9,6 +8,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class Lobby {
@@ -19,14 +19,15 @@ public class Lobby {
     private BoardView boardView;
     private GameController controller;
     private ServerApp serverApp;
-    private Server server; //TODO delete after unification of ServerImpl and ServerApp
     private boolean playing;
+    private int maxNumberOfPlayers;
 
     public Lobby(ServerApp serverApp) {
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.ID = null;
         this.serverApp = serverApp;
+        this.maxNumberOfPlayers = 4;
 
         try {
             controller = new GameController(false, this);
@@ -45,6 +46,7 @@ public class Lobby {
 
     /**
      * Adds a player to the lobby
+     *
      * @param p tha player that needs to be added
      */
     public void addPlayer(RemotePlayer p) throws IOException, InterruptedException {
@@ -53,12 +55,22 @@ public class Lobby {
                 p.setOwner(); //the first player to join the lobby become the owner
             }
             lp.add(p);
-            p.setState(States.WAIT);
             p.setController(controller);
-            p.update(boardView);
             controller.addPlayer(new Player(p.getNickname()));
-            if (lp.size() == 4) this.open = false;
+            TimeUnit.MILLISECONDS.sleep(50);
+            if (lp.size() >= maxNumberOfPlayers){
+                p.setState(States.PLAY);
+                p.update(controller.getBoardView());
+                startGame();
+                this.open = false;
+            }else{
+                p.setState(States.WAIT);
+            }
         }
+    }
+
+    public void removePlayer(RemotePlayer p){
+
     }
 
     private boolean closeLobby() {
@@ -71,12 +83,11 @@ public class Lobby {
 
 
     public void startGame() throws RemoteException {
-        this.open=false;
+        this.open = false;
         controller.startGame();
-        for(RemotePlayer rp : lp) {
+        for (RemotePlayer rp : lp) {
             rp.setState(States.PLAY);
         }
-        this.open = false;
         this.playing = true;
     }
 
@@ -97,12 +108,14 @@ public class Lobby {
 
     public void updateAll() throws IOException, InterruptedException {
         for (RemotePlayer p : lp) {
-            if(p.isConnected()) p.update(boardView);
+            if (p.isConnected()) p.update(boardView);
         }
     }
 
+
     public void setFirstMatch(boolean firstMatch) {
         this.firstMatch = firstMatch;
+        this.getController().setFM(firstMatch);
     }
 
     public boolean isFirstMatch() {
@@ -116,6 +129,7 @@ public class Lobby {
     public List<RemotePlayer> getListOfPlayers() {
         return lp;
     }
+
     public BoardView getBoardView() {
         return boardView;
     }
@@ -127,6 +141,7 @@ public class Lobby {
     public Integer getID() {
         return this.ID;
     }
+
     public GameController getController() {
         return controller;
     }
@@ -135,10 +150,24 @@ public class Lobby {
      * Checks and eventually updates if the lobby should be open
      */
     public void checkOpen() {
-        if(this.lp.size() == 4) this.open= false;
+        if (this.lp.size() == 4) this.open = false;
     }
 
     public boolean getPlay() {
         return playing;
+    }
+
+    public void setMaxNumberOfPlayers(int maxNumberOfPlayers) throws IOException, InterruptedException {
+        System.out.println(maxNumberOfPlayers);
+        if(maxNumberOfPlayers > 1 && maxNumberOfPlayers <= 4 ){
+            if(maxNumberOfPlayers >= this.getListOfPlayers().size()){
+                this.maxNumberOfPlayers = maxNumberOfPlayers;
+                if(maxNumberOfPlayers == this.getListOfPlayers().size()){
+                    System.out.println("UNCLEPEAR");
+                    startGame();
+                    updateAll();
+                }
+            }
+        }
     }
 }

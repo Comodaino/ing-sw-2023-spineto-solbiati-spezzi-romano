@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class PersonalGoal extends Goal implements Serializable {
     private Shelf playerShelf;
     private ArrayList<Pgtype> PGoal;
+    private int numOfGoal;
 
     /**
      * Constructor of the PersonalGoal
@@ -21,7 +22,6 @@ public class PersonalGoal extends Goal implements Serializable {
      * @param ps, Shelf of player
      */
     public PersonalGoal(Shelf ps) {
-
         this.playerShelf = ps;
         this.PGoal = new ArrayList<>();
     }
@@ -36,56 +36,58 @@ public class PersonalGoal extends Goal implements Serializable {
         switch (rand.nextInt(12)) {
 
             case 0:
-                getPersGoal(1);
+                this.PGoal = getPersGoal(1);
                 j = 0;
                 break;
             case 1:
-                getPersGoal(7);
+                this.PGoal =getPersGoal(7);
                 j = 1;
                 break;
             case 2:
-                getPersGoal(13);
+                this.PGoal =getPersGoal(13);
                 j = 2;
                 break;
             case 3:
-                getPersGoal(19);
+                this.PGoal =getPersGoal(19);
                 j = 3;
                 break;
             case 4:
-                getPersGoal(25);
+                this.PGoal =getPersGoal(25);
                 j = 4;
                 break;
             case 5:
-                getPersGoal(31);
+                this.PGoal =getPersGoal(31);
                 j = 5;
                 break;
             case 6:
-                getPersGoal(37);
+                this.PGoal =getPersGoal(37);
                 j = 6;
                 break;
             case 7:
-                getPersGoal(43);
+                this.PGoal =getPersGoal(43);
                 j = 7;
                 break;
             case 8:
-                getPersGoal(49);
+                this.PGoal =getPersGoal(49);
                 j = 8;
                 break;
             case 9:
-                getPersGoal(55);
+                this.PGoal =getPersGoal(55);
                 j = 9;
                 break;
             case 10:
-                getPersGoal(61);
+                this.PGoal =getPersGoal(61);
                 j = 10;
                 break;
             case 11:
-                getPersGoal(67);
+                this.PGoal =getPersGoal(67);
                 j = 11;
                 break;
         }
+        this.numOfGoal = j;
         return j;
     }
+
 
     /**
      * this method calculate the score at the end of the game
@@ -194,5 +196,9 @@ public class PersonalGoal extends Goal implements Serializable {
 
         return score;
 
+    }
+
+    public int getNumOfGoal() {
+        return numOfGoal;
     }
 }

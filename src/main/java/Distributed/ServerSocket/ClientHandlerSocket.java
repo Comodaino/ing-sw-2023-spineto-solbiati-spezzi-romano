@@ -2,7 +2,6 @@ package Distributed.ServerSocket;
 
 import Distributed.*;
 import Model.BoardView;
-import Model.Player;
 
 import java.io.*;
 import java.net.Socket;
@@ -12,15 +11,15 @@ import java.util.concurrent.TimeUnit;
 
 import static Distributed.States.*;
 
-;
 
 public class ClientHandlerSocket extends RemoteHandler implements Runnable, Serializable {
     private final Socket socket;
     private SocketPlayer player;
-    private final ObjectOutputStream out;
+    private ObjectOutputStream out;
     private Lobby lobby;
     private Scanner in;
     private boolean outputEnabled;
+
 
     /**
      * Constructor for the Client Handler
@@ -57,8 +56,23 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 }
             }
         };
+        Thread th2 = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while(true){
+                        TimeUnit.SECONDS.sleep(2);
+                        outSocket("/ping");
+                    }
+
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
 
         th1.start();
+        th2.start();
         try {
             outSocket("ready");
         } catch (IOException e) {
@@ -125,9 +139,12 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 lobby.addPlayer(player);
 
                 outSocket("/setnickname " + input);
-                if (player.isOwner()) outSocket("/wait owner ");
-                else outSocket("/wait");
 
+                lobby.updateAll();
+                if(player.getState() == WAIT) {
+                    if (player.isOwner()) outSocket("/wait owner ");
+                    else outSocket("/wait");
+                }
                 break;
             case "false":
                 System.out.println("Nickname not available");
@@ -141,17 +158,21 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 }
                 player.setSocket(socket);
                 player.setConnected(true);
+                player.setHandler(this);
                 outSocket("/setnickname " + input);
 
                 if(player.getState()==WAIT){
                     outputEnabled = false;
+                    lobby.updateAll();
                     if (player.isOwner()) outSocket("/wait owner ");
                     else outSocket("/wait");
-                }else update(lobby.getBoardView());
+
+                }else lobby.updateAll();
 
 
                 break;
         }
+        outputEnabled = true;
     }
 
     /**
@@ -164,8 +185,9 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         if (player.isOwner()) {
             switch (input) {
                 case "/start":
-                    lobby.startGame();
-                    player.setState(PLAY);
+                    if(lobby.getListOfPlayers().size()>1){
+                        lobby.startGame();
+                    }
                     break;
                 case "/firstMatch":
                     lobby.setFirstMatch(true);
@@ -176,7 +198,15 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 case "/closeLobby":
                     lobby.close();
                     break;
+                default :
+                    if(input != null && input.startsWith("/set")) {
+                        if(input.length()==6) lobby.setMaxNumberOfPlayers(input.charAt(5) - 48);
+                    }else lobby.getController().update(input);
+                    break;
             }
+            lobby.updateAll();
+        }else{
+            lobby.getController().update(input);
             lobby.updateAll();
         }
     }
@@ -214,21 +244,23 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 System.out.println("RECEIVED " + input);
                 if (player.getState().equals(INIT)) {
                     initCommand(input);
-                } else {
-                    if (input.charAt(0) == '/') {
+                }else{
+                    if (input.startsWith("/")) {
                         switch (player.getState()) {
                             case WAIT:
                                 waitCommand(input);
                                 break;
                             case PLAY:
+                                System.out.println("DIOBOIA");
                                 playCommand(input);
                                 break;
                             case END:
-                                endCommand();
                                 break;
                         }
                     }
                 }
+
+                if(player.getState()==END) endCommand();
             } catch (NoSuchElementException e) {
                 player.setConnected(false);
                 socket.close();

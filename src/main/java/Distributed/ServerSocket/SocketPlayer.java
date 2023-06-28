@@ -59,4 +59,8 @@ public class SocketPlayer extends RemotePlayer implements Serializable {
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
+
+    public void setHandler(ClientHandlerSocket handler){
+        this.handler=handler;
+    }
 }

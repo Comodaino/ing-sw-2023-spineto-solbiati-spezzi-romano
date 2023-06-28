@@ -65,4 +65,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     public void handler(Client client, String arg) throws RemoteException{
         serverApp.handler(client, arg);
     }
+    @Override
+    public boolean beat() throws RemoteException { return true; }
 }

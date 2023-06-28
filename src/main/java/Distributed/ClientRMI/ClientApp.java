@@ -11,6 +11,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClientApp is a class which extends UnicastRemoteObject and implements Client and AbstractClient
@@ -175,6 +176,38 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
      */
     public void run(String serverHost) throws Exception {
         this.server = (Server) Naming.lookup("rmi://" + serverHost + "/ServerRMI");
+
+
+        Thread rmiHB = new Thread(){
+            @Override
+            public void run() {
+                while(true){
+                    if(heartBeatServiceClient()){
+                        System.out.println("STILLCONNECTED");
+                    }else{
+                        System.out.println("DISCONNECTED");
+                    }
+
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            }
+        };
+
+        rmiHB.start();
+
+    }
+
+    private boolean heartBeatServiceClient() {
+        try {
+            return this.server.beat();
+        } catch (RemoteException e) {
+            return false;
+        }
     }
 
     /**

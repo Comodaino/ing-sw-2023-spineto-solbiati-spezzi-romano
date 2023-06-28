@@ -10,6 +10,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -43,6 +45,7 @@ public class GUIApp extends Application implements ViewInterface {
 
     private String command;
     private boolean firstSwitch=true;
+    BooleanProperty cancel = new SimpleBooleanProperty(false);
 
 
     public GUIApp() {
@@ -135,6 +138,8 @@ public class GUIApp extends Application implements ViewInterface {
         fillBoardGridPane.setVgap(0);
         fillBoardGridPane.setPrefSize(650, 650);
         fillBoardGridPane.setAlignment(Pos.CENTER);
+        fillBoardGridPane.setLayoutX(-2);
+        fillBoardGridPane.setLayoutY(-1);
         boardPane.getChildren().add(fillBoardGridPane);
 
         return boardPane;
@@ -159,9 +164,11 @@ public class GUIApp extends Application implements ViewInterface {
         reset.setStyle("");
         reset.setText("Cancel move");
         reset.setOnMouseClicked(e -> {
+            cancel.set(true);
             command= null;
             firstRemove = true;
             firstSwitch = true;
+            cancel.set(false);
         });
         return reset;
     }
@@ -188,14 +195,14 @@ public class GUIApp extends Application implements ViewInterface {
             for (int j = 0; j < 9; j++) {
                Pane emptyPane = new Pane();
                 emptyPane.setPrefSize(65, 65);
-                emptyPane.setStyle("-fx-background-size: 0;-fx-border-width: 1; -fx-border-color: black;-fx-background-color: transparent;-fx-alignment: center;  ");
+                emptyPane.setStyle("-fx-background-size: 0;-fx-border-width: 0; -fx-background-color: transparent;-fx-alignment: center;  ");
                fillBoardPane.add(emptyPane, i, j);
             }
         }
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (!client.getBoardView().getCell(i, j).isEmpty()) {
-                 //   fillBoardPane.add(getTile(i,j), j, i);
+                    fillBoardPane.add(getTile(i,j), j, i);
                 }
             }
         }
@@ -211,7 +218,7 @@ public class GUIApp extends Application implements ViewInterface {
         tilePane.getChildren().add(tileButton);
         tileButton.setPrefSize(65, 65);
         tileButton.setMaxSize(65, 65);
-        tileButton.setStyle("-fx-background-color: white; -fx-border-radius:  0; -fx-border-height: 0;");
+        tileButton.setStyle("-fx-background-color: white; -fx-border-radius:  1; -fx-border-height: 0; -fx-alignment: center;");
 
         String imageTilePath;
         Constant tile = new Constant();
@@ -262,6 +269,18 @@ public class GUIApp extends Application implements ViewInterface {
         GaussianBlur blur = new GaussianBlur(2);
         BooleanProperty isSelected = new SimpleBooleanProperty(false);
         AtomicInteger count = new AtomicInteger(0);
+
+        cancel.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(oldValue == true) return;
+                tileButton.setEffect(null);
+                tileButton.setDisable(false);
+                tileButton.setOpacity(1);
+                tileButton.setStyle("-fx-background-color: white; -fx-border-radius:  1; -fx-border-height: 0; -fx-alignment: center;");
+            }
+        });
+
         if(count.get() < 3) {
             tileButton.setOnMouseClicked(e -> {
                 try {

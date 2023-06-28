@@ -46,6 +46,12 @@ public class TextualUI implements ViewInterface {
 
         while(state!=State.CLOSE) {
             String in = input.nextLine();
+
+            if(state==State.END){
+                client.println("lobby");
+                return;
+            }
+
             if(in!=null && in.length()>0) {
                 if (state == State.LOBBY || state == State.PLAY) {
                     if (in.startsWith("/") && (state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))

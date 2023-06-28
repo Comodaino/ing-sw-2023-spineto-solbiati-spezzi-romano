@@ -353,19 +353,19 @@ public class GameController implements Serializable {
         if (input[0].charAt(0) == '/') {
             switch (input[0]) {
                 case "/remove":
-                    if(lobby.getPlay()){
+                    if(lobby.getPlay() && input.length>2 &&  input.length%2 == 0){
                         playRemove(input);
                         serverUpdater();
                     }
                     break;
                 case "/add":
-                    if(lobby.getPlay()) {
+                    if(lobby.getPlay() && input.length>2) {
                         playAdd(input);
                         serverUpdater();
                     }
                     break;
                 case "/switch":
-                    if(lobby.getPlay()) {
+                    if(lobby.getPlay() && input.length>2) {
                         playSwitch(input);
                         serverUpdater();
                     }

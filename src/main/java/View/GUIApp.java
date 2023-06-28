@@ -278,6 +278,11 @@ public class GUIApp extends Application implements ViewInterface {
                 tileButton.setDisable(false);
                 tileButton.setOpacity(1);
                 tileButton.setStyle("-fx-background-color: white; -fx-border-radius:  1; -fx-border-height: 0; -fx-alignment: center;");
+
+                if(!isSelected.get()){
+                    isSelected.set(true);
+                    count.decrementAndGet();
+                }
             }
         });
 
@@ -376,7 +381,7 @@ public class GUIApp extends Application implements ViewInterface {
                     new GoalQuartets(size);
                     photo=3;
                     break;
-                case "GoalRows":
+                case "GoalRow":
                     new GoalRow(size);
                     photo=7;
                     break;

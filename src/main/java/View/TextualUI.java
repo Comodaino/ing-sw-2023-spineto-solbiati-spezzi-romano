@@ -58,7 +58,6 @@ public class TextualUI implements ViewInterface {
                         }
                     }
                 }if (state == State.HOME){
-                    if (!client.isOwner()) System.out.println("wait for the owner");
                     if (in.length() > 10) {
                         System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
                     } else
@@ -275,7 +274,6 @@ public class TextualUI implements ViewInterface {
     }
 
     public void update() throws IOException {
-        System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
                 System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +

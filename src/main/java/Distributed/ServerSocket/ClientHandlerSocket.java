@@ -244,21 +244,23 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 System.out.println("RECEIVED " + input);
                 if (player.getState().equals(INIT)) {
                     initCommand(input);
-                } else {
-                    if (input.charAt(0) == '/') {
+                }else{
+                    if (input.startsWith("/")) {
                         switch (player.getState()) {
                             case WAIT:
                                 waitCommand(input);
                                 break;
                             case PLAY:
+                                System.out.println("DIOBOIA");
                                 playCommand(input);
                                 break;
                             case END:
-                                endCommand();
                                 break;
                         }
                     }
                 }
+
+                if(player.getState()==END) endCommand();
             } catch (NoSuchElementException e) {
                 player.setConnected(false);
                 socket.close();

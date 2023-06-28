@@ -33,6 +33,8 @@ public class ClientAppSocket implements AbstractClient {
     private boolean beat;
     private Timestamp timeStamp;
 
+    private int endFlag;
+
 
     /**
      * Client App constructor for socket connection
@@ -51,6 +53,7 @@ public class ClientAppSocket implements AbstractClient {
         this.typeOfView = typeOfView;
         state = States.INIT;
         this.timeStamp = new Timestamp(System.currentTimeMillis());
+        this.endFlag = 0;
     }
 
     /**
@@ -196,9 +199,21 @@ public class ClientAppSocket implements AbstractClient {
                             view.setState(State.PLAY);
                             break;
                         case "/end":
-                            state = States.END;
-                            view.setState(State.END);
-                            view.update();
+
+                            switch (endFlag) {
+                                case 0:
+                                    state = States.END;
+                                    view.setState(State.END);
+                                    view.update();
+                                    endFlag = 1;
+                                    break;
+                                case 1:
+                                    endFlag = 2;
+                                    break;
+                                case 2:
+                                    endFlag = 0;
+                                    break;
+                            }
                             break;
                         case "/close":
                             state = States.CLOSE;

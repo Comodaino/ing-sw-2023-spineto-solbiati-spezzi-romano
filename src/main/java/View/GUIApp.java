@@ -103,7 +103,7 @@ public class GUIApp extends Application implements ViewInterface {
         mainPane.add(vBox, 0, 0);
         primaryStage.setTitle("Play");
         primaryStage.setOnCloseRequest(e -> {
-            // Gestire l'evento di chiusura
+            // Manage closing event
         });
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();

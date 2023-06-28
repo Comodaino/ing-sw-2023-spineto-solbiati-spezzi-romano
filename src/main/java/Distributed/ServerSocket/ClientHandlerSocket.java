@@ -56,8 +56,23 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 }
             }
         };
+        Thread th2 = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while(true){
+                        TimeUnit.SECONDS.sleep(2);
+                        outSocket("/ping");
+                    }
+
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
 
         th1.start();
+        th2.start();
         try {
             outSocket("ready");
         } catch (IOException e) {
@@ -229,21 +244,23 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 System.out.println("RECEIVED " + input);
                 if (player.getState().equals(INIT)) {
                     initCommand(input);
-                } else {
-                    if (input.charAt(0) == '/') {
+                }else{
+                    if (input.startsWith("/")) {
                         switch (player.getState()) {
                             case WAIT:
                                 waitCommand(input);
                                 break;
                             case PLAY:
+                                System.out.println("DIOBOIA");
                                 playCommand(input);
                                 break;
                             case END:
-                                endCommand();
                                 break;
                         }
                     }
                 }
+
+                if(player.getState()==END) endCommand();
             } catch (NoSuchElementException e) {
                 player.setConnected(false);
                 socket.close();

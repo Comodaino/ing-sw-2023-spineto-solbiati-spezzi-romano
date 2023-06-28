@@ -2,11 +2,8 @@ package Controller;
 
 import Distributed.Lobby;
 import Distributed.RemotePlayer;
-import Model.Board;
-import Model.BoardView;
+import Model.*;
 import Model.CommonGoals.CommonGoal;
-import Model.Player;
-import Model.Whisper;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,7 +28,7 @@ public class GameController implements Serializable {
     private List<Player> donePlayers;
     private Lobby lobby;
     private int removeSize;
-
+    private String firstPlayerToEnd;
     private int endGameCounter;
 
     /**
@@ -53,6 +50,7 @@ public class GameController implements Serializable {
             }
         }
         this.gameBoard.setCurrentPlayer(this.currentPlayer);
+        this.firstPlayerToEnd = null;
 
         Thread th = new Thread() {
             @Override
@@ -101,6 +99,14 @@ public class GameController implements Serializable {
 
         if (lobby.getPlay()) {
 
+            int disconnectedNumber = 0;
+            for (RemotePlayer rp : lobby.getListOfPlayers()) {
+                if (!rp.isConnected()) disconnectedNumber++;
+            }
+
+            if (gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1) {
+                forceEndGame();
+            }
 
             int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
 
@@ -111,8 +117,15 @@ public class GameController implements Serializable {
             boolean flag = false;
             do {
                 i += 1;
-                if (i == gameBoard.getListOfPlayer().size() - 1) setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
-                else setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
+
+                if (i == gameBoard.getListOfPlayer().size() - 1){
+                    if(gameBoard.getListOfPlayer().get(0).getNickname().equals(firstPlayerToEnd)) forceEndGame();
+                    setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
+                }
+                else{
+                    if(gameBoard.getListOfPlayer().get(i+1).getNickname().equals(firstPlayerToEnd)) forceEndGame();
+                    setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
+                }
 
                 for (RemotePlayer p : lobby.getListOfPlayers()) {
                     if (p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) flag = true;
@@ -121,6 +134,8 @@ public class GameController implements Serializable {
             } while (donePlayers.contains(currentPlayer) || flag);
             gameBoard.setCurrentPlayer(currentPlayer);
             if (endGameCounter != 0) this.endGameCounter++;
+
+
         }
     }
 
@@ -134,36 +149,20 @@ public class GameController implements Serializable {
      */
     private void playEndGame() {
 
-        System.out.println("ENDING THE GAME FOR " + currentPlayer.getNickname());
-        for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
-            if (gameBoard.getListOfPlayer().get(i).equals(currentPlayer)) {
-                gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
-                gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
-                donePlayers.add(currentPlayer);
-                gameBoard.addToDone(currentPlayer);
-                currentPlayer.setAsEnded();
-
-                int disconnectedNumber = 0;
-                for (RemotePlayer rp : lobby.getListOfPlayers()) {
-                    if (!rp.isConnected()) disconnectedNumber++;
-                }
-
-                if (this.endGameCounter >= gameBoard.getListOfPlayer().size() + disconnectedNumber) {
-                    for (Player p : gameBoard.getListOfPlayer()) p.removeChair();
-                    lobby.endMatch();
-                }
-            }
-        }
+        System.out.println(currentPlayer.getNickname() + "ENDED THE GAME");
+        firstPlayerToEnd = currentPlayer.getNickname();
     }
 
 
-    private void forceEndGame() throws IOException, InterruptedException {
-
+    private void forceEndGame() {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
+
             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
 
+
             lobby.endMatch();
+
         }
     }
 
@@ -304,9 +303,11 @@ public class GameController implements Serializable {
     private boolean columnAvailable(int c, String name) {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
             if (gameBoard.getListOfPlayer().get(i).getNickname().equals(name)) {
-                    if (!gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - gameBoard.getTileBuffer().size(), c)) {
+                for (int j = 0; j < gameBoard.getTileBuffer().size(); j++) {
+                    if (!gameBoard.getListOfPlayer().get(i).getShelf().isEmpty(5 - j, c)) {
                         return false;
                     }
+                }
                 return true;
             }
         }
@@ -385,7 +386,7 @@ public class GameController implements Serializable {
                     break;
                 case "/end":
                     if (lobby.getPlay()) {
-                        forceEndGame();
+                        playEndGame();
                         serverUpdater();
                     }
                     break;

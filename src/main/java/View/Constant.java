@@ -8,8 +8,8 @@ public class Constant {
     public Constant(){
 
         this.persGoal = "images/personal goal cards/Personal_Goals";
-        this.goal = "images/common goal cards/";
-        this.tile = "images/item tiles/";
+        this.goal = "images/common%20goal%20cards/";
+        this.tile = "images/item%20tiles/";
     }
     public String getCostantPersGoal(){
         return persGoal;

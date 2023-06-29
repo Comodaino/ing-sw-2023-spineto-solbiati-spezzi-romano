@@ -58,8 +58,9 @@ public class SwitchButton {
         return isSelected2.get();
     }
 
-    public void setGraphic(ImageView imageView) {
-        switchButton.setGraphic(imageView);
+    public void setGraphic(String path) {
+        switchButton.setStyle("-fx-background-image: url('"+ path +"'); -fx-background-size: 40 40; -fx-background-repeat: no-repeat; -fx-background-position: center; ");
+    //    switchButton.setGraphic(imageView);
     }
 
     public void setOpacity(int i) {

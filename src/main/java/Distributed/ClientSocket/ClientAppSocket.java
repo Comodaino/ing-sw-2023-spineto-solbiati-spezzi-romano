@@ -16,7 +16,9 @@ import java.sql.Timestamp;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-
+/** Client side application for connection using TCP sockets
+ * @author Alessio
+ */
 public class ClientAppSocket implements AbstractClient {
     private final int port;
     private final String typeOfView;

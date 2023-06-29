@@ -4,6 +4,10 @@ import Controller.GameController;
 
 import java.io.IOException;
 
+
+/**
+ * Abstract super class for client handlers
+ */
 public abstract class RemoteHandler {
     protected Lobby lobby;
     protected States state;

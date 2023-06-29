@@ -17,6 +17,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ * Main class for the server side of the app, starts the server both for RMI (publishing to the registry)
+ * and for socket (creating a thread that accepts and redirects socket connections
+ */
 public class ServerApp {
     private int port;
     private static List<Lobby> lobbies;
@@ -33,6 +37,9 @@ public class ServerApp {
         lobbies.add(openLobby);
     }
 
+    /**
+     * Starts the server
+     */
     public static void execute() {
         ServerApp server = null;
         try {
@@ -69,11 +76,11 @@ public class ServerApp {
         }
     }
 
-    public void startServer() throws IOException, InterruptedException {
+    private void startServer() throws IOException, InterruptedException {
         socketAccepter();
     }
 
-    public void socketAccepter() throws IOException, InterruptedException {
+    private void socketAccepter() throws IOException, InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
 
@@ -100,7 +107,7 @@ public class ServerApp {
      * @param lobby the lobby to be removed
      * @author Alessio
      */
-    public void removeLobby(Lobby lobby) {
+    private void removeLobby(Lobby lobby) {
         synchronized (lobbies) {
             this.lobbies.remove(lobby);
         }

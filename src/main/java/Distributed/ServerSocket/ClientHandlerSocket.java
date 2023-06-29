@@ -12,6 +12,10 @@ import java.util.concurrent.TimeUnit;
 import static Distributed.States.*;
 
 
+/** Handler for interactions with a client using socket connection
+ * @author Alessio
+ */
+
 public class ClientHandlerSocket extends RemoteHandler implements Runnable, Serializable {
     private final Socket socket;
     private SocketPlayer player;

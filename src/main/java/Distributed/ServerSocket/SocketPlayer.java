@@ -11,6 +11,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 
+
+/* Subclass of Remote Player for socket connection
+ *
+ *
+ * @author Alessio
+ */
+
 public class SocketPlayer extends RemotePlayer implements Serializable {
     private final ConnectionType type;
     private Player modelPlayer;

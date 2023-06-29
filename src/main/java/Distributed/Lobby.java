@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ *  Lobby for the game, a hub on which players connects to each other to play a match
+ * @author Alessio
+ */
+
 public class Lobby {
     private final List<RemotePlayer> lp;
     private Integer ID;
@@ -69,7 +74,18 @@ public class Lobby {
         }
     }
 
+    /**
+     * Remove p from the lobby
+     * @param p
+     */
     public void removePlayer(RemotePlayer p){
+
+        for(int i = 0; i<lp.size(); i++){
+            if(lp.get(i).getNickname().equals(p.getNickname())){
+                lp.remove(i);
+                this.open = true;
+            }
+        }
 
     }
 
@@ -81,7 +97,10 @@ public class Lobby {
         return false; //lobby not closed
     }
 
-
+    /**
+     * Starts the match
+     * @throws RemoteException
+     */
     public void startGame() throws RemoteException {
         this.open = false;
         controller.startGame();
@@ -91,6 +110,9 @@ public class Lobby {
         this.playing = true;
     }
 
+    /**
+     * Ends the match
+     */
     public void endMatch() {
         this.playing = false;
         for (RemotePlayer p : lp) {
@@ -99,6 +121,9 @@ public class Lobby {
         }
     }
 
+    /**
+     * Closes the lobby so no other player can join
+     */
     public void close() {
         for (RemotePlayer p : lp) {
             p.setState(States.CLOSE);
@@ -106,6 +131,11 @@ public class Lobby {
         serverApp.removeLobby(this);
     }
 
+    /**
+     * Updates every player
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void updateAll() throws IOException, InterruptedException {
         for (RemotePlayer p : lp) {
             if (p.isConnected()) p.update(boardView);
@@ -158,10 +188,11 @@ public class Lobby {
     }
 
     public void setMaxNumberOfPlayers(int maxNumberOfPlayers) throws IOException, InterruptedException {
-        System.out.println(maxNumberOfPlayers);
         if(maxNumberOfPlayers > 1 && maxNumberOfPlayers <= 4 ){
             if(maxNumberOfPlayers >= this.getListOfPlayers().size()){
                 this.maxNumberOfPlayers = maxNumberOfPlayers;
+                if(!this.open && maxNumberOfPlayers > this.getListOfPlayers().size()) this.open=true;
+
                 if(maxNumberOfPlayers == this.getListOfPlayers().size()){
                     startGame();
                     updateAll();

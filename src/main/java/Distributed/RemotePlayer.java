@@ -10,6 +10,10 @@ import java.io.Serializable;
 
 import static Distributed.States.INIT;
 
+
+/**
+ * Abstract super class for remote players
+ */
 public abstract class RemotePlayer implements Serializable {
     private Player modelPlayer;
     private ConnectionType type;
@@ -65,5 +69,11 @@ public abstract class RemotePlayer implements Serializable {
     public Client getClient() { return null; }
     public void setConnected(boolean status) {this.connected = status;}
     public boolean isConnected() { return connected; }
+
+    /**
+     * If possible reconnects the player to the lobby
+     * @param client
+     * @param id
+     */
     public abstract void reconnect(Client client, int id);
 }

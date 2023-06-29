@@ -46,6 +46,10 @@ public class TextualUI implements ViewInterface {
             String in = input.nextLine();
             if(in.equals("/exit")) client.println(in);
             else {
+                if(state == State.END){
+                    client.println(in);
+                    return;
+                }
                 if (in != null && in.length() > 0) {
                     if (state == State.LOBBY || state == State.PLAY) {
                         if (in.startsWith("/") && (state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
@@ -291,6 +295,7 @@ public class TextualUI implements ViewInterface {
                 }
                 if(winner==null) {
                     System.out.println("\t\t\t\t\t" + ConsoleColors.RED_BOLD + "There is no winner" );
+                    System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK + "press Enter to return to the lobby" );
                 }else{
                     System.out.println("The winner is......");
                     System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");

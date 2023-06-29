@@ -289,6 +289,11 @@ public class ServerApp {
         for (RemotePlayer rp : lobby.getListOfPlayers()) {
             if (rp.getNickname().equals(client.getNickname())) {
                 rp.setState(States.WAIT);
+                try {
+                    rp.update(lobby.getBoardView());
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 

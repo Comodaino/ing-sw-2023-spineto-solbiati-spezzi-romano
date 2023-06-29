@@ -11,12 +11,13 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.sql.Timestamp;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-/** Client side application for connection using TCP sockets
+/**
+ * Client side application for connection using TCP sockets
+ *
  * @author Alessio
  */
 public class ClientAppSocket implements AbstractClient {
@@ -115,20 +116,20 @@ public class ClientAppSocket implements AbstractClient {
         }
 
 
-
         Thread th = new Thread() {
             @Override
             public void run() {
                 double tmpStamp;
-                while(true){
+                while (true) {
                     try {
-                         tmpStamp = timeStamp.getTime();
+                        tmpStamp = timeStamp.getTime();
                         TimeUnit.SECONDS.sleep(10);
-                        if(tmpStamp == timeStamp.getTime()){
-                            System.out.println("WORKING");
+                        if (tmpStamp == timeStamp.getTime()) {
+                            view.update("disconnected");
+                            break;
                         }
 
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException | IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
@@ -163,6 +164,7 @@ public class ClientAppSocket implements AbstractClient {
         if (input != null) {
 
             boolean flag = true;
+
 
             if (input.startsWith("/wait")) {
                 String[] tmpInput = input.split(" ");
@@ -202,21 +204,14 @@ public class ClientAppSocket implements AbstractClient {
                             view.setState(State.PLAY);
                             break;
                         case "/end":
-
-                            switch (endFlag) {
-                                case 0:
-                                    state = States.END;
-                                    view.setState(State.END);
-                                    view.update();
-                                    endFlag = 1;
-                                    break;
-                                case 1:
-                                    endFlag = 2;
-                                    break;
-                                case 2:
-                                    endFlag = 0;
-                                    break;
+                            if(endFlag <= 1){
+                                endFlag ++;
+                                break;
                             }
+                            state = States.END;
+                            view.setState(State.END);
+                            view.update();
+                            endFlag = 0;
                             break;
                         case "/close":
                             state = States.CLOSE;

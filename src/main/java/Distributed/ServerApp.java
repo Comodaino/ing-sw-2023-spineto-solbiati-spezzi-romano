@@ -149,7 +149,6 @@ public class ServerApp {
                 break;
             case END:
                 endCommand(client);
-                lobby.updateAll();
                 break;
         }
         } catch (IOException | InterruptedException e) {
@@ -287,7 +286,6 @@ public class ServerApp {
         synchronized (lobbies) {
             lobby = lobbies.get(client.getLobbyID() - 1);
         }
-
         for (RemotePlayer rp : lobby.getListOfPlayers()) {
             if (rp.getNickname().equals(client.getNickname())) {
                 rp.setState(States.WAIT);

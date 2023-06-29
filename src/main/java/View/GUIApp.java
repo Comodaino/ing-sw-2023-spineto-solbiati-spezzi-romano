@@ -101,6 +101,7 @@ public class GUIApp extends Application implements ViewInterface {
 
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
+
         vBox.getChildren().addAll(createBoard(client),commonGoal);
         mainPane.add(createShelf(client, mainPane), 1, 0);
         mainPane.add(showOtherShelf(client), 2, 0);
@@ -152,16 +153,6 @@ public class GUIApp extends Application implements ViewInterface {
         boardPane.getChildren().add(fillBoardGridPane);
 
         return boardPane;
-    }
-    private boolean updateBoard (AbstractClient client, GridPane board ){
-
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-
-
-            }
-        }
-        return true;
     }
 
     private Button resetCommand() {

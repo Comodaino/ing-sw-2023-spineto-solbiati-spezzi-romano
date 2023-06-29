@@ -47,7 +47,7 @@ Implementation of the tabletop game: [MyShelfie](https://www.craniocreations.it/
 
 ## Tests
 
-These are screenshot directly from intellij showing coverage fo our tests, since the common goals are so many and each match doesn't use more than two of them, we decided to test them separately 
+These are screenshot directly from intellij showing coverage for our tests, since the common goals are so many and each match doesn't use more than two of them, we decided to test them separately 
 
 Percentage coverages for classes, methods and lines of code:
 ![imageNotFound](testScreenshots/controllerAndModelCoverage.jpg)

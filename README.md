@@ -50,8 +50,7 @@ Implementation of the tabletop game: [MyShelfie](https://www.craniocreations.it/
 These are screenshot directly from intellij showing coverage for our tests, since the common goals are so many and each match doesn't use more than two of them, we decided to test them separately 
 
 Percentage coverages for classes, methods and lines of code:
-![imageNotFound](testScreenshots/controllerAndModelCoverage.jpg)
-![imageNotFound](testScreenshots/commonGoalsCoverage.jpg)
+![imageNotFound](Derivables/testScreenshots/testScreenshot.png)
 
 ---
 
@@ -83,22 +82,6 @@ java -jar myshelfie.jar
 ```
 java -jar myshelfie.jar -t client -c socket -v TUI -i localhost
 ```
-
-
-## Docker
-It's also possible to run the app on a docker container, this was done to find any compatibility issues and that the jar was built correctly,
-the jar was also tested on two different fresh installation of linux with a different distro (arch and garuda)
-
-To build the container: 
-```
-sudo docker build -t nameOfTheImage .
-```
-To run the container: 
-```
-sudo docker run -p -i -t nameOfTheImage
-```
-Docker is required to create and run the image, to create the image copy in a new folder both Dockerfile and the jar executable
-
 ---
 
 ## Group members:

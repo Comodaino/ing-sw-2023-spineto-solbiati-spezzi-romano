@@ -219,14 +219,15 @@ public class TextualUI implements ViewInterface {
 
             switch (this.state) {
                 case HOME:
-                    System.out.println(ConsoleColors.RED_BOLD_BRIGHT + "\n" +
+                    System.out.println(ConsoleColors.RED_BOLD + "\n" +
 
-                            "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
-                            "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
-                            "██╔████╔██║░╚████╔╝░  ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
-                            "██║╚██╔╝██║░░╚██╔╝░░  ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
-                            "██║░╚═╝░██║░░░██║░░░  ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
-                            "╚═╝░░░░░╚═╝░░░╚═╝░░░  ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
+                            "███╗░░░███╗██╗░░░██╗    ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
+                            "████╗░████║╚██╗░██╔╝    ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
+                            "██╔████╔██║░╚████╔╝░    ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
+                            "██║╚██╔╝██║░░╚██╔╝░░    ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
+                            "██║░╚═╝░██║░░░██║░░░    ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
+                            "╚═╝░░░░░╚═╝░░░╚═╝░░░    ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
+
                     homePrint(arg);
                     break;
                 case LOBBY:
@@ -316,12 +317,12 @@ public class TextualUI implements ViewInterface {
             case HOME:
                 System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +
 
-                        "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
-                        "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
-                        "██╔████╔██║░╚████╔╝░  ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
-                        "██║╚██╔╝██║░░╚██╔╝░░  ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
-                        "██║░╚═╝░██║░░░██║░░░  ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
-                        "╚═╝░░░░░╚═╝░░░╚═╝░░░  ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
+                        "███╗░░░███╗██╗░░░██╗    ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
+                        "████╗░████║╚██╗░██╔╝    ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
+                        "██╔████╔██║░╚████╔╝░    ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
+                        "██║╚██╔╝██║░░╚██╔╝░░    ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
+                        "██║░╚═╝░██║░░░██║░░░    ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
+                        "╚═╝░░░░░╚═╝░░░╚═╝░░░    ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
                 System.out.print("Insert your nickname:\t");
                 break;
             case LOBBY:
@@ -392,7 +393,7 @@ public class TextualUI implements ViewInterface {
         if (client.getBoardView().getChatBuffer().size()>0)
             System.out.println(ConsoleColors.PURPLE_UNDERLINED + "CHAT:" + RESET);
         for(String s: client.getBoardView().getChatBuffer()){
-            System.out.println("\uD83D\uDFE9" + s);
+            System.out.println(ConsoleColors.PURPLE_BOLD + "° " + RESET + s);
         }
         for(Whisper s: client.getBoardView().getPersonalChatBuffer()){
             if(s.getRecipient().equals(client.getNickname())) System.out.println("--" + s.getContent());
@@ -463,7 +464,7 @@ public class TextualUI implements ViewInterface {
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
                     System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
-                }System.out.println("\t 0   1   2   3   4   ");
+                }System.out.println("     0   1   2   3   4   ");
             }
         }
 
@@ -522,7 +523,7 @@ public class TextualUI implements ViewInterface {
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
                     System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
-                }System.out.println("\t 0   1   2   3   4   ");
+                }System.out.println("     0   1   2   3   4   ");
             }
         }
     }

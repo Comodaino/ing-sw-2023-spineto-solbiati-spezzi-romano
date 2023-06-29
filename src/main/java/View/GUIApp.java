@@ -293,7 +293,7 @@ public class GUIApp extends Application implements ViewInterface {
                 tileButton.setEffect(null);
                 tileButton.setDisable(false);
                 tileButton.setOpacity(1);
-                tileButton.setStyle("-fx-background-image: url('"+imageTilePath+"') ; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-border-width: 2; -fx-alignment: center; -fx-border-color: lightblue;");
+                tileButton.setStyle("-fx-background-image: url('"+imageTilePath+"') ;-fx-background-size: 65 65; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-border-width: 0; -fx-alignment: center; ");
 
                 if(!isSelected.get()){
                     isSelected.set(true);
@@ -420,8 +420,8 @@ public class GUIApp extends Application implements ViewInterface {
 
 
              */
-                pane.setPrefSize(150, 150);
-                pane.setStyle("-fx-background-image: url('"+url+"') ;-fx-background-size: 150 150; -fx-background-repeat: no-repeat; -fx-background-position: center;");
+                pane.setPrefSize(150, 100);
+                pane.setStyle("-fx-background-image: url('"+url+"') ;-fx-background-size: 150 100; -fx-background-repeat: no-repeat; -fx-background-position: center;");
                 ImageView imageView2 = new ImageView();
             //    pane.getChildren().add(imageView1);
                 if(cg.getCompleted().size() >= client.getBoardView().getListOfPlayer().size()){
@@ -448,8 +448,8 @@ public class GUIApp extends Application implements ViewInterface {
             } else {
                 Pane pane2 = new Pane();
                 String url2 = commonGoal.getConstantGoal() + photo + ".jpg";
-                pane2.setPrefSize(150, 150);
-                pane2.setStyle("-fx-background-image: url('"+url2+"') ; -fx-background-size: 150 150; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+                pane2.setPrefSize(150, 100);
+                pane2.setStyle("-fx-background-image: url('"+url2+"') ; -fx-background-size: 150 100; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
 
              /*   Image imageGoal2 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
                 ImageView imageView3 = new ImageView(imageGoal2);
@@ -524,7 +524,8 @@ public class GUIApp extends Application implements ViewInterface {
                 if(client.getBoardView().getListOfPlayer().get(nPlayer).getShelf().getTile(row,col) != null) {
                     Pane pane = new Pane();
                     String url = printShelf(nPlayer, row, col);
-                    pane.setStyle("-fx-background-image: url('"+url+"')");
+                    pane.setPrefSize(40, 40);
+                    pane.setStyle("-fx-background-image: url('"+url+"'); -fx-background-size: 40 40; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
                         shelfGridPane.add(pane, col, 5-row);
                     } else {
                     Label label = new Label();
@@ -569,7 +570,8 @@ public class GUIApp extends Application implements ViewInterface {
 
         String personalGoalImage = createPersonalGoal(client);
         Pane paneImagePersGoal = new Pane();
-        paneImagePersGoal.setStyle("-fx-background-image: url('"+personalGoalImage+"') ; -fx-background-size: 150 150; -fx-background-repeat: no-repeat; -fx-background-position: center ;");
+        paneImagePersGoal.setPrefSize(150, 150);
+        paneImagePersGoal.setStyle("-fx-background-image: url('"+personalGoalImage+"') ; -fx-background-size: 98 150; -fx-background-repeat: no-repeat; -fx-background-position: center ;");
     /*    ImageView personalGoalImageView = new ImageView(personalGoalImage);
         personalGoalImageView.setFitWidth(150);
         personalGoalImageView.setFitHeight(150);
@@ -609,7 +611,7 @@ public class GUIApp extends Application implements ViewInterface {
 
             GridPane bufferPane = new GridPane();
            for(int i =0; i<client.getBoardView().getTileBuffer().size();i++) {
-               SwitchButton switchButton = new SwitchButton(this, i,command);
+               SwitchButton switchButton = new SwitchButton(this, i,command,createTile(i));
             /*   Image image = new Image(createTile(i));
                 ImageView imageView = new ImageView(image);
                 imageView.setFitWidth(40);

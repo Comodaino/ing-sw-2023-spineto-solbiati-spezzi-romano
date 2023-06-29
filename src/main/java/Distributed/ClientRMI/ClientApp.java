@@ -213,7 +213,12 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
                         throw new RuntimeException(e);
                     }
                     if(tmpStamp == timeStamp.getTime()){
-                        System.out.println("WORKING");
+                        try {
+                            view.update("disconnected");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
                     }
                 }
 

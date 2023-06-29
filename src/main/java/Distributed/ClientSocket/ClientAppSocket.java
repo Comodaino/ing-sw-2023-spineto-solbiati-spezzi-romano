@@ -141,7 +141,7 @@ public class ClientAppSocket implements AbstractClient {
             } catch (IOException e) {
                 in.close();
                 socket.close();
-                System.out.println("ADD DISCONNECTION");
+                view.update("disconnected");
                 break;
             }
         }

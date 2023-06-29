@@ -63,6 +63,6 @@
   </properties>
   <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInEmptyColumn" time="0.004"/>
   <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInFullColumn" time="0"/>
-  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetNonExistingTile" time="0.001"/>
-  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetExistingTile" time="0"/>
+  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetNonExistingTile" time="0"/>
+  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetExistingTile" time="0.001"/>
 </testsuite>

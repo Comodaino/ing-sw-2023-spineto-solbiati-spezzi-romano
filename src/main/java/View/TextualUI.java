@@ -463,7 +463,7 @@ public class TextualUI implements ViewInterface {
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
                     System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
-                }System.out.println("\t 0   1   2   3   4   ");
+                }System.out.println("     0   1   2   3   4   ");
             }
         }
 
@@ -522,7 +522,7 @@ public class TextualUI implements ViewInterface {
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
                     System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
-                }System.out.println("\t 0   1   2   3   4   ");
+                }System.out.println("     0   1   2   3   4   ");
             }
         }
     }
@@ -742,6 +742,7 @@ public class TextualUI implements ViewInterface {
     private boolean columnAvailable(int c, int size) throws RemoteException {
         for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
             if (client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())) {
+                if(size <= 0) return false;
                 return client.getBoardView().getListOfPlayer().get(i).getShelf().isEmpty(6 - size, c);
             }
         }

@@ -287,7 +287,7 @@ public class ServerApp {
             lobby = lobbies.get(client.getLobbyID() - 1);
         }
         for (RemotePlayer rp : lobby.getListOfPlayers()) {
-            if (rp.getNickname().equals(client.getNickname())) {
+            if (rp.getNickname().equals(client.getNickname()) && rp.isConnected()) {
                 rp.setState(States.WAIT);
                 try {
                     rp.update(lobby.getBoardView());

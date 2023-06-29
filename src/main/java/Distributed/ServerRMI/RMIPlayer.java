@@ -17,10 +17,12 @@ import java.rmi.RemoteException;
 public class RMIPlayer extends RemotePlayer {
     Client client;
     private States state;
+    private boolean connected;
 
     public RMIPlayer(Client client){
         super(ConnectionType.RMI);
         this.client = client;
+        this.connected = true;
     }
 
     /**

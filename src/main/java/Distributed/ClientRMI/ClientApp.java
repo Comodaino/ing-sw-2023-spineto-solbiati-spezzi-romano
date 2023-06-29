@@ -125,11 +125,10 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
         this.boardView = boardView;
 
-/*
         if (this.state == States.END && endFlag) {
             endFlag = false;
             return;
-        }*/
+        }
         endFlag = true;
         if (arg == null || arg.length() == 0) {
             try {
@@ -296,6 +295,7 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
         switch (state) { //It also sets the state of the view
             case PLAY:
                 view.setState(State.PLAY);
+                this.endFlag = false;
                 break;
             case WAIT:
                 view.setState(State.LOBBY);

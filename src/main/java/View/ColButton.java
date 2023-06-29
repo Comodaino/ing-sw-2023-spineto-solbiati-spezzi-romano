@@ -9,11 +9,22 @@ import javafx.scene.image.ImageView;
 
 
 public class ColButton extends Button {
+
+    /**
+    * Constructs a new ColButton object with the specified parent GUIApp and index.
+    *
+    * @author Alessandra
+    */
     Button button;
     int index;
     GUIApp parent;
 
-public ColButton(GUIApp parent, int index){
+    /**
+     * Constructor of the class
+     * @param parent the parent GUIApp
+     * @param index the index of the column
+     */
+    public ColButton(GUIApp parent, int index){
     this.index = index;
     this.parent = parent;
     button = new Button();
@@ -38,10 +49,19 @@ public ColButton(GUIApp parent, int index){
     });
 }
 
+    /**
+     * Returns the underlying button of the ColButton.
+     *
+     * @return The button associated with the ColButton.
+     */
     public Button getButton() {
         return button;
     }
-
+    /**
+     * Returns the index of the ColButton.
+     *
+     * @return The index of the ColButton.
+     */
     public int getIndex() {
         return index;
     }

@@ -7,6 +7,16 @@ import Distributed.ServerApp;
 import java.io.IOException;
 import java.util.Scanner;
 
+
+/**
+ * Main Class for MyShelfie, from here you can start server and all the kinds of clients (RMI/socket and TUI/GUI),
+ * Arguments accepted:
+ *
+ * -i ipAddress
+ * -t client/server
+ * -c socket/RMI
+ * -v TUI/GUI
+ */
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
 

@@ -309,7 +309,7 @@ public class GameController implements Serializable {
 
     private void checkEnd() {
         if (donePlayers.size() == gameBoard.getListOfPlayer().size()) {
-            lobby.endMatch();
+            forceEndGame();
         }
     }
 

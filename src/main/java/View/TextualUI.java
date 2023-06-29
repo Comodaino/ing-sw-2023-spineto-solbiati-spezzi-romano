@@ -9,6 +9,10 @@ import java.rmi.RemoteException;
 import java.util.Comparator;
 import java.util.Scanner;
 
+/**
+ * This class is the textual user interface of the game.
+ * @author Clara
+ */
 public class TextualUI implements ViewInterface {
 
     private State state;
@@ -17,17 +21,12 @@ public class TextualUI implements ViewInterface {
     private static final String RESET = "\033[0m";
     private static final int maxMsgLength = 50;
     private int removeSize;
-    //private boolean added, removed;
-    private int numPlayers;
 
     public TextualUI(AbstractClient client) throws IOException {
 
         this.state = State.HOME;
         this.input = new Scanner(System.in);
         this.client = client;
-        //this.added = false;
-        //this.removed = false;
-        this.numPlayers = 0;
         Thread th = new Thread() {
             @Override
             public void run() {
@@ -204,6 +203,13 @@ public class TextualUI implements ViewInterface {
         System.out.println("  0 1 2 3 4");
     }
 
+    /**
+     * method to print changes based on the state and the argument received.
+     * if arg is "disconnected" it will print a message of disconnection, if arg is "/nickname" it will print a message of nickname already taken and requires a new nickname
+     * if arg is "/commands" it will print the list of commands available only during LOBBY state, other arg will be ignored
+     * @param arg can be "disconnected", "/nickname" or "/commands"
+     * @throws IOException
+     */
     @Override
     public void update(String arg) throws IOException {
         if(arg.equals("disconnected")) {
@@ -241,14 +247,30 @@ public class TextualUI implements ViewInterface {
                         break;
                     }
 
-                    System.out.println("Your turn!");
-                    showBoard();
-                    showYourShelf();
-                    showOthersShelf();
-                    //showGoals();
-                    System.out.println("Commands you can use:");
-                    System.out.println("/add column  -- add tile in the column of your shelf");
-                    System.out.println("/remove row column   -- remove tile[row][column] from the board");
+                    Player currentPlayer = null;
+                    for(Player p : client.getBoardView().getListOfPlayer()){
+                        if(p.getNickname().equals(client.getBoardView().getCurrentPlayer().getNickname())){
+                            currentPlayer = p;
+                        }
+                    }
+                    assert currentPlayer != null;
+                    if (client.getNickname().equals(currentPlayer.getNickname())){
+                        showBoard();
+                        showYourShelf();
+                        showOthersShelf();
+                        tileBuffer();
+                        showGoals();
+                        //showYourScore();
+                        chat();
+                        System.out.println("Your turn!");
+                    }
+                    else{
+                        showBoard();
+                        showYourShelf();
+                        showOthersShelf();
+                        chat();
+                        System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
+                    }
                     break;
                 case END:
                     String winner = client.getBoardView().getWinner().getNickname();
@@ -281,6 +303,15 @@ public class TextualUI implements ViewInterface {
             }
     }
 
+    /**
+     * Prints all the useful information and requirements about the game to the user, based on the state of the game.
+     * In state HOME it will print the home screen and require a nickname.
+     * In state LOBBY it will print the lobby screen and require the owner player to choose if it's his first match or not or to start the game.
+     * In state PLAY it will print the board, the goals, the players' shelves, the chat and the whispers received(if any), updating any changes taken from the client.
+     * In state END it will print the final scores and the winner.
+     * In state CLOSE it will print a message of closure of the game.
+     * @throws IOException
+     */
     public void update() throws IOException {
         System.out.println("update: " + this.state);
         switch (this.state) {
@@ -370,13 +401,6 @@ public class TextualUI implements ViewInterface {
             if(s.getRecipient().equals(client.getNickname())) System.out.println("--" + s.getContent());
         }
     }
-
-    /*private void showYourScore() throws RemoteException {
-        for(Player p: client.getBoardView().getListOfPlayer()) {
-            if (p.getNickname().equals(client.getNickname()))
-                System.out.println(ConsoleColors.PURPLE_UNDERLINED + "YOUR SCORE:\t" + p.getScore() + RESET);
-        }
-    }*/
 
     private void showGoals() throws RemoteException {
         System.out.print("COMMON GOALS:\t\t");

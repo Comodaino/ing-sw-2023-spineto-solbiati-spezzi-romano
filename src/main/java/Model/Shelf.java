@@ -49,7 +49,7 @@ public class Shelf implements Serializable {
 
     /**
      * isFull return true if the specific Shelf is already full, otherwise returns false
-     * @return is <strong>true</strong> if the specific Shelf is already full, otherwise it is <strong>false</strong>
+     * @return  <strong>true</strong> if the specific Shelf is already full, otherwise returns <strong>false</strong>
      */
     public boolean isFull() {
         for (int i = 0; i < 6; i++) {
@@ -61,6 +61,13 @@ public class Shelf implements Serializable {
         }
         return true;
     }
+
+    /**
+     * isEmpty checks if a specific cell of the Shelf is empty
+     * @param r row
+     * @param c column
+     * @return <strong>true</strong> if the cell is empty, otherwise returns <strong>false</strong>
+     */
     public boolean isEmpty(int r, int c){
         return getTile(r, c) == null;
     }

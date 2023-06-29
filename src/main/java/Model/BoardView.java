@@ -6,6 +6,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class is used to create a view of the board, so that the client can only see the information that he needs.
+ * @author Alessio
+ */
 public class BoardView implements Serializable {
     static final long serialVersionUID = 1L;
     private final Board board;

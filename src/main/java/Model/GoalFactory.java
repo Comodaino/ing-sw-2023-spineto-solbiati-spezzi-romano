@@ -4,10 +4,20 @@ import Model.CommonGoals.*;
 
 import java.io.Serializable;
 
+/**
+ * this class implements getGoal method which returns a new common goal
+ * @author Alessio
+ */
 public class GoalFactory implements Serializable {
     public GoalFactory(){
     }
 
+    /**
+     * this method returns a new common goal
+     * @param i from 0 to 11
+     * @param size number of players
+     * @return a new common goal or null if i is not in the range
+     */
     public CommonGoal getGoal(int i, int size){
         switch(i){
             case 0: return new GoalAngles(size);

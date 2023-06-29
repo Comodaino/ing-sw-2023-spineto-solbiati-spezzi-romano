@@ -13,16 +13,19 @@ public class SwitchButton {
     String command;
     String com;
     BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
-    public SwitchButton(GUIApp parent, int index, String command ){
+    String path;
+    public SwitchButton(GUIApp parent, int index, String command, String path ){
         this.index = index;
         this.parent = parent;
         this.firstSwitch = firstSwitch;
         this.command = command;
         this.com = com;
         this.isSelected2 = isSelected2;
+        this.path = path;
         switchButton = new Button();
         switchButton.setPrefSize(40,40);
         switchButton.setVisible(true);
+
 
         switchButton.setOnMouseClicked(e -> {
             if(isSelected2.get()) {
@@ -33,7 +36,8 @@ public class SwitchButton {
 
                 }else com = parent.getCommand();
                 isSelected2.set(false);
-                switchButton.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");
+                switchButton.setStyle("-fx-background-image: url('"+path+"');-fx-border-color: blue; -fx-border-width: 2px;");
+
                 switchButton.setDisable(true);
                 switchButton.setOpacity(0.8);
                 this.command =  com + " " + index;
@@ -58,8 +62,9 @@ public class SwitchButton {
         return isSelected2.get();
     }
 
-    public void setGraphic(ImageView imageView) {
-        switchButton.setGraphic(imageView);
+    public void setGraphic(String path) {
+        switchButton.setStyle("-fx-background-image: url('"+ path +"'); -fx-background-size: 40 40; -fx-background-repeat: no-repeat; -fx-background-position: center; ");
+    //    switchButton.setGraphic(imageView);
     }
 
     public void setOpacity(int i) {

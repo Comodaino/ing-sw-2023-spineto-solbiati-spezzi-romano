@@ -220,4 +220,14 @@ public class Board implements Serializable {
     public void setFm(boolean fm) {
         this.fm = fm;
     }
+
+    /**
+     * Removes the player with the nickname equal to the parameter from the match
+     * @param nickname
+     */
+    public void removePlayer(String nickname) {
+        for(int i=0; i< listOfPlayer.size(); i++){
+            if(listOfPlayer.get(i).getNickname().equals(nickname)) listOfPlayer.remove(i);
+        }
+    }
 }

@@ -76,7 +76,7 @@ public class TextualUI implements ViewInterface {
 
     private boolean correctLobbyInput(String in) {
         if (in.startsWith("/")) {
-            if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h"))
+            if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h") || in.equals("/quit"))
                 return true;
             if (in.startsWith("/set")) {
                 String[] set = in.split(" ");

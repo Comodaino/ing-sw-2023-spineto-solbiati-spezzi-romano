@@ -78,12 +78,15 @@ public class Lobby {
      * Remove p from the lobby
      * @param p
      */
-    public void removePlayer(RemotePlayer p){
+    public void removePlayer(RemotePlayer p) throws IOException, InterruptedException {
 
         for(int i = 0; i<lp.size(); i++){
             if(lp.get(i).getNickname().equals(p.getNickname())){
-                lp.remove(i);
+                this.getController().removePlayer(p.getNickname());
+                if(lp.remove(i).isOwner()) lp.get(0).setOwner();
+                System.out.println("REMOVED");
                 this.open = true;
+                updateAll();
             }
         }
 

@@ -436,5 +436,13 @@ public class GameController implements Serializable {
     public void setFM(boolean fm) {
         this.gameBoard.setFm(fm);
     }
+
+    /**
+     * Removes the player with the nickname equal to the parameter from the match
+     * @param nickname
+     */
+    public void removePlayer(String nickname) {
+        this.gameBoard.removePlayer(nickname);
+    }
 }
 

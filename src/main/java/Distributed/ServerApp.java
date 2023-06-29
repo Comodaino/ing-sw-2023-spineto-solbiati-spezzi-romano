@@ -103,11 +103,11 @@ public class ServerApp {
     }
 
     /**
-     * This method remove a Lobby from the list of lobbies.
+     * This method removes a Lobby from the list of lobbies.
      * @param lobby the lobby to be removed
      * @author Alessio
      */
-    private void removeLobby(Lobby lobby) {
+    public void removeLobby(Lobby lobby) {
         synchronized (lobbies) {
             this.lobbies.remove(lobby);
         }
@@ -155,8 +155,6 @@ public class ServerApp {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     /**
@@ -232,6 +230,21 @@ public class ServerApp {
                 if (client.isOwner()) {
                     lobby.close();
                 }
+                break;
+            case "/quit":
+
+                for(Lobby l: lobbies){
+                    if(l.getID().equals(client.getLobbyID())){
+                        for(RemotePlayer rp: l.getListOfPlayers()){
+                            if(rp.getNickname().equals(client.getNickname())){
+                                l.removePlayer(rp);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+
                 break;
             default:
                 if(command != null && command.startsWith("/set")) {

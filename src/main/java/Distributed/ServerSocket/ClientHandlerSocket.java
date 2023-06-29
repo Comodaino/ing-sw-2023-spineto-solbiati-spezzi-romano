@@ -186,7 +186,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
      */
     private void waitCommand(String input) throws IOException, InterruptedException {
         System.out.println("WAIT");
-        if (player.isOwner()) {
+        if(input.equals("/quit")) lobby.removePlayer(this.player);
+        else if (player.isOwner()) {
             switch (input) {
                 case "/start":
                     if(lobby.getListOfPlayers().size()>1){

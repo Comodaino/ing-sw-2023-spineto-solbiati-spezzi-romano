@@ -271,7 +271,7 @@ public class GUIApp extends Application implements ViewInterface {
                 break;
         }
         imageTilePath = tile.getConstantTile() + imageTileName + i + ".png";
-        tileButton.setStyle("-fx-background-image: url('"+imageTilePath+"') ; -fx-background-size: 65 65; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-border-width: 0; -fx-alignment: center;  ");
+        tileButton.setStyle("-fx-background-image: url('"+imageTilePath+"') ; -fx-background-size: 65 65; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-border-width: 2; -fx-alignment: center;  ");
    /*   Image imageTile = new Image(imageTilePath);
         ImageView imageView = new ImageView(imageTile);
         imageView.setPreserveRatio(true);
@@ -293,7 +293,7 @@ public class GUIApp extends Application implements ViewInterface {
                 tileButton.setEffect(null);
                 tileButton.setDisable(false);
                 tileButton.setOpacity(1);
-                tileButton.setStyle("-fx-background-image: url('"+imageTilePath+"') ; -fx-border-radius:  1; -fx-border-height: 0; -fx-alignment: center;-fx-background-repeat: no-repeat;");
+                tileButton.setStyle("-fx-background-image: url('"+imageTilePath+"') ; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-border-width: 2; -fx-alignment: center; -fx-border-color: lightblue;");
 
                 if(!isSelected.get()){
                     isSelected.set(true);
@@ -319,7 +319,7 @@ public class GUIApp extends Application implements ViewInterface {
                 if(command!=null && command.startsWith("/remove")) {
                     if (isSelected.get() && count.get() < 3) {
                         isSelected.set(false);
-                        tileButton.setStyle("-fx-background-image: url('"+imageTilePath+"') ;-fx-border-width: 0; -fx-border-radius: 0;  -fx-opacity: 0.8; -fx-alignment: center;-fx-background-repeat: no-repeat;");
+                        tileButton.setStyle("-fx-background-image: url('"+imageTilePath+"') ;-fx-border-width: 2; -fx-border-radius: 0;  -fx-opacity: 0.8; -fx-alignment: center;-fx-background-repeat: no-repeat; -fx-border-color: lightblue;");
                   //      tileButton.setEffect(blur);
                         tileButton.setDisable(true);
                   //      tileButton.setOpacity(0.8);
@@ -420,7 +420,8 @@ public class GUIApp extends Application implements ViewInterface {
 
 
              */
-                pane.setStyle("-fx-background-image: url('"+url+"') ;");
+                pane.setPrefSize(150, 150);
+                pane.setStyle("-fx-background-image: url('"+url+"') ;-fx-background-size: 150 150; -fx-background-repeat: no-repeat; -fx-background-position: center;");
                 ImageView imageView2 = new ImageView();
             //    pane.getChildren().add(imageView1);
                 if(cg.getCompleted().size() >= client.getBoardView().getListOfPlayer().size()){
@@ -447,7 +448,9 @@ public class GUIApp extends Application implements ViewInterface {
             } else {
                 Pane pane2 = new Pane();
                 String url2 = commonGoal.getConstantGoal() + photo + ".jpg";
-                pane2.setStyle("-fx-background-image: url('"+url2+"') ;");
+                pane2.setPrefSize(150, 150);
+                pane2.setStyle("-fx-background-image: url('"+url2+"') ; -fx-background-size: 150 150; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+
              /*   Image imageGoal2 = new Image(commonGoal.getConstantGoal() + photo + ".jpg");
                 ImageView imageView3 = new ImageView(imageGoal2);
                 imageView3.setPreserveRatio(true);
@@ -564,13 +567,17 @@ public class GUIApp extends Application implements ViewInterface {
         }
 
 
-        Image personalGoalImage = createPersonalGoal(client);
-        ImageView personalGoalImageView = new ImageView(personalGoalImage);
+        String personalGoalImage = createPersonalGoal(client);
+        Pane paneImagePersGoal = new Pane();
+        paneImagePersGoal.setStyle("-fx-background-image: url('"+personalGoalImage+"') ; -fx-background-size: 150 150; -fx-background-repeat: no-repeat; -fx-background-position: center ;");
+    /*    ImageView personalGoalImageView = new ImageView(personalGoalImage);
         personalGoalImageView.setFitWidth(150);
         personalGoalImageView.setFitHeight(150);
         personalGoalImageView.setPreserveRatio(true);
 
-        persGoal.add(personalGoalImageView, 1, 0);
+
+     */
+        persGoal.add(paneImagePersGoal, 1, 0);
         persGoal.setAlignment(Pos.CENTER);
         gridPane.add(persGoal, 0, 0);
 
@@ -644,7 +651,7 @@ public class GUIApp extends Application implements ViewInterface {
     private String printShelf(int nPlayer, int row, int col){
         String imageTilePath;
         Constant tile = new Constant();
-        ImageView imageView = new ImageView();
+   //     ImageView imageView = new ImageView();
         int i = 0;
         String imageTileName = null;
             switch (client.getBoardView().getListOfPlayer().get(nPlayer).getShelf().getTile(row, col).getColor()) {
@@ -746,12 +753,21 @@ public class GUIApp extends Application implements ViewInterface {
        GridPane shelfPlayer2 = new GridPane();
        GridPane shelfPlayer3 = new GridPane();
        GridPane shelfPlayer4 = new GridPane();
-       Image imageShelf = new Image("images/boards/bookshelf.png");
+
+       shelfPlayer2.setPrefSize(200, 200);
+     //  shelf2.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+
+    /*   Image imageShelf = new Image("images/boards/bookshelf.png");
        ImageView shelfImageView = new ImageView(imageShelf);
        shelfImageView.setFitWidth(200);
        shelfImageView.setFitHeight(200);
        shelfImageView.setPreserveRatio(true);
+
+     */
        GridPane shelf2 = new GridPane();
+       shelf2.setPrefSize(200, 200);
+       shelf2.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+
        GridPane shelf3 = new GridPane();
        GridPane shelf4 = new GridPane();
        shelf2.setAlignment(Pos.CENTER);
@@ -810,7 +826,7 @@ public class GUIApp extends Application implements ViewInterface {
                                Pane pane2 = new Pane();
                                pane2.setPrefSize(25,25);
                                String url2 = printOtherShelf(row, col, i);
-                               pane2.setStyle("-fx-background-image: url('"+url2+"')");
+                               pane2.setStyle("-fx-background-image: url('"+url2+"'); -fx-background-size: 25 25; -fx-background-repeat: no-repeat; -fx-background-position: center center; ");
                                shelf2.add(pane2, col, 5 - row);
                                namePlayer2.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());
                                shelfPlayer2.add(namePlayer2, 0, 1);
@@ -820,7 +836,7 @@ public class GUIApp extends Application implements ViewInterface {
                                Pane pane3 = new Pane();
                                pane3.setPrefSize(25,25);
                                String url3 = printOtherShelf(row, col, i);
-                               pane3.setStyle("-fx-background-image: url('"+url3+"')");
+                               pane3.setStyle("-fx-background-image: url('"+url3+"'); -fx-background-size: 25 25; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
                                Label namePlayer3 = new Label();
                                shelf3.add(pane3, col, 5 - row);
                                namePlayer3.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());
@@ -830,7 +846,7 @@ public class GUIApp extends Application implements ViewInterface {
                                Pane pane4 = new Pane();
                                pane4.setPrefSize(25,25);
                                String url4 = printOtherShelf(row, col, i);
-                               pane4.setStyle("-fx-background-image: url('"+url4+"')");
+                               pane4.setStyle("-fx-background-image: url('"+url4+"'); -fx-background-size: 25 25; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
                                Label namePlayer4 = new Label();
                                shelf4.add(pane4, col, 5 - row);
                                namePlayer4.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());
@@ -844,23 +860,31 @@ public class GUIApp extends Application implements ViewInterface {
            }
        }
 
-       shelfPlayer2.add(shelfImageView, 0, 0);
+    //   shelfPlayer2.add(shelfImageView, 0, 0);
        shelfPlayer2.add(shelf2, 0, 0);
 
        if (client.getBoardView().getListOfPlayer().size() >= 3) {
-           ImageView shelfImageView3 = new ImageView(imageShelf);
+           shelfPlayer3.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+
+       /*    ImageView shelfImageView3 = new ImageView(imageShelf);
            shelfImageView3.setFitWidth(200);
            shelfImageView3.setFitHeight(200);
            shelfImageView3.setPreserveRatio(true);
            shelfPlayer3.add(shelfImageView3, 1, 1);
+
+        */
            shelfPlayer3.add(shelf3, 1, 1);
        }
        if (client.getBoardView().getListOfPlayer().size() == 4) {
+           shelfPlayer4.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+/*
            ImageView shelfImageView4 = new ImageView(imageShelf);
            shelfImageView4.setFitWidth(200);
            shelfImageView4.setFitHeight(200);
            shelfImageView4.setPreserveRatio(true);
            shelfPlayer4.add(shelfImageView4, 2, 2);
+
+ */
            shelfPlayer4.add(shelf4, 2, 2);
        }
 
@@ -871,7 +895,7 @@ public class GUIApp extends Application implements ViewInterface {
     private String printOtherShelf(int row, int col, int playerNumber){
         String imageTilePath= null;
         Constant tile = new Constant();
-        ImageView imageView = new ImageView();
+   //     ImageView imageView = new ImageView();
         int i = 0;
         String imageTileName = null;
         if(client.getBoardView().getListOfPlayer().get(playerNumber).getShelf().getTile(row,col) != null) {
@@ -919,8 +943,8 @@ public class GUIApp extends Application implements ViewInterface {
          */
         }else{
             imageTilePath = null;
-            imageView.setFitHeight(25);
-            imageView.setFitWidth(25);
+        //    imageView.setFitHeight(25);
+         //   imageView.setFitWidth(25);
         }
         return imageTilePath;
     }
@@ -964,7 +988,7 @@ public class GUIApp extends Application implements ViewInterface {
 
     }
 
-    private Image createPersonalGoal(AbstractClient client) {
+    private String createPersonalGoal(AbstractClient client) {
 
         Player p= null;
         for(int playerIndex=0; playerIndex<client.getBoardView().getListOfPlayer().size(); playerIndex++){
@@ -1020,7 +1044,7 @@ public class GUIApp extends Application implements ViewInterface {
                 break;
         }
 
-        return new Image(imagePath);
+        return imagePath;
     }
 
     public void home(Stage stage, String nickname) {

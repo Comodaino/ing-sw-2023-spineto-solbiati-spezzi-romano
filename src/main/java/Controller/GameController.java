@@ -118,6 +118,11 @@ public class GameController implements Serializable {
             do {
                 i += 1;
 
+                if(i + 2 < gameBoard.getListOfPlayer().size() && gameBoard.getListOfPlayer().get(i+2).getNickname().equals(firstPlayerToEnd)) forceEndGame();
+                if(i + 1 > gameBoard.getListOfPlayer().size() && gameBoard.getListOfPlayer().get(0).getNickname().equals(firstPlayerToEnd)) forceEndGame();
+
+
+
                 if (i == gameBoard.getListOfPlayer().size() - 1){
                     if(gameBoard.getListOfPlayer().get(0).getNickname().equals(firstPlayerToEnd)) forceEndGame();
                     setCurrentPlayer(gameBoard.getListOfPlayer().get(0));

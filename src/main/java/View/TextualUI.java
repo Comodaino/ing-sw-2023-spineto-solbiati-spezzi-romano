@@ -170,10 +170,7 @@ public class TextualUI implements ViewInterface {
     private void printPGShelf(String[][] pg) {
         for (int i = 5; i >=0; i--) {
             for (int j = 0; j < 5; j++) {
-                if (j == 0)
-                    System.out.print(i + " ");
-                if (j == 0) {
-                }
+                if (j == 0) System.out.print(i + " ");
                 if (pg[i][j] == (null)) {
                     System.out.print("[]");
                 } else {
@@ -200,7 +197,7 @@ public class TextualUI implements ViewInterface {
                 }
             }System.out.print("\n");
         }
-        System.out.println("   0 1 2 3 4");
+        System.out.println(" 0 1 2 3 4");
     }
 
     /**

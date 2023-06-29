@@ -113,7 +113,7 @@ public class GameController implements Serializable {
                 }
 
                 if (gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1){
-                    System.out.println("DIOPORCO MI METTO A PIANGERE");
+                    System.out.println("TIMEOUT ENDED, CLOSING THE GAME");
                     forceEndGame();
                     try {
                         lobby.updateAll();

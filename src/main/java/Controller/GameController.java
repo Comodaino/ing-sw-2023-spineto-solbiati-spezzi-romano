@@ -105,7 +105,26 @@ public class GameController implements Serializable {
             }
 
             if (gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1) {
-                forceEndGame();
+
+                try {
+                    TimeUnit.SECONDS.sleep(20);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                if (gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1){
+                    System.out.println("DIOPORCO MI METTO A PIANGERE");
+                    forceEndGame();
+                    try {
+                        lobby.updateAll();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+
             }
 
             int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;

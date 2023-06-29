@@ -8,7 +8,7 @@ public class Constant {
     private String display5;
     /**
      * Constructs a new Constant object and initializes the paths for different resources.
-     * @author Alessandra Romano
+     * @author Alessandra
      */
     public Constant(){
 

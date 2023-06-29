@@ -200,7 +200,7 @@ public class TextualUI implements ViewInterface {
                 }
             }System.out.print("\n");
         }
-        System.out.println("  0 1 2 3 4");
+        System.out.println("   0 1 2 3 4");
     }
 
     /**
@@ -260,7 +260,6 @@ public class TextualUI implements ViewInterface {
                         showOthersShelf();
                         tileBuffer();
                         showGoals();
-                        //showYourScore();
                         chat();
                         System.out.println("Your turn!");
                     }
@@ -313,7 +312,6 @@ public class TextualUI implements ViewInterface {
      * @throws IOException
      */
     public void update() throws IOException {
-        System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
                 System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +
@@ -337,7 +335,7 @@ public class TextualUI implements ViewInterface {
                     }
                 System.out.println("Players in the lobby:");
                 for(Player p: client.getBoardView().getListOfPlayer()){
-                    System.out.println("☭☭☭☭☭☭" + p.getNickname() + "☭☭☭☭☭☭☭☭");
+                    System.out.println("---" + ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + p.getNickname() + RESET + "---");
                 }
                 chat();
                 break;
@@ -360,9 +358,8 @@ public class TextualUI implements ViewInterface {
                     showOthersShelf();
                     tileBuffer();
                     showGoals();
-                    //showYourScore();
                     chat();
-                    System.out.println("Your turn!");
+                    System.out.println("YOUR TURN!");
                 }
                 else{
                     showBoard();
@@ -407,7 +404,7 @@ public class TextualUI implements ViewInterface {
         client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));
         System.out.println("PERSONAL GOALS:\t\t");
         printGoal("/pg");
-        System.out.println("Adjacent tiles");
+        //System.out.println("Adjacent tiles");
 
     }
 
@@ -416,7 +413,7 @@ public class TextualUI implements ViewInterface {
         System.out.println("OTHERS' SHELVES:");
         for (Player p : client.getBoardView().getListOfPlayer()) {
             if (!p.getNickname().equals(client.getNickname())) {
-                System.out.println(ConsoleColors.BLUE_BOLD + p.getNickname());
+                System.out.println(ConsoleColors.BLUE_BOLD + "\t" + p.getNickname());
                 String tType = null;
                 for (int i = 5; i >=0; i--) {
                     for (int j = 0; j < 5; j++) {
@@ -445,22 +442,22 @@ public class TextualUI implements ViewInterface {
                             }
                             switch (tile.getColor()) {
                                 case WHITE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case YELLOW:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case LIGHTBLUE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case GREEN:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case BLUE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                                     break;
                                 case PINK:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                             }
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
@@ -504,22 +501,22 @@ public class TextualUI implements ViewInterface {
                             }
                             switch (tile.getColor()) {
                                 case WHITE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case YELLOW:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                                     break;
                                 case LIGHTBLUE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case GREEN:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                                     break;
                                 case BLUE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case PINK:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                                     break;
                             }
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);

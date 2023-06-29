@@ -9,6 +9,10 @@ import java.rmi.RemoteException;
 import java.util.Comparator;
 import java.util.Scanner;
 
+/**
+ * This class is the textual user interface of the game.
+ * @author Clara
+ */
 public class TextualUI implements ViewInterface {
 
     private State state;
@@ -17,17 +21,12 @@ public class TextualUI implements ViewInterface {
     private static final String RESET = "\033[0m";
     private static final int maxMsgLength = 50;
     private int removeSize;
-    //private boolean added, removed;
-    private int numPlayers;
 
     public TextualUI(AbstractClient client) throws IOException {
 
         this.state = State.HOME;
         this.input = new Scanner(System.in);
         this.client = client;
-        //this.added = false;
-        //this.removed = false;
-        this.numPlayers = 0;
         Thread th = new Thread() {
             @Override
             public void run() {
@@ -42,27 +41,30 @@ public class TextualUI implements ViewInterface {
         th.start();
     }
 
-    public void inputHandler() throws IOException {
-
+    private void inputHandler() throws IOException {
         while(state!=State.CLOSE) {
             String in = input.nextLine();
-            if(in!=null && in.length()>0) {
-                if (state == State.LOBBY || state == State.PLAY) {
-                    if (in.startsWith("/") && (state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
-                        System.out.println("Command is invalid, try /help or /h");
-                    else{
-                        if(in.equals("/h") || in.equals("/help")) help();
+            if(in.equals("/exit")) client.println(in);
+            else {
+                if (in != null && in.length() > 0) {
+                    if (state == State.LOBBY || state == State.PLAY) {
+                        if (in.startsWith("/") && (state == State.LOBBY && !correctLobbyInput(in)) || ((state == State.PLAY) && !correctInput(in)))
+                            System.out.println("Command is invalid, try /help or /h");
                         else {
-                            if(in.equals("/cg") || in.equals("/pg")) printGoal(in);
-                            else client.println(in);
+                            if (in.equals("/h") || in.equals("/help")) help();
+                            else {
+                                if (in.equals("/cg") || in.equals("/pg")) printGoal(in);
+                                else client.println(in);
+                            }
                         }
                     }
-                }if (state == State.HOME){
-                    if (!client.isOwner()) System.out.println("wait for the owner");
-                    if (in.length() > 10) {
-                        System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
-                    } else
-                        client.println(in);
+                    if (state == State.HOME) {
+                        if (!client.isOwner()) System.out.println("wait for the owner");
+                        if (in.length() > 10) {
+                            System.out.println("Nickname too long, please insert a nickname with less than 10 characters");
+                        } else
+                            client.println(in);
+                    }
                 }
             }
         }
@@ -108,7 +110,7 @@ public class TextualUI implements ViewInterface {
                         case ("GoalAngles"):
                             System.out.println("Four tiles of the same color in the four corners of the bookshelf");
                             break;
-                        case ("GoalColumns"):
+                        case ("GoalColumn"):
                             System.out.println("Three columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column");
                             break;
                         case ("GoalCouples"):
@@ -117,7 +119,7 @@ public class TextualUI implements ViewInterface {
                         case ("GoalCross"):
                             System.out.println("five tiles of the same type forming an X");
                             break;
-                        case ("GoalDiagonals"):
+                        case ("GoalDiagonal"):
                             System.out.println("five tiles of the same type forming a diagonal");
                             break;
                         case ("GoalDiffColumns"):
@@ -132,7 +134,7 @@ public class TextualUI implements ViewInterface {
                         case ("GoalQuartets"):
                             System.out.println("four groups each containing at least 3 tiles of the same type. The tiles of one group can be different from those of another group");
                             break;
-                        case ("GoalRows"):
+                        case ("GoalRow"):
                             System.out.println("four lines each formed by 5 tiles of maximum three different types");
                             break;
                         case ("GoalSquares"):
@@ -171,7 +173,6 @@ public class TextualUI implements ViewInterface {
                 if (j == 0)
                     System.out.print(i + " ");
                 if (j == 0) {
-                    //System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                 }
                 if (pg[i][j] == (null)) {
                     System.out.print("[]");
@@ -199,15 +200,26 @@ public class TextualUI implements ViewInterface {
                 }
             }System.out.print("\n");
         }
-        System.out.println("  1 2 3 4 5");
+        System.out.println("   0 1 2 3 4");
     }
 
+    /**
+     * method to print changes based on the state and the argument received.
+     * if arg is "disconnected" it will print a message of disconnection, if arg is "/nickname" it will print a message of nickname already taken and requires a new nickname
+     * if arg is "/commands" it will print the list of commands available only during LOBBY state, other arg will be ignored
+     * @param arg can be "disconnected", "/nickname" or "/commands"
+     * @throws IOException
+     */
     @Override
     public void update(String arg) throws IOException {
-        //System.out.println("update: " + this.state);
+        if(arg.equals("disconnected")) {
+            System.out.println(ConsoleColors.RED_BOLD + "\n\n\n\n\n\n\n\t\t\tYOU HAVE BEEN DISCONNECTED FROM THE SERVER\n\n" + RESET);
+            System.out.println("Press /exit to quit the game");
+        }
+
             switch (this.state) {
                 case HOME:
-                    System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +
+                    System.out.println(ConsoleColors.RED_BOLD_BRIGHT + "\n" +
 
                             "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
                             "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
@@ -235,14 +247,29 @@ public class TextualUI implements ViewInterface {
                         break;
                     }
 
-                    System.out.println("Your turn!");
-                    showBoard();
-                    showYourShelf();
-                    showOthersShelf();
-                    //showGoals();
-                    System.out.println("Commands you can use:");
-                    System.out.println("/add column  -- add tile in the column of your shelf");
-                    System.out.println("/remove row column   -- remove tile[row][column] from the board");
+                    Player currentPlayer = null;
+                    for(Player p : client.getBoardView().getListOfPlayer()){
+                        if(p.getNickname().equals(client.getBoardView().getCurrentPlayer().getNickname())){
+                            currentPlayer = p;
+                        }
+                    }
+                    assert currentPlayer != null;
+                    if (client.getNickname().equals(currentPlayer.getNickname())){
+                        showBoard();
+                        showYourShelf();
+                        showOthersShelf();
+                        tileBuffer();
+                        showGoals();
+                        chat();
+                        System.out.println("Your turn!");
+                    }
+                    else{
+                        showBoard();
+                        showYourShelf();
+                        showOthersShelf();
+                        chat();
+                        System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
+                    }
                     break;
                 case END:
                     String winner = client.getBoardView().getWinner().getNickname();
@@ -275,11 +302,19 @@ public class TextualUI implements ViewInterface {
             }
     }
 
+    /**
+     * Prints all the useful information and requirements about the game to the user, based on the state of the game.
+     * In state HOME it will print the home screen and require a nickname.
+     * In state LOBBY it will print the lobby screen and require the owner player to choose if it's his first match or not or to start the game.
+     * In state PLAY it will print the board, the goals, the players' shelves, the chat and the whispers received(if any), updating any changes taken from the client.
+     * In state END it will print the final scores and the winner.
+     * In state CLOSE it will print a message of closure of the game.
+     * @throws IOException
+     */
     public void update() throws IOException {
-        System.out.println("update: " + this.state);
         switch (this.state) {
             case HOME:
-                System.out.println(ConsoleColors.YELLOW_BOLD + "\n" +
+                System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +
 
                         "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
                         "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
@@ -300,7 +335,7 @@ public class TextualUI implements ViewInterface {
                     }
                 System.out.println("Players in the lobby:");
                 for(Player p: client.getBoardView().getListOfPlayer()){
-                    System.out.println("☭☭☭☭☭☭" + p.getNickname() + "☭☭☭☭☭☭☭☭");
+                    System.out.println("---" + ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + p.getNickname() + RESET + "---");
                 }
                 chat();
                 break;
@@ -323,9 +358,8 @@ public class TextualUI implements ViewInterface {
                     showOthersShelf();
                     tileBuffer();
                     showGoals();
-                    //showYourScore();
                     chat();
-                    System.out.println("Your turn!");
+                    System.out.println("YOUR TURN!");
                 }
                 else{
                     showBoard();
@@ -365,19 +399,12 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    /*private void showYourScore() throws RemoteException {
-        for(Player p: client.getBoardView().getListOfPlayer()) {
-            if (p.getNickname().equals(client.getNickname()))
-                System.out.println(ConsoleColors.PURPLE_UNDERLINED + "YOUR SCORE:\t" + p.getScore() + RESET);
-        }
-    }*/
-
     private void showGoals() throws RemoteException {
         System.out.print("COMMON GOALS:\t\t");
         client.getBoardView().getSetOfCommonGoal().forEach((goal) -> System.out.println(goal.getName()));
         System.out.println("PERSONAL GOALS:\t\t");
         printGoal("/pg");
-        System.out.println("Adjacent tiles");
+        //System.out.println("Adjacent tiles");
 
     }
 
@@ -386,7 +413,7 @@ public class TextualUI implements ViewInterface {
         System.out.println("OTHERS' SHELVES:");
         for (Player p : client.getBoardView().getListOfPlayer()) {
             if (!p.getNickname().equals(client.getNickname())) {
-                System.out.println(ConsoleColors.BLUE_BOLD + p.getNickname());
+                System.out.println(ConsoleColors.BLUE_BOLD + "\t" + p.getNickname());
                 String tType = null;
                 for (int i = 5; i >=0; i--) {
                     for (int j = 0; j < 5; j++) {
@@ -415,22 +442,22 @@ public class TextualUI implements ViewInterface {
                             }
                             switch (tile.getColor()) {
                                 case WHITE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case YELLOW:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case LIGHTBLUE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case GREEN:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case BLUE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                                     break;
                                 case PINK:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                             }
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
@@ -474,22 +501,22 @@ public class TextualUI implements ViewInterface {
                             }
                             switch (tile.getColor()) {
                                 case WHITE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.WHITE_BACKGROUND + tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case YELLOW:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.YELLOW_BACKGROUND + tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                                     break;
                                 case LIGHTBLUE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.CYAN_BACKGROUND +   tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case GREEN:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.GREEN_BACKGROUND +  tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                                     break;
                                 case BLUE:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.BLUE_BACKGROUND + tType + RESET +ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "|" + RESET);
                                     break;
                                 case PINK:
-                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + "|");
+                                    System.out.print(ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + tType + RESET + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                                     break;
                             }
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
@@ -553,7 +580,7 @@ public class TextualUI implements ViewInterface {
         }System.out.println("\t\t  0   1   2   3   4   5   6   7   8");
     }
 
-    public void homePrint(String arg){
+    private void homePrint(String arg){
         if (arg != null && arg.equals("/nickname")) {
             System.out.println("nickname already used, please insert another nickname:  ");
         } else {
@@ -573,7 +600,7 @@ public class TextualUI implements ViewInterface {
     }
 
 
-    public void tileBuffer(){
+    private void tileBuffer(){
         System.out.print(ConsoleColors.BLUE_UNDERLINED + "TILE BUFFER:" + RESET + "\t\t");
         String tType = null;
         if(client.getBoardView().getTileBuffer().size() == 0){
@@ -621,7 +648,7 @@ public class TextualUI implements ViewInterface {
         }
     }
 
-    public void help() throws RemoteException {
+    private void help() throws RemoteException {
         System.out.println("\t\t\t" + ConsoleColors.GREEN_UNDERLINED + "COMMANDS AVAILABLE:" + RESET);
         if(this.state.equals(State.PLAY)) {
             System.out.println(ConsoleColors.GREEN_UNDERLINED + "/remove row column" + RESET + "  ---> to remove the tile[row][column] from the board");
@@ -631,7 +658,6 @@ public class TextualUI implements ViewInterface {
             System.out.println(ConsoleColors.GREEN_UNDERLINED + "/cg of /pg" + RESET + "  ---> to see common goals or private goals");
         }
         if(this.state.equals(State.LOBBY) && client.isOwner()) System.out.println(ConsoleColors.GREEN_UNDERLINED + "/start" + RESET + "  ---> to start the game");
-        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/chat message" + RESET + "  ---> to send a message to everyone");
         System.out.println(ConsoleColors.GREEN_UNDERLINED + "/whisper addressee message" + RESET + "  ---> to send a private message to another player");
         System.out.println(ConsoleColors.GREEN_UNDERLINED + "/exit" + RESET + "  ---> close the app, if a match is still going you can rejoin");
     }
@@ -773,7 +799,7 @@ public class TextualUI implements ViewInterface {
             }
         } return false;
     }
-   void printGoalShelf(String goal){
+   private void printGoalShelf(String goal){
         String conf = goal + "_conf";
        InputStream is = getClass().getClassLoader().getResourceAsStream("CommonGoalsTUI/"+ conf);
        assert is != null;

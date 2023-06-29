@@ -17,10 +17,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -523,7 +520,6 @@ public class GUIApp extends Application implements ViewInterface {
         ImageView shelfImageView = new ImageView(imageShelf);
         shelfImageView.setFitWidth(300);
         shelfImageView.setFitHeight(300);
-
 
         shelfPane.add(shelfImageView, 0, 0);
         shelfPane.add(shelfGridPane, 0, 0);
@@ -1114,7 +1110,9 @@ public class GUIApp extends Application implements ViewInterface {
 
         GridPane root = new GridPane();
 
-        root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_3.jpg'); -fx-background-size: cover; " + " -fx-background-repeat: no-repeat; ");
+        Constant c = new Constant();
+        String urlDisplay3 = c.getDisplay3();
+        root.setStyle("-fx-background-image: url('"+urlDisplay3+"'); -fx-background-size: cover; " + " -fx-background-repeat: no-repeat; ");
 
         root.add(contentBox, 1, 1);
 
@@ -1195,7 +1193,9 @@ public class GUIApp extends Application implements ViewInterface {
         contentBox.getChildren().addAll(button);
         contentBox.setAlignment(Pos.CENTER);
 
-        root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_5.jpg'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
+        Constant c = new Constant();
+        String urlDisplay5 = c.getDisplay5();
+        root.setStyle("-fx-background-image: url('"+urlDisplay5+"'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
 
         root.add(contentBox, 2, 1);
         primaryStage.setMaximized(true);
@@ -1327,7 +1327,9 @@ public class GUIApp extends Application implements ViewInterface {
             chat.setStyle("-fx-alignment: center;");
 
             contentBox.getChildren().addAll(chat);
-            root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_5.jpg'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
+            Constant constant = new Constant();
+            String display5 = constant.getDisplay5();
+            root.setStyle("-fx-background-image: url('"+display5+"'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
             root.setAlignment(Pos.CENTER);
 
             root.add(contentBox, 2, 0);
@@ -1401,10 +1403,13 @@ public class GUIApp extends Application implements ViewInterface {
     }
     private void end(Stage primaryStage, String arg){
         GridPane root = new GridPane();
+        VBox contentBox = new VBox();
         Scene sceneEnd = new Scene(root);
         BoxBlur blur = new BoxBlur(3, 4, 3);
         root.setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-image: url('images/Publisher%20material/Display_5.jpg'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
+        Constant constant = new Constant();
+        String display5 = constant.getDisplay5();
+        root.setStyle("-fx-background-image: url('"+display5+"'); " + "-fx-background-size: cover; " + " -fx-background-repeat: no-repeat;");
         Image imageLogo = new Image("images/Publisher material/Title 2000x618px.png");
         ImageView imageViewLogo = new ImageView(imageLogo);
         imageViewLogo.setPreserveRatio(true);
@@ -1416,12 +1421,14 @@ public class GUIApp extends Application implements ViewInterface {
             labelWinner.setText("There's no winner");
             labelWinner.setStyle("-fx-font-size: 20px;-fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             labelWinner.setAlignment(Pos.CENTER);
-            root.add(labelWinner, 0, 1);
+            contentBox.getChildren().add(labelWinner);
+          //  root.add(labelWinner, 0, 1);
         }else {
             labelWinner.setText(client.getBoardView().getWinner().getNickname() + " won the game!");
             labelWinner.setStyle("-fx-font-size: 20px; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             labelWinner.setAlignment(Pos.CENTER);
-            root.add(labelWinner, 0, 1);
+            contentBox.getChildren().add(labelWinner);
+         //   root.add(labelWinner, 0, 1);
         }
 
 
@@ -1447,7 +1454,9 @@ public class GUIApp extends Application implements ViewInterface {
             label.setAlignment(Pos.CENTER);
             vBox.getChildren().add(label);
 
+
         }
+        contentBox.getChildren().add(vBox);
         vBox.setStyle("-fx-background-color: white; -fx-border-color: lightblue; -fx-border-width: 2px; -fx-alignment: center; ");
         root.add(vBox, 0, 2);
         Button button = new Button("Lobby");
@@ -1455,7 +1464,10 @@ public class GUIApp extends Application implements ViewInterface {
         button.setOnMouseClicked(e -> {
             client.println("lobbbb");
         });
-        root.add(button, 0, 3);
+       // root.add(button, 0, 3);
+        contentBox.getChildren().add(button);
+        contentBox.setAlignment(Pos.CENTER);
+        root.add(contentBox, 0, 2);
         primaryStage.setScene(sceneEnd);
         primaryStage.setMaximized(true);
         primaryStage.show();

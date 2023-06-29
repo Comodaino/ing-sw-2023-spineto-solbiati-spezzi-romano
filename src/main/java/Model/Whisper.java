@@ -2,6 +2,10 @@ package Model;
 
 import java.io.Serializable;
 
+/**
+ * represents a private message between two users with attribute sender, recipient, and content
+ * @author Alessio
+ */
 public class Whisper implements Serializable {
     String sender;
     String recipient;

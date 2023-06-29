@@ -13,9 +13,9 @@ public class Pgtype implements Serializable {
 
     /**
      * Constructor of Pgtype
-     * @param line
-     * @param col
-     * @param color
+     * @param line row in the personalGoal Shelf
+     * @param col column in the personalGoal Shelf
+     * @param color color of the Tile in that position
      */
     public Pgtype(int line, int col, Color color) {
         this.line = line;

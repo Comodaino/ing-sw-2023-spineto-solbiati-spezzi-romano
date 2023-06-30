@@ -162,7 +162,6 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
 
 
         try {
-            System.out.println("IP ADD: " + address);
             client.run(address);
         } catch (Exception e) {
             throw new RuntimeException(e);

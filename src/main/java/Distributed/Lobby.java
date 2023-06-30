@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class Lobby {
@@ -19,12 +20,14 @@ public class Lobby {
     private GameController controller;
     private ServerApp serverApp;
     private boolean playing;
+    private int maxNumberOfPlayers;
 
     public Lobby(ServerApp serverApp) {
         this.lp = new ArrayList<RemotePlayer>();
         this.firstMatch = false;
         this.ID = null;
         this.serverApp = serverApp;
+        this.maxNumberOfPlayers = 4;
 
         try {
             controller = new GameController(false, this);
@@ -52,12 +55,22 @@ public class Lobby {
                 p.setOwner(); //the first player to join the lobby become the owner
             }
             lp.add(p);
-            p.setState(States.WAIT);
             p.setController(controller);
-            //p.update(boardView);
             controller.addPlayer(new Player(p.getNickname()));
-            if (lp.size() == 4) this.open = false;
+            TimeUnit.MILLISECONDS.sleep(50);
+            if (lp.size() >= maxNumberOfPlayers){
+                p.setState(States.PLAY);
+                p.update(controller.getBoardView());
+                startGame();
+                this.open = false;
+            }else{
+                p.setState(States.WAIT);
+            }
         }
+    }
+
+    public void removePlayer(RemotePlayer p){
+
     }
 
     private boolean closeLobby() {
@@ -102,6 +115,7 @@ public class Lobby {
 
     public void setFirstMatch(boolean firstMatch) {
         this.firstMatch = firstMatch;
+        this.getController().setFM(firstMatch);
     }
 
     public boolean isFirstMatch() {
@@ -141,5 +155,19 @@ public class Lobby {
 
     public boolean getPlay() {
         return playing;
+    }
+
+    public void setMaxNumberOfPlayers(int maxNumberOfPlayers) throws IOException, InterruptedException {
+        System.out.println(maxNumberOfPlayers);
+        if(maxNumberOfPlayers > 1 && maxNumberOfPlayers <= 4 ){
+            if(maxNumberOfPlayers >= this.getListOfPlayers().size()){
+                this.maxNumberOfPlayers = maxNumberOfPlayers;
+                if(maxNumberOfPlayers == this.getListOfPlayers().size()){
+                    System.out.println("UNCLEPEAR");
+                    startGame();
+                    updateAll();
+                }
+            }
+        }
     }
 }

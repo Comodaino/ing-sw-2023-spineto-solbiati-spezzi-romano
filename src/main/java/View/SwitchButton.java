@@ -12,14 +12,15 @@ public class SwitchButton {
     GUIApp parent;
     String command;
     String com;
+    BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
     public SwitchButton(GUIApp parent, int index, String command ){
         this.index = index;
         this.parent = parent;
         this.firstSwitch = firstSwitch;
         this.command = command;
         this.com = com;
+        this.isSelected2 = isSelected2;
         switchButton = new Button();
-        BooleanProperty isSelected2 = new SimpleBooleanProperty(false);
         switchButton.setPrefSize(40,40);
         switchButton.setVisible(true);
 
@@ -53,9 +54,23 @@ public class SwitchButton {
     public int getIndex() {
         return index;
     }
+    public boolean getIsSelected2() {
+        return isSelected2.get();
+    }
 
     public void setGraphic(ImageView imageView) {
         switchButton.setGraphic(imageView);
     }
 
+    public void setOpacity(int i) {
+        switchButton.setOpacity(i);
+    }
+
+    public void setStyle(String s) {
+        switchButton.setStyle(s);
+    }
+
+    public void setIsSelected2(boolean b) {
+        isSelected2.set(b);
+    }
 }

@@ -20,6 +20,7 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
     private Scanner in;
     private boolean outputEnabled;
 
+
     /**
      * Constructor for the Client Handler
      *
@@ -125,10 +126,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 outSocket("/setnickname " + input);
 
                 lobby.updateAll();
-
-                if (player.isOwner()) outSocket("/wait owner ");
-                else outSocket("/wait");
-
+                if(player.getState() == WAIT) {
+                    if (player.isOwner()) outSocket("/wait owner ");
+                    else outSocket("/wait");
+                }
                 break;
             case "false":
                 System.out.println("Nickname not available");
@@ -169,10 +170,8 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
         if (player.isOwner()) {
             switch (input) {
                 case "/start":
-
                     if(lobby.getListOfPlayers().size()>1){
                         lobby.startGame();
-                        player.setState(PLAY);
                     }
                     break;
                 case "/firstMatch":
@@ -184,7 +183,10 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                 case "/closeLobby":
                     lobby.close();
                     break;
-                default : lobby.getController().update(input);
+                default :
+                    if(input != null && input.startsWith("/set")) {
+                        if(input.length()==6) lobby.setMaxNumberOfPlayers(input.charAt(5) - 48);
+                    }else lobby.getController().update(input);
                     break;
             }
             lobby.updateAll();

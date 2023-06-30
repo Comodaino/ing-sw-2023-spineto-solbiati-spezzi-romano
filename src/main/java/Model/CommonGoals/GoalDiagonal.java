@@ -16,22 +16,26 @@ public class GoalDiagonal extends CommonGoal{
     public int getScore(Player p){
         boolean found = false;
 
-        if(  (p.getShelf().getTile(0,0) != null && p.getShelf().getTile(1,1) != null) && p.getShelf().getTile(0, 0).getColor().equals(p.getShelf().getTile(1, 1).getColor()) &&
+        if(  (p.getShelf().getTile(0,0) != null && p.getShelf().getTile(1,1) != null && p.getShelf().getTile(2,2) != null && p.getShelf().getTile(3,3) != null && p.getShelf().getTile(4,4) != null) &&
+                p.getShelf().getTile(0, 0).getColor().equals(p.getShelf().getTile(1, 1).getColor()) &&
                 p.getShelf().getTile(1, 1).getColor().equals(p.getShelf().getTile(2, 2).getColor()) &&
                 p.getShelf().getTile(2, 2).getColor().equals(p.getShelf().getTile(3, 3).getColor()) &&
                 p.getShelf().getTile(3, 3).getColor().equals(p.getShelf().getTile(4, 4).getColor())){
             found = true;
-        } else if((p.getShelf().getTile(1,0) != null && p.getShelf().getTile(2,1) != null) && p.getShelf().getTile(1, 0).getColor().equals(p.getShelf().getTile(2, 1).getColor()) &&
+        } else if((p.getShelf().getTile(1,0) != null && p.getShelf().getTile(2,1) != null && p.getShelf().getTile(3,2) != null && p.getShelf().getTile(4,3) != null && p.getShelf().getTile(5,4) != null) &&
+                p.getShelf().getTile(1, 0).getColor().equals(p.getShelf().getTile(2, 1).getColor()) &&
                 p.getShelf().getTile(2, 1).getColor().equals(p.getShelf().getTile(3, 2).getColor()) &&
                 p.getShelf().getTile(3, 2).getColor().equals(p.getShelf().getTile(4, 3).getColor()) &&
                 p.getShelf().getTile(4, 3).getColor().equals(p.getShelf().getTile(5, 4).getColor())){
             found = true;
-        } else if((p.getShelf().getTile(0,4) != null && p.getShelf().getTile(1,3) != null) && p.getShelf().getTile(0, 4).getColor().equals(p.getShelf().getTile(1, 3).getColor()) &&
+        } else if((p.getShelf().getTile(0,4) != null && p.getShelf().getTile(1,3) != null && p.getShelf().getTile(2,2) != null && p.getShelf().getTile(3,1) != null && p.getShelf().getTile(4,0) != null) &&
+                p.getShelf().getTile(0, 4).getColor().equals(p.getShelf().getTile(1, 3).getColor()) &&
                 p.getShelf().getTile(1, 3).getColor().equals(p.getShelf().getTile(2, 2).getColor()) &&
                 p.getShelf().getTile(2, 2).getColor().equals(p.getShelf().getTile(3, 1).getColor()) &&
                 p.getShelf().getTile(3, 1).getColor().equals(p.getShelf().getTile(4, 0).getColor())){
             found = true;
-        } else if((p.getShelf().getTile(1,4) != null && p.getShelf().getTile(2,3) != null) && p.getShelf().getTile(1, 4).getColor().equals(p.getShelf().getTile(2, 3).getColor()) &&
+        } else if((p.getShelf().getTile(1,4) != null && p.getShelf().getTile(2,3) != null && p.getShelf().getTile(3,2) != null && p.getShelf().getTile(4,1) != null && p.getShelf().getTile(5,0) != null) &&
+                p.getShelf().getTile(1, 4).getColor().equals(p.getShelf().getTile(2, 3).getColor()) &&
                 p.getShelf().getTile(2, 3).getColor().equals(p.getShelf().getTile(3, 2).getColor()) &&
                 p.getShelf().getTile(3, 2).getColor().equals(p.getShelf().getTile(4, 1).getColor()) &&
                 p.getShelf().getTile(4, 1).getColor().equals(p.getShelf().getTile(5, 0).getColor())){

@@ -111,11 +111,9 @@ public class GameController implements Serializable {
                 i += 1;
 
                 if (i == gameBoard.getListOfPlayer().size() - 1){
-                    if(gameBoard.getListOfPlayer().get(0).getNickname().equals(firstPlayerToEnd)) forceEndGame();
                     setCurrentPlayer(gameBoard.getListOfPlayer().get(0));
                 }
                 else{
-                    if(gameBoard.getListOfPlayer().get(i+1).getNickname().equals(firstPlayerToEnd)) forceEndGame();
                     setCurrentPlayer(gameBoard.getListOfPlayer().get(i + 1));
                 }
 
@@ -281,12 +279,12 @@ public class GameController implements Serializable {
                         if (gameBoard.getEndGoal().getStatus()) {
                             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getEndGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                         }
-                        if (currentPlayer.getShelf().isFull() || endGameCounter != 0) {
+                        if (currentPlayer.getShelf().isFull() || endGameCounter > 0) {
                             gameBoard.getTileBuffer().removeAll(gameBoard.getTileBuffer());
-                            if(endGameCounter == 0)playEndGame();
+                            if(endGameCounter == 0) playEndGame();
                             checkEnd();
                             for(Player p: boardView.getListOfPlayer()) {
-                               if(p.getNickname().equals(currentPlayer.getNickname())) donePlayers.add(currentPlayer);
+                               if(p.getNickname().equals(currentPlayer.getNickname())) donePlayers.add(p);
                             }
                             this.endGameCounter++;
                         }

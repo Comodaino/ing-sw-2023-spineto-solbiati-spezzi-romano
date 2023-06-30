@@ -1348,14 +1348,14 @@ public class GUIApp extends Application implements ViewInterface {
         imageViewLogo.setFitHeight(154);
         root.add(imageViewLogo, 0, 0);
         Label labelWinner = new Label();
-        if (client.getBoardView().getWinner() == null || client.getBoardView().getWinner().getNickname() == null) {
-            labelWinner.setText("There's no winner");
+        if (client.getBoardView().getWinner() == null || client.getBoardView().getWinner() == null) {
+            labelWinner.setText("Match ended in a tie");
             labelWinner.setStyle("-fx-font-size: 20px;-fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             labelWinner.setAlignment(Pos.CENTER);
             contentBox.getChildren().add(labelWinner);
             //  root.add(labelWinner, 0, 1);
         } else {
-            labelWinner.setText(client.getBoardView().getWinner().getNickname() + " won the game!");
+            labelWinner.setText(client.getBoardView().getWinner() + " won the game!");
             labelWinner.setStyle("-fx-font-size: 20px; -fx-text-fill: black; -fx-font-family: 'Times New Roman'; -fx-background-color: white;");
             labelWinner.setAlignment(Pos.CENTER);
             contentBox.getChildren().add(labelWinner);

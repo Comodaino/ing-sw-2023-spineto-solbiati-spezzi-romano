@@ -273,7 +273,7 @@ public class TextualUI implements ViewInterface {
                 }
                 break;
             case END:
-                String winner = client.getBoardView().getWinner().getNickname();
+                String winner = client.getBoardView().getWinner());
                 client.getBoardView().getListOfPlayer().sort(new Comparator<Player>() {
                     @Override
                     public int compare(Player o1, Player o2) {
@@ -291,7 +291,7 @@ public class TextualUI implements ViewInterface {
                     System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
                 }
                 if(winner==null) {
-                    System.out.println("\t\t\t\t\t" + ConsoleColors.RED_BOLD + "There is no winner" );
+                    System.out.println("\t\t\t\t\t" + ConsoleColors.RED_BOLD + "Match ended in a tie" );
                 }else{
                     System.out.println("The winner is......");
                     System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");

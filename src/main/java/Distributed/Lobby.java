@@ -119,8 +119,10 @@ public class Lobby {
     public void endMatch() {
         this.playing = false;
         for (RemotePlayer p : lp) {
-            p.setState(States.END);
-            p.endMatch();
+            if(p.isConnected()) {
+                p.setState(States.END);
+                p.endMatch();
+            }
         }
     }
 

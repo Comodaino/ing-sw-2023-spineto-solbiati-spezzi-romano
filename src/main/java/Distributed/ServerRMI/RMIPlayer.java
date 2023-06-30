@@ -75,12 +75,16 @@ public class RMIPlayer extends RemotePlayer {
 
     @Override
     public void setState(States state) {
-        try {
-            this.state = state;
-            this.client.setState(state);
-            System.out.println("STATE CHANGED TO: " + state + this.state + getClient().getState());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
+        if(this.connected) {
+            try {
+                this.state = state;
+
+                this.client.setState(state);
+
+                System.out.println("STATE CHANGED TO: " + state + this.state + getClient().getState());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

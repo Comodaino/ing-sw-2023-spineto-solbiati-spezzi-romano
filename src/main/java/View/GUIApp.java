@@ -1389,7 +1389,7 @@ public class GUIApp extends Application implements ViewInterface {
         }
         contentBox.getChildren().add(vBox);
         vBox.setStyle("-fx-background-color: white; -fx-border-color: lightblue; -fx-border-width: 2px; -fx-alignment: center; ");
-        root.add(vBox, 0, 2);
+        //root.add(vBox, 0, 2);
         Button button = new Button("Lobby");
         button.setStyle("-fx-font-size: 20px; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
         button.setOnMouseClicked(e -> {

@@ -190,7 +190,7 @@ public class GameController implements Serializable {
             }
         }
         for(Player p: gameBoard.getListOfPlayer()){
-            if(p.getScore() == maxP.getScore()){
+            if(p.getScore() == maxP.getScore() && !p.getNickname().equals(maxP.getNickname())){
                 tie = true;
             }
         }

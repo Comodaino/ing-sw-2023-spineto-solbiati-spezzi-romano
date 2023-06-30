@@ -435,7 +435,7 @@ public class GUIApp extends Application implements ViewInterface {
                     }
                 }
                 if (cg.getCompleted().size() >= client.getBoardView().getListOfPlayer().size()) {
-                    imageView4 = null;
+                    imageView4.setImage(null);
                 } else {
                     if (cg.getCompleted().size() == 0) {
                         imageView4 = getImageOfScoreOfCommonGoal(8);

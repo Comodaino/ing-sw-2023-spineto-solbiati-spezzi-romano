@@ -256,7 +256,6 @@ public class ClientHandlerSocket extends RemoteHandler implements Runnable, Seri
                                 waitCommand(input);
                                 break;
                             case PLAY:
-                                System.out.println("DIOBOIA");
                                 playCommand(input);
                                 break;
                             case END:

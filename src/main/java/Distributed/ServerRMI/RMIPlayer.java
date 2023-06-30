@@ -19,6 +19,7 @@ public class RMIPlayer extends RemotePlayer {
     private States state;
     private boolean connected;
 
+
     public RMIPlayer(Client client){
         super(ConnectionType.RMI);
         this.client = client;
@@ -46,6 +47,7 @@ public class RMIPlayer extends RemotePlayer {
      */
     @Override
     public void update(BoardView boardView) throws IOException, InterruptedException {
+
         client.update(boardView, null);
     }
 

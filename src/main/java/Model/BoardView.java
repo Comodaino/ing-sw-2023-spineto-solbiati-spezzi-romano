@@ -26,7 +26,7 @@ public class BoardView implements Serializable {
     public List<Player> getListOfPlayer() {
         return board.getListOfPlayer();
     }
-    public Set<CommonGoal> getSetOfCommonGoal() {
+    public List<CommonGoal> getSetOfCommonGoal() {
         return board.getSetOfCommonGoal();
     }
     public EndGoal getEndGoal() { return board.getEndGoal(); }

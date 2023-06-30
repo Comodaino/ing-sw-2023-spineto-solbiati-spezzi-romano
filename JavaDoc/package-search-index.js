@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"AppMain"},{"l":"Controller"},{"l":"Distributed"},{"l":"Distributed.ClientRMI"},{"l":"Distributed.ClientSocket"},{"l":"Distributed.ServerRMI"},{"l":"Distributed.ServerSocket"},{"l":"Model"},{"l":"Model.CommonGoals"},{"l":"org.example"},{"l":"View"}];updateSearchResults();

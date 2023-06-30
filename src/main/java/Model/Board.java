@@ -18,7 +18,7 @@ public class Board implements Serializable {
     private final List<Player> listOfPlayer;
     private List<Player> donePlayers;
     private Player winner;
-    private Set<CommonGoal> setOfCommonGoal;
+    private List<CommonGoal> setOfCommonGoal;
     private EndGoal endGoal;
     private List<Tile> tileBuffer;
     private Bag bag;
@@ -90,7 +90,7 @@ public class Board implements Serializable {
         tileBuffer = new ArrayList<Tile>();
         recharge();
 
-        setOfCommonGoal = new HashSet<CommonGoal>();
+        setOfCommonGoal = new ArrayList<>();
         CommonGoal tmpGoal = goalFactory.getGoal(rand.nextInt(11), listOfPlayer.size());
         setOfCommonGoal.add(tmpGoal);
 
@@ -189,7 +189,7 @@ public class Board implements Serializable {
         return listOfPlayer;
     }
 
-    public Set<CommonGoal> getSetOfCommonGoal() {
+    public List<CommonGoal> getSetOfCommonGoal() {
         return setOfCommonGoal;
     }
 

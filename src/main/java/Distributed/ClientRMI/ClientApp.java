@@ -108,7 +108,12 @@ public class ClientApp extends UnicastRemoteObject implements Client, AbstractCl
             }
             server.handler(this, arg);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            try {
+                view.update("disconnected");
+                return;
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 

@@ -127,4 +127,13 @@ public class SwitchButton {
     public void setIsSelected2(boolean b) {
         isSelected2.set(b);
     }
+
+    /**
+     * Returns the path of the switch button.
+     *
+     * @return The path to the image for the button.
+     */
+    public String getGraphic() {
+        return path;
+    }
 }

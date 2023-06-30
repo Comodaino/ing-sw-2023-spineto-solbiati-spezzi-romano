@@ -75,8 +75,8 @@ public class TextualUI implements ViewInterface {
         if(in.startsWith("/")){
             if (in.equals("/start") || in.equals("/firstMatch") || in.equals("/notFirstMatch") || in.equals("/help") || in.equals("/h")) return true;
             if(in.startsWith("/set")){
-             String[] set = in.split(" ");
-             if(set[1].equals("2") || set[1].equals("3") || set[1].equals("4")) return true;
+                String[] set = in.split(" ");
+                if(set[1].equals("2") || set[1].equals("3") || set[1].equals("4")) return true;
                 else{
                     System.out.println("from 2 to 4 players allowed");
                     return false;
@@ -170,7 +170,10 @@ public class TextualUI implements ViewInterface {
     private void printPGShelf(String[][] pg) {
         for (int i = 5; i >=0; i--) {
             for (int j = 0; j < 5; j++) {
-                if (j == 0) System.out.print(i + " ");
+                if (j == 0)
+                    System.out.print(i + " ");
+                if (j == 0) {
+                }
                 if (pg[i][j] == (null)) {
                     System.out.print("[]");
                 } else {
@@ -197,7 +200,7 @@ public class TextualUI implements ViewInterface {
                 }
             }System.out.print("\n");
         }
-        System.out.println(" 0 1 2 3 4");
+        System.out.println("   0 1 2 3 4");
     }
 
     /**
@@ -214,89 +217,90 @@ public class TextualUI implements ViewInterface {
             System.out.println("Press /exit to quit the game");
         }
 
-            switch (this.state) {
-                case HOME:
-                    System.out.println(ConsoleColors.RED_BOLD_BRIGHT + "\n" +
+        switch (this.state) {
+            case HOME:
+                System.out.println(ConsoleColors.RED_BOLD + "\n" +
 
-                            "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
-                            "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
-                            "██╔████╔██║░╚████╔╝░  ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
-                            "██║╚██╔╝██║░░╚██╔╝░░  ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
-                            "██║░╚═╝░██║░░░██║░░░  ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
-                            "╚═╝░░░░░╚═╝░░░╚═╝░░░  ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
-                    homePrint(arg);
-                    break;
-                case LOBBY:
-                    if (client.isOwner()) {
-                        if (arg!= null && arg.equals("/commands"))
-                            System.out.println("command not valid, please try again");
-                        System.out.println("Commands you can use:");
-                        System.out.println("/start to start the game");
-                        System.out.println("/firstMatch if this is your first match\nOR");
-                        System.out.println("/notFirstMatch if you have already played");
-                    } else {
-                        System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
-                    }
-                    break;
-                case PLAY:
-                    if (client.getBoardView().getListOfPlayer().size() == 1) {
-                        nb();
-                        break;
-                    }
+                        "███╗░░░███╗██╗░░░██╗    ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
+                        "████╗░████║╚██╗░██╔╝    ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
+                        "██╔████╔██║░╚████╔╝░    ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
+                        "██║╚██╔╝██║░░╚██╔╝░░    ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
+                        "██║░╚═╝░██║░░░██║░░░    ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
+                        "╚═╝░░░░░╚═╝░░░╚═╝░░░    ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
 
-                    Player currentPlayer = null;
-                    for(Player p : client.getBoardView().getListOfPlayer()){
-                        if(p.getNickname().equals(client.getBoardView().getCurrentPlayer().getNickname())){
-                            currentPlayer = p;
-                        }
-                    }
-                    assert currentPlayer != null;
-                    if (client.getNickname().equals(currentPlayer.getNickname())){
-                        showBoard();
-                        showYourShelf();
-                        showOthersShelf();
-                        tileBuffer();
-                        showGoals();
-                        chat();
-                        System.out.println("Your turn!");
-                    }
-                    else{
-                        showBoard();
-                        showYourShelf();
-                        showOthersShelf();
-                        chat();
-                        System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
-                    }
+                homePrint(arg);
+                break;
+            case LOBBY:
+                if (client.isOwner()) {
+                    if (arg!= null && arg.equals("/commands"))
+                        System.out.println("command not valid, please try again");
+                    System.out.println("Commands you can use:");
+                    System.out.println("/start to start the game");
+                    System.out.println("/firstMatch if this is your first match\nOR");
+                    System.out.println("/notFirstMatch if you have already played");
+                } else {
+                    System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
+                }
+                break;
+            case PLAY:
+                if (client.getBoardView().getListOfPlayer().size() == 1) {
+                    nb();
                     break;
-                case END:
-                    String winner = client.getBoardView().getWinner().getNickname();
-                    client.getBoardView().getListOfPlayer().sort(new Comparator<Player>() {
-                        @Override
-                        public int compare(Player o1, Player o2) {
-                            if (o1.getScore()== o2.getScore()){
-                                if(o1.getNickname().compareTo(o2.getNickname())>=0){
-                                    return 1;
-                                }
-                            }else return -1;
-                            if(o1.getScore()> o2.getScore()) return  1;
-                            return -1;
-                        }
-                    });
-                    System.out.println("SCORES:");
-                    for (Player p : client.getBoardView().getListOfPlayer()) {
-                        System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
+                }
+
+                Player currentPlayer = null;
+                for(Player p : client.getBoardView().getListOfPlayer()){
+                    if(p.getNickname().equals(client.getBoardView().getCurrentPlayer().getNickname())){
+                        currentPlayer = p;
                     }
-                    if(winner==null) {
-                        System.out.println("\t\t\t\t\t" + ConsoleColors.RED_BOLD + "There is no winner" );
-                    }else{
-                        System.out.println("The winner is......");
-                        System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
+                }
+                assert currentPlayer != null;
+                if (client.getNickname().equals(currentPlayer.getNickname())){
+                    showBoard();
+                    showYourShelf();
+                    showOthersShelf();
+                    tileBuffer();
+                    showGoals();
+                    chat();
+                    System.out.println("Your turn!");
+                }
+                else{
+                    showBoard();
+                    showYourShelf();
+                    showOthersShelf();
+                    chat();
+                    System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
+                }
+                break;
+            case END:
+                String winner = client.getBoardView().getWinner().getNickname();
+                client.getBoardView().getListOfPlayer().sort(new Comparator<Player>() {
+                    @Override
+                    public int compare(Player o1, Player o2) {
+                        if (o1.getScore()== o2.getScore()){
+                            if(o1.getNickname().compareTo(o2.getNickname())>=0){
+                                return 1;
+                            }
+                        }else return -1;
+                        if(o1.getScore()> o2.getScore()) return  1;
+                        return -1;
                     }
-                    break;
-                case CLOSE:
-                    System.out.println("The lobby has been closed, thank you for playing!");
-                    break;
-            }
+                });
+                System.out.println("SCORES:");
+                for (Player p : client.getBoardView().getListOfPlayer()) {
+                    System.out.println(p.getNickname() + "\t---->\t" + p.getScore());
+                }
+                if(winner==null) {
+                    System.out.println("\t\t\t\t\t" + ConsoleColors.RED_BOLD + "There is no winner" );
+                }else{
+                    System.out.println("The winner is......");
+                    System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
+                }
+                break;
+            case CLOSE:
+                System.out.println("The lobby has been closed, thank you for playing!");
+                break;
+        }
     }
 
     /**
@@ -313,23 +317,23 @@ public class TextualUI implements ViewInterface {
             case HOME:
                 System.out.println(ConsoleColors.PURPLE_BOLD + "\n" +
 
-                        "███╗░░░███╗██╗░░░██╗  ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
-                        "████╗░████║╚██╗░██╔╝  ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
-                        "██╔████╔██║░╚████╔╝░  ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
-                        "██║╚██╔╝██║░░╚██╔╝░░  ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
-                        "██║░╚═╝░██║░░░██║░░░  ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
-                        "╚═╝░░░░░╚═╝░░░╚═╝░░░  ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
+                        "███╗░░░███╗██╗░░░██╗    ░██████╗██╗░░██╗███████╗██╗░░░░░███████╗██╗███████╗\n"+
+                        "████╗░████║╚██╗░██╔╝    ██╔════╝██║░░██║██╔════╝██║░░░░░██╔════╝██║██╔════╝\n"+
+                        "██╔████╔██║░╚████╔╝░    ╚█████╗░███████║█████╗░░██║░░░░░█████╗░░██║█████╗░░\n"+
+                        "██║╚██╔╝██║░░╚██╔╝░░    ░╚═══██╗██╔══██║██╔══╝░░██║░░░░░██╔══╝░░██║██╔══╝░░\n"+
+                        "██║░╚═╝░██║░░░██║░░░    ██████╔╝██║░░██║███████╗███████╗██║░░░░░██║███████╗\n"+
+                        "╚═╝░░░░░╚═╝░░░╚═╝░░░    ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░░░░╚═╝╚══════╝"+ RESET);
                 System.out.print("Insert your nickname:\t");
                 break;
             case LOBBY:
-                    if (client.isOwner()) {
-                        System.out.println("COMMANDS AVAILABLE:");
-                        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/start"+ RESET + " to start the game");
-                        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/firstMatch"+ RESET + " if this is your first match\t\tOR\t\t" + ConsoleColors.GREEN_UNDERLINED +"/notFirstMatch" + RESET + " if you have already played");
-                        System.out.println(ConsoleColors.GREEN_UNDERLINED + "/set n"+ RESET + " to set number of players");
-                    } else{
-                        System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
-                    }
+                if (client.isOwner()) {
+                    System.out.println("COMMANDS AVAILABLE:");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/start"+ RESET + " to start the game");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/firstMatch"+ RESET + " if this is your first match\t\tOR\t\t" + ConsoleColors.GREEN_UNDERLINED +"/notFirstMatch" + RESET + " if you have already played");
+                    System.out.println(ConsoleColors.GREEN_UNDERLINED + "/set n"+ RESET + " to set number of players");
+                } else{
+                    System.out.println(ConsoleColors.CYAN_UNDERLINED + "wait for the owner to start the game" + RESET);
+                }
                 System.out.println("Players in the lobby:");
                 for(Player p: client.getBoardView().getListOfPlayer()){
                     System.out.println("---" + ConsoleColors.BLACK + ConsoleColors.PURPLE_BACKGROUND + p.getNickname() + RESET + "---");
@@ -365,7 +369,7 @@ public class TextualUI implements ViewInterface {
                     chat();
                     System.out.println(client.getBoardView().getCurrentPlayer().getNickname() + " is playing...Wait your turn!");
                 }
-              break;
+                break;
             case END:
                 String winner;
                 System.out.println("SCORES:");
@@ -389,7 +393,7 @@ public class TextualUI implements ViewInterface {
         if (client.getBoardView().getChatBuffer().size()>0)
             System.out.println(ConsoleColors.PURPLE_UNDERLINED + "CHAT:" + RESET);
         for(String s: client.getBoardView().getChatBuffer()){
-            System.out.println("\uD83D\uDFE9" + s);
+            System.out.println(ConsoleColors.PURPLE_BOLD + "° " + RESET + s);
         }
         for(Whisper s: client.getBoardView().getPersonalChatBuffer()){
             if(s.getRecipient().equals(client.getNickname())) System.out.println("--" + s.getContent());
@@ -460,7 +464,7 @@ public class TextualUI implements ViewInterface {
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
                     System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
-                }System.out.println("\t 0   1   2   3   4   ");
+                }System.out.println("     0   1   2   3   4   ");
             }
         }
 
@@ -519,7 +523,7 @@ public class TextualUI implements ViewInterface {
                         }if(j==4) System.out.print(ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND +"|" + RESET);
                     }
                     System.out.println("\n  " + ConsoleColors.BLACK_BOLD + ConsoleColors.RED_BACKGROUND + "++===+===+===+===+===++" + RESET);
-                }System.out.println("\t 0   1   2   3   4   ");
+                }System.out.println("     0   1   2   3   4   ");
             }
         }
     }
@@ -750,30 +754,37 @@ public class TextualUI implements ViewInterface {
         if (!in.startsWith("/")) return true;
         String[] tmpInput = in.split(" ");
         if (in.startsWith("/remove")) {
-                switch (tmpInput.length) {
-                    case 3:
-                        removeSize = 1;
-                        break;
-                    case 5:
-                        removeSize = 2;
-                        break;
-                    case 7:
-                        removeSize = 3;
-                        break;
-                }
+            switch (tmpInput.length) {
+                case 3:
+                    removeSize = 1;
+                    break;
+                case 5:
+                    removeSize = 2;
+                    break;
+                case 7:
+                    removeSize = 3;
+                    break;
+            }
 
-                //A triple AND condition was not used to improve readability
-                if (adjacentFree(tmpInput[1].charAt(0) - 48, tmpInput[2].charAt(0) - 48)) {
-                    if (removeSize < 2 || adjacentFree(tmpInput[3].charAt(0) - 48, tmpInput[4].charAt(0) - 48)) {
-                        if (removeSize < 3 || adjacentFree(tmpInput[5].charAt(0) - 48, tmpInput[6].charAt(0) - 48)) {
-                            return inLine(tmpInput);
-                        }
+            //A triple AND condition was not used to improve readability
+            if (adjacentFree(tmpInput[1].charAt(0) - 48, tmpInput[2].charAt(0) - 48)) {
+                if (removeSize < 2 || adjacentFree(tmpInput[3].charAt(0) - 48, tmpInput[4].charAt(0) - 48)) {
+                    if (removeSize < 3 || adjacentFree(tmpInput[5].charAt(0) - 48, tmpInput[6].charAt(0) - 48)) {
+                        return inLine(tmpInput);
                     }
                 }
+            }
             return false;
         }
         if(in.startsWith("/add")){
-                return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+            String[] add = in.split(" ");
+            if(add.length != 2) return false;
+            else{ if(!add[1].equals("0") && !add[1].equals("1") && !add[1].equals("2") && !add[1].equals("3") && !add[1].equals("4")){
+                System.out.println("column out of range");
+                return false;
+            }
+            else return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+            }
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;
@@ -783,7 +794,7 @@ public class TextualUI implements ViewInterface {
             String[] msg = in.split(" ");
             if (msg.length < 3){
                 System.out.println("whisper failed, addressee or message is missing");
-            return false;
+                return false;
             }
             else {
                 for (int i = 2; i < msg.length; i++)
@@ -796,13 +807,13 @@ public class TextualUI implements ViewInterface {
             }
         } return false;
     }
-   private void printGoalShelf(String goal){
+    private void printGoalShelf(String goal){
         String conf = goal + "_conf";
-       InputStream is = getClass().getClassLoader().getResourceAsStream("CommonGoalsTUI/"+ conf);
-       assert is != null;
-       Scanner reader = new Scanner(is);
-         while(reader.hasNextLine()){
-              System.out.println(reader.nextLine());
-         }
+        InputStream is = getClass().getClassLoader().getResourceAsStream("CommonGoalsTUI/"+ conf);
+        assert is != null;
+        Scanner reader = new Scanner(is);
+        while(reader.hasNextLine()){
+            System.out.println(reader.nextLine());
+        }
     }
 }

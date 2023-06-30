@@ -392,23 +392,23 @@ public class GUIApp extends Application implements ViewInterface {
                             imageView2 = getImageOfScoreOfCommonGoal(4);
                         }
                     }
-                }
-                if (cg.getCompleted().size() >= client.getBoardView().getListOfPlayer().size()) {
-                    imageView2.setImage(null);
                 } else {
-                    if (cg.getCompleted().size() == 0) {
-                        imageView2 = getImageOfScoreOfCommonGoal(8);
+                    if (cg.getCompleted().size() >= client.getBoardView().getListOfPlayer().size()) {
+                    imageView2.setImage(null);
+                    } else {
+                        if (cg.getCompleted().size() == 0) {
+                            imageView2 = getImageOfScoreOfCommonGoal(8);
+                        }
+                        if (cg.getCompleted().size() == 1) {
+                            imageView2 = getImageOfScoreOfCommonGoal(6);
+                        }
+                        if (cg.getCompleted().size() == 2) {
+                            imageView2 = getImageOfScoreOfCommonGoal(4);
+                        }
+                        if (cg.getCompleted().size() == 3) {
+                            imageView2 = getImageOfScoreOfCommonGoal(2);
+                        }
                     }
-                    if (cg.getCompleted().size() == 1) {
-                        imageView2 = getImageOfScoreOfCommonGoal(6);
-                    }
-                    if (cg.getCompleted().size() == 2) {
-                        imageView2 = getImageOfScoreOfCommonGoal(4);
-                    }
-                    if (cg.getCompleted().size() == 3) {
-                        imageView2 = getImageOfScoreOfCommonGoal(2);
-                    }
-
                 }
                 pane.getChildren().add(imageView2);
                 commonGoalPane.add(pane, 0, 0);
@@ -775,10 +775,10 @@ public class GUIApp extends Application implements ViewInterface {
                             case 0:
                                 Label namePlayer2 = new Label();
                                 Pane pane2 = new Pane();
-                                pane2.setPrefSize(25, 25);
+                                pane2.setPrefSize(25, 30);
                                 String url2 = printOtherShelf(row, col, i);
 
-                                pane2.setStyle("-fx-background-image: url('" + url2 + "'); -fx-background-size: 25 25; -fx-background-repeat: no-repeat; -fx-background-position:  center; ");
+                                pane2.setStyle("-fx-background-image: url('" + url2 + "'); -fx-background-size: 25 30; -fx-background-repeat: no-repeat; -fx-background-position:  center; ");
                                 shelf2.add(pane2, col, 5 - row);
                                 namePlayer2.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());
                                 shelfPlayer2.add(namePlayer2, 0, 1);
@@ -786,9 +786,9 @@ public class GUIApp extends Application implements ViewInterface {
 
                             case 1:
                                 Pane pane3 = new Pane();
-                                pane3.setPrefSize(25, 25);
+                                pane3.setPrefSize(25, 30);
                                 String url3 = printOtherShelf(row, col, i);
-                                pane3.setStyle("-fx-background-image: url('" + url3 + "'); -fx-background-size: 25 25; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+                                pane3.setStyle("-fx-background-image: url('" + url3 + "'); -fx-background-size: 25 30; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
                                 Label namePlayer3 = new Label();
                                 shelf3.add(pane3, col, 5 - row);
                                 namePlayer3.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());
@@ -796,9 +796,9 @@ public class GUIApp extends Application implements ViewInterface {
                                 break;
                             case 2:
                                 Pane pane4 = new Pane();
-                                pane4.setPrefSize(25, 25);
+                                pane4.setPrefSize(25, 30);
                                 String url4 = printOtherShelf(row, col, i);
-                                pane4.setStyle("-fx-background-image: url('" + url4 + "'); -fx-background-size: 25 25; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+                                pane4.setStyle("-fx-background-image: url('" + url4 + "'); -fx-background-size: 25 30; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
                                 Label namePlayer4 = new Label();
                                 shelf4.add(pane4, col, 5 - row);
                                 namePlayer4.setText("Player: " + client.getBoardView().getListOfPlayer().get(i).getNickname());

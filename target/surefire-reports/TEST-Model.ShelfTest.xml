@@ -61,8 +61,8 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.stdout.encoding" value="UTF-8"/>
   </properties>
-  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInEmptyColumn" time="0.002"/>
+  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInEmptyColumn" time="0.003"/>
   <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testAddInFullColumn" time="0"/>
-  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetNonExistingTile" time="0.001"/>
+  <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetNonExistingTile" time="0"/>
   <testcase classname="Model.ShelfTest" name="Model.ShelfTest.testGetExistingTile" time="0"/>
 </testsuite>

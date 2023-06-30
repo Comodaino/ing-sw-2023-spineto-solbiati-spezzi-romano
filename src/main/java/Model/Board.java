@@ -17,7 +17,7 @@ public class Board implements Serializable {
     private Cell[][] matrix;
     private final List<Player> listOfPlayer;
     private List<Player> donePlayers;
-    private Player winner;
+    private String winner;
     private List<CommonGoal> setOfCommonGoal;
     private EndGoal endGoal;
     private List<Tile> tileBuffer;
@@ -202,7 +202,7 @@ public class Board implements Serializable {
     public List<String> getChatBuffer() { return chatBuffer; }
     public List<Whisper> getPersonalChatBuffer(){ return personalChatBuffer;}
 
-    public Player getWinner() {
+    public String getWinner() {
         return winner;
     }
     public boolean adjacentFree(int r, int c){
@@ -219,6 +219,10 @@ public class Board implements Serializable {
 
     public void setFm(boolean fm) {
         this.fm = fm;
+    }
+
+    public void setWinner(String winnerNick){
+        this.winner = winnerNick;
     }
 
     /**

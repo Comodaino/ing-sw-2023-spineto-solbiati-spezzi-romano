@@ -1220,12 +1220,29 @@ public class GUIApp extends Application implements ViewInterface {
             root.setAlignment(Pos.CENTER);
 
             root.add(contentBox, 2, 0);
+            Pane paneButtonQuit = new Pane();
+            paneButtonQuit.getChildren().add(buttonQuit());
+
+            paneButtonQuit.setTranslateY(100);
+            paneButtonQuit.setTranslateX(200);
+            root.add(paneButtonQuit,4,4);
         primaryStage.setMaximized(true);
         primaryStage.setScene(scene1);
         primaryStage.show();
 
+
     }
 
+private Button buttonQuit(){
+    Button quit = new Button("Quit");
+    quit.setPrefSize(130, 80);
+    quit.setStyle("-fx-font-size: 20px; ; -fx-text-fill: black; -fx-font-family: 'Times New Roman';");
+    quit.setOnAction(e -> {
+        client.println("/quit");
+        System.exit(0);
+    });
+    return quit;
+}
     @Override
     public void update() throws IOException {
         update(null);

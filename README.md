@@ -57,6 +57,8 @@ Percentage coverages for classes, methods and lines of code:
 
 # Running the app
 
+### NOTE: for computers running mac os on arm processor please use the alternative .jar
+
 ## JAR
 It's possible to just run the jar:
 - [Latest release](https://github.com/Comodaino/ing-sw-2023-spineto-solbiati-spezzi-romano/releases/latest)

@@ -704,8 +704,12 @@ public class GUIApp extends Application implements ViewInterface {
        shelfPlayer4.setPrefSize(200, 200);
 
        GridPane shelf2 = new GridPane();
-       shelf2.setPrefSize(200, 200);
-       shelf2.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
+       Pane imageShelf2 = new Pane();
+
+
+       imageShelf2.setPrefSize(200, 200);
+         imageShelf2.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
+    //   shelfPlayer2.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
 
        GridPane shelf3 = new GridPane();
        GridPane shelf4 = new GridPane();
@@ -715,36 +719,37 @@ public class GUIApp extends Application implements ViewInterface {
        for (int i = 0; i < 5; i++) {
            Button emptyButton = new Button();
            emptyButton.setDisable(true);
-           emptyButton.setPrefSize(32, 1);
-           emptyButton.setStyle(" -fx-border-width: 1;-fx-border-height: 1;-fx-border-color: black; -fx-background-color: transparent;  -fx-background-repeat: no-repeat;");
+           emptyButton.setPrefSize(31, 1);
+           emptyButton.setStyle(" -fx-border-width: 0;-fx-border-height: 0;-fx-border-color: transparent; -fx-background-color: transparent;  -fx-background-repeat: no-repeat;");
            shelf2.add(emptyButton, i, 6);
-           emptyButton.setTranslateY(10);
+         //  emptyButton.setTranslateY(10);
        }
 
-    //   shelf2.setTranslateY(10);
+       shelf2.setTranslateY(10);
        shelf2.setTranslateX(2);
+
        for (int i = 0; i < 5; i++) {
            Button emptyButton = new Button();
            emptyButton.setDisable(true);
-           emptyButton.setPrefSize(32, 1);
-           emptyButton.setStyle(" -fx-border-width: 1;-fx-border-height: 1;-fx-border-color: black; -fx-background-color: transparent;  -fx-background-repeat: no-repeat;");
+           emptyButton.setPrefSize(31, 1);
+           emptyButton.setStyle(" -fx-border-width: 0;-fx-border-height: 0;-fx-border-color: transparent; -fx-background-color: transparent;  -fx-background-repeat: no-repeat;");
            shelf3.add(emptyButton, i, 6);
            emptyButton.setTranslateY(10);
        }
 
-     //  shelf3.setTranslateY(10);
+       shelf3.setTranslateY(10);
        shelf3.setTranslateX(2);
 
        for (int i = 0; i < 5; i++) {
            Button emptyButton = new Button();
            emptyButton.setDisable(true);
-           emptyButton.setPrefSize(32, 1);
-           emptyButton.setStyle(" -fx-border-width: 1;-fx-border-height: 1;-fx-border-color: black; -fx-background-color: transparent; -fx-background-repeat: no-repeat;");
+           emptyButton.setPrefSize(31, 1);
+           emptyButton.setStyle(" -fx-border-width: 0;-fx-border-height: 0;-fx-border-color: transparent; -fx-background-color: transparent; -fx-background-repeat: no-repeat;");
            shelf4.add(emptyButton, i, 6);
               emptyButton.setTranslateY(10);
        }
 
-     //  shelf4.setTranslateY(10);
+       shelf4.setTranslateY(10);
        shelf4.setTranslateX(2);
 
 
@@ -796,17 +801,25 @@ public class GUIApp extends Application implements ViewInterface {
        }
 
        shelfPlayer2.add(shelf2, 0, 0);
+       shelfPlayer2.add(imageShelf2, 0, 0);
 
        if (client.getBoardView().getListOfPlayer().size() >= 3) {
            shelf3.setPrefSize(200, 200);
-           shelf3.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
+           Pane paneImage3 = new Pane();
+           paneImage3.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
+        //   shelf3.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
+
            shelfPlayer3.add(shelf3, 1, 1);
+           shelfPlayer3.add(paneImage3, 1, 1);
        }
        if (client.getBoardView().getListOfPlayer().size() == 4) {
-              shelf4.setPrefSize(200, 200);
-           shelf4.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
+           shelf4.setPrefSize(200, 200);
+           Pane paneImage4 = new Pane();
+           paneImage4.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
+        //   shelf4.setStyle("-fx-background-image: url('images/boards/bookshelf.png') ; -fx-background-size: 200 200; -fx-background-repeat: no-repeat; -fx-background-position: center;");
 
            shelfPlayer4.add(shelf4, 2, 2);
+           shelfPlayer4.add(paneImage4, 2, 2);
        }
 
        otherShelf.getChildren().addAll(shelfPlayer2, shelfPlayer3, shelfPlayer4);

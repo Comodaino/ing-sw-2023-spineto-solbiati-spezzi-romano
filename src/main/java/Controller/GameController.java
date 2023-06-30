@@ -99,32 +99,6 @@ public class GameController implements Serializable {
 
         if (lobby.getPlay()) {
 
-            int disconnectedNumber = 0;
-            for (RemotePlayer rp : lobby.getListOfPlayers()) {
-                if (!rp.isConnected()) disconnectedNumber++;
-            }
-
-            if (gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1) {
-
-                try {
-                    TimeUnit.SECONDS.sleep(20);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                if (gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1){
-                    System.out.println("TIMEOUT ENDED, CLOSING THE GAME");
-                    forceEndGame();
-                    try {
-                        lobby.updateAll();
-                    } catch (IOException | InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-
-            }
-
             int i = gameBoard.getListOfPlayer().indexOf(currentPlayer) - 1;
 
             for (int j = gameBoard.getTileBuffer().size() - 1; j >= 0; j--) {
@@ -149,7 +123,7 @@ public class GameController implements Serializable {
                     if (p.getNickname().equals(currentPlayer.getNickname()) && !p.isConnected()) flag = true;
                 }
 
-            } while (donePlayers.contains(currentPlayer) || flag);
+            } while (!checkIfOnlyOne() && (donePlayers.contains(currentPlayer) || flag));
 
 
             if(currentPlayer.getNickname().equals(firstPlayerToEnd)) forceEndGame();
@@ -159,6 +133,34 @@ public class GameController implements Serializable {
 
 
         }
+    }
+
+    private boolean checkIfOnlyOne(){
+        int disconnectedNumber = 0;
+        for (RemotePlayer rp : lobby.getListOfPlayers()) {
+            if (!rp.isConnected()) disconnectedNumber++;
+        }
+
+        if (gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1) {
+
+            try {
+                TimeUnit.SECONDS.sleep(20);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (gameBoard.getListOfPlayer().size() - donePlayers.size() - disconnectedNumber <= 1){
+                System.out.println("TIMEOUT ENDED, CLOSING THE GAME");
+                forceEndGame();
+                try {
+                    lobby.updateAll();
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     private void serverUpdater() throws IOException, InterruptedException {

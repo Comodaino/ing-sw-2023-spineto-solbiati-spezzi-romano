@@ -117,9 +117,7 @@ public class GameController implements Serializable {
                     forceEndGame();
                     try {
                         lobby.updateAll();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
+                    } catch (IOException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 }
@@ -152,6 +150,10 @@ public class GameController implements Serializable {
                 }
 
             } while (donePlayers.contains(currentPlayer) || flag);
+
+
+            if(currentPlayer.getNickname().equals(firstPlayerToEnd)) forceEndGame();
+
             gameBoard.setCurrentPlayer(currentPlayer);
             if (endGameCounter != 0) this.endGameCounter++;
 

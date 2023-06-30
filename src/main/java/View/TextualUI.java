@@ -777,7 +777,14 @@ public class TextualUI implements ViewInterface {
             return false;
         }
         if(in.startsWith("/add")){
-                return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+            String[] add = in.split(" ");
+            if(add.length != 2) return false;
+                else{ if(!add[1].equals("0") && !add[1].equals("1") && !add[1].equals("2") && !add[1].equals("3") && !add[1].equals("4")){
+                    System.out.println("column out of range");
+                    return false;
+                    }
+                    else return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+                }
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;
         if(in.startsWith("/end")) return true;

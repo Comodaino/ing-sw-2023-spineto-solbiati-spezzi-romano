@@ -178,12 +178,28 @@ public class GameController implements Serializable {
 
     private void forceEndGame() {
         for (int i = 0; i < gameBoard.getListOfPlayer().size(); i++) {
-
             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getGoal().getScore(gameBoard.getListOfPlayer().get(i).getShelf()));
             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getListOfPlayer().get(i).getNearGoal().getScore(gameBoard.getListOfPlayer().get(i)));
-
-            lobby.endMatch();
         }
+        String winner;
+        Player maxP = gameBoard.getListOfPlayer().get(0);
+        boolean tie = false;
+        for(Player p: gameBoard.getListOfPlayer()){
+            if(p.getScore() > maxP.getScore()){
+                maxP = p;
+            }
+        }
+        for(Player p: gameBoard.getListOfPlayer()){
+            if(p.getScore() == maxP.getScore()){
+                tie = true;
+            }
+        }
+        winner = maxP.getNickname();
+        if(tie) gameBoard.setWinner(null);
+        else gameBoard.setWinner(winner);
+
+
+        lobby.endMatch();
     }
 
     private void playSwitch(String[] input) {

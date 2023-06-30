@@ -168,7 +168,7 @@ public class GUIApp extends Application implements ViewInterface {
         Button reset = new Button("end");
         reset.setPrefSize(100, 60);
         reset.setStyle("");
-        reset.setText("DEBUG END GAME");
+        reset.setText("End match early");
         reset.setOnMouseClicked(e -> {
             client.println("/end");
         });

@@ -40,7 +40,7 @@ public class ClientAppSocket implements AbstractClient {
 
 
     /**
-     * Client App constructor for socket connection
+     * Client App constructor for socket connectionDi
      *
      * @param address    ip address of the server
      * @param port       port of the server

@@ -333,7 +333,7 @@ public class GameController implements Serializable {
     }
 
     private void checkEnd() {
-        if (donePlayers.size() == gameBoard.getListOfPlayer().size()) {
+        if (donePlayers.size() > gameBoard.getListOfPlayer().size()) {
             forceEndGame();
         }
     }

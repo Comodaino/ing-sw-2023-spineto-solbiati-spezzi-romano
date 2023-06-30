@@ -273,7 +273,7 @@ public class TextualUI implements ViewInterface {
                 }
                 break;
             case END:
-                String winner = client.getBoardView().getWinner());
+                String winner = client.getBoardView().getWinner();
                 client.getBoardView().getListOfPlayer().sort(new Comparator<Player>() {
                     @Override
                     public int compare(Player o1, Player o2) {
@@ -378,7 +378,7 @@ public class TextualUI implements ViewInterface {
                 }
                 if(client.getBoardView().getWinner()!=null)
                 {
-                    winner = client.getBoardView().getWinner().getNickname();
+                    winner = client.getBoardView().getWinner();
                     System.out.println("The winner is......");
                     System.out.println("\t\t\t\t\t" + ConsoleColors.BLACK_BOLD + ConsoleColors.PURPLE_BACKGROUND_BRIGHT + winner + RESET + "\t\t\t\t\t");
                 }else System.out.println(ConsoleColors.RED_BOLD + "There is no winner" + ConsoleColors.WHITE);

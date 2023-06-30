@@ -743,7 +743,8 @@ public class TextualUI implements ViewInterface {
     private boolean columnAvailable(int c, int size) throws RemoteException {
         for (int i = 0; i < client.getBoardView().getListOfPlayer().size(); i++) {
             if (client.getBoardView().getListOfPlayer().get(i).getNickname().equals(client.getNickname())) {
-                return client.getBoardView().getListOfPlayer().get(i).getShelf().isEmpty(5 - size, c);
+                if(size <= 0) return false;
+                return client.getBoardView().getListOfPlayer().get(i).getShelf().isEmpty(6 - size, c);
             }
         }
         return false;
@@ -783,7 +784,7 @@ public class TextualUI implements ViewInterface {
                 System.out.println("column out of range");
                 return false;
             }
-            else return columnAvailable(client.getBoardView().getTileBuffer().size(), tmpInput[1].charAt(0) - 48);
+            else return columnAvailable(tmpInput[1].charAt(0) - 48, client.getBoardView().getTileBuffer().size());
             }
         }
         if(in.startsWith("/switch")) return client.getBoardView().getTileBuffer().size() > 1;

@@ -282,10 +282,13 @@ public class GameController implements Serializable {
                             gameBoard.getListOfPlayer().get(i).addScore(gameBoard.getEndGoal().getScore(gameBoard.getListOfPlayer().get(i)));
                         }
                         if (currentPlayer.getShelf().isFull() || endGameCounter != 0) {
-                            this.endGameCounter++;
                             gameBoard.getTileBuffer().removeAll(gameBoard.getTileBuffer());
-                            playEndGame();
+                            if(endGameCounter == 0)playEndGame();
                             checkEnd();
+                            for(Player p: boardView.getListOfPlayer()) {
+                               if(p.getNickname().equals(currentPlayer.getNickname())) donePlayers.add(currentPlayer);
+                            }
+                            this.endGameCounter++;
                         }
                     }
                 }

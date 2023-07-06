@@ -1,1 +1,0 @@
-java -jar MyShelfi.jar -t client -v TUI

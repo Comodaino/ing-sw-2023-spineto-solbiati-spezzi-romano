@@ -1,1 +1,0 @@
-java -jar MyShelfie.jar -t server

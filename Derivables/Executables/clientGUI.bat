@@ -1,1 +1,0 @@
-java -jar MyShelfiejar -t client -v GUI
